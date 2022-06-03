@@ -10,9 +10,11 @@ import matplotlib.colors as mc
 import matplotlib as mpl
 from matplotlib.lines import Line2D
 import matplotlib.cm as cm
+import os
 
 # Define .INP file name
-inp_file = 'NWC_new_stations.inp'
+dirname = os.path.dirname(__file__)
+inp_file = os.path.join(dirname, 'Networks', 'CTown.inp')
 
 # Run hydraulic simulation and store results
 wn = wntr.network.WaterNetworkModel(inp_file)
