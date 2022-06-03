@@ -10,9 +10,11 @@ import matplotlib.colors as mc
 import matplotlib as mpl
 from matplotlib.lines import Line2D
 import matplotlib.cm as cm
+import os
 
 # Define .INP file name
-inp_file = 'NWC_new_stations.inp'
+dirname = os.path.dirname(__file__)
+inp_file = os.path.join(dirname, 'Networks', 'CTown.inp')
 
 # Run hydraulic simulation and store results
 wn = wntr.network.WaterNetworkModel(inp_file)
@@ -24,7 +26,7 @@ junc_names = wn.junction_name_list
 valve_names = wn.valve_name_list
 tank_names = wn.tank_name_list
 node_names = wn.node_name_list
-
+   
 #find incidence matrix and A21 matrix
 pipe_tp =[]
 pipe_tp2 = []
@@ -65,29 +67,19 @@ time_step = wn.options.time.report_timestep
 mult_ts = 3600/time_step
 x = np.linspace(0,(x_val-1)/mult_ts,x_val)
 
-image_path = "C:/Users/mst2245/Documents/Research/5. State Estimation/Python exercises/NWC/Images"
+image_path = os.path.join(dirname, 'Images')
 
 def plot_spl_elements():
     nxp.draw_networkx_nodes(G, pos_dict, nodelist = wn.reservoir_name_list, node_size = 200, node_color = 'k', node_shape = 's')
     nxp.draw_networkx_nodes(G, pos_dict, nodelist = wn.tank_name_list, node_size = 200, node_color = 'b', node_shape = 'h')
-    nxp.draw_networkx_nodes(G, pos_dict, nodelist = spl_nodes, node_size = 150, node_color = 'r')
-    # nxp.draw_networkx_nodes(G, pos_dict, nodelist = spl_nodes, node_size = 50, node_color = 'white')    
-    plt.text(wn.get_node('AM9001').coordinates[0]-500,wn.get_node('AM9001').coordinates[1],s = 'Anderson Mill R + T + PS', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('FP9001').coordinates[0],wn.get_node('FP9001').coordinates[1]-1400,s = 'Four Points R + T + PS', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='left', fontsize = '15')
-    plt.text(wn.get_node('104158').coordinates[0]-400,wn.get_node('104158').coordinates[1]-500,s = 'GL Tank', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('STC9001').coordinates[0]-400,wn.get_node('STC9001').coordinates[1]+500,s = 'STC Tank', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('PP35').coordinates[0]-300,wn.get_node('PP35').coordinates[1]-800,s = 'PP35', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('PP48').coordinates[0]-600,wn.get_node('PP48').coordinates[1]+500,s = 'PP48', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP104').coordinates[0]+1200,wn.get_node('SP104').coordinates[1]+1000,s = 'SP104', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP105').coordinates[0]-100,wn.get_node('SP105').coordinates[1]+600,s = 'SP105', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP106').coordinates[0]-1100,wn.get_node('SP106').coordinates[1]-300,s = 'SP106', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP108').coordinates[0]+1100,wn.get_node('SP108').coordinates[1]+700,s = 'SP108', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP110').coordinates[0]+700,wn.get_node('SP110').coordinates[1]+700,s = 'SP110', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP111').coordinates[0]+1100,wn.get_node('SP111').coordinates[1]-800,s = 'SP111', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP114').coordinates[0]-400,wn.get_node('SP114').coordinates[1]-400,s = 'SP114', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP116').coordinates[0]+1100,wn.get_node('SP116').coordinates[1]-800,s = 'SP116', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP115').coordinates[0]-200,wn.get_node('SP115').coordinates[1]-1200,s = 'SP115', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-
+    plt.text(wn.get_node('R1').coordinates[0]+450,wn.get_node('R1').coordinates[1]+75,s = 'Resevoir 1', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T1').coordinates[0]+125,wn.get_node('T1').coordinates[1]+75,s = 'Tank 1', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T2').coordinates[0]+175,wn.get_node('T2').coordinates[1]-125,s = 'Tank 2', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T3').coordinates[0],wn.get_node('T3').coordinates[1]-100,s = 'Tank 3', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T4').coordinates[0]+350,wn.get_node('T4').coordinates[1]+75,s = 'Tank 4', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T5').coordinates[0]+100,wn.get_node('T5').coordinates[1]+75,s = 'Tank 5', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T6').coordinates[0]+200,wn.get_node('T6').coordinates[1]+75,s = 'Tank 6', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T7').coordinates[0]+100,wn.get_node('T7').coordinates[1]+75,s = 'Tank 7', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
 def legend_without_duplicate_labels(ax):
     handles, labels = ax.get_legend_handles_labels()
     unique = [(h, l) for i, (h, l) in enumerate(zip(handles, labels)) if l not in labels[:i]]
@@ -122,19 +114,18 @@ for i in range(len(G_edge_list)):
                 G_list_pumps_only.append(G_edge_list[i])
             if wn.link_name_list[j] in wn.valve_name_list:
                 G_list_valves_only.append(G_edge_list[i])
-
+            
 # Special nodes list
 spl_nodes = []
 spl_nodes_dict = {}
 for tank_name, tank in wn.tanks():
     # spl_nodes.append(tank_name)
     spl_nodes_dict[tank_name] = tank_name
-
+    
 for res_name, res in wn.reservoirs():
     # spl_nodes.append(res_name)
     spl_nodes_dict[res_name] = res_name
 
-spl_nodes = ['PP35', 'PP48', 'SP110', 'SP108', 'SP116', 'SP114', 'SP106', 'SP105', 'SP115', 'SP104', 'SP111']
 
 for i in range(len(spl_nodes)):
     spl_nodes_dict[spl_nodes[i]] = spl_nodes[i]
@@ -162,10 +153,10 @@ for i in range(len(junc_names)):
     alldems.append(dem)
     if dem != 0:
         demzero.append(dem)
-
+    
     if dem == 0:
         dem0.append(junc_names[i])
-
+        
     elif dem > 0 and dem <= 2:
         dem10.append(junc_names[i])
 
@@ -174,16 +165,16 @@ for i in range(len(junc_names)):
 
     elif dem > 4 and dem <= 10:
         dem30.append(junc_names[i])
-
+        
     elif dem > 10 and dem <= 20:
         dem40.append(junc_names[i])
-
+        
     elif dem > 20 and dem <= 40:
         dem50.append(junc_names[i])
-
+        
     elif dem > 40:
         dem60.append(junc_names[i])
-
+        
     else:
         demother.append(junc_names[i])
 
@@ -212,7 +203,7 @@ elevations = []
 for junc_name, junc in wn.junctions():
     elevations.append(3.28084*junc.elevation)
     junc_list.append(junc_name)
-
+        
 fig, ax = plt.subplots(figsize=(15,25))
 nodes = nxp.draw_networkx_nodes(G, pos_dict, nodelist = junc_list, node_size = 40, node_color = elevations, cmap = cmap)
 nxp.draw_networkx_edges(G, pos_dict, arrows = False, edge_color = 'k')
@@ -248,7 +239,7 @@ for junc_name, junc in wn.junctions():
     if np.mean(pres) >= 90:
         pres_90.append(np.mean(pres))
         pres_90_nodes.append(junc_name)
-
+    
 
 fig, ax = plt.subplots(figsize=(15,25))
 nodes = nxp.draw_networkx_nodes(G, pos_dict, nodelist = junc_list, node_size = 40, node_color = avg_pres, cmap = cmap)
@@ -307,7 +298,7 @@ age = results_age.node['quality']
 for junc_name, junc in wn.junctions():
     water_age.append(np.max(age.loc[:,junc_name])/3600)
     junc_list.append(junc_name)
-
+    
 fig2 = plt.plot(figsize=(8,12))
 plt.hist(water_age, color = 'darkorange') #, bins = 51) #, range = (0,50))
 plt.xlabel('Maximum Water Age over 24 Hr Period')
@@ -338,7 +329,7 @@ for res_name, res in wn.reservoirs():
     junc_list = []
     tracer = []
     tracer_tot = []
-
+    
     for junc_name, junc in wn.junctions():
         if wn.get_node(junc_name).base_demand != 0:
             t_r = tracer_am9001.loc[:,junc_name]
@@ -347,17 +338,17 @@ for res_name, res in wn.reservoirs():
             if np.max(t_r) != 0:
                 junc_list.append(junc_name)
                 tracer.append(np.max(t_r))
-
+        
     fig, ax = plt.subplots(figsize=(15,25))
     nodes = nxp.draw_networkx_nodes(G, pos_dict, nodelist = junc_list, node_size = 40, node_color = tracer, cmap = cmap)
     nxp.draw_networkx_edges(G, pos_dict, arrows = False, edge_color = 'k')
-
+    
     plot_spl_elements()
     cbar = plt.colorbar(nodes)
     cbar.set_label('Maximum daily percentage of water sourced from Reservoir {} for 24 hr duration'.format(res_name), fontsize = 15)
     plt.axis('off')
     plt.savefig(image_path+'/Tracer plots/res {} tracer 24 hrs.png'.format(res_name))
-
+    
 
 # Tanks
 for tank_name, tank in wn.tanks():
@@ -380,18 +371,18 @@ for tank_name, tank in wn.tanks():
             if np.max(t_r) != 0:
                 junc_list.append(junc_name)
                 tracer.append(np.max(t_r))
-
+        
     fig, ax = plt.subplots(figsize=(15,25))
     nodes = nxp.draw_networkx_nodes(G, pos_dict, nodelist = junc_list, node_size = 40, node_color = tracer, cmap = cmap)
     nxp.draw_networkx_edges(G, pos_dict, arrows = False, edge_color = 'k')
-
+    
     plot_spl_elements()
     cbar = plt.colorbar(nodes)
     cbar.set_label('Maximum daily percentage of water sourced from Tank {} for 24 hr duration'.format(tank_name), fontsize = 15)
     plt.axis('off')
     plt.savefig(image_path+'/Tracer plots/tank {} tracer 24 hrs.png'.format(tank_name))
-
-
+    
+    
 
 # In[]
 for tank_name, tank in wn.tanks():
@@ -412,7 +403,7 @@ for tank_name, tank in wn.reservoirs():
     tracer_am9001 = results_am9001.node['quality'].loc[:, '72838']
     # fig, ax=plt.subplots(figsize = (8,12))
 
-
+    
 for tank_name, tank in wn.tanks():
     trace_node = tank_name
     wn.options.quality.parameter = 'TRACE'
@@ -446,7 +437,7 @@ for tank_name, tank in wn.tanks():
 
     tracer_am9001 = results_am9001.node['quality'].loc[:, '72838']
 
-
+    
 for tank_name, tank in wn.reservoirs():
     trace_node = tank_name
     wn.options.quality.parameter = 'TRACE'
@@ -465,7 +456,7 @@ for tank_name, tank in wn.tanks():
     tracer_am9001 = results_am9001.node['quality'].loc[:, '786631']
     # fig, ax=plt.subplots(figsize = (8,12))
 
-
+    
 for tank_name, tank in wn.reservoirs():
     trace_node = tank_name
     wn.options.quality.parameter = 'TRACE'
@@ -490,7 +481,7 @@ for res_name, res in wn.reservoirs():
     junc_list = []
     tracer = []
     tracer_tot = []
-
+    
     for junc_name, junc in wn.junctions():
         if wn.get_node(junc_name).base_demand != 0:
             t_r = tracer_am9001.loc[:,junc_name]
@@ -499,17 +490,17 @@ for res_name, res in wn.reservoirs():
             if np.max(t_r) != 0:
                 junc_list.append(junc_name)
                 tracer.append(np.max(t_r))
-
+        
     fig, ax = plt.subplots(figsize=(15,25))
     nodes = nxp.draw_networkx_nodes(G, pos_dict, nodelist = junc_list, node_size = 40, node_color = tracer, cmap = cmap)
     nxp.draw_networkx_edges(G, pos_dict, arrows = False, edge_color = 'k')
-
+    
     plot_spl_elements()
     cbar = plt.colorbar(nodes)
     cbar.set_label('Maximum daily percentage of water sourced from Reservoir {} for 72 hr duration'.format(res_name), fontsize = 15)
     plt.axis('off')
     plt.savefig(image_path+'/Tracer plots/res {} tracer 72 hrs.png'.format(res_name))
-
+    
   # Tanks
 for tank_name, tank in wn.tanks():
     trace_node = tank_name
@@ -531,23 +522,23 @@ for tank_name, tank in wn.tanks():
             if np.max(t_r) != 0:
                 junc_list.append(junc_name)
                 tracer.append(np.max(t_r))
-
+        
     fig, ax = plt.subplots(figsize=(15,25))
     nodes = nxp.draw_networkx_nodes(G, pos_dict, nodelist = junc_list, node_size = 40, node_color = tracer, cmap = cmap)
     nxp.draw_networkx_edges(G, pos_dict, arrows = False, edge_color = 'k')
-
+    
     plot_spl_elements()
     cbar = plt.colorbar(nodes)
     cbar.set_label('Maximum daily percentage of water sourced from Tank {} for 72 hr duration'.format(tank_name), fontsize = 15)
     plt.axis('off')
     plt.savefig(image_path+'/Tracer plots/tank {} tracer 72 hrs.png'.format(tank_name))
-
+    
 
 # In[]
 
 times_list = [12, 24, 33, 48, 72]
 
-
+             
 for times in times_list:
     for res_name, res in wn.reservoirs():
         trace_node = res_name
@@ -558,18 +549,18 @@ for times in times_list:
         tracer_am9001 = results_am9001.node['quality']
         junc_list = []
         tracer = []
-
+    
         for junc_name, junc in wn.junctions():
             if wn.get_node(junc_name).base_demand != 0:
                 t_r = tracer_am9001.loc[times*time_step,junc_name]
                 if t_r != 0:
                     junc_list.append(junc_name)
                     tracer.append(t_r)
-
+            
         fig, ax = plt.subplots(figsize=(15,25))
         nodes = nxp.draw_networkx_nodes(G, pos_dict, nodelist = junc_list, node_size = 40, node_color = tracer, cmap = cmap, vmin = 0, vmax = 100)
         nxp.draw_networkx_edges(G, pos_dict, arrows = False, edge_color = 'k')
-
+        
         plot_spl_elements()
         plt.title('Hour {}'.format(times), fontdict = {'fontsize' : 30})
         if times == 72:
@@ -577,7 +568,7 @@ for times in times_list:
             cbar.set_label('Percentage of water sourced from Reservoir {}'.format(res_name,times), fontsize = 15)
         plt.axis('off')
         plt.savefig(image_path+'/Tracer plots/{} hr res {} tracer.png'.format(times, res_name))
-
+           
     # Tanks
     for res_name, res in wn.tanks():
         trace_node = res_name
@@ -588,18 +579,18 @@ for times in times_list:
         tracer_am9001 = results_am9001.node['quality']
         junc_list = []
         tracer = []
-
+    
         for junc_name, junc in wn.junctions():
             if wn.get_node(junc_name).base_demand != 0:
                 t_r = tracer_am9001.loc[times*time_step,junc_name]
                 if t_r != 0:
                     junc_list.append(junc_name)
                     tracer.append(t_r)
-
+            
         fig, ax = plt.subplots(figsize=(15,25))
         nodes = nxp.draw_networkx_nodes(G, pos_dict, nodelist = junc_list, node_size = 40, node_color = tracer, cmap = cmap, vmin = 0, vmax = 100)
         nxp.draw_networkx_edges(G, pos_dict, arrows = False, edge_color = 'k')
-
+        
         plot_spl_elements()
         plt.title('Hour {}'.format(times), fontdict = {'fontsize' : 30})
         if times == 72:
@@ -607,7 +598,7 @@ for times in times_list:
             cbar.set_label('Percentage of water sourced from Tank {}'.format(res_name,times), fontsize = 15)
         plt.axis('off')
         plt.savefig(image_path+'/Tracer plots/{} hr tank {} tracer.png'.format(times, res_name))
-
+        
 # In[]
 # Basic plot
 fig, ax = plt.subplots(figsize=(15,25))
@@ -624,3 +615,4 @@ for valve_name, valve in wn.valves():
 nxp.draw_networkx_nodes(G, pos_dict, nodelist = valve_list, node_size = 200, node_color = 'orange', node_shape = 'P')
 plt.axis('off')
 fig.savefig(image_path+'/barebones.png')
+

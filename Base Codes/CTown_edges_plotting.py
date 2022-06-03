@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jun  3 13:55:37 2022
-
-@author: Tyler
-"""
-
 # Import libraries
 import wntr
 import networkx as nx
@@ -17,9 +10,11 @@ import matplotlib.colors as mc
 import matplotlib as mpl
 from matplotlib.lines import Line2D
 import matplotlib.cm as cm
+import os
 
 # Define .INP file name
-inp_file = 'NWC_new_stations.inp'
+dirname = os.path.dirname(__file__)
+inp_file = os.path.join(dirname, 'Networks', 'CTown.inp')
 
 # Run hydraulic simulation and store results
 wn = wntr.network.WaterNetworkModel(inp_file)
@@ -72,28 +67,19 @@ time_step = wn.options.time.report_timestep
 mult_ts = 3600/time_step
 x = np.linspace(0,(x_val-1)/mult_ts,x_val)
 
-image_path = "C:/Users/mst2245/Documents/Research/5. State Estimation/Python exercises/NWC/Images"
+image_path = os.path.join(dirname, 'Images')
 
 def plot_spl_elements():
     nxp.draw_networkx_nodes(G, pos_dict, nodelist = wn.reservoir_name_list, node_size = 200, node_color = 'k', node_shape = 's')
     nxp.draw_networkx_nodes(G, pos_dict, nodelist = wn.tank_name_list, node_size = 200, node_color = 'b', node_shape = 'h')
-    nxp.draw_networkx_nodes(G, pos_dict, nodelist = spl_nodes, node_size = 150, node_color = 'r')
-    # nxp.draw_networkx_nodes(G, pos_dict, nodelist = spl_nodes, node_size = 50, node_color = 'white')    
-    plt.text(wn.get_node('AM9001').coordinates[0]-500,wn.get_node('AM9001').coordinates[1],s = 'Anderson Mill R + T + PS', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('FP9001').coordinates[0],wn.get_node('FP9001').coordinates[1]-1400,s = 'Four Points R + T + PS', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='left', fontsize = '15')
-    plt.text(wn.get_node('104158').coordinates[0]-400,wn.get_node('104158').coordinates[1]-500,s = 'GL Tank', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('STC9001').coordinates[0]-400,wn.get_node('STC9001').coordinates[1]+500,s = 'STC Tank', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('PP35').coordinates[0]-300,wn.get_node('PP35').coordinates[1]-800,s = 'PP35', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('PP48').coordinates[0]-600,wn.get_node('PP48').coordinates[1]+500,s = 'PP48', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP104').coordinates[0]+1200,wn.get_node('SP104').coordinates[1]+1000,s = 'SP104', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP105').coordinates[0]-100,wn.get_node('SP105').coordinates[1]+600,s = 'SP105', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP106').coordinates[0]-1100,wn.get_node('SP106').coordinates[1]-300,s = 'SP106', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP108').coordinates[0]+1100,wn.get_node('SP108').coordinates[1]+700,s = 'SP108', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP110').coordinates[0]+700,wn.get_node('SP110').coordinates[1]+700,s = 'SP110', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP111').coordinates[0]+1100,wn.get_node('SP111').coordinates[1]-800,s = 'SP111', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP114').coordinates[0]-400,wn.get_node('SP114').coordinates[1]-400,s = 'SP114', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP116').coordinates[0]+1100,wn.get_node('SP116').coordinates[1]-800,s = 'SP116', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
-    plt.text(wn.get_node('SP115').coordinates[0]-200,wn.get_node('SP115').coordinates[1]-1200,s = 'SP115', bbox=dict(facecolor='white', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
+    plt.text(wn.get_node('R1').coordinates[0]+450,wn.get_node('R1').coordinates[1]+75,s = 'Resevoir 1', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T1').coordinates[0]+125,wn.get_node('T1').coordinates[1]+75,s = 'Tank 1', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T2').coordinates[0]+200,wn.get_node('T2').coordinates[1]-125,s = 'Tank 2', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T3').coordinates[0],wn.get_node('T3').coordinates[1]-100,s = 'Tank 3', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T4').coordinates[0]+350,wn.get_node('T4').coordinates[1]+75,s = 'Tank 4', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T5').coordinates[0]+100,wn.get_node('T5').coordinates[1]+75,s = 'Tank 5', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('T6').coordinates[0]+175,wn.get_node('T6').coordinates[1]+75,s = 'Tank 6', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '12')
+    plt.text(wn.get_node('T7').coordinates[0]+100,wn.get_node('T7').coordinates[1]+75,s = 'Tank 7', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
 
 def legend_without_duplicate_labels(ax):
     handles, labels = ax.get_legend_handles_labels()
@@ -140,8 +126,6 @@ for tank_name, tank in wn.tanks():
 for res_name, res in wn.reservoirs():
     # spl_nodes.append(res_name)
     spl_nodes_dict[res_name] = res_name
-
-spl_nodes = ['PP35', 'PP48', 'SP110', 'SP108', 'SP116', 'SP114', 'SP106', 'SP105', 'SP115', 'SP104', 'SP111']
 
 for i in range(len(spl_nodes)):
     spl_nodes_dict[spl_nodes[i]] = spl_nodes[i]
@@ -328,3 +312,5 @@ for valve_name, valve in wn.valves():
 nxp.draw_networkx_nodes(G, pos_dict, nodelist = valve_list, node_size = 200, node_color = 'orange', node_shape = 'P')
 plt.axis('off')
 fig.savefig(image_path+'/barebones.png')
+
+
