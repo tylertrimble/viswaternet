@@ -69,17 +69,20 @@ x = np.linspace(0,(x_val-1)/mult_ts,x_val)
 
 image_path = os.path.join(dirname, 'Images')
 
-def plot_spl_elements():
+def plot_spl_elements(size_of_font, type_of_graph):
+    if type_of_graph == "continuous":
+        size_of_font = size_of_font - 4
+    
     nxp.draw_networkx_nodes(G, pos_dict, nodelist = wn.reservoir_name_list, node_size = 200, node_color = 'k', node_shape = 's')
     nxp.draw_networkx_nodes(G, pos_dict, nodelist = wn.tank_name_list, node_size = 200, node_color = 'b', node_shape = 'h')
-    plt.text(wn.get_node('R1').coordinates[0]+450,wn.get_node('R1').coordinates[1]+75,s = 'Resevoir 1', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('T1').coordinates[0]+125,wn.get_node('T1').coordinates[1]+75,s = 'Tank 1', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('T2').coordinates[0]+175,wn.get_node('T2').coordinates[1]-125,s = 'Tank 2', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('T3').coordinates[0],wn.get_node('T3').coordinates[1]-100,s = 'Tank 3', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('T4').coordinates[0]+350,wn.get_node('T4').coordinates[1]+75,s = 'Tank 4', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('T5').coordinates[0]+100,wn.get_node('T5').coordinates[1]+75,s = 'Tank 5', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('T6').coordinates[0]+200,wn.get_node('T6').coordinates[1]+75,s = 'Tank 6', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
-    plt.text(wn.get_node('T7').coordinates[0]+100,wn.get_node('T7').coordinates[1]+75,s = 'Tank 7', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = '15')
+    plt.text(wn.get_node('R1').coordinates[0]+450,wn.get_node('R1').coordinates[1]+75,s = 'Resevoir 1', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = size_of_font)
+    plt.text(wn.get_node('T1').coordinates[0]+125,wn.get_node('T1').coordinates[1]+75,s = 'Tank 1', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = size_of_font)
+    plt.text(wn.get_node('T2').coordinates[0]+175,wn.get_node('T2').coordinates[1]-125,s = 'Tank 2', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = size_of_font)
+    plt.text(wn.get_node('T3').coordinates[0],wn.get_node('T3').coordinates[1]-100,s = 'Tank 3', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = size_of_font)
+    plt.text(wn.get_node('T4').coordinates[0]+350,wn.get_node('T4').coordinates[1]+75,s = 'Tank 4', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = size_of_font)
+    plt.text(wn.get_node('T5').coordinates[0]+100,wn.get_node('T5').coordinates[1]+75,s = 'Tank 5', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = size_of_font)
+    plt.text(wn.get_node('T6').coordinates[0]+200,wn.get_node('T6').coordinates[1]+75,s = 'Tank 6', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = size_of_font)
+    plt.text(wn.get_node('T7').coordinates[0]+100,wn.get_node('T7').coordinates[1]+75,s = 'Tank 7', bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = size_of_font)
 def legend_without_duplicate_labels(ax):
     handles, labels = ax.get_legend_handles_labels()
     unique = [(h, l) for i, (h, l) in enumerate(zip(handles, labels)) if l not in labels[:i]]
@@ -188,7 +191,7 @@ nxp.draw_networkx_nodes(G, pos_dict, nodelist = dem50, node_size = 120, node_col
 nxp.draw_networkx_nodes(G, pos_dict, nodelist = dem60, node_size = 200, node_color = cmap(1.0), label = '> 40')
 
 nxp.draw_networkx_edges(G, pos_dict, arrows = False, edge_color = 'k')
-plot_spl_elements()
+plot_spl_elements(15, "discrete")
 
 plt.axis('off')
 plt.legend(scatterpoints = 1, title = 'Demand [GPM]', loc = 'lower right', fontsize = '15', title_fontsize = '17')
@@ -203,11 +206,12 @@ elevations = []
 for junc_name, junc in wn.junctions():
     elevations.append(3.28084*junc.elevation)
     junc_list.append(junc_name)
-        
+    
 fig, ax = plt.subplots(figsize=(15,25))
 nodes = nxp.draw_networkx_nodes(G, pos_dict, nodelist = junc_list, node_size = 40, node_color = elevations, cmap = cmap)
 nxp.draw_networkx_edges(G, pos_dict, arrows = False, edge_color = 'k')
-plot_spl_elements()
+
+plot_spl_elements(15, "continuous")
 
 valve_list = []
 for valve_name, valve in wn.valves():
