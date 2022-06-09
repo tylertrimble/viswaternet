@@ -60,7 +60,6 @@ for link_name, link in wn.links():
     pipe_tp2.append(link.end_node_name)
 new_pipes_list = list(zip(pipe_tp, pipe_tp2))
 
-
 # Time configuration
 x_val = len(results.node['head'].loc[:, junc_names[0]])
 time_step = wn.options.time.report_timestep
