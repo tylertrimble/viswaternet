@@ -179,14 +179,13 @@ def createFlowRatePlot(model, savefig=False, animation=None):
     fig, ax = plt.subplots(figsize=(15,25))
     
     flow_rates = []
-    for i in range(len(model['pipe_list_names'])-1):
+    for i in range(len(model['pipe_list_names'])):
         flow_rates.append(np.average(model['results'].link['flowrate'].iloc[:,i]))
     flow_rates = from_si(FlowUnits.GPM, flow_rates, HydParam.Flow)
     max_flow_rate = np.max(flow_rates)
     min_flow_rate = np.min(flow_rates)
     normalized_flow_rates = np.copy(flow_rates)
-    norm = mc.Normalize(vmin=min_flow_rate, vmax=max_flow_rate, clip=True)
-    mapper = mpl.cm.ScalarMappable(norm=norm, cmap=mpl.cm.Blues)
+
     counter = 0
     for flow_rate in flow_rates:
         normalized_flow_rates[counter] = (flow_rate - min_flow_rate)/(max_flow_rate - min_flow_rate)
@@ -195,9 +194,15 @@ def createFlowRatePlot(model, savefig=False, animation=None):
     nxp.draw_networkx_nodes(model['G'], model['pos_dict'], node_size = 30, node_color = 'k')
     nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist = model['wn'].reservoir_name_list, node_size = 200, node_color = 'black',linewidths=3,node_shape = 's')
     nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist = model['wn'].tank_name_list, node_size = 200, node_color = 'black',linewidths=3, node_shape = 'd')
-    g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = model['G_list_pipes_only'], edge_color = flow_rates, width = 2, edge_cmap = mpl.cm.gnuplot, arrows = False)
+    g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = model['G_list_pipes_only'], edge_color = flow_rates, width = widths, edge_cmap = mpl.cm.Reds, arrows = False)
     cbar = plt.colorbar(g)
     cbar.set_label('Pipe FlowRate', fontsize = 15)
+    if savefig == True:
+        if model['inp_file'].endswith('.inp'):
+            prefixRemove = len(model['image_path']) + 3
+            model['inp_file'] = model['inp_file'][prefixRemove:-4]
+        image_path2 = '/FlowRate' + model['inp_file'] + '.png'
+        plt.savefig(model['image_path']+image_path2) 
     
 def createDemandPatternPlot(model, savefig=False):   
     """Creates a plot showing demand pattern groups. By default also shows
