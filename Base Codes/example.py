@@ -6,4 +6,6 @@ import wdn_viz_001 as wdn
 
 model = wdn.initializeModel('CTown.inp')
 
-flow_rates = wdn.createFlowRatePlot(model,savefig=True)
+wdn.createBasicPlot(model, savefig=True)
+wdn.createFlowRatePlot(model, savefig=True)
+wdn.createDemandPatternPlot(model, savefig=True)
