@@ -196,7 +196,7 @@ def createFlowRatePlot(model, savefig=False, animation=None):
     nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist = model['wn'].tank_name_list, node_size = 200, node_color = 'black',linewidths=3, node_shape = 'd')
     g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = model['G_list_pipes_only'], edge_color = flow_rates, width = widths, edge_cmap = mpl.cm.Reds, arrows = False)
     cbar = plt.colorbar(g)
-    cbar.set_label('Pipe FlowRate', fontsize = 15)
+    cbar.set_label('Pipe FlowRate (GPM)', fontsize = 15)
     if savefig == True:
         if model['inp_file'].endswith('.inp'):
             prefixRemove = len(model['image_path']) + 3

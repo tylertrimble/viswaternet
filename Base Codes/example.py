@@ -4,7 +4,7 @@ Example with CTown.inp showing first few functions
 """
 import wdn_viz_001 as wdn
 
-model = wdn.initializeModel('Net3.inp')
+model = wdn.initializeModel('CTown.inp')
 
 wdn.createBasicPlot(model, savefig=True)
 wdn.createFlowRatePlot(model, savefig=True)
