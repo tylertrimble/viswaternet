@@ -1,18 +1,15 @@
 import wntr
-import networkx as nx
 import numpy as np
-import scipy.sparse as sp
 import matplotlib.pyplot as plt
 from wntr.epanet.util import *
 import networkx.drawing.nx_pylab as nxp
-import matplotlib.colors as mc
+import matplotlib.colors as colors
 import matplotlib as mpl
-from matplotlib.lines import Line2D
-import matplotlib.cm as cm
+from matplotlib import cm
 import matplotlib.patches as mpatches
 import os
 import pandas as pd
-import math
+
 
 def patternMatch(nodePattern,pattern, junc_name,demandPatternNodes):
     """Determines if demand pattern of node is the one specified, then stores 
@@ -26,9 +23,24 @@ def patternMatch(nodePattern,pattern, junc_name,demandPatternNodes):
         demandPatternNodes[pattern][junc_name] = junc_name
     return demandPatternNodes
 
-def binParameter(parameterResults,binList):
+def convertExcel(data):
+    node_list= {}
+    dirname = os.path.dirname(__file__)
+    dataFile = os.path.join(dirname, 'Excel', data)
+    df = pd.read_excel(dataFile,dtype=str)
+    headers = df.columns
+
+    for header in headers:
+        node_list[header] = {}
+        for node in df.loc[:,header].dropna():
+            node_list[header][node] = node
+
+    return node_list, headers
+            
+    
+def binParameter(parameterResults,binList,binNum):
     if binList == 'Automatic':
-        bins=math.floor(math.pow(len(parameterResults),1/3))
+        bins=binNum
         binList = np.linspace(np.min(parameterResults),np.max(parameterResults),bins)
     binnedParameter = {}
     binNames = []
@@ -49,7 +61,7 @@ def binParameter(parameterResults,binList):
                 
     for binName in binNames:
         binnedParameter[binName] = {}
-    print(binNames)
+
     for i in range(len(binList)):
         
         if i == 0:
@@ -88,6 +100,68 @@ def binParameter(parameterResults,binList):
             del binnedParameter[binName]
     return binnedParameter, binNames
 
+def binLinkParameter(parameterResults,binList,binNum):
+    if binList == 'Automatic':
+        bins=binNum
+        binList = np.linspace(np.min(parameterResults),np.max(parameterResults),bins)
+    binnedParameter = {}
+    binNames = []
+    junctionNames = list(parameterResults.index)
+    for i in range(len(binList)):
+        
+        if i == 0:
+            if np.min(parameterResults) < binList[i]:
+                binNames = np.append(binNames, '< {0:1.3f}'.format(binList[i]))
+            binNames = np.append(binNames, '{0:1.3f} - {1:1.3f}'.format(binList[i], binList[i+1]))
+            
+        elif (i<len(binList) - 1) == True:
+            binNames = np.append(binNames, '{0:1.3f} - {1:1.3f}'.format(binList[i], binList[i+1]))
+            
+        elif i == len(binList) - 1:
+            if np.max(parameterResults) > binList[i]:
+                binNames = np.append(binNames, '> {0:1.3f}'.format(binList[i]))
+                
+    for binName in binNames:
+        binnedParameter[binName] = {}
+
+    for i in range(len(binList)):
+        
+        if i == 0:
+            counter = 0
+
+            
+            for parameter in parameterResults:
+                if parameter >= binList[i] and parameter < binList[i+1]:
+                        binnedParameter['{0:1.3f} - {1:1.3f}'.format(binList[i], binList[i+1])][junctionNames[counter]] = int(counter)
+                if parameter < binList[i]:
+                        binnedParameter['< {0:1.3f}'.format(binList[i])][junctionNames[counter]] = counter
+                counter += 1
+        elif i == len(binList) - 2:
+            counter = 0
+            for parameter in parameterResults:
+                if parameter >= binList[i] and parameter <= binList[i+1]:
+                        binnedParameter['{0:1.3f} - {1:1.3f}'.format(binList[i], binList[i+1])][junctionNames[counter]] = int(counter)
+                counter += 1
+        elif (i<len(binList) - 2) == True:
+            counter = 0
+            for parameter in parameterResults:
+                if parameter >= binList[i] and parameter < binList[i+1]:
+                        binnedParameter['{0:1.3f} - {1:1.3f}'.format(binList[i], binList[i+1])][junctionNames[counter]] = int(counter)
+                counter += 1
+                
+        elif i == len(binList) - 1:
+            counter = 0
+            for parameter in parameterResults:
+                if parameter > binList[i]:
+                    binnedParameter['> {0:1.3f}'.format(binList[i])][junctionNames[counter]] = int(counter)
+                counter += 1
+                
+    for binName in binNames:
+        if len(binnedParameter[binName]) == 0:
+            binNames = np.delete(binNames,np.where(binNames == binName))
+            del binnedParameter[binName]
+    
+    return binnedParameter, binNames
     
             
 def drawLegend(ax,title='Node Types',pumps=True,loc='upper right'):
@@ -110,11 +184,11 @@ def drawSpecialLegend(ax,binList,title=None,loc='lower right'):
     legend = plt.legend(title=title,handles=handles[len(labels) - len(binList):], loc=loc,fontsize = '15', title_fontsize = '17')
     ax.add_artist(legend)
     
-    
+ 
 def drawDistinctNodes(model,ax,nodes, binList, binSizeList=None, binLabelList=None, binShapeList=None,cmap='tab10', colorList =  None,legend=True, legendTitle=None, legendLoc='lower right'):
     if binSizeList == None:
         binSizeList = np.ones(len(binList))*300
-    print(binSizeList)
+
     
     if binLabelList == None:
         binLabelList = binList
@@ -141,6 +215,32 @@ def drawDistinctNodes(model,ax,nodes, binList, binSizeList=None, binLabelList=No
     if legend == True:
         drawSpecialLegend(ax,binList,title=legendTitle,loc=legendLoc)
     handles, labels = ax.get_legend_handles_labels()       
+
+def drawDistinctLinks(model,ax,links, binList, binWidthList=None, binLabelList=None,cmap='tab10', colorList =  None,legend=True, legendTitle=None, legendLoc='lower right'):
+    if binWidthList == None:
+        binWidthList = np.ones(len(binList))*2
+
+    
+    if binLabelList == None:
+        binLabelList = binList
+    counter = 0
+    if (colorList != None and cmap != None) == True or cmap != None:        
+        cmap = mpl.cm.get_cmap(cmap)
+        cmapValue = 0
+        
+        for binName in binList:
+            nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = ([model['G_edge_list'][i] for i in links.get(binName).values()]),edge_color = cmap(float(cmapValue)),width = binWidthList[counter],arrows = False,label=binLabelList[counter])
+            cmapValue += 1/len(binList)
+            counter += 1
+            
+    else:
+        for binName in binList:
+            nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = model['G_edge_list'][links.get(binName).values()],edge_color = colorList[counter],width = binWidthList[counter],arrows = False,label=binLabelList[counter])
+            counter += 1
+            
+    if legend == True:
+        drawSpecialLegend(ax,binList,title=legendTitle,loc=legendLoc)
+    handles, labels = ax.get_legend_handles_labels()      
         
     
 def drawBaseElements(model,ax,resevoirs=True,tanks=True,pumps=True,valves=True,legend=True):
@@ -168,13 +268,38 @@ def drawBaseElements(model,ax,resevoirs=True,tanks=True,pumps=True,valves=True,l
         
     if legend == True:
         drawLegend(ax,pumps=pumps)      
-def getParameter(model,parameter):
-    try:
-        parameterResults = model['results'].node[parameter]
-        return parameterResults
-    except KeyError:
-        parameterResults = model['wn'].query_node_attribute('elevation')
-        return parameterResults
+
+def drawColorBar(model,ax,g,cmap,colorBarTitle, nodeSize = 100, nodeShape = '.'):
+
+    cbar = plt.colorbar(g)
+    cbar.set_label(colorBarTitle, fontsize = 15)
+def getParameter(model,parameterType,parameter,timestep = None):
+    if parameterType == 'Node':
+        try:
+            if timestep != None:
+                parameterResults = model['results'].node[parameter].iloc[timestep]
+                elementList = list(parameterResults.index)
+            else:
+                parameterResults = model['results'].node[parameter]
+                elementList = list(parameterResults.index)
+            return parameterResults, elementList
+        except KeyError:
+            parameterResults = model['wn'].query_node_attribute(parameter)
+            elementList = list(parameterResults.index)
+            return parameterResults, elementList
+    else:
+        try:
+            if timestep != None:
+                parameterResults = model['results'].link[parameter].iloc[timestep]
+                elementList = list(parameterResults.index)
+            else:
+                parameterResults = model['results'].link[parameter]
+                elementList = list(parameterResults.index)
+            return parameterResults, elementList
+        except KeyError:
+            parameterResults = model['wn'].query_link_attribute(parameter)
+            elementList = list(parameterResults.index)
+            return parameterResults, elementList
 
 
 def getDemandPatterns(model):
@@ -220,6 +345,7 @@ def initializeModel(inp_file):
     image_path = os.path.join(dirname, 'Images')
     model['image_path'] = image_path
     
+    
     # Run hydraulic simulation and store results
     wn = wntr.network.WaterNetworkModel(inp_file)
     model['wn'] = wn
@@ -227,6 +353,9 @@ def initializeModel(inp_file):
     model['sim'] = sim
     results = sim.run_sim()
     model['results'] = results
+    
+    print(wn.options.time.report_timestep)
+
     
     # Create name lists for easy reference
     junc_names = wn.junction_name_list
@@ -280,7 +409,8 @@ def initializeModel(inp_file):
     model['G_list_valves_only'] = G_list_valves_only  
     model['G_pipe_index'] = G_pipe_index  
     model['pipe_list_names'] = pipe_list_names                   
-        
+    
+    
     return model
 
 
@@ -349,12 +479,54 @@ def createDemandPatternPlot(model, savefig=True, saveName=None):
     if savefig == True:
          saveFig(model, saveName=saveName)
 
-def plotDistinctNodes(model, parameter=None,bins='Automatic', binSizeList = None, binShapeList = None,binLabelList = None, savefig=True, legend=True,legendTitle = None, legendLoc='lower right', saveName=None, cmap='tab10', colorList=None):
+def plotDistinctNodes(model, parameter=None, timestep=None, bins='Automatic', binNum=None, binSizeList = None, binShapeList = None,binLabelList = None, savefig=True, tanks=True, resevoirs=True, pumps=True, valves=True,legend=True,legendTitle = None, legendLoc='lower right', saveName=None, cmap='tab10', colorList=None, specialData=None, specialLegendTitle=None):
     fig, ax = plt.subplots(figsize=(15,25))
-    parameterResults = getParameter(model,parameter)
-    binnedResults,binNames = binParameter(parameterResults,binList=bins)
-    drawBaseElements(model,ax,tanks=False)
-    drawDistinctNodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,cmap=cmap, colorList=colorList, legend=legend, legendTitle=legendTitle, legendLoc=legendLoc)
+    drawBaseElements(model,ax,tanks=tanks,resevoirs=resevoirs,pumps=pumps,valves=valves)
+    if parameter != None:
+        parameterResults, nodeList = getParameter(model,'Node',parameter, timestep=timestep)
+        binnedResults,binNames = binParameter(parameterResults,binList=bins, binNum=binNum)
+        
+        drawDistinctNodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,cmap=cmap, colorList=colorList, legend=legend, legendTitle=legendTitle, legendLoc=legendLoc)
+    if specialData != None:
+        node_list, headers = convertExcel(specialData)
+        drawDistinctNodes(model,ax,node_list,headers, legendTitle=specialLegendTitle)
     
     if savefig == True:
-         saveFig(model,saveName=saveName)
+         saveFig(model, saveName=saveName)
+   
+def plotContinuousNodes(model, parameter=None, timestep=None, tanks=True, resevoirs=True, pumps=True, valves=True,cmap='gist_heat', colorBarTitle=None,nodeSize=100, nodeShape='.',savefig=True, saveName=None):
+    fig, ax = plt.subplots(figsize=(15,25))
+    drawBaseElements(model,ax,tanks=tanks,resevoirs=resevoirs,pumps=pumps,valves=valves)
+    if parameter != None:
+        parameterResults, nodeList = getParameter(model,'Node',parameter, timestep=timestep)
+    negativeValues = False
+    for value in parameterResults:
+        if value < -1e-5:
+            negativeValues = True
+            cmap = 'bwr'
+            top = cm.get_cmap('Oranges_r', 128)
+            bottom = cm.get_cmap('Blues', 128)
+
+            newcolors = np.vstack((top(np.linspace(0, 1, 128)),
+                       bottom(np.linspace(0, 1, 128))))
+            newcmp = ListedColormap(newcolors, name='OrangeBlue')
+            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=parameterResults, cmap=newcmap,node_shape = nodeShape)
+            break
+    if negativeValues == False:
+        g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=parameterResults, cmap=cmap, node_shape = nodeShape)
+    drawColorBar(model,ax,g,cmap,colorBarTitle=colorBarTitle)
+    if savefig == True:
+        saveFig(model, saveName=saveName)
+    
+def plotDistinctLinks(model, parameter=None, timestep=None, bins='Automatic', binNum=None, binWidthList=None, binLabelList=None,colorList=None,tanks=True, resevoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legendTitle=None, legendLoc='lower right',savefig=True,saveName=None):
+    fig, ax = plt.subplots(figsize=(15,25))
+    drawBaseElements(model,ax,tanks=tanks,resevoirs=resevoirs,pumps=pumps,valves=valves)
+    if parameter != None:
+        parameterResults, linkList = getParameter(model,'Link',parameter, timestep=timestep)
+        binnedResults,binNames = binLinkParameter(parameterResults,binList=bins, binNum=binNum)
+        drawDistinctLinks(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList, legend=legend, legendTitle=legendTitle, legendLoc=legendLoc)
+    if savefig == True:
+         saveFig(model, saveName=saveName)
+         
+def plotContinuousLinks(model,parameter=None,timestep=None,minWidth=1,maxWidth=5,tanks=True, resevoirs=True, pumps=True, valves=True,cmap='gist_heat',colorBarTitle=None,savefig=True, saveName=None):
+    f
