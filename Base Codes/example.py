@@ -65,4 +65,4 @@ wdn.plot_distinct_links(model,specialData=[edge_list,bins],savefig=True, legendT
 
 edge_list, bins = wdn.convert_excel(model,'NWC Pipes.xlsx','Category',0,2)
 
-wdn.plot_distinct_links(model,specialData=[edge_list,bins],savefig=True, legendTitle= 'Pipe Material', saveName = 'PressureZonesMap')
+wdn.plot_distinct_links(model,specialData=[edge_list,bins],savefig=True, legendTitle= 'Pressure Zone', saveName = 'PressureZonesMap')
