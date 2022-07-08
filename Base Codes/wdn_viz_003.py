@@ -711,7 +711,13 @@ def draw_color_bar(ax,g,cmap,colorBarTitle):
     
     
     
-    
+def draw_label(model,labels,coords,nodes=None):
+    if nodes != None:
+        for label, node, coord in labels, nodes, coords: 
+            plt.text(model['wn'].get_node(node).coordinates[0]+coord[0],model['wn'].get_node(node).coordinates[1]+coord[1],s = label, bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = 11)
+    else:
+        for label, coord in labels, coords:
+            plt.text(coord[0],coord[1],s = label, bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = 11)
     
     
     
@@ -1049,3 +1055,4 @@ def animate_plot(model,function,**kwargs):
         
         for filename in set(filenames):
             os.remove(filename)
+            
