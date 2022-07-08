@@ -470,12 +470,12 @@ def draw_base_elements(model,ax,reservoirs=True,tanks=True,pumps=True,valves=Tru
     
     if reservoirs == True:
         
-        nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist = model['reservoir_names'], node_size = 200, node_color = 'black',linewidths=3,node_shape = 's', label='Reservoirs')
+        nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = model['reservoir_names'], node_size = 200, node_color = 'black',linewidths=3,node_shape = 's', label='Reservoirs')
     
     
     if tanks == True:
         
-        nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist = model['tank_names'], node_size = 200, node_color = 'black',linewidths=3, node_shape = 'd', label='Tanks')
+        nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = model['tank_names'], node_size = 200, node_color = 'black',linewidths=3, node_shape = 'd', label='Tanks')
    
     
     if valves == True:
@@ -492,15 +492,15 @@ def draw_base_elements(model,ax,reservoirs=True,tanks=True,pumps=True,valves=Tru
             valveCounter += 1
             
             
-        nxp.draw_networkx_nodes(model['G'], valve_coordinates, nodelist = model['valve_names'], node_size = 200, node_color = 'orange', edgecolors='black',linewidths=1,node_shape = 'P', label='Valves')
+        nxp.draw_networkx_nodes(model['G'], valve_coordinates, ax=ax, nodelist = model['valve_names'], node_size = 200, node_color = 'orange', edgecolors='black',linewidths=1,node_shape = 'P', label='Valves')
         
         
-    nxp.draw_networkx_edges(model['G'], model['pos_dict'], arrows = False, edge_color = 'k')
+    nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, arrows = False, edge_color = 'k')
     
     
     if pumps == True:
         
-        nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = model['G_list_pumps_only'], node_size = 200, edge_color = 'b', width=3, arrows=False)  
+        nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, edgelist = model['G_list_pumps_only'], node_size = 200, edge_color = 'b', width=3, arrows=False)  
         
         
      
@@ -578,7 +578,7 @@ def draw_distinct_nodes(model,ax,nodes, binList, binSizeList=None, binLabelList=
         
         for binName in binList:
             
-            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = binSizeList[counter], node_color = cmap(float(cmapValue)), node_shape = binShapeList[counter],label=binLabelList[counter], edgecolors = binBorderList[counter],linewidths = binBorderWidthList[counter])
+            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = binSizeList[counter], node_color = cmap(float(cmapValue)), node_shape = binShapeList[counter],label=binLabelList[counter], edgecolors = binBorderList[counter],linewidths = binBorderWidthList[counter])
             
             
             cmapValue += 1/len(binList)
@@ -591,7 +591,7 @@ def draw_distinct_nodes(model,ax,nodes, binList, binSizeList=None, binLabelList=
         
         for binName in binList:
             
-            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = binSizeList[counter], node_color = colorList[counter], node_shape = binShapeList[counter],label=binLabelList[counter], edgecolors = binBorderList[counter],linewidths = binBorderWidthList[counter])
+            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = binSizeList[counter], node_color = colorList[counter], node_shape = binShapeList[counter],label=binLabelList[counter], edgecolors = binBorderList[counter],linewidths = binBorderWidthList[counter])
             
             
             counter += 1
@@ -688,8 +688,8 @@ def draw_legend(ax,binList,title=None,pumps=True,loc='upper right',loc2='lower r
         handles.extend([patch])
     
     
-    legend = plt.legend(handles=handles[len(binList):], loc=loc,fontsize = '15')
-    legend2 = plt.legend(title=title,handles=handles[:len(binList)], loc=loc2,fontsize = '15', title_fontsize = '17')
+    legend = ax.legend(handles=handles[len(binList):], loc=loc,fontsize = '15')
+    legend2 = ax.legend(title=title,handles=handles[:len(binList)], loc=loc2,fontsize = '15', title_fontsize = '17')
     
     ax.add_artist(legend)
     ax.add_artist(legend2)
