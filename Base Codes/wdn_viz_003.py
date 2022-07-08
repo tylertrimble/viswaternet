@@ -132,35 +132,55 @@ def pattern_match(nodePattern,pattern, junc_name,demandPatternNodes):
 
 
 
-def convert_excel(data):
+def convert_excel(model,file,dataType,elementIndex,valueIndex):
     """Converts an excel file into the correct dictionary structure needed to
     be used with drawing functions.
     Arguments:
     data: Takes Excel file. Excel file must be structured in a specific manner.
     Look at examples to see this format."""
     
-    
-    node_list= {}
-    dirname = os.path.dirname(__file__)
-    dataFile = os.path.join(dirname, 'Excel', data)
-    
-    
-    df = pd.read_excel(dataFile,dtype=str)
-    headers = df.columns
-
-
-    for header in headers:
-        
-        node_list[header] = {}
+    if dataType == 'Category':
+        node_list= {}
+        dirname = os.path.dirname(__file__)
+        dataFile = os.path.join(dirname, 'Excel', file)
         
         
-        for node in df.loc[:,header].dropna():
+        df = pd.read_excel(dataFile,dtype=str)
+        bins = pd.unique(df.iloc[:,valueIndex])
+    
+    
+        for binName in bins:
             
-            node_list[header][node] = node
-
-
-    return node_list, headers
-
+            node_list[binName] = {}
+            
+            
+        for node,data in zip(df.iloc[:,elementIndex].dropna(),df.iloc[:,valueIndex].dropna()):
+            
+            node_list[data][node] = model['G_pipe_name_list'].index(node)
+    
+    
+        return node_list, bins
+    elif dataType == 'Numerical':
+        node_list= {}
+        dirname = os.path.dirname(__file__)
+        dataFile = os.path.join(dirname, 'Excel', file)
+        
+        
+        df = pd.read_excel(dataFile)
+        bins = pd.unique(df)
+    
+    
+        for binName in bins:
+            
+            node_list[binName] = {}
+            
+            
+        for node in df.iloc[:,elementIndex].dropna():
+                
+            node_list[binName][node] = model['G_pipe_name_list'].index(node)
+    
+    
+        return node_list, bins
 
 
 
@@ -455,7 +475,7 @@ def draw_nodes(model, nodes,nodeSize=300,nodeColor='k',nodeShape='.',edgeColors=
     
     
     
-def draw_base_elements(model,ax,reservoirs=True,tanks=True,pumps=True,valves=True,legend=True):
+def draw_base_elements(model,ax,links=True,reservoirs=True,tanks=True,pumps=True,valves=True,legend=True):
     """Draws nodes, links, resevoirs, tanks, pumps and valves without any data
     attached to them.
     Arguments:
@@ -494,8 +514,8 @@ def draw_base_elements(model,ax,reservoirs=True,tanks=True,pumps=True,valves=Tru
             
         nxp.draw_networkx_nodes(model['G'], valve_coordinates, ax=ax, nodelist = model['valve_names'], node_size = 200, node_color = 'orange', edgecolors='black',linewidths=1,node_shape = 'P', label='Valves')
         
-        
-    nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, arrows = False, edge_color = 'k')
+    if links == True:   
+        nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, arrows = False, edge_color = 'k')
     
     
     if pumps == True:
@@ -812,20 +832,25 @@ def plot_distinct_nodes(model,figsize=[15,25],parameter=None, timestep=None, bin
         draw_distinct_nodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
     
     
-    draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
+        draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
     
     
-    if legend == True:
-        
-        draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+        if legend == True:
+            
+            draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
         
         
     if specialData != None:
         
-        node_list, headers = convert_excel(specialData)
+        draw_distinct_nodes(model,ax,specialData[0], specialData[1])
         
         
-        draw_distinct_nodes(model,ax,node_list,headers, legendTitle=legendTitle)
+        draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
+    
+    
+        if legend == True:
+            
+            draw_legend(ax,specialData[1],title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
     
     
     if savefig == True:
@@ -885,6 +910,8 @@ def plot_continuous_nodes(model,figsize=[15,25],parameter=None, timestep=None, t
             
             
             break
+    
+    
         
         
     if negativeValues == False:
@@ -902,7 +929,7 @@ def plot_continuous_nodes(model,figsize=[15,25],parameter=None, timestep=None, t
     
   
     
-def plot_distinct_links(model, figsize=[15,25], parameter=None, timestep=None, bins='Automatic', binEdgeNum=None, binWidthList=None, binLabelList=None,colorList=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legendTitle=None, legendLoc='upper right', legendLoc2='lower right',savefig=True,saveName=None):
+def plot_distinct_links(model, figsize=[15,25], parameter=None, timestep=None, bins='Automatic', binEdgeNum=None, binWidthList=None, binLabelList=None,colorList=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legendTitle=None, legendLoc='upper right', legendLoc2='lower right',savefig=True,saveName=None,specialData=None):
     """Plots distinct Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -936,7 +963,7 @@ def plot_distinct_links(model, figsize=[15,25], parameter=None, timestep=None, b
     fig, ax = plt.subplots(figsize=(15,25))
     
     
-    draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
+    
     
     
     if parameter != None:
@@ -949,12 +976,24 @@ def plot_distinct_links(model, figsize=[15,25], parameter=None, timestep=None, b
         
         draw_distinct_links(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
         
+        draw_base_elements(model,ax,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
         
-    if legend == True:
+        if legend == True:
+            
+            draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
         
-        draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+    
+    if specialData != None:
         
+        draw_distinct_links(model,ax,specialData[0], specialData[1])
         
+        draw_base_elements(model,ax,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
+        
+        if legend == True:
+            
+            draw_legend(ax,specialData[1],title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+
+
     if savefig == True:
         
          save_fig(model, saveName=saveName)

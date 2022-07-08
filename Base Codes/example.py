@@ -54,3 +54,15 @@ wdn.draw_base_elements(model,ax2)
 wdn.draw_legend(ax2,binNames)
 
 wdn.save_fig(model, "Subplot")
+
+#%%
+#Special data plotting with excel
+model = wdn.initialize_model('NWC_old_stations.inp')
+
+edge_list, bins = wdn.convert_excel(model,'NWC Pipes.xlsx','Category',0,1)
+
+wdn.plot_distinct_links(model,specialData=[edge_list,bins],savefig=True, legendTitle= 'Pipe Material', saveName = 'PipeMaterialMap')
+
+edge_list, bins = wdn.convert_excel(model,'NWC Pipes.xlsx','Category',0,2)
+
+wdn.plot_distinct_links(model,specialData=[edge_list,bins],savefig=True, legendTitle= 'Pipe Material', saveName = 'PressureZonesMap')
