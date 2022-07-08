@@ -7,6 +7,7 @@ import matplotlib as mpl
 import matplotlib.patches as mpatches
 import os
 import pandas as pd
+import imageio
 def initialize_model(inp_file):
     """Initializes all variables needed to perform other plotting functions
     Arguments:
@@ -447,7 +448,13 @@ def bin_parameter(model,parameterResults,binEdgeNum,binList='Automatic',):
 
 
 
-
+def draw_nodes(model, nodes,nodeSize=300,nodeColor='k',nodeShape='.',edgeColors='k',lineWidths=0,label='None'):
+    
+    nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodes,node_size = nodeSize, node_color=nodeColor, node_shape = nodeShape,edgecolors=edgeColors,linewidths=lineWidths,label=label)
+    
+    
+    
+    
 def draw_base_elements(model,ax,reservoirs=True,tanks=True,pumps=True,valves=True,legend=True):
     """Draws nodes, links, resevoirs, tanks, pumps and valves without any data
     attached to them.
@@ -496,14 +503,9 @@ def draw_base_elements(model,ax,reservoirs=True,tanks=True,pumps=True,valves=Tru
         nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = model['G_list_pumps_only'], node_size = 200, edge_color = 'b', width=3, arrows=False)  
         
         
-    if legend == True:
-        
-        draw_legend(ax,pumps=pumps) 
-        
-        
      
         
-def draw_distinct_nodes(model,ax,nodes, binList, binSizeList=None, binLabelList=None, binShapeList=None,cmap='tab10', colorList =  None,legend=True, legendTitle=None, legendLoc='lower right'):
+def draw_distinct_nodes(model,ax,nodes, binList, binSizeList=None, binLabelList=None, binShapeList=None,cmap='tab10', binBorderList = None, binBorderWidthList = None, colorList =  None):
     """Draws nodes based off of distinct bins.
     Arguments:
     model: Takes Dictionary.
@@ -516,15 +518,24 @@ def draw_distinct_nodes(model,ax,nodes, binList, binSizeList=None, binLabelList=
     binShapeList: Takes List. List of markers for each bin.
     cmap: Takes String. Colormap that determines bin colors.
     colorList: Takes List. List of hexadecimal strings that determine bin
-    colors. cmap must = None for colorList to take priority.
-    legend: Takes Boolean. Determines whether to draw legend or not.
-    legendTitle: Takes string. Title of legend.
-    legendLoc: Takes String. Location of legend."""
+    colors. cmap must = None for colorList to take priority."""
     
     
     if binSizeList == None:
         
-        binSizeList = np.ones(len(binList))*300
+        if len(model['node_names']) < 300:
+            
+            binSizeList = np.ones(len(binList))*300
+            
+            
+        elif len(model['node_names']) >= 300 and len(model['node_names']) < 1000:
+            
+            binSizeList = np.ones(len(binList))*(80000/len(model['node_names']))
+            
+            
+        else:
+            
+            binSizeList = np.ones(len(binList))*80
 
     
     if binLabelList == None:
@@ -541,6 +552,20 @@ def draw_distinct_nodes(model,ax,nodes, binList, binSizeList=None, binLabelList=
             
             binShapeList = np.append(binShapeList,'.')
             
+    if binBorderList == None:
+        binBorderList = []
+        
+        for i in range(len(binList)):
+            
+            binBorderList = np.append(binBorderList,'k')
+    
+    if binBorderWidthList == None:
+        binBorderWidthList = []
+        
+        for i in range(len(binList)):
+            
+            binBorderWidthList = np.append(binBorderWidthList,0)
+            
             
     counter = 0
     
@@ -553,7 +578,7 @@ def draw_distinct_nodes(model,ax,nodes, binList, binSizeList=None, binLabelList=
         
         for binName in binList:
             
-            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = binSizeList[counter], node_color = cmap(float(cmapValue)), node_shape = binShapeList[counter],label=binLabelList[counter])
+            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = binSizeList[counter], node_color = cmap(float(cmapValue)), node_shape = binShapeList[counter],label=binLabelList[counter], edgecolors = binBorderList[counter],linewidths = binBorderWidthList[counter])
             
             
             cmapValue += 1/len(binList)
@@ -566,20 +591,15 @@ def draw_distinct_nodes(model,ax,nodes, binList, binSizeList=None, binLabelList=
         
         for binName in binList:
             
-            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = binSizeList[counter], node_color = colorList[counter], node_shape = binShapeList[counter],label=binLabelList[counter])
+            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = binSizeList[counter], node_color = colorList[counter], node_shape = binShapeList[counter],label=binLabelList[counter], edgecolors = binBorderList[counter],linewidths = binBorderWidthList[counter])
             
             
             counter += 1
-            
-            
-    if legend == True:
-        
-        draw_bin_legend(ax,binList,title=legendTitle,loc=legendLoc)  
 
 
 
 
-def draw_distinct_links(model,ax,links, binList, binWidthList=None, binLabelList=None,cmap='tab10', colorList =  None,legend=True, legendTitle=None, legendLoc='lower right'):
+def draw_distinct_links(model,ax,links, binList, binWidthList=None, binLabelList=None,cmap='tab10', colorList =  None):
     """Draws links s based off of distinct bins.
     Arguments:
     model: Takes Dictionary.
@@ -592,10 +612,7 @@ def draw_distinct_links(model,ax,links, binList, binWidthList=None, binLabelList
     binShapeList: Takes List. List of markers for each bin.
     cmap: Takes String. Colormap that determines bin colors.
     colorList: Takes List. List of hexadecimal strings that determine bin
-    colors. cmap must = None for colorList to take priority.
-    legend: Takes Boolean. Determines whether to draw legend or not.
-    legendTitle: Takes string. Title of legend.
-    legendLoc: Takes String. Location of legend."""
+    colors. cmap must = None for colorList to take priority."""
     
     
     if binWidthList == None:
@@ -635,23 +652,20 @@ def draw_distinct_links(model,ax,links, binList, binWidthList=None, binLabelList
             nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = ([model['pipe_list'][i] for i in links.get(binName).values()]),edge_color = colorList[counter],width = binWidthList[counter],arrows = False,label=binLabelList[counter])
             
             
-            counter += 1
-            
-            
-    if legend == True:
-        
-        draw_bin_legend(ax,binList,title=legendTitle,loc=legendLoc)  
+            counter += 1        
         
    
     
     
-def draw_legend(ax,title='Node Types',pumps=True,loc='upper right'):
+def draw_legend(ax,binList,title=None,pumps=True,loc='upper right',loc2='lower right'):
     """Draws legend for basic elements.
     Arguments:
     ax: Axis of the figure the user wants the elements to be plotted on.
+    binList: Takes List. List of bins.
     title: Takes String. Legend title.
     pumps: Takes Boolean. Determines whether pumps are drawn or not.
-    loc: Takes String. Location of legend."""
+    loc: Takes String. Location of elements legend.
+    loc2 = Takes String. Location of bins legend"""
     
     
     handles, labels = ax.get_legend_handles_labels()
@@ -674,36 +688,15 @@ def draw_legend(ax,title='Node Types',pumps=True,loc='upper right'):
         handles.extend([patch])
     
     
-    legend = plt.legend(title=title,handles=handles, loc=loc,fontsize = '15', title_fontsize = '17')
-    
-    
-    ax.add_artist(legend)
-
-
-
-
-def draw_bin_legend(ax,binList,title=None,loc='lower right'):
-    """Draws legend for binned elements.
-    Arguments:
-    ax: Axis of the figure the user wants the elements to be plotted on.
-    binList: Takes List. List of Bin Names. Length of List used to locate
-    correct handles and labels.
-    title: Takes String. Legend title.
-    pumps: Takes Boolean. Determines whether pumps are drawn or not.
-    loc: Takes String. Location of legend."""
-    
-    
-    handles, labels = ax.get_legend_handles_labels()
-    
-    
-    legend = plt.legend(title=title,handles=handles[len(labels) - len(binList):], loc=loc,fontsize = '15', title_fontsize = '17')
-    
+    legend = plt.legend(handles=handles[len(binList):], loc=loc,fontsize = '15')
+    legend2 = plt.legend(title=title,handles=handles[:len(binList)], loc=loc2,fontsize = '15', title_fontsize = '17')
     
     ax.add_artist(legend)
+    ax.add_artist(legend2)
+
+
     
-    
-    
-    
+
 def draw_color_bar(ax,g,cmap,colorBarTitle):
     """Draws Color Bar.
     Arguments:
@@ -727,22 +720,22 @@ def draw_color_bar(ax,g,cmap,colorBarTitle):
     
     
     
-# def create_basic_plot(model, savefig=False, saveName=None):
-#     """Creates a basic plot, similar to the default seen in EPANET.
-#     Arguments:
-#     model: Saved initilization done with initializeModel
-#     savefig: Boolean. Determines whether plot is saved to /Images directory"""
+def create_basic_plot(model, savefig=False, saveName=None):
+    """Creates a basic plot, similar to the default seen in EPANET.
+    Arguments:
+    model: Saved initilization done with initializeModel
+    savefig: Boolean. Determines whether plot is saved to /Images directory"""
 
 
-#     fig, ax = plt.subplots(figsize=(15,25))
+    fig, ax = plt.subplots(figsize=(15,25))
     
     
-#     draw_base_elements(model,ax,pumps=False,legend=True)
+    draw_base_elements(model,ax,pumps=False,legend=True)
     
     
-#     if savefig == True:
+    if savefig == True:
         
-#         save_fig(model, saveName=saveName)
+        save_fig(model, saveName=saveName)
    
  
 
@@ -765,7 +758,7 @@ def draw_color_bar(ax,g,cmap,colorBarTitle):
 
 
 
-def plot_distinct_nodes(model,figsize=[15,25],parameter=None, timestep=None, bins='Automatic', binEdgeNum=None, binSizeList = None, binShapeList = None,binLabelList = None, savefig=True, tanks=True, resevoirs=True, pumps=True, valves=True,legend=True,legendTitle = None, legendLoc='lower right', saveName=None, cmap='tab10', colorList=None, specialData=None):
+def plot_distinct_nodes(model,figsize=[15,25],parameter=None, timestep=None, bins='Automatic', binEdgeNum=None, binSizeList = None, binShapeList = None,binLabelList = None, binBorderList = None, binBorderWidthList = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legendTitle = None, legendLoc='upper right', legendLoc2='lower right',saveName=None, cmap='tab10', colorList=None, specialData=None):
     """Plots distinct Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -795,11 +788,11 @@ def plot_distinct_nodes(model,figsize=[15,25],parameter=None, timestep=None, bin
     specialData: Takes either Excel file or correctly formatted dictionary. 
     Used to plot custom data."""
     
-    
+    global fig,ax
     fig, ax = plt.subplots(figsize=(figsize[0],figsize[1]))
     
     
-    draw_base_elements(model,ax,tanks=tanks,resevoirs=resevoirs,pumps=pumps,valves=valves)
+    
     
     
     if parameter != None:
@@ -810,9 +803,17 @@ def plot_distinct_nodes(model,figsize=[15,25],parameter=None, timestep=None, bin
         binnedResults,binNames = bin_parameter(model,parameterResults,binList=bins, binEdgeNum=binEdgeNum) 
         
         
-        draw_distinct_nodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,cmap=cmap, colorList=colorList, legend=legend, legendTitle=legendTitle, legendLoc=legendLoc)
+        draw_distinct_nodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
     
     
+    draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
+    
+    
+    if legend == True:
+        
+        draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+        
+        
     if specialData != None:
         
         node_list, headers = convert_excel(specialData)
@@ -829,7 +830,7 @@ def plot_distinct_nodes(model,figsize=[15,25],parameter=None, timestep=None, bin
     
 
 
-def plot_continuous_nodes(model,figsize=[15,25],parameter=None, timestep=None, tanks=True, resevoirs=True, pumps=True, valves=True,cmap='gist_heat', colorBarTitle=None,nodeSize=100, nodeShape='.',savefig=True, saveName=None):
+def plot_continuous_nodes(model,figsize=[15,25],parameter=None, timestep=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat', colorBarTitle=None,nodeSize=100, nodeShape='.',savefig=True, saveName=None):
     """Plots continuous Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -853,7 +854,7 @@ def plot_continuous_nodes(model,figsize=[15,25],parameter=None, timestep=None, t
     fig, ax = plt.subplots(figsize=(figsize[0],figsize[1]))
     
     
-    draw_base_elements(model,ax,tanks=tanks,resevoirs=resevoirs,pumps=pumps,valves=valves)
+    draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
     
     
     if parameter != None:
@@ -869,10 +870,12 @@ def plot_continuous_nodes(model,figsize=[15,25],parameter=None, timestep=None, t
         if value < -1e-5:
             
             negativeValues = True
+            
+            
             cmap = 'bwr'
 
 
-            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=parameterResults, cmap=cmap,node_shape = nodeShape)
+            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=parameterResults,vmax=np.max(parameterResults),vmin=-np.max(parameterResults), cmap=cmap,node_shape = nodeShape)
             
             
             break
@@ -893,7 +896,7 @@ def plot_continuous_nodes(model,figsize=[15,25],parameter=None, timestep=None, t
     
   
     
-def plot_distinct_links(model, figsize=[15,25], parameter=None, timestep=None, bins='Automatic', binNum=None, binWidthList=None, binLabelList=None,colorList=None,tanks=True, resevoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legendTitle=None, legendLoc='lower right',savefig=True,saveName=None):
+def plot_distinct_links(model, figsize=[15,25], parameter=None, timestep=None, bins='Automatic', binEdgeNum=None, binWidthList=None, binLabelList=None,colorList=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legendTitle=None, legendLoc='upper right', legendLoc2='lower right',savefig=True,saveName=None):
     """Plots distinct Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -927,7 +930,7 @@ def plot_distinct_links(model, figsize=[15,25], parameter=None, timestep=None, b
     fig, ax = plt.subplots(figsize=(15,25))
     
     
-    draw_base_elements(model,ax,tanks=tanks,resevoirs=resevoirs,pumps=pumps,valves=valves)
+    draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
     
     
     if parameter != None:
@@ -935,10 +938,15 @@ def plot_distinct_links(model, figsize=[15,25], parameter=None, timestep=None, b
         parameterResults, linkList = get_parameter(model,'Link',parameter, timestep=timestep)
         
         
-        binnedResults,binNames = bin_parameter(model,parameterResults,binList=bins, binNum=binNum)
+        binnedResults,binNames = bin_parameter(model,parameterResults,binList=bins, binEdgeNum=binEdgeNum)
         
         
-        draw_distinct_links(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList, legend=legend, legendTitle=legendTitle, legendLoc=legendLoc)
+        draw_distinct_links(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
+        
+        
+    if legend == True:
+        
+        draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
         
         
     if savefig == True:
@@ -948,7 +956,7 @@ def plot_distinct_links(model, figsize=[15,25], parameter=None, timestep=None, b
          
    
     
-def plot_continuous_links(model,figsize=[15,25],parameter=None,timestep=None,minWidth=1,maxWidth=5,tanks=True, resevoirs=True, pumps=True, valves=True,cmap='gist_heat',colorBarTitle=None,savefig=True, saveName=None):
+def plot_continuous_links(model,figsize=[15,25],parameter=None,timestep=None,minWidth=1,maxWidth=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',colorBarTitle=None,savefig=True, saveName=None):
     """Plots continuous Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -972,7 +980,7 @@ def plot_continuous_links(model,figsize=[15,25],parameter=None,timestep=None,min
     fig, ax = plt.subplots(figsize=(figsize[0],figsize[1]))
     
     
-    draw_base_elements(model,ax,tanks=tanks,resevoirs=resevoirs,pumps=pumps,valves=valves)
+    draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
     
     
     if parameter != None:
@@ -1021,3 +1029,23 @@ def plot_continuous_links(model,figsize=[15,25],parameter=None,timestep=None,min
     if savefig == True:
         
         save_fig(model, saveName=saveName)
+    
+def animate_plot(model,function,**kwargs):
+    timesteps = int(model['wn'].options.time.duration/model['wn'].options.time.report_timestep)
+    filenames = []
+    for timestep in range(timesteps):
+        function(model,timestep=timestep,**kwargs)
+        handles, labels = [], []
+        legend3 = plt.legend(handles, labels, title = 'Timestep ' + str(timestep*model['wn'].options.time.report_timestep) + " Seconds", loc='lower left')
+        ax.add_artist(legend3)
+        plt.savefig(str(timestep) + '.png')
+        filenames = np.append(filenames, str(timestep) + '.png')
+
+    # build gif
+    with imageio.get_writer('mygif.gif', mode='I',fps=3) as writer:
+        for filename in filenames:
+            image = imageio.imread(filename)
+            writer.append_data(image)
+        
+        for filename in set(filenames):
+            os.remove(filename)
