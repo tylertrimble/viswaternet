@@ -139,48 +139,28 @@ def convert_excel(model,file,dataType,elementIndex,valueIndex):
     data: Takes Excel file. Excel file must be structured in a specific manner.
     Look at examples to see this format."""
     
-    if dataType == 'Category':
-        node_list= {}
-        dirname = os.path.dirname(__file__)
-        dataFile = os.path.join(dirname, 'Excel', file)
+    
+    node_list= {}
+    dirname = os.path.dirname(__file__)
+    dataFile = os.path.join(dirname, 'Excel', file)
+    
+    
+    df = pd.read_excel(dataFile,dtype=str)
+    bins = pd.unique(df.iloc[:,valueIndex])
+
+
+    for binName in bins:
+        
+        node_list[binName] = {}
         
         
-        df = pd.read_excel(dataFile,dtype=str)
-        bins = pd.unique(df.iloc[:,valueIndex])
-    
-    
-        for binName in bins:
-            
-            node_list[binName] = {}
-            
-            
-        for node,data in zip(df.iloc[:,elementIndex].dropna(),df.iloc[:,valueIndex].dropna()):
-            
-            node_list[data][node] = model['G_pipe_name_list'].index(node)
-    
-    
-        return node_list, bins
-    elif dataType == 'Numerical':
-        node_list= {}
-        dirname = os.path.dirname(__file__)
-        dataFile = os.path.join(dirname, 'Excel', file)
+    for node,data in zip(df.iloc[:,elementIndex].dropna(),df.iloc[:,valueIndex].dropna()):
         
-        
-        df = pd.read_excel(dataFile)
-        bins = pd.unique(df)
-    
-    
-        for binName in bins:
-            
-            node_list[binName] = {}
-            
-            
-        for node in df.iloc[:,elementIndex].dropna():
-                
-            node_list[binName][node] = model['G_pipe_name_list'].index(node)
-    
-    
-        return node_list, bins
+        node_list[data][node] = model['G_pipe_name_list'].index(node)
+
+
+    return node_list, bins
+
 
 
 
@@ -321,7 +301,7 @@ def get_parameter(model,parameterType,parameter,timestep = None):
 
 
 
-def bin_parameter(model,parameterResults,binEdgeNum,binList='Automatic',):
+def bin_parameter(model,parameterResults,binEdgeNum,binList='Automatic'):
     """Bins results from get_parameter based on user specifications.
     Arguments:
     model: Takes Dictionary. Gets pipe or node name list.
@@ -468,11 +448,88 @@ def bin_parameter(model,parameterResults,binEdgeNum,binList='Automatic',):
 
 
 
-def draw_nodes(model, nodes,nodeSize=300,nodeColor='k',nodeShape='.',edgeColors='k',lineWidths=0,label='None'):
+def draw_nodes(model,nodeList,parameterResults=None,nodeSize=300,nodeColor='k',cmap='tab10',nodeShape='.',edgeColors='k',lineWidths=0,label=None):
+    if parameterResults[0] != None:
+        
+        negativeValues = False
+        
+        
+        for value in parameterResults:
+            
+            if value < -1e-5:
+                
+                negativeValues = True
+                
+                
+                cmap = mpl.cm.get_cmap(cmap)
     
-    nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodes,node_size = nodeSize, node_color=nodeColor, node_shape = nodeShape,edgecolors=edgeColors,linewidths=lineWidths,label=label)
+    
+                g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=parameterResults,vmax=np.max(parameterResults),vmin=-np.max(parameterResults), cmap=cmap,node_shape = nodeShape,linewidths=lineWidths,edgecolors=edgeColors,label=label)
+                
+                
+                return g
     
     
+        if negativeValues == False:
+            
+            cmap = mpl.cm.get_cmap(cmap)
+            
+            
+            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=parameterResults, cmap=cmap, node_shape = nodeShape)
+            
+            
+            return g
+        
+        
+    nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=nodeColor, node_shape = nodeShape,edgecolors=edgeColors,linewidths=lineWidths,label=label)
+    
+    
+    
+    
+def draw_links(model,linkList,parameterResults=None,edgeColor='k',cmap='tab10'):
+    
+    edgeList = {}
+    
+    
+    for i in linkList:
+        
+        edgeList[i] = linkList.index(i)
+    
+    
+    negativeValues = False
+    
+    
+    if parameterResults[0] != None:
+        
+        for value in parameterResults:
+            
+            if value < -1e-5:
+                
+                negativeValues = True
+                
+                
+                cmap = mpl.cm.get_cmap(cmap)
+                
+                
+                g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameterResults, edge_vmax=np.max(parameterResults),edge_vmin=-np.max(parameterResults),edge_cmap=cmap,arrows=False)
+                
+                
+                return g
+
+        
+        if negativeValues == False:
+            
+            cmap = mpl.cm.get_cmap(cmap)
+            
+            
+            g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameterResults, edge_cmap=cmap, arrows=False)
+            
+            
+            return g
+            
+    else:
+        
+        nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=edgeColor, arrows=False)
     
     
 def draw_base_elements(model,ax,links=True,reservoirs=True,tanks=True,pumps=True,valves=True,legend=True):
@@ -731,13 +788,21 @@ def draw_color_bar(ax,g,cmap,colorBarTitle):
     
     
     
-def draw_label(model,labels,coords,nodes=None):
+def draw_label(model,labels,xCoords,yCoords,nodes=None):
+    
+    
     if nodes != None:
-        for label, node, coord in labels, nodes, coords: 
-            plt.text(model['wn'].get_node(node).coordinates[0]+coord[0],model['wn'].get_node(node).coordinates[1]+coord[1],s = label, bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = 11)
+        
+        for label, node, xCoord, yCoord in zip(labels, nodes, xCoords, yCoords): 
+            
+            plt.text(model['wn'].get_node(node).coordinates[0]+xCoord,model['wn'].get_node(node).coordinates[1]+yCoord,s = label, bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = 11)
+            
+            
     else:
-        for label, coord in labels, coords:
-            plt.text(coord[0],coord[1],s = label, bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = 11)
+        
+        for label, xCoord, yCoord in zip(labels, xCoords, yCoords):
+            
+            plt.text(xCoord,yCoord,s = label, bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = 11)
     
     
     
@@ -861,7 +926,7 @@ def plot_distinct_nodes(model,figsize=[15,25],parameter=None, timestep=None, bin
     
 
 
-def plot_continuous_nodes(model,figsize=[15,25],parameter=None, timestep=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat', colorBarTitle=None,nodeSize=100, nodeShape='.',savefig=True, saveName=None):
+def plot_continuous_nodes(model,figsize=[15,25],parameter=None, timestep=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat', colorBarTitle=None,nodeSize=100, nodeShape='.',savefig=True, saveName=None,specialData=None):
     """Plots continuous Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -885,43 +950,31 @@ def plot_continuous_nodes(model,figsize=[15,25],parameter=None, timestep=None, t
     fig, ax = plt.subplots(figsize=(figsize[0],figsize[1]))
     
     
-    draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-    
-    
     if parameter != None:
         
         parameterResults, nodeList = get_parameter(model,'Node',parameter, timestep=timestep)
         
         
-    negativeValues = False
-    
-    
-    for value in parameterResults:
-        
-        if value < -1e-5:
+        g = draw_nodes(model,nodeList,parameterResults=parameterResults,nodeSize=nodeSize,cmap=cmap,nodeShape=nodeShape)
             
-            negativeValues = True
-            
-            
-            cmap = 'bwr'
-
-
-            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=parameterResults,vmax=np.max(parameterResults),vmin=-np.max(parameterResults), cmap=cmap,node_shape = nodeShape)
-            
-            
-            break
+        
+        draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
+        
+        
+        draw_color_bar(ax,g,cmap,colorBarTitle=colorBarTitle)
     
     
+    if specialData != None:
         
-        
-    if negativeValues == False:
-        
-        g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=parameterResults, cmap=cmap, node_shape = nodeShape)
-        
-        
-    draw_color_bar(ax,g,cmap,colorBarTitle=colorBarTitle)
+        g = draw_nodes(model,specialData[1],parameterResults=specialData[0],nodeSize=nodeSize,cmap=cmap,nodeShape=nodeShape)
+      
+    
+        draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
     
     
+        draw_color_bar(ax,g,cmap,colorBarTitle=colorBarTitle)
+        
+        
     if savefig == True:
         
         save_fig(model, saveName=saveName)
@@ -1001,7 +1054,7 @@ def plot_distinct_links(model, figsize=[15,25], parameter=None, timestep=None, b
          
    
     
-def plot_continuous_links(model,figsize=[15,25],parameter=None,timestep=None,minWidth=1,maxWidth=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',colorBarTitle=None,savefig=True, saveName=None):
+def plot_continuous_links(model,figsize=[15,25],parameter=None,timestep=None,minWidth=1,maxWidth=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',colorBarTitle=None,savefig=True, saveName=None, specialData=None):
     """Plots continuous Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1023,75 +1076,78 @@ def plot_continuous_links(model,figsize=[15,25],parameter=None,timestep=None,min
     
     
     fig, ax = plt.subplots(figsize=(figsize[0],figsize[1]))
-    
-    
-    draw_base_elements(model,ax,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-    
+
     
     if parameter != None:
         
-        parameterResults, pipeList = get_parameter(model,'Link',parameter, timestep=timestep)
+        parameterResults, linkList = get_parameter(model,'Link',parameter, timestep=timestep)
         
         
-    edgeList = {}
+        g = draw_links(model,linkList,parameterResults=parameterResults,cmap=cmap)
+      
     
-    for i in pipeList:
-        
-        edgeList[i] = pipeList.index(i)
-        
-        
-    negativeValues = False
+        draw_base_elements(model,ax,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
     
     
-    for value in parameterResults:
+        draw_color_bar(ax,g,cmap,colorBarTitle=colorBarTitle)
+    
+    if specialData != None:
         
-        if value < -1e-5:
-            
-            negativeValues = True
-            
-            
-            cmap = 'bwr'
-            cmap = mpl.cm.get_cmap(cmap)
-            
-            
-            g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameterResults, edge_vmax=np.max(parameterResults),edge_vmin=-np.max(parameterResults),edge_cmap=cmap,arrows=False)
-            
-            
-            break
-        
-        
-    if negativeValues == False:
-        
-        cmap = mpl.cm.get_cmap(cmap)
-        
-        
-        g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameterResults, edge_cmap=cmap, arrows=False)
-        
-        
-    draw_color_bar(ax,g,cmap,colorBarTitle=colorBarTitle)
+        g = draw_links(model,specialData[1],parameterResults=specialData[0],cmap=cmap)
+      
+    
+        draw_base_elements(model,ax,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
+    
+    
+        draw_color_bar(ax,g,cmap,colorBarTitle=colorBarTitle)
     
     
     if savefig == True:
         
         save_fig(model, saveName=saveName)
     
+    
+    
+    
 def animate_plot(model,function,**kwargs):
     timesteps = int(model['wn'].options.time.duration/model['wn'].options.time.report_timestep)
+    
+    
     filenames = []
+    
+    
     for timestep in range(timesteps):
+        
         function(model,timestep=timestep,**kwargs)
+        
+        
         handles, labels = [], []
+        
+        
         legend3 = plt.legend(handles, labels, title = 'Timestep ' + str(timestep*model['wn'].options.time.report_timestep) + " Seconds", loc='lower left')
+        
+        
         ax.add_artist(legend3)
+        
+        
         plt.savefig(str(timestep) + '.png')
+        
+        
         filenames = np.append(filenames, str(timestep) + '.png')
+
 
     # build gif
     with imageio.get_writer('mygif.gif', mode='I',fps=3) as writer:
+        
         for filename in filenames:
+            
             image = imageio.imread(filename)
+            
+            
             writer.append_data(image)
         
+        
         for filename in set(filenames):
+            
             os.remove(filename)
             
