@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 #Runs simulations and stores necessary information about network and the simulation in a dataframe
 model = wdn.initialize_model('Networks\CTown.inp')
-
+model['image_path'] = 'D:\Class Projects\wdn-viz\Base Codes\Images'
 
 # In[3]:
 
@@ -205,6 +205,7 @@ wdn.plot_unique_data(model,ax,parameter='tag',cmap='tab10')
 
 
 model = wdn.initialize_model('Networks\\NWC_old_stations.inp')
+model['image_path'] = 'D:\Class Projects\wdn-viz\Base Codes\Images'
 fig, ax = plt.subplots(figsize=(15,25))
 #Plots unique data from excel file
 wdn.plot_unique_data(model,ax,parameter='NWC Pipes.xlsx',parameter_type='link',data_type='unique',excel_columns=[0,1],reservoirs=False,tanks=False,valves=False)
