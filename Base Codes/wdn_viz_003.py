@@ -518,7 +518,7 @@ def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='au
 
         if (elementWithParameter in model['node_names']) == True:
 
-            continue
+            break
         else:   
             element_list = model['G_pipe_name_list']
             elementType = "link"
@@ -634,7 +634,7 @@ def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='au
             
             del binnedParameter[binName]
     
-    
+
     return binnedParameter, binNames
 
 
