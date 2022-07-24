@@ -10,6 +10,7 @@ import os
 import pandas as pd
 import imageio
 
+
 def initialize_model(inp_file):
     """Initializes all variables needed to perform other plotting functions
     Arguments:
@@ -171,7 +172,7 @@ def convert_excel(model,file,dataType,elementIndex,valueIndex):
     
         return element_list, bins
     
-    if dataType == 'continuous' or 'discrete':
+    if dataType == 'continuous':
         dirname = os.path.dirname(__file__)
         dataFile = os.path.join(dirname, 'Excel', file)
         
@@ -179,7 +180,7 @@ def convert_excel(model,file,dataType,elementIndex,valueIndex):
         element_list = pd.Series(data=df.iloc[:,valueIndex].values,index=df.iloc[:,elementIndex].values)
         data = {}
         data['element_list'] = element_list
-        data['index'] = list(str(i) for i in list(element_list.index))
+        data['index'] = list(element_list.index)
         return data
 
 
@@ -192,35 +193,20 @@ def save_fig(model, saveName=None):
     and is followed by the name of the network."""
     
     networkName = model['inp_file']
-    
-    
     if networkName.endswith('.inp'):
-        
         try:
-            
             prefixRemove =  networkName.rfind('\\')
-            
-            
             networkName =  networkName[prefixRemove+1:]
             
-            
         except:
-            
-            pass
-            
-        
+            "do nothing"
         networkName =  networkName[:-4]
     
-    
-    if saveName != None:   
-        
+    if saveName != None:    
         image_path2 = '\\' + str(saveName) +  networkName + '.png'
         
-        
     else:
-        
         image_path2 = '\\' +  networkName + '.png'
-    
     
     plt.savefig(model['image_path']+image_path2)
   
@@ -261,7 +247,6 @@ def get_parameter(model,parameterType,parameter,value = None,tanks=False,reservo
     
     if parameterType == 'node':
         try:
-            
             if value == None:
                 
                 parameterResults = model['results'].node[parameter]
@@ -270,219 +255,109 @@ def get_parameter(model,parameterType,parameter,value = None,tanks=False,reservo
                 
             else:
                 if value == 'max':
-                    
                     parameterResults = np.max(model['results'].node[parameter])
-                    
-                    
                     elementList = list(parameterResults.index)
-                    
-                    
                 elif value == 'min':
-                    
                     parameterResults = np.min(model['results'].node[parameter])
-                    
-                    
                     elementList = list(parameterResults.index)
-                    
-                    
                 elif value == 'mean':
-                    
                     parameterResults = np.mean(model['results'].node[parameter])
-                    
-                    
                     elementList = list(parameterResults.index)
-                    
-                    
                 elif type(value) == int:
-                    
                     parameterResults = model['results'].node[parameter].iloc[value]
-                    
-                    
                     elementList = list(parameterResults.index)
-                    
-                    
             try:   
-                
                 if tanks == False:
-                    
                     for tank in model['tank_names']:
-                        
                         parameterResults.drop(tank, axis=0, inplace=True)
-                        
-                        
                         elementList.remove(tank)
-                        
-                        
                 if reservoirs == False:
-                    
                     for reservoir in model['reservoir_names']:
-                        
                         parameterResults.drop(reservoir, axis=0, inplace=True)
-                        
-                        
                         elementList.remove(reservoir) 
             
-            
             except KeyError:
-                
-                pass
-            
+                "do nothing"
             
             return parameterResults, elementList
         
         
         except KeyError:
             
-            
             parameterResults = model['wn'].query_node_attribute(parameter)
-            
-            
             elementList = list(parameterResults.index)
             
-            
             try:   
-                
                 if tanks == False:
-                    
                     for tank in model['tank_names']:
-                        
                         parameterResults.drop(tank, axis=0, inplace=True)
-                        
-                        
                         elementList.remove(tank)
-                        
-                        
                 if reservoirs == False:
-                    
                     for reservoir in model['reservoir_names']:
-                        
                         parameterResults.drop(reservoir, axis=0, inplace=True)
-                        
-                        
                         elementList.remove(reservoir)
-                        
-                        
             except KeyError:
+                "do nothing"
                 
-                pass
-                
-            
             return parameterResults, elementList
         
         
     elif parameterType == 'link':
         
         try:
-            
             if value == None:
-                
                 parameterResults = model['results'].link[parameter]
-                
-                
                 elementList = list(parameterResults.index)
                 
                 
             else:
-                
                 if value == 'max':
-                    
                     parameterResults = np.max(model['results'].link[parameter])
-                    
-                    
                     elementList = list(parameterResults.index)
-                    
-                    
                 elif value == 'min':
-                    
                     parameterResults = np.min(model['results'].link[parameter])
-                    
-                    
                     elementList = list(parameterResults.index)
-                    
-                    
                 elif value == 'mean':
-                    
                     parameterResults = np.mean(model['results'].link[parameter])
-                    
-                    
                     elementList = list(parameterResults.index)
-                    
-                    
                 elif type(value) == int:
-                    
                     parameterResults = model['results'].link[parameter].iloc[value]
-                    
-                    
                     elementList = list(parameterResults.index)   
-                    
                     
             return parameterResults, elementList
         
         
         except KeyError:
             
-            
             parameterResults = model['wn'].query_link_attribute(parameter)
-            
-            
             elementList = list(parameterResults.index)
-            
+
             return parameterResults, elementList
 
 
 
 
 def get_demand_patterns(model):
-    
     demandPatterns = []
-    
-    
     patterns = model['wn'].pattern_name_list
-    
-    
     patterns = np.append(patterns, 'None')
-    
-    
     for junction in model['junc_names']:
-        
         try:
-            
             demandPattern = model['wn'].get_node(junction).demand_timeseries_list[0].pattern.name
-            
-            
             demandPatterns = np.append(demandPatterns, demandPattern)
-            
-            
         except AttributeError:
-            
             demandPatterns = np.append(demandPatterns, 'None')
-            
-            
     demandPatternNodes = {}
-    
-    
     for pattern in patterns:
-        
         demandPatternNodes[pattern] = {}
         
-        
     for i in range(len(model['junc_names'])):
-        
         for pattern in patterns:
-            
             demandPatternNodes = pattern_match(model,demandPatterns[i],pattern,model['junc_names'][i],demandPatternNodes)
-            
-            
     for pattern in patterns:
-        
         if len(demandPatternNodes[pattern]) == 0:
-            
             patterns = np.delete(patterns,np.where(patterns == pattern))
-            
-            
             del demandPatternNodes[pattern]
-            
-            
     return demandPatternNodes, patterns  
     
 
@@ -499,10 +374,7 @@ def bin_parameter(model,parameterResults,elementList,binEdgeNum,binList='automat
     
     
     if binList == 'automatic':
-        
         bins=binEdgeNum
-        
-        
         binList = np.linspace(np.min(parameterResults),np.max(parameterResults),bins)
         
         
@@ -515,15 +387,16 @@ def bin_parameter(model,parameterResults,elementList,binEdgeNum,binList='automat
     
     
     for elementWithParameter in elementsWithParameter:   
-
-        if (elementWithParameter in model['node_names']) == True:
-
+        
+        if (elementWithParameter in model['node_names']):
             continue
-        else:   
+        
+        
+        else:
             elementList = model['G_pipe_name_list']
             elementType = "link"
-
             break
+        
         
     if elementType != "link":
         
@@ -532,7 +405,6 @@ def bin_parameter(model,parameterResults,elementList,binEdgeNum,binList='automat
     for i in range(len(binList)):
         
         if i == 0:
-            
             if np.min(parameterResults) < binList[i]:
                 
                 binNames = np.append(binNames, '< {0:1.3f}'.format(binList[i]))
@@ -630,8 +502,6 @@ def bin_parameter(model,parameterResults,elementList,binEdgeNum,binList='automat
         if len(binnedParameter[binName]) == 0:
             
             binNames = np.delete(binNames,np.where(binNames == binName))
-            
-            
             del binnedParameter[binName]
     
     
@@ -640,7 +510,6 @@ def bin_parameter(model,parameterResults,elementList,binEdgeNum,binList='automat
 
 
 def draw_nodes(model,nodeList,parameterResults=[],nodeSize=300,nodeColor='k',cmap='tab10',nodeShape='.',edgeColors='k',lineWidths=0,label=None):
-    
     if len(parameterResults) != 0:
         
         negativeValues = False
@@ -755,7 +624,6 @@ def draw_base_elements(model,ax,nodes=True,links=True,reservoirs=True,tanks=True
    
     
     if valves == True:
-        
         valve_coordinates = {}
         valveCounter = 0
         
@@ -771,8 +639,7 @@ def draw_base_elements(model,ax,nodes=True,links=True,reservoirs=True,tanks=True
             
         nxp.draw_networkx_nodes(model['G'], valve_coordinates, ax=ax, nodelist = model['valve_names'], node_size = 200, node_color = 'orange', edgecolors='black',linewidths=1,node_shape = 'P', label='Valves')
         
-    if links == True:  
-        
+    if links == True:   
         nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, arrows = False, edge_color = 'k')
     
     
@@ -969,17 +836,11 @@ def draw_legend(ax,binList=[],title=None,pumps=True,loc='upper right',loc2='lowe
     
     
     if len(binList) != 0:
-        
         legend = ax.legend(handles=handles[len(binList):], loc=loc,fontsize = '15')
         ax.add_artist(legend)
-        
-        
         legend2 = ax.legend(title=title,handles=handles[:len(binList)], loc=loc2,fontsize = '15', title_fontsize = '17')
         ax.add_artist(legend2)
-        
-        
     else:
-        
         legend = ax.legend(handles=handles, loc=loc,fontsize = '15')
         ax.add_artist(legend)
     
@@ -1073,7 +934,6 @@ def plot_discrete_nodes(model,ax,binEdgeNum,parameter=None, value=None, getTanks
     and is followed by the name of the network.
     specialData: Takes either Excel file or correctly formatted dictionary. 
     Used to plot custom data."""
-
 
     if parameter != None:
         
@@ -1183,9 +1043,7 @@ def plot_discrete_links(model, ax,binEdgeNum, parameter=None, value=None, bins='
         
         draw_discrete_links(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
         
-        
         draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-        
         
         if legend == True:
             
@@ -1199,7 +1057,7 @@ def plot_discrete_links(model, ax,binEdgeNum, parameter=None, value=None, bins='
          
    
     
-def plot_continuous_links(model,ax,parameter=None,value=None,minWidth=1,maxWidth=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',colorBarTitle=None,savefig=True, saveName=None):
+def plot_continuous_links(model,ax,parameter=None,value=None,minWidth=1,maxWidth=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',colorBarTitle=None,savefig=True, saveName=None, specialData=None):
     """Plots continuous Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1226,33 +1084,30 @@ def plot_continuous_links(model,ax,parameter=None,value=None,minWidth=1,maxWidth
     if parameter != None:
         
         parameterResults, linkList = get_parameter(model,'link',parameter, value=value)
-        
-        
         minParameter = np.min(parameterResults)
         maxParameter = np.max(parameterResults)
-        
-        
         normalizedParameter = np.copy(parameterResults)
-        
-        
         counter = 0
         
-        
         for parameter in parameterResults:
-            
             normalizedParameter[counter] = ((maxWidth - minWidth)*((parameter - minParameter)/(maxParameter - minParameter))) + minWidth
-           
-            
             counter += 1
         
-        
         widths = normalizedParameter
-        
-        
         g = draw_links(model,linkList,parameterResults=parameterResults,cmap=cmap,widths=widths)
       
     
         draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
+    
+    
+        draw_color_bar(ax,g,cmap,colorBarTitle=colorBarTitle)
+    
+    if specialData != None:
+        
+        g = draw_links(model,specialData['index'],parameterResults=specialData['element_list'],cmap=cmap)
+      
+    
+        draw_base_elements(model,ax,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
     
     
         draw_color_bar(ax,g,cmap,colorBarTitle=colorBarTitle)
@@ -1266,8 +1121,6 @@ def plot_continuous_links(model,ax,parameter=None,value=None,minWidth=1,maxWidth
     
     
 def animate_plot(model,ax,function,**kwargs):
-    
-    
     values = int(model['wn'].options.time.duration/model['wn'].options.time.report_value)
     
     
@@ -1308,374 +1161,157 @@ def animate_plot(model,ax,function,**kwargs):
         for filename in set(filenames):
             
             os.remove(filename)
-            
-            
 def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None,excelColumns=None,customDataValues=None, bins='automatic',binSizeList = None, binShapeList = None, binEdgeNum=None, binWidthList=None, binLabelList=None,binBorderList = None, binBorderWidthList = None,colorList=None,minWidth=1,maxWidth=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legendTitle=None,nodeSize=100, nodeShape='.',legendLoc='upper right', legendLoc2='lower right',savefig=True,saveName=None,colorBarTitle=None):
-    
-    
     if parameter=='demand_patterns':
-        
         demandPatternNodes,patterns = get_demand_patterns(model)
-        
-        
         draw_discrete_nodes(model,ax,demandPatternNodes,patterns,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
-        
-        
         draw_base_elements(model,ax,nodes=False)  
-        
         
         if legend == True:
             
             draw_legend(ax,patterns,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
-            
-            
         if savefig == True:
-            
             save_fig(model, saveName=saveName)
-            
-            
         return
-    
-    
     if parameter=='diameter':
-        
         parameterResults, linkList = get_parameter(model,'link',parameter)
-        
-        
         uniques = pd.unique(parameterResults)
-        
-        
         binNames = []
-        
-        
         for binName in uniques:
-            
             binNames = np.append(binNames,('{:.4f}'.format(binName)))
             
-            
         binnedResults = {}
-        
-        
         for binName in binNames:
-            
             binnedResults[binName] = {}
-        
         
         for link in linkList:
             
             binnedResults['{:.4f}'.format(parameterResults.loc[link])][link] = model['G_pipe_name_list'].index(link)
        
-        
         draw_discrete_links(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
-        
         
         draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
         
-        
         if legend == True:
             
             draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
-        
-        
         if savefig == True:
             
             save_fig(model, saveName=saveName)
-            
-            
         return
-    
-    
     if parameter=='tag':
-        
         parameterResults, nodeList = get_parameter(model,'node',parameter)
-        
-        
         uniques = pd.unique(parameterResults)
         uniques =  uniques[uniques != None]
-        
-        
         binNames = []
-        
-        
         if len(uniques) != 0:
-            
             for binName in uniques:
-                
                 binNames = binName
-            
             
         binNames = np.append(binNames,'No Tag')
         
-        
         binnedResults = {}
-        
-        
         for binName in binNames:
-            
             binnedResults[binName] = {}
         
-        
         for node in nodeList:
-            
             if parameterResults.loc[node] == None:
-                
                 binnedResults['No Tag'][node] = model['node_names'].index(node)
-                
-                
                 continue
-            
-            
             binnedResults[parameterResults.loc[node]][node] = model['node_names'].index(node)
        
-        
         draw_discrete_nodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
         
-        
         draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-        
         
         if legend == True:
             
             draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
-        
-        
         if savefig == True:
             
             save_fig(model, saveName=saveName)
-            
-            
         return
-    
-    
     if parameter == 'custom_data':
-        
         if dataType == 'unique':
-            
             if parameterType == 'link':
-                
                 draw_discrete_links(model,ax,customDataValues[0], customDataValues[1],binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
                 
-                
                 draw_base_elements(model,ax,links=False,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-            
-            
             elif parameterType == 'node':
-                
                 draw_discrete_nodes(model,ax,customDataValues[0], customDataValues[1],binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
             
-            
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-           
-            
-           
             if legend == True:
                 
                 draw_legend(ax,customDataValues[1],title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
-            
-            
             if savefig == True:
                 
                 save_fig(model, saveName=saveName)
-                
-                
             return
-        
-        if dataType == 'discrete':
-            binnedResults,binNames = bin_parameter(model,customDataValues[1],customDataValues[0],binList=bins, binEdgeNum=binEdgeNum) 
-            
-            
-            if parameterType == 'link':
-                
-                draw_discrete_links(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
-                
-                
-                draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-                
-                
-            if parameterType == 'node':
-                
-                draw_discrete_nodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
-            
-            
-                draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-            
-        
-            if legend == True:
-                
-                draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
-        
-        
-            if savefig == True:
-            
-             save_fig(model, saveName=saveName)
-             
-             return
-         
-            
         if dataType == 'continuous':
-            
             minParameter = np.min(customDataValues[1])
             maxParameter = np.max(customDataValues[1])
-            
-            
             normalizedParameter = np.copy(customDataValues[1])
-            
-            
             counter = 0
             
-            
             for parameter in customDataValues[1]:
-                
                 normalizedParameter[counter] = ((maxWidth - minWidth)*((parameter - minParameter)/(maxParameter - minParameter))) + minWidth
-                
-                
                 counter += 1
-            
             
             widths = normalizedParameter
             
-            
             if parameterType == 'link':
-                
                 g = draw_links(model,customDataValues[0], parameterResults=customDataValues[1],cmap=cmap,widths=widths)
                 
-                
                 draw_base_elements(model,ax,links=False,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-            
-            
             elif parameterType == 'node':
-                
                 g = draw_nodes(model,customDataValues[0], parameterResults=customDataValues[1],nodeSize=nodeSize,cmap=cmap,nodeShape=nodeShape)
             
-            
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-            
-            
             draw_color_bar(ax,g,cmap)
-            
-            
             if savefig == True:
                 
                 save_fig(model, saveName=saveName)
-                
-                
             return
-        
-        
     if type(parameter) == str:
-        
         if dataType == 'unique':
-            
             nodeList, binList = convert_excel(model,parameter,dataType,excelColumns[0],excelColumns[1])
-            
-            
             if parameterType == 'link':
-                
                 draw_discrete_links(model,ax,nodeList, binList,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
                 
-                
                 draw_base_elements(model,ax,links=False,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-            
-            
             elif parameterType == 'node':
-                
                 draw_discrete_nodes(model,ax,nodeList, binList,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
             
-            
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-            
-            
             if legend == True:
                 
                 draw_legend(ax,binList,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
-            
-            
             if savefig == True:
                 
                 save_fig(model, saveName=saveName)
-            
-            return 
-        
-        
-        if dataType == 'discrete':
-            
-            data = convert_excel(model,parameter,dataType,excelColumns[0],excelColumns[1])
-            
-            binnedResults,binNames = bin_parameter(model,data['element_list'],data['index'],binList=bins, binEdgeNum=binEdgeNum) 
-            
-            
-            if parameterType == 'link':
-                
-                draw_discrete_links(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
-                
-                
-                draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-                
-                
-            if parameterType == 'node':
-                
-                draw_discrete_nodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
-            
-            
-                draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-            
-        
-            if legend == True:
-                
-                draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
-        
-        
-            if savefig == True:
-            
-             save_fig(model, saveName=saveName)    
-         
-            return
         if dataType == 'continuous':
-            
             data = convert_excel(model,parameter,dataType,excelColumns[0],excelColumns[1])
-            
-            
             minParameter = np.min(data['element_list'])
             maxParameter = np.max(data['element_list'])
-            
-            
             normalizedParameter = np.copy(data['element_list'])
-            
-            
             counter = 0
             
-            
             for parameter in data['element_list']:
-                
                 normalizedParameter[counter] = ((maxWidth - minWidth)*((parameter - minParameter)/(maxParameter - minParameter))) + minWidth
-                
-                
                 counter += 1
             
-            
             widths = normalizedParameter
-            
-            
             if parameterType == 'link':
-                
                 g = draw_links(model,data['index'], parameterResults=data['element_list'],cmap=cmap,widths=widths)
                 
-                
                 draw_base_elements(model,ax,links=False,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-            
-            
             elif parameterType == 'node':
-                
                 g = draw_nodes(model,data['index'], parameterResults=data['element_list'],nodeSize=nodeSize,cmap=cmap,nodeShape=nodeShape)
             
-            
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
-            
-            
             draw_color_bar(ax,g,cmap)
             if savefig == True:
                 
                 save_fig(model, saveName=saveName)
-                
-                
         return
