@@ -12,7 +12,7 @@ import imageio
 
 def initialize_model(inp_file):
     """Initializes all variables needed to perform other plotting functions
-    Arguments:
+        Arguments:
     inp_file: Takes a string. Directorty location of network input file. Ends with .inp"""
     
     
@@ -118,45 +118,45 @@ def initialize_model(inp_file):
 
 
 
-def pattern_match(model,nodePattern,pattern, junc_name,demandPatternNodes):
+def pattern_match(model,node_pattern,pattern, junc_name,demand_pattern_nodes):
     """Determines if demand pattern of node is the one specified, then stores 
     it with the apropriate dictionary key.
     Arguments:
-    nodePattern: The demand pattern of the node
+    node_pattern: The demand pattern of the node
     pattern: Which pattern the node demand pattern is being checked against
     junc_name: Name of node/junction being checked
-    demandPatternNodes: Name of demand pattern dictionary"""
+    demand_pattern_nodes: Name of demand pattern dictionary"""
     
     
-    if nodePattern == pattern:
+    if node_pattern == pattern:
         
-        demandPatternNodes[pattern][junc_name] = model['node_names'].index(junc_name)
+        demand_pattern_nodes[pattern][junc_name] = model['node_names'].index(junc_name)
         
         
-    return demandPatternNodes
+    return demand_pattern_nodes
 
 
 
 
-def convert_excel(model,file,dataType,elementIndex,valueIndex):
+def convert_excel(model,file,data_type,element_index,value_index):
     """Converts an excel file into the correct dictionary structure needed to
     be used with drawing functions.
     Arguments:
     model: Takes dictionary. Uses input file name to give each image a unique
     name.
     file: Takes string. Location in Directory where excel file is located.
-    dataType: Takes string. Type of data that is being extracted. Unique data
+    data_type: Takes string. Type of data that is being extracted. Unique data
     is data that is seperated into groups such as pressure groups. Discrete
     data is numerical and is """
     
-    if dataType == 'unique':
+    if data_type == 'unique':
         element_list= {}
         dirname = os.path.dirname(__file__)
         dataFile = os.path.join(dirname, 'Excel', file)
         
         
         df = pd.read_excel(dataFile,dtype=str)
-        bins = pd.unique(df.iloc[:,valueIndex])
+        bins = pd.unique(df.iloc[:,value_index])
     
     
         for binName in bins:
@@ -164,31 +164,31 @@ def convert_excel(model,file,dataType,elementIndex,valueIndex):
             element_list[binName] = {}
             
             
-        for node,data in zip(df.iloc[:,elementIndex].dropna(),df.iloc[:,valueIndex].dropna()):
+        for node,data in zip(df.iloc[:,element_index].dropna(),df.iloc[:,value_index].dropna()):
             
             element_list[data][node] = model['G_pipe_name_list'].index(node)
     
     
         return element_list, bins
     
-    if dataType == 'continuous' or 'discrete':
+    if data_type == 'continuous' or 'discrete':
         dirname = os.path.dirname(__file__)
         dataFile = os.path.join(dirname, 'Excel', file)
         
         df = pd.read_excel(dataFile)
-        element_list = pd.Series(data=df.iloc[:,valueIndex].values,index=df.iloc[:,elementIndex].values)
+        element_list = pd.Series(data=df.iloc[:,value_index].values,index=df.iloc[:,element_index].values)
         data = {}
         data['element_list'] = element_list
         data['index'] = list(str(i) for i in list(element_list.index))
         return data
 
 
-def save_fig(model, saveName=None):
+def save_fig(model, save_name=None):
     """Saves figure to the <file directory>/Images.
     Arguments:
     model: Takes dictionary. Uses input file name to give each image a unique
     name.
-    saveName: Takes string. SaveName acts as a prefix for the image file name,
+    save_name: Takes string. SaveName acts as a prefix for the image file name,
     and is followed by the name of the network."""
     
     networkName = model['inp_file']
@@ -212,9 +212,9 @@ def save_fig(model, saveName=None):
         networkName =  networkName[:-4]
     
     
-    if saveName != None:   
+    if save_name != None:   
         
-        image_path2 = '\\' + str(saveName) +  networkName + '.png'
+        image_path2 = '\\' + str(save_name) +  networkName + '.png'
         
         
     else:
@@ -227,14 +227,14 @@ def save_fig(model, saveName=None):
     
   
     
-def get_parameter(model,parameterType,parameter,value = None,tanks=False,reservoirs=False):
+def get_parameter(model,parameter_type,parameter,value = None,tanks=False,reservoirs=False):
     """Gets parameter for each node in the network and stores it in
-    parameterResults. Also grabs the indices of the nodes that had that
+    parameter_results. Also grabs the indices of the nodes that had that
     parameter.
     Arguments:
     model: Takes dictionary. Utilizes network model and results from WNTR to 
     get parameters.
-    parameterType: Takes String. The type of node, can be 'Node' or 'Link'.
+    parameter_type: Takes String. The type of node, can be 'Node' or 'Link'.
     parameter: Takes String. The name of the parameter. 
     value: Takes Integer. Parameters from results must include a value 
     with it. The value given is the value index, not time.
@@ -259,46 +259,46 @@ def get_parameter(model,parameterType,parameter,value = None,tanks=False,reservo
         'reaction_rate'
         'link_quality'"""
     
-    if parameterType == 'node':
+    if parameter_type == 'node':
         try:
             
             if value == None:
                 
-                parameterResults = model['results'].node[parameter]
-                elementList = list(parameterResults.index)
+                parameter_results = model['results'].node[parameter]
+                element_list = list(parameter_results.index)
                 
                 
             else:
                 if value == 'max':
                     
-                    parameterResults = np.max(model['results'].node[parameter])
+                    parameter_results = np.max(model['results'].node[parameter])
                     
                     
-                    elementList = list(parameterResults.index)
+                    element_list = list(parameter_results.index)
                     
                     
                 elif value == 'min':
                     
-                    parameterResults = np.min(model['results'].node[parameter])
+                    parameter_results = np.min(model['results'].node[parameter])
                     
                     
-                    elementList = list(parameterResults.index)
+                    element_list = list(parameter_results.index)
                     
                     
                 elif value == 'mean':
                     
-                    parameterResults = np.mean(model['results'].node[parameter])
+                    parameter_results = np.mean(model['results'].node[parameter])
                     
                     
-                    elementList = list(parameterResults.index)
+                    element_list = list(parameter_results.index)
                     
                     
                 elif type(value) == int:
                     
-                    parameterResults = model['results'].node[parameter].iloc[value]
+                    parameter_results = model['results'].node[parameter].iloc[value]
                     
                     
-                    elementList = list(parameterResults.index)
+                    element_list = list(parameter_results.index)
                     
                     
             try:   
@@ -307,20 +307,20 @@ def get_parameter(model,parameterType,parameter,value = None,tanks=False,reservo
                     
                     for tank in model['tank_names']:
                         
-                        parameterResults.drop(tank, axis=0, inplace=True)
+                        parameter_results.drop(tank, axis=0, inplace=True)
                         
                         
-                        elementList.remove(tank)
+                        element_list.remove(tank)
                         
                         
                 if reservoirs == False:
                     
                     for reservoir in model['reservoir_names']:
                         
-                        parameterResults.drop(reservoir, axis=0, inplace=True)
+                        parameter_results.drop(reservoir, axis=0, inplace=True)
                         
                         
-                        elementList.remove(reservoir) 
+                        element_list.remove(reservoir) 
             
             
             except KeyError:
@@ -328,16 +328,16 @@ def get_parameter(model,parameterType,parameter,value = None,tanks=False,reservo
                 pass
             
             
-            return parameterResults, elementList
+            return parameter_results, element_list
         
         
         except KeyError:
             
             
-            parameterResults = model['wn'].query_node_attribute(parameter)
+            parameter_results = model['wn'].query_node_attribute(parameter)
             
             
-            elementList = list(parameterResults.index)
+            element_list = list(parameter_results.index)
             
             
             try:   
@@ -346,20 +346,20 @@ def get_parameter(model,parameterType,parameter,value = None,tanks=False,reservo
                     
                     for tank in model['tank_names']:
                         
-                        parameterResults.drop(tank, axis=0, inplace=True)
+                        parameter_results.drop(tank, axis=0, inplace=True)
                         
                         
-                        elementList.remove(tank)
+                        element_list.remove(tank)
                         
                         
                 if reservoirs == False:
                     
                     for reservoir in model['reservoir_names']:
                         
-                        parameterResults.drop(reservoir, axis=0, inplace=True)
+                        parameter_results.drop(reservoir, axis=0, inplace=True)
                         
                         
-                        elementList.remove(reservoir)
+                        element_list.remove(reservoir)
                         
                         
             except KeyError:
@@ -367,67 +367,67 @@ def get_parameter(model,parameterType,parameter,value = None,tanks=False,reservo
                 pass
                 
             
-            return parameterResults, elementList
+            return parameter_results, element_list
         
         
-    elif parameterType == 'link':
+    elif parameter_type == 'link':
         
         try:
             
             if value == None:
                 
-                parameterResults = model['results'].link[parameter]
+                parameter_results = model['results'].link[parameter]
                 
                 
-                elementList = list(parameterResults.index)
+                element_list = list(parameter_results.index)
                 
                 
             else:
                 
                 if value == 'max':
                     
-                    parameterResults = np.max(model['results'].link[parameter])
+                    parameter_results = np.max(model['results'].link[parameter])
                     
                     
-                    elementList = list(parameterResults.index)
+                    element_list = list(parameter_results.index)
                     
                     
                 elif value == 'min':
                     
-                    parameterResults = np.min(model['results'].link[parameter])
+                    parameter_results = np.min(model['results'].link[parameter])
                     
                     
-                    elementList = list(parameterResults.index)
+                    element_list = list(parameter_results.index)
                     
                     
                 elif value == 'mean':
                     
-                    parameterResults = np.mean(model['results'].link[parameter])
+                    parameter_results = np.mean(model['results'].link[parameter])
                     
                     
-                    elementList = list(parameterResults.index)
+                    element_list = list(parameter_results.index)
                     
                     
                 elif type(value) == int:
                     
-                    parameterResults = model['results'].link[parameter].iloc[value]
+                    parameter_results = model['results'].link[parameter].iloc[value]
                     
                     
-                    elementList = list(parameterResults.index)   
+                    element_list = list(parameter_results.index)   
                     
                     
-            return parameterResults, elementList
+            return parameter_results, element_list
         
         
         except KeyError:
             
             
-            parameterResults = model['wn'].query_link_attribute(parameter)
+            parameter_results = model['wn'].query_link_attribute(parameter)
             
             
-            elementList = list(parameterResults.index)
+            element_list = list(parameter_results.index)
             
-            return parameterResults, elementList
+            return parameter_results, element_list
 
 
 
@@ -458,59 +458,59 @@ def get_demand_patterns(model):
             demandPatterns = np.append(demandPatterns, 'None')
             
             
-    demandPatternNodes = {}
+    demand_pattern_nodes = {}
     
     
     for pattern in patterns:
         
-        demandPatternNodes[pattern] = {}
+        demand_pattern_nodes[pattern] = {}
         
         
     for i in range(len(model['junc_names'])):
         
         for pattern in patterns:
             
-            demandPatternNodes = pattern_match(model,demandPatterns[i],pattern,model['junc_names'][i],demandPatternNodes)
+            demand_pattern_nodes = pattern_match(model,demandPatterns[i],pattern,model['junc_names'][i],demand_pattern_nodes)
             
             
     for pattern in patterns:
         
-        if len(demandPatternNodes[pattern]) == 0:
+        if len(demand_pattern_nodes[pattern]) == 0:
             
             patterns = np.delete(patterns,np.where(patterns == pattern))
             
             
-            del demandPatternNodes[pattern]
+            del demand_pattern_nodes[pattern]
             
             
-    return demandPatternNodes, patterns  
+    return demand_pattern_nodes, patterns  
     
 
 
 
-def bin_parameter(model,parameterResults,elementList,binEdgeNum,binList='automatic'):
+def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='automatic'):
     """Bins results from get_parameter based on user specifications.
     Arguments:
     model: Takes Dictionary. Gets pipe or node name list.
-    parameterResults: Takes Series. Results from get_parameter.
-    binEdgeNum: Number of bin edges that the user wants.
-    binList: List of bin edges. When set to 'Automatic' it will create bin
+    parameter_results: Takes Series. Results from get_parameter.
+    bin_edge_num: Number of bin edges that the user wants.
+    bin_list: List of bin edges. When set to 'Automatic' it will create bin
     edges."""
     
     
-    if binList == 'automatic':
+    if bin_list == 'automatic':
         
-        bins=binEdgeNum
+        bins=bin_edge_num
         
         
-        binList = np.linspace(np.min(parameterResults),np.max(parameterResults),bins)
+        bin_list = np.linspace(np.min(parameter_results),np.max(parameter_results),bins)
         
         
     binnedParameter = {}
     binNames = []
     
     
-    elementsWithParameter = elementList
+    elementsWithParameter = element_list
     elementType = None
     
     
@@ -520,37 +520,37 @@ def bin_parameter(model,parameterResults,elementList,binEdgeNum,binList='automat
 
             continue
         else:   
-            elementList = model['G_pipe_name_list']
+            element_list = model['G_pipe_name_list']
             elementType = "link"
 
             break
         
     if elementType != "link":
         
-        elementList = model['node_names']
+        element_list = model['node_names']
 
-    for i in range(len(binList)):
+    for i in range(len(bin_list)):
         
         if i == 0:
             
-            if np.min(parameterResults) < binList[i]:
+            if np.min(parameter_results) < bin_list[i]:
                 
-                binNames = np.append(binNames, '< {0:1.3f}'.format(binList[i]))
+                binNames = np.append(binNames, '< {0:1.3f}'.format(bin_list[i]))
                 
                 
-            binNames = np.append(binNames, '{0:1.3f} - {1:1.3f}'.format(binList[i], binList[i+1]))
+            binNames = np.append(binNames, '{0:1.3f} - {1:1.3f}'.format(bin_list[i], bin_list[i+1]))
             
             
-        elif (i<len(binList) - 1) == True:
+        elif (i<len(bin_list) - 1) == True:
             
-            binNames = np.append(binNames, '{0:1.3f} - {1:1.3f}'.format(binList[i], binList[i+1]))
+            binNames = np.append(binNames, '{0:1.3f} - {1:1.3f}'.format(bin_list[i], bin_list[i+1]))
             
             
-        elif i == len(binList) - 1:
+        elif i == len(bin_list) - 1:
             
-            if np.max(parameterResults) > binList[i]:
+            if np.max(parameter_results) > bin_list[i]:
                 
-                binNames = np.append(binNames, '> {0:1.3f}'.format(binList[i]))
+                binNames = np.append(binNames, '> {0:1.3f}'.format(bin_list[i]))
                 
                 
     for binName in binNames:
@@ -558,68 +558,68 @@ def bin_parameter(model,parameterResults,elementList,binEdgeNum,binList='automat
         binnedParameter[binName] = {}
 
 
-    for i in range(len(binList)):
+    for i in range(len(bin_list)):
         
         if i == 0:
             
             counter = 0
 
             
-            for parameter in parameterResults:
+            for parameter in parameter_results:
                 
-                if parameter >= binList[i] and parameter < binList[i+1]:
+                if parameter >= bin_list[i] and parameter < bin_list[i+1]:
                     
-                        binnedParameter['{0:1.3f} - {1:1.3f}'.format(binList[i], binList[i+1])][elementsWithParameter[counter]] = elementList.index(elementsWithParameter[counter])
+                        binnedParameter['{0:1.3f} - {1:1.3f}'.format(bin_list[i], bin_list[i+1])][elementsWithParameter[counter]] = element_list.index(elementsWithParameter[counter])
                         
                         
-                if parameter < binList[i]:
+                if parameter < bin_list[i]:
                     
-                        binnedParameter['< {0:1.3f}'.format(binList[i])][elementsWithParameter[counter]] = elementList.index(elementsWithParameter[counter])
+                        binnedParameter['< {0:1.3f}'.format(bin_list[i])][elementsWithParameter[counter]] = element_list.index(elementsWithParameter[counter])
                         
                         
                 counter += 1
                 
                 
-        elif i == len(binList) - 2:
+        elif i == len(bin_list) - 2:
             
             counter = 0
             
             
-            for parameter in parameterResults:
+            for parameter in parameter_results:
                 
-                if parameter >= binList[i] and parameter <= binList[i+1]:
+                if parameter >= bin_list[i] and parameter <= bin_list[i+1]:
                     
-                        binnedParameter['{0:1.3f} - {1:1.3f}'.format(binList[i], binList[i+1])][elementsWithParameter[counter]] = elementList.index(elementsWithParameter[counter])
+                        binnedParameter['{0:1.3f} - {1:1.3f}'.format(bin_list[i], bin_list[i+1])][elementsWithParameter[counter]] = element_list.index(elementsWithParameter[counter])
                         
                         
                 counter += 1
                 
                 
-        elif (i<len(binList) - 2) == True:
+        elif (i<len(bin_list) - 2) == True:
             
             counter = 0
             
             
-            for parameter in parameterResults:
+            for parameter in parameter_results:
                 
-                if parameter >= binList[i] and parameter < binList[i+1]:
+                if parameter >= bin_list[i] and parameter < bin_list[i+1]:
                     
-                        binnedParameter['{0:1.3f} - {1:1.3f}'.format(binList[i], binList[i+1])][elementsWithParameter[counter]] = elementList.index(elementsWithParameter[counter])
+                        binnedParameter['{0:1.3f} - {1:1.3f}'.format(bin_list[i], bin_list[i+1])][elementsWithParameter[counter]] = element_list.index(elementsWithParameter[counter])
                         
                         
                 counter += 1
                 
                 
-        elif i == len(binList) - 1:
+        elif i == len(bin_list) - 1:
             
             counter = 0
             
             
-            for parameter in parameterResults:
+            for parameter in parameter_results:
                 
-                if parameter > binList[i]:
+                if parameter > bin_list[i]:
                     
-                    binnedParameter['> {0:1.3f}'.format(binList[i])][elementsWithParameter[counter]] = elementList.index(elementsWithParameter[counter])
+                    binnedParameter['> {0:1.3f}'.format(bin_list[i])][elementsWithParameter[counter]] = element_list.index(elementsWithParameter[counter])
                     
                     
                 counter += 1
@@ -639,14 +639,14 @@ def bin_parameter(model,parameterResults,elementList,binEdgeNum,binList='automat
 
 
 
-def draw_nodes(model,nodeList,parameterResults=[],nodeSize=300,nodeColor='k',cmap='tab10',nodeShape='.',edgeColors='k',lineWidths=0,label=None):
+def draw_nodes(model,node_list,parameter_results=[],node_size=300,node_color='k',cmap='tab10',node_shape='.',edge_colors='k',line_widths=0,label=None):
     
-    if len(parameterResults) != 0:
+    if len(parameter_results) != 0:
         
         negativeValues = False
         
         
-        for value in parameterResults:
+        for value in parameter_results:
             
             if value < -1e-5:
                 
@@ -656,7 +656,7 @@ def draw_nodes(model,nodeList,parameterResults=[],nodeSize=300,nodeColor='k',cma
                 cmap = mpl.cm.get_cmap(cmap)
     
     
-                g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=parameterResults,vmax=np.max(parameterResults),vmin=-np.max(parameterResults), cmap=cmap,node_shape = nodeShape,linewidths=lineWidths,edgecolors=edgeColors,label=label)
+                g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results,vmax=np.max(parameter_results),vmin=-np.max(parameter_results), cmap=cmap,node_shape = node_shape,linewidths=line_widths,edgecolors=edge_colors,label=label)
                 
                 
                 return g
@@ -667,37 +667,37 @@ def draw_nodes(model,nodeList,parameterResults=[],nodeSize=300,nodeColor='k',cma
             cmap = mpl.cm.get_cmap(cmap)
             
             
-            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=parameterResults, cmap=cmap, node_shape = nodeShape)
+            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results, cmap=cmap, node_shape = node_shape)
             
             
             return g
         
     else:
         
-        nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=nodeList,node_size = nodeSize, node_color=nodeColor, node_shape = nodeShape,edgecolors=edgeColors,linewidths=lineWidths,label=label)
+        nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=node_color, node_shape = node_shape,edgecolors=edge_colors,linewidths=line_widths,label=label)
     
     
     
     
-def draw_links(model,linkList,parameterResults=[],edgeColor='k',cmap='tab10',widths=[]):
+def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',widths=[]):
     
     edgeList = {}
     
     if len(widths) == 0:
         
-        widths = np.ones(len(linkList))*1
+        widths = np.ones(len(link_list))*1
     
-    for i in linkList:
+    for i in link_list:
         
-        edgeList[i] = linkList.index(i)
+        edgeList[i] = link_list.index(i)
     
     
     negativeValues = False
     
     
-    if len(parameterResults) != 0:
+    if len(parameter_results) != 0:
         
-        for value in parameterResults:
+        for value in parameter_results:
             
             if value < -1e-5:
                 
@@ -707,7 +707,7 @@ def draw_links(model,linkList,parameterResults=[],edgeColor='k',cmap='tab10',wid
                 cmap = mpl.cm.get_cmap(cmap)
                 
                 
-                g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameterResults, edge_vmax=np.max(parameterResults),edge_vmin=-np.max(parameterResults),edge_cmap=cmap,arrows=False,width=widths)
+                g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_vmax=np.max(parameter_results),edge_vmin=-np.max(parameter_results),edge_cmap=cmap,arrows=False,width=widths)
                 
                 
                 return g
@@ -718,14 +718,14 @@ def draw_links(model,linkList,parameterResults=[],edgeColor='k',cmap='tab10',wid
             cmap = mpl.cm.get_cmap(cmap)
             
             
-            g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameterResults, edge_cmap=cmap, arrows=False,width=widths)
+            g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_cmap=cmap, arrows=False,width=widths)
             
             
             return g
             
     else:
         
-        nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=edgeColor, arrows=False)
+        nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=edge_color, arrows=False)
     
     
 def draw_base_elements(model,ax,nodes=True,links=True,reservoirs=True,tanks=True,pumps=True,valves=True,legend=True):
@@ -783,83 +783,83 @@ def draw_base_elements(model,ax,nodes=True,links=True,reservoirs=True,tanks=True
         
      
         
-def draw_discrete_nodes(model,ax,nodes, binList, binSizeList=None, binLabelList=None, binShapeList=None,cmap='tab10', binBorderList = None, binBorderWidthList = None, colorList =  None):
+def draw_discrete_nodes(model,ax,nodes, bin_list, bin_size_list=None, bin_label_list=None, bin_shape_list=None,cmap='tab10', bin_border_list = None, bin_border_width_list = None, color_list =  None):
     """Draws nodes based off of discrete bins.
     Arguments:
     model: Takes Dictionary.
     ax: Axis of the figure the user wants the elements to be plotted on.
     nodes: Takes Dictionary. List of nodes to be plotted organized by bin 
     into dictionaries.
-    binList: Takes List. List of bin names.
-    binSizeList: Takes List. List of node sizes for each bin.
-    binLabelList: Takes List. List of labels for each bin.
-    binShapeList: Takes List. List of markers for each bin.
+    bin_list: Takes List. List of bin names.
+    bin_size_list: Takes List. List of node sizes for each bin.
+    bin_label_list: Takes List. List of labels for each bin.
+    bin_shape_list: Takes List. List of markers for each bin.
     cmap: Takes String. Colormap that determines bin colors.
-    colorList: Takes List. List of hexadecimal strings that determine bin
-    colors. cmap must = None for colorList to take priority."""
+    color_list: Takes List. List of hexadecimal strings that determine bin
+    colors. cmap must = None for color_list to take priority."""
     
     
-    if binSizeList == None:
+    if bin_size_list == None:
         
         if len(model['node_names']) < 300:
             
-            binSizeList = np.ones(len(binList))*300
+            bin_size_list = np.ones(len(bin_list))*300
             
             
         elif len(model['node_names']) >= 300 and len(model['node_names']) < 1000:
             
-            binSizeList = np.ones(len(binList))*(80000/len(model['node_names']))
+            bin_size_list = np.ones(len(bin_list))*(80000/len(model['node_names']))
             
             
         else:
             
-            binSizeList = np.ones(len(binList))*80
+            bin_size_list = np.ones(len(bin_list))*80
 
     
-    if binLabelList == None:
+    if bin_label_list == None:
         
-        binLabelList = binList
-        
-        
-    if binShapeList == None:
-        
-        binShapeList = []
+        bin_label_list = bin_list
         
         
-        for i in range(len(binList)):
+    if bin_shape_list == None:
+        
+        bin_shape_list = []
+        
+        
+        for i in range(len(bin_list)):
             
-            binShapeList = np.append(binShapeList,'.')
+            bin_shape_list = np.append(bin_shape_list,'.')
             
-    if binBorderList == None:
-        binBorderList = []
+    if bin_border_list == None:
+        bin_border_list = []
         
-        for i in range(len(binList)):
+        for i in range(len(bin_list)):
             
-            binBorderList = np.append(binBorderList,'k')
+            bin_border_list = np.append(bin_border_list,'k')
     
-    if binBorderWidthList == None:
-        binBorderWidthList = []
+    if bin_border_width_list == None:
+        bin_border_width_list = []
         
-        for i in range(len(binList)):
+        for i in range(len(bin_list)):
             
-            binBorderWidthList = np.append(binBorderWidthList,0)
+            bin_border_width_list = np.append(bin_border_width_list,0)
             
             
     counter = 0
     
     
-    if (colorList != None and cmap != None) == True or cmap != None:    
+    if (color_list != None and cmap != None) == True or cmap != None:    
         
         cmap = mpl.cm.get_cmap(cmap)
-        cmapValue = 1/len(binList)
+        cmapValue = 1/len(bin_list)
         
         
-        for binName in binList:
+        for binName in bin_list:
             
-            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = binSizeList[counter], node_color = cmap(float(cmapValue)), node_shape = binShapeList[counter],label=binLabelList[counter], edgecolors = binBorderList[counter],linewidths = binBorderWidthList[counter])
+            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = bin_size_list[counter], node_color = cmap(float(cmapValue)), node_shape = bin_shape_list[counter],label=bin_label_list[counter], edgecolors = bin_border_list[counter],linewidths = bin_border_width_list[counter])
             
             
-            cmapValue += 1/len(binList)
+            cmapValue += 1/len(bin_list)
             
             
             counter += 1
@@ -867,9 +867,9 @@ def draw_discrete_nodes(model,ax,nodes, binList, binSizeList=None, binLabelList=
             
     else:
         
-        for binName in binList:
+        for binName in bin_list:
             
-            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = binSizeList[counter], node_color = colorList[counter], node_shape = binShapeList[counter],label=binLabelList[counter], edgecolors = binBorderList[counter],linewidths = binBorderWidthList[counter])
+            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = bin_size_list[counter], node_color = color_list[counter], node_shape = bin_shape_list[counter],label=bin_label_list[counter], edgecolors = bin_border_list[counter],linewidths = bin_border_width_list[counter])
             
             
             counter += 1
@@ -877,47 +877,47 @@ def draw_discrete_nodes(model,ax,nodes, binList, binSizeList=None, binLabelList=
 
 
 
-def draw_discrete_links(model,ax,links, binList, binWidthList=None, binLabelList=None,cmap='tab10', colorList =  None):
+def draw_discrete_links(model,ax,links, bin_list, bin_width_list=None, bin_label_list=None,cmap='tab10', color_list =  None):
     """Draws links s based off of discrete bins.
     Arguments:
     model: Takes Dictionary.
     ax: Axis of the figure the user wants the elements to be plotted on.
     links: Takes Dictionary. List of links to be plotted organized by bin 
     into dictionaries.
-    binList: Takes List. List of bin names.
-    binWidthList: Takes List. List of link widths for each bin.
-    binLabelList: Takes List. List of labels for each bin.
-    binShapeList: Takes List. List of markers for each bin.
+    bin_list: Takes List. List of bin names.
+    bin_width_list: Takes List. List of link widths for each bin.
+    bin_label_list: Takes List. List of labels for each bin.
+    bin_shape_list: Takes List. List of markers for each bin.
     cmap: Takes String. Colormap that determines bin colors.
-    colorList: Takes List. List of hexadecimal strings that determine bin
-    colors. cmap must = None for colorList to take priority."""
+    color_list: Takes List. List of hexadecimal strings that determine bin
+    colors. cmap must = None for color_list to take priority."""
     
     
-    if binWidthList == None:
+    if bin_width_list == None:
         
-        binWidthList = np.ones(len(binList))*2
+        bin_width_list = np.ones(len(bin_list))*2
         
 
-    if binLabelList == None:
+    if bin_label_list == None:
         
-        binLabelList = binList
+        bin_label_list = bin_list
         
         
     counter = 0
     
     
-    if (colorList != None and cmap != None) == True or cmap != None:    
+    if (color_list != None and cmap != None) == True or cmap != None:    
         
         cmap = mpl.cm.get_cmap(cmap)
-        cmapValue = 1/len(binList)
+        cmapValue = 1/len(bin_list)
         
         
-        for binName in binList:
+        for binName in bin_list:
             
-            nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = ([model['pipe_list'][i] for i in links.get(binName).values()]),edge_color = cmap(float(cmapValue)),width = binWidthList[counter],arrows = False,label=binLabelList[counter])
+            nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = ([model['pipe_list'][i] for i in links.get(binName).values()]),edge_color = cmap(float(cmapValue)),width = bin_width_list[counter],arrows = False,label=bin_label_list[counter])
             
             
-            cmapValue += 1/len(binList)
+            cmapValue += 1/len(bin_list)
             
             
             counter += 1
@@ -925,9 +925,9 @@ def draw_discrete_links(model,ax,links, binList, binWidthList=None, binLabelList
             
     else:
         
-        for binName in binList:
+        for binName in bin_list:
             
-            nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = ([model['pipe_list'][i] for i in links.get(binName).values()]),edge_color = colorList[counter],width = binWidthList[counter],arrows = False,label=binLabelList[counter])
+            nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = ([model['pipe_list'][i] for i in links.get(binName).values()]),edge_color = color_list[counter],width = bin_width_list[counter],arrows = False,label=bin_label_list[counter])
             
             
             counter += 1        
@@ -935,11 +935,11 @@ def draw_discrete_links(model,ax,links, binList, binWidthList=None, binLabelList
    
     
     
-def draw_legend(ax,binList=[],title=None,pumps=True,loc='upper right',loc2='lower right'):
+def draw_legend(ax,bin_list=[],title=None,pumps=True,loc='upper right',loc2='lower right'):
     """Draws legend for basic elements.
     Arguments:
     ax: Axis of the figure the user wants the elements to be plotted on.
-    binList: Takes List. List of bins.
+    bin_list: Takes List. List of bins.
     title: Takes String. Legend title.
     pumps: Takes Boolean. Determines whether pumps are drawn or not.
     loc: Takes String. Location of elements legend.
@@ -968,13 +968,13 @@ def draw_legend(ax,binList=[],title=None,pumps=True,loc='upper right',loc2='lowe
         
     
     
-    if len(binList) != 0:
+    if len(bin_list) != 0:
         
-        legend = ax.legend(handles=handles[len(binList):], loc=loc,fontsize = '15')
+        legend = ax.legend(handles=handles[len(bin_list):], loc=loc,fontsize = '15')
         ax.add_artist(legend)
         
         
-        legend2 = ax.legend(title=title,handles=handles[:len(binList)], loc=loc2,fontsize = '15', title_fontsize = '17')
+        legend2 = ax.legend(title=title,handles=handles[:len(bin_list)], loc=loc2,fontsize = '15', title_fontsize = '17')
         ax.add_artist(legend2)
         
         
@@ -987,33 +987,33 @@ def draw_legend(ax,binList=[],title=None,pumps=True,loc='upper right',loc2='lowe
 
     
 
-def draw_color_bar(ax,g,cmap,colorBarTitle=None):
+def draw_color_bar(ax,g,cmap,color_bar_title=None):
     """Draws Color Bar.
     Arguments:
     g: NetworkX graph of plotted elements.
     cmap: Colormap
-    colorBarTitle: Takes String. Title of Color Bar."""
+    color_bar_title: Takes String. Title of Color Bar."""
 
     
     cbar = plt.colorbar(g)
-    cbar.set_label(colorBarTitle, fontsize = 15)
+    cbar.set_label(color_bar_title, fontsize = 15)
     
     
     
     
-def draw_label(model,ax,labels,xCoords,yCoords,nodes=None):
+def draw_label(model,ax,labels,x_coords,y_coords,nodes=None):
     
     
     if nodes != None:
         
-        for label, node, xCoord, yCoord in zip(labels, nodes, xCoords, yCoords): 
+        for label, node, xCoord, yCoord in zip(labels, nodes, x_coords, y_coords): 
             
             plt.text(model['wn'].get_node(node).coordinates[0]+xCoord,model['wn'].get_node(node).coordinates[1]+yCoord,s = label, bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = 11)
             
             
     elif nodes == None:
         
-        for label, xCoord, yCoord in zip(labels, xCoords, yCoords):
+        for label, xCoord, yCoord in zip(labels, x_coords, y_coords):
             
             plt.text(xCoord,yCoord,s = label, bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right', fontsize = 11,transform=ax.transAxes)
     
@@ -1024,7 +1024,7 @@ def draw_label(model,ax,labels,xCoords,yCoords,nodes=None):
     
     
     
-def plot_basic_elements(model, ax,pumps=True,valves=True,reservoirs=True,tanks=True,links=True,nodes=True,savefig=False, saveName=None, drawLegend=True):
+def plot_basic_elements(model,ax,pumps=True,valves=True,reservoirs=True,tanks=True,links=True,nodes=True,savefig=False, save_name=None, legend=True):
     """Creates a basic plot, similar to the default seen in EPANET.
     Arguments:
     model: Saved initilization done with initializeModel
@@ -1033,18 +1033,18 @@ def plot_basic_elements(model, ax,pumps=True,valves=True,reservoirs=True,tanks=T
     
     draw_base_elements(model,ax,nodes=nodes,reservoirs=reservoirs,tanks=tanks,links=links,valves=valves,pumps=pumps,legend=True)
     
-    if drawLegend == True:
+    if legend == True:
         
         draw_legend(ax)
     
     if savefig == True:
         
-        save_fig(model, saveName=saveName)
+        save_fig(model, save_name=save_name)
 
 
 
 
-def plot_discrete_nodes(model,ax,binEdgeNum,parameter=None, value=None, getTanks=False,getReservoirs=False,bins='automatic', binSizeList = None, binShapeList = None,binLabelList = None, binBorderList = None, binBorderWidthList = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legendTitle = None, legendLoc='upper right', legendLoc2='lower right',saveName=None, cmap='tab10', colorList=None):
+def plot_discrete_nodes(model,ax,bin_edge_num,parameter=None, value=None, get_tanks=False,get_reservoirs=False,bins='automatic', bin_size_list = None, bin_shape_list = None,bin_label_list = None, bin_border_list = None, bin_border_width_list = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legend_title = None, legend_loc_1='upper right', legend_loc_2='lower right',save_name=None, cmap='tab10', color_list=None):
     """Plots discrete Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1053,23 +1053,23 @@ def plot_discrete_nodes(model,ax,binEdgeNum,parameter=None, value=None, getTanks
     with it. The value given is the value index, not time.
     bins: List of bin edges. When set to 'Automatic' it will create bin
     edges.
-    binEdgeNum: Number of bin edges that the user wants.
-    binList: Takes List. List of bin names.
-    binSizeList: Takes List. List of node sizes for each bin.
-    binLabelList: Takes List. List of labels for each bin.
-    binShapeList: Takes List. List of markers for each bin.
+    bin_edge_num: Number of bin edges that the user wants.
+    bin_list: Takes List. List of bin names.
+    bin_size_list: Takes List. List of node sizes for each bin.
+    bin_label_list: Takes List. List of labels for each bin.
+    bin_shape_list: Takes List. List of markers for each bin.
     cmap: Takes String. Colormap that determines bin colors.
-    colorList: Takes List. List of hexadecimal strings that determine bin
-    colors. cmap must = None for colorList to take priority.
+    color_list: Takes List. List of hexadecimal strings that determine bin
+    colors. cmap must = None for color_list to take priority.
     reservoirs: Takes Boolean. Determines whether to draw reservoirs or not.
     tanks: Takes Boolean. Determines whether to draw tanks or not.
     pumps: Takes Boolean. Determines whether to draw pumps or not.
     valves: Takes Boolean. Determines whether to draw valves or not.
     legend: Takes Boolean. Determines whether to draw legend or not.
-    legendTitle: Takes string. Title of legend.
-    legendLoc: Takes String. Location of legend.
+    legend_title: Takes string. Title of legend.
+    legend_loc_1: Takes String. Location of legend.
     savefig: Takes Boolean. Determines if figure is saved or not.
-    saveName: Takes string. SaveName acts as a prefix for the image file name,
+    save_name: Takes string. SaveName acts as a prefix for the image file name,
     and is followed by the name of the network.
     specialData: Takes either Excel file or correctly formatted dictionary. 
     Used to plot custom data."""
@@ -1077,12 +1077,12 @@ def plot_discrete_nodes(model,ax,binEdgeNum,parameter=None, value=None, getTanks
 
     if parameter != None:
         
-        parameterResults, nodeList = get_parameter(model,'node',parameter, value=value,tanks=getTanks,reservoirs=getReservoirs)
+        parameter_results, node_list = get_parameter(model,'node',parameter, value=value,tanks=get_tanks,reservoirs=get_reservoirs)
         
-        binnedResults,binNames = bin_parameter(model,parameterResults,nodeList,binList=bins, binEdgeNum=binEdgeNum) 
+        binnedResults,binNames = bin_parameter(model,parameter_results,node_list,bin_list=bins, bin_edge_num=bin_edge_num) 
         
         
-        draw_discrete_nodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
+        draw_discrete_nodes(model,ax,binnedResults,binNames,bin_size_list=bin_size_list,bin_shape_list=bin_shape_list, bin_label_list=bin_label_list,bin_border_list = bin_border_list, bin_border_width_list = bin_border_width_list,cmap=cmap, color_list=color_list)
     
     
         draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1090,18 +1090,18 @@ def plot_discrete_nodes(model,ax,binEdgeNum,parameter=None, value=None, getTanks
     
         if legend == True:
             
-            draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+            draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
     
     
     if savefig == True:
         
-         save_fig(model, saveName=saveName)
+         save_fig(model, save_name=save_name)
 
 
     
 
 
-def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat', colorBarTitle=None,nodeSize=100, nodeShape='.',savefig=True, saveName=None):
+def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat', color_bar_title=None,node_size=100, node_shape='.',savefig=True, save_name=None):
     """Plots continuous Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1113,10 +1113,10 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reser
     pumps: Takes Boolean. Determines whether to draw pumps or not.
     valves: Takes Boolean. Determines whether to draw valves or not.
     legend: Takes Boolean. Determines whether to draw legend or not.
-    legendTitle: Takes string. Title of legend.
-    legendLoc: Takes String. Location of legend.
+    legend_title: Takes string. Title of legend.
+    legend_loc_1: Takes String. Location of legend.
     savefig: Takes Boolean. Determines if figure is saved or not.
-    saveName: Takes string. SaveName acts as a prefix for the image file name,
+    save_name: Takes string. SaveName acts as a prefix for the image file name,
     and is followed by the name of the network.
     specialData: Takes either Excel file or correctly formatted dictionary. 
     Used to plot custom data."""
@@ -1124,26 +1124,26 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reser
     
     if parameter != None:
         
-        parameterResults, nodeList = get_parameter(model,'node',parameter, value=value)
+        parameter_results, node_list = get_parameter(model,'node',parameter, value=value)
         
         
-        g = draw_nodes(model,nodeList,parameterResults=parameterResults,nodeSize=nodeSize,cmap=cmap,nodeShape=nodeShape)
+        g = draw_nodes(model,node_list,parameter_results=parameter_results,node_size=node_size,cmap=cmap,node_shape=node_shape)
             
         
         draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
         
         
-        draw_color_bar(ax,g,cmap,colorBarTitle=colorBarTitle)
+        draw_color_bar(ax,g,cmap,color_bar_title=color_bar_title)
 
         
     if savefig == True:
         
-        save_fig(model, saveName=saveName)
+        save_fig(model, save_name=save_name)
   
     
   
     
-def plot_discrete_links(model, ax,binEdgeNum, parameter=None, value=None, bins='automatic', binWidthList=None, binLabelList=None,colorList=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legendTitle=None, legendLoc='upper right', legendLoc2='lower right',savefig=True,saveName=None):
+def plot_discrete_links(model, ax,bin_edge_num, parameter=None, value=None, bins='automatic', bin_width_list=None, bin_label_list=None,color_list=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legend_title=None, legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None):
     """Plots discrete Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1152,36 +1152,36 @@ def plot_discrete_links(model, ax,binEdgeNum, parameter=None, value=None, bins='
     with it. The value given is the value index, not time.
     bins: List of bin edges. When set to 'Automatic' it will create bin
     edges.
-    binEdgeNum: Number of bin edges that the user wants.
-    binList: Takes List. List of bin names.
-    binWidthList: Takes List. List of link widths for each bin.
-    binLabelList: Takes List. List of labels for each bin.
-    binShapeList: Takes List. List of markers for each bin.
+    bin_edge_num: Number of bin edges that the user wants.
+    bin_list: Takes List. List of bin names.
+    bin_width_list: Takes List. List of link widths for each bin.
+    bin_label_list: Takes List. List of labels for each bin.
+    bin_shape_list: Takes List. List of markers for each bin.
     cmap: Takes String. Colormap that determines bin colors.
-    colorList: Takes List. List of hexadecimal strings that determine bin
-    colors. cmap must = None for colorList to take priority.
+    color_list: Takes List. List of hexadecimal strings that determine bin
+    colors. cmap must = None for color_list to take priority.
     reservoirs: Takes Boolean. Determines whether to draw reservoirs or not.
     tanks: Takes Boolean. Determines whether to draw tanks or not.
     pumps: Takes Boolean. Determines whether to draw pumps or not.
     valves: Takes Boolean. Determines whether to draw valves or not.
     legend: Takes Boolean. Determines whether to draw legend or not.
-    legendTitle: Takes string. Title of legend.
-    legendLoc: Takes String. Location of legend.
+    legend_title: Takes string. Title of legend.
+    legend_loc_1: Takes String. Location of legend.
     savefig: Takes Boolean. Determines if figure is saved or not.
-    saveName: Takes string. SaveName acts as a prefix for the image file name,
+    save_name: Takes string. SaveName acts as a prefix for the image file name,
     and is followed by the name of the network.
     specialData: Takes either Excel file or correctly formatted dictionary. 
     Used to plot custom data."""
     
     if parameter != None:
         
-        parameterResults, linkList = get_parameter(model,'link',parameter, value=value)
+        parameter_results, link_list = get_parameter(model,'link',parameter, value=value)
         
         
-        binnedResults,binNames = bin_parameter(model,parameterResults,linkList,binList=bins, binEdgeNum=binEdgeNum)
+        binnedResults,binNames = bin_parameter(model,parameter_results,link_list,bin_list=bins, bin_edge_num=bin_edge_num)
         
         
-        draw_discrete_links(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
+        draw_discrete_links(model,ax,binnedResults,binNames,bin_width_list=bin_width_list, bin_label_list=bin_label_list,cmap=cmap, color_list=color_list)
         
         
         draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1189,17 +1189,17 @@ def plot_discrete_links(model, ax,binEdgeNum, parameter=None, value=None, bins='
         
         if legend == True:
             
-            draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+            draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
 
 
     if savefig == True:
         
-         save_fig(model, saveName=saveName)
+         save_fig(model, save_name=save_name)
    
          
    
     
-def plot_continuous_links(model,ax,parameter=None,value=None,minWidth=1,maxWidth=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',colorBarTitle=None,savefig=True, saveName=None):
+def plot_continuous_links(model,ax,parameter=None,value=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',color_bar_title=None,savefig=True, save_name=None):
     """Plots continuous Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1211,10 +1211,10 @@ def plot_continuous_links(model,ax,parameter=None,value=None,minWidth=1,maxWidth
     pumps: Takes Boolean. Determines whether to draw pumps or not.
     valves: Takes Boolean. Determines whether to draw valves or not.
     legend: Takes Boolean. Determines whether to draw legend or not.
-    legendTitle: Takes string. Title of legend.
-    legendLoc: Takes String. Location of legend.
+    legend_title: Takes string. Title of legend.
+    legend_loc_1: Takes String. Location of legend.
     savefig: Takes Boolean. Determines if figure is saved or not.
-    saveName: Takes string. SaveName acts as a prefix for the image file name,
+    save_name: Takes string. SaveName acts as a prefix for the image file name,
     and is followed by the name of the network.
     specialData: Takes either Excel file or correctly formatted dictionary. 
     Used to plot custom data."""
@@ -1225,22 +1225,22 @@ def plot_continuous_links(model,ax,parameter=None,value=None,minWidth=1,maxWidth
     
     if parameter != None:
         
-        parameterResults, linkList = get_parameter(model,'link',parameter, value=value)
+        parameter_results, link_list = get_parameter(model,'link',parameter, value=value)
         
         
-        minParameter = np.min(parameterResults)
-        maxParameter = np.max(parameterResults)
+        minParameter = np.min(parameter_results)
+        maxParameter = np.max(parameter_results)
         
         
-        normalizedParameter = np.copy(parameterResults)
+        normalizedParameter = np.copy(parameter_results)
         
         
         counter = 0
         
         
-        for parameter in parameterResults:
+        for parameter in parameter_results:
             
-            normalizedParameter[counter] = ((maxWidth - minWidth)*((parameter - minParameter)/(maxParameter - minParameter))) + minWidth
+            normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
            
             
             counter += 1
@@ -1249,18 +1249,18 @@ def plot_continuous_links(model,ax,parameter=None,value=None,minWidth=1,maxWidth
         widths = normalizedParameter
         
         
-        g = draw_links(model,linkList,parameterResults=parameterResults,cmap=cmap,widths=widths)
+        g = draw_links(model,link_list,parameter_results=parameter_results,cmap=cmap,widths=widths)
       
     
         draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
     
     
-        draw_color_bar(ax,g,cmap,colorBarTitle=colorBarTitle)
+        draw_color_bar(ax,g,cmap,color_bar_title=color_bar_title)
     
     
     if savefig == True:
         
-        save_fig(model, saveName=saveName)
+        save_fig(model, save_name=save_name)
     
     
     
@@ -1310,15 +1310,15 @@ def animate_plot(model,ax,function,**kwargs):
             os.remove(filename)
             
             
-def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None,excelColumns=None,customDataValues=None, bins='automatic',binSizeList = None, binShapeList = None, binEdgeNum=None, binWidthList=None, binLabelList=None,binBorderList = None, binBorderWidthList = None,colorList=None,minWidth=1,maxWidth=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legendTitle=None,nodeSize=100, nodeShape='.',legendLoc='upper right', legendLoc2='lower right',savefig=True,saveName=None,colorBarTitle=None):
+def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=None,excel_columns=None,customDataValues=None, bins='automatic',bin_size_list = None, bin_shape_list = None, bin_edge_num=None, bin_width_list=None, bin_label_list=None,bin_border_list = None, bin_border_width_list = None,color_list=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legend_title=None,node_size=100, node_shape='.',legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None,color_bar_title=None):
     
     
     if parameter=='demand_patterns':
         
-        demandPatternNodes,patterns = get_demand_patterns(model)
+        demand_pattern_nodes,patterns = get_demand_patterns(model)
         
         
-        draw_discrete_nodes(model,ax,demandPatternNodes,patterns,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
+        draw_discrete_nodes(model,ax,demand_pattern_nodes,patterns,bin_size_list=bin_size_list,bin_shape_list=bin_shape_list, bin_label_list=bin_label_list,bin_border_list = bin_border_list, bin_border_width_list = bin_border_width_list,cmap=cmap, color_list=color_list)
         
         
         draw_base_elements(model,ax,nodes=False)  
@@ -1326,12 +1326,12 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
         
         if legend == True:
             
-            draw_legend(ax,patterns,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+            draw_legend(ax,patterns,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
             
             
         if savefig == True:
             
-            save_fig(model, saveName=saveName)
+            save_fig(model, save_name=save_name)
             
             
         return
@@ -1339,10 +1339,10 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
     
     if parameter=='diameter':
         
-        parameterResults, linkList = get_parameter(model,'link',parameter)
+        parameter_results, link_list = get_parameter(model,'link',parameter)
         
         
-        uniques = pd.unique(parameterResults)
+        uniques = pd.unique(parameter_results)
         
         
         binNames = []
@@ -1361,12 +1361,12 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
             binnedResults[binName] = {}
         
         
-        for link in linkList:
+        for link in link_list:
             
-            binnedResults['{:.4f}'.format(parameterResults.loc[link])][link] = model['G_pipe_name_list'].index(link)
+            binnedResults['{:.4f}'.format(parameter_results.loc[link])][link] = model['G_pipe_name_list'].index(link)
        
         
-        draw_discrete_links(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
+        draw_discrete_links(model,ax,binnedResults,binNames,bin_width_list=bin_width_list, bin_label_list=bin_label_list,cmap=cmap, color_list=color_list)
         
         
         draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1374,12 +1374,12 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
         
         if legend == True:
             
-            draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+            draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
         
         
         if savefig == True:
             
-            save_fig(model, saveName=saveName)
+            save_fig(model, save_name=save_name)
             
             
         return
@@ -1387,10 +1387,10 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
     
     if parameter=='tag':
         
-        parameterResults, nodeList = get_parameter(model,'node',parameter)
+        parameter_results, node_list = get_parameter(model,'node',parameter)
         
         
-        uniques = pd.unique(parameterResults)
+        uniques = pd.unique(parameter_results)
         uniques =  uniques[uniques != None]
         
         
@@ -1415,9 +1415,9 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
             binnedResults[binName] = {}
         
         
-        for node in nodeList:
+        for node in node_list:
             
-            if parameterResults.loc[node] == None:
+            if parameter_results.loc[node] == None:
                 
                 binnedResults['No Tag'][node] = model['node_names'].index(node)
                 
@@ -1425,10 +1425,10 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
                 continue
             
             
-            binnedResults[parameterResults.loc[node]][node] = model['node_names'].index(node)
+            binnedResults[parameter_results.loc[node]][node] = model['node_names'].index(node)
        
         
-        draw_discrete_nodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
+        draw_discrete_nodes(model,ax,binnedResults,binNames,bin_size_list=bin_size_list,bin_shape_list=bin_shape_list, bin_label_list=bin_label_list,bin_border_list = bin_border_list, bin_border_width_list = bin_border_width_list,cmap=cmap, color_list=color_list)
         
         
         draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1436,12 +1436,12 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
         
         if legend == True:
             
-            draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+            draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
         
         
         if savefig == True:
             
-            save_fig(model, saveName=saveName)
+            save_fig(model, save_name=save_name)
             
             
         return
@@ -1449,19 +1449,19 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
     
     if parameter == 'custom_data':
         
-        if dataType == 'unique':
+        if data_type == 'unique':
             
-            if parameterType == 'link':
+            if parameter_type == 'link':
                 
-                draw_discrete_links(model,ax,customDataValues[0], customDataValues[1],binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
+                draw_discrete_links(model,ax,customDataValues[0], customDataValues[1],bin_width_list=bin_width_list, bin_label_list=bin_label_list,cmap=cmap, color_list=color_list)
                 
                 
                 draw_base_elements(model,ax,links=False,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
             
             
-            elif parameterType == 'node':
+            elif parameter_type == 'node':
                 
-                draw_discrete_nodes(model,ax,customDataValues[0], customDataValues[1],binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
+                draw_discrete_nodes(model,ax,customDataValues[0], customDataValues[1],bin_size_list=bin_size_list,bin_shape_list=bin_shape_list, bin_label_list=bin_label_list,bin_border_list = bin_border_list, bin_border_width_list = bin_border_width_list,cmap=cmap, color_list=color_list)
             
             
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1470,31 +1470,31 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
            
             if legend == True:
                 
-                draw_legend(ax,customDataValues[1],title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+                draw_legend(ax,customDataValues[1],title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
             
             
             if savefig == True:
                 
-                save_fig(model, saveName=saveName)
+                save_fig(model, save_name=save_name)
                 
                 
             return
         
-        if dataType == 'discrete':
-            binnedResults,binNames = bin_parameter(model,customDataValues[1],customDataValues[0],binList=bins, binEdgeNum=binEdgeNum) 
+        if data_type == 'discrete':
+            binnedResults,binNames = bin_parameter(model,customDataValues[1],customDataValues[0],bin_list=bins, bin_edge_num=bin_edge_num) 
             
             
-            if parameterType == 'link':
+            if parameter_type == 'link':
                 
-                draw_discrete_links(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
+                draw_discrete_links(model,ax,binnedResults,binNames,bin_width_list=bin_width_list, bin_label_list=bin_label_list,cmap=cmap, color_list=color_list)
                 
                 
                 draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
                 
                 
-            if parameterType == 'node':
+            if parameter_type == 'node':
                 
-                draw_discrete_nodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
+                draw_discrete_nodes(model,ax,binnedResults,binNames,bin_size_list=bin_size_list,bin_shape_list=bin_shape_list, bin_label_list=bin_label_list,bin_border_list = bin_border_list, bin_border_width_list = bin_border_width_list,cmap=cmap, color_list=color_list)
             
             
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1502,17 +1502,17 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
         
             if legend == True:
                 
-                draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+                draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
         
         
             if savefig == True:
             
-             save_fig(model, saveName=saveName)
+             save_fig(model, save_name=save_name)
              
              return
          
             
-        if dataType == 'continuous':
+        if data_type == 'continuous':
             
             minParameter = np.min(customDataValues[1])
             maxParameter = np.max(customDataValues[1])
@@ -1526,7 +1526,7 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
             
             for parameter in customDataValues[1]:
                 
-                normalizedParameter[counter] = ((maxWidth - minWidth)*((parameter - minParameter)/(maxParameter - minParameter))) + minWidth
+                normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
                 
                 
                 counter += 1
@@ -1535,17 +1535,17 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
             widths = normalizedParameter
             
             
-            if parameterType == 'link':
+            if parameter_type == 'link':
                 
-                g = draw_links(model,customDataValues[0], parameterResults=customDataValues[1],cmap=cmap,widths=widths)
+                g = draw_links(model,customDataValues[0], parameter_results=customDataValues[1],cmap=cmap,widths=widths)
                 
                 
                 draw_base_elements(model,ax,links=False,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
             
             
-            elif parameterType == 'node':
+            elif parameter_type == 'node':
                 
-                g = draw_nodes(model,customDataValues[0], parameterResults=customDataValues[1],nodeSize=nodeSize,cmap=cmap,nodeShape=nodeShape)
+                g = draw_nodes(model,customDataValues[0], parameter_results=customDataValues[1],node_size=node_size,cmap=cmap,node_shape=node_shape)
             
             
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1556,7 +1556,7 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
             
             if savefig == True:
                 
-                save_fig(model, saveName=saveName)
+                save_fig(model, save_name=save_name)
                 
                 
             return
@@ -1564,22 +1564,22 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
         
     if type(parameter) == str:
         
-        if dataType == 'unique':
+        if data_type == 'unique':
             
-            nodeList, binList = convert_excel(model,parameter,dataType,excelColumns[0],excelColumns[1])
+            node_list, bin_list = convert_excel(model,parameter,data_type,excel_columns[0],excel_columns[1])
             
             
-            if parameterType == 'link':
+            if parameter_type == 'link':
                 
-                draw_discrete_links(model,ax,nodeList, binList,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
+                draw_discrete_links(model,ax,node_list, bin_list,bin_width_list=bin_width_list, bin_label_list=bin_label_list,cmap=cmap, color_list=color_list)
                 
                 
                 draw_base_elements(model,ax,links=False,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
             
             
-            elif parameterType == 'node':
+            elif parameter_type == 'node':
                 
-                draw_discrete_nodes(model,ax,nodeList, binList,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
+                draw_discrete_nodes(model,ax,node_list, bin_list,bin_size_list=bin_size_list,bin_shape_list=bin_shape_list, bin_label_list=bin_label_list,bin_border_list = bin_border_list, bin_border_width_list = bin_border_width_list,cmap=cmap, color_list=color_list)
             
             
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1587,34 +1587,34 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
             
             if legend == True:
                 
-                draw_legend(ax,binList,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+                draw_legend(ax,bin_list,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
             
             
             if savefig == True:
                 
-                save_fig(model, saveName=saveName)
+                save_fig(model, save_name=save_name)
             
             return 
         
         
-        if dataType == 'discrete':
+        if data_type == 'discrete':
             
-            data = convert_excel(model,parameter,dataType,excelColumns[0],excelColumns[1])
+            data = convert_excel(model,parameter,data_type,excel_columns[0],excel_columns[1])
             
-            binnedResults,binNames = bin_parameter(model,data['element_list'],data['index'],binList=bins, binEdgeNum=binEdgeNum) 
+            binnedResults,binNames = bin_parameter(model,data['element_list'],data['index'],bin_list=bins, bin_edge_num=bin_edge_num) 
             
             
-            if parameterType == 'link':
+            if parameter_type == 'link':
                 
-                draw_discrete_links(model,ax,binnedResults,binNames,binWidthList=binWidthList, binLabelList=binLabelList,cmap=cmap, colorList=colorList)
+                draw_discrete_links(model,ax,binnedResults,binNames,bin_width_list=bin_width_list, bin_label_list=bin_label_list,cmap=cmap, color_list=color_list)
                 
                 
                 draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
                 
                 
-            if parameterType == 'node':
+            if parameter_type == 'node':
                 
-                draw_discrete_nodes(model,ax,binnedResults,binNames,binSizeList=binSizeList,binShapeList=binShapeList, binLabelList=binLabelList,binBorderList = binBorderList, binBorderWidthList = binBorderWidthList,cmap=cmap, colorList=colorList)
+                draw_discrete_nodes(model,ax,binnedResults,binNames,bin_size_list=bin_size_list,bin_shape_list=bin_shape_list, bin_label_list=bin_label_list,bin_border_list = bin_border_list, bin_border_width_list = bin_border_width_list,cmap=cmap, color_list=color_list)
             
             
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1622,17 +1622,17 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
         
             if legend == True:
                 
-                draw_legend(ax,binNames,title=legendTitle,pumps=pumps,loc=legendLoc,loc2=legendLoc2)
+                draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
         
         
             if savefig == True:
             
-             save_fig(model, saveName=saveName)    
+             save_fig(model, save_name=save_name)    
          
             return
-        if dataType == 'continuous':
+        if data_type == 'continuous':
             
-            data = convert_excel(model,parameter,dataType,excelColumns[0],excelColumns[1])
+            data = convert_excel(model,parameter,data_type,excel_columns[0],excel_columns[1])
             
             
             minParameter = np.min(data['element_list'])
@@ -1647,7 +1647,7 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
             
             for parameter in data['element_list']:
                 
-                normalizedParameter[counter] = ((maxWidth - minWidth)*((parameter - minParameter)/(maxParameter - minParameter))) + minWidth
+                normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
                 
                 
                 counter += 1
@@ -1656,17 +1656,17 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
             widths = normalizedParameter
             
             
-            if parameterType == 'link':
+            if parameter_type == 'link':
                 
-                g = draw_links(model,data['index'], parameterResults=data['element_list'],cmap=cmap,widths=widths)
+                g = draw_links(model,data['index'], parameter_results=data['element_list'],cmap=cmap,widths=widths)
                 
                 
                 draw_base_elements(model,ax,links=False,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
             
             
-            elif parameterType == 'node':
+            elif parameter_type == 'node':
                 
-                g = draw_nodes(model,data['index'], parameterResults=data['element_list'],nodeSize=nodeSize,cmap=cmap,nodeShape=nodeShape)
+                g = draw_nodes(model,data['index'], parameter_results=data['element_list'],node_size=node_size,cmap=cmap,node_shape=node_shape)
             
             
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1675,7 +1675,7 @@ def plot_unique_data(model, ax, parameter=None, parameterType=None,dataType=None
             draw_color_bar(ax,g,cmap)
             if savefig == True:
                 
-                save_fig(model, saveName=saveName)
+                save_fig(model, save_name=save_name)
                 
                 
         return
