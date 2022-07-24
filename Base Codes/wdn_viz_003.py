@@ -1265,7 +1265,7 @@ def plot_continuous_links(model,ax,parameter=None,value=None,min_width=1,max_wid
     
     
     
-def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,**kwargs):
+def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif_save_name='gif',**kwargs):
     
     
     timesteps = int(model['wn'].options.time.duration/model['wn'].options.time.report_timestep)

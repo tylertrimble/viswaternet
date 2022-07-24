@@ -518,7 +518,7 @@ def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='au
 
         if (elementWithParameter in model['node_names']) == True:
 
-            continue
+            break
         else:   
             element_list = model['G_pipe_name_list']
             elementType = "link"
@@ -634,7 +634,7 @@ def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='au
             
             del binnedParameter[binName]
     
-    
+
     return binnedParameter, binNames
 
 
@@ -1044,7 +1044,7 @@ def plot_basic_elements(model,ax,pumps=True,valves=True,reservoirs=True,tanks=Tr
 
 
 
-def plot_discrete_nodes(model,ax,bin_edge_num,parameter=None, value=None, get_tanks=False,get_reservoirs=False,bins='automatic', bin_size_list = None, bin_shape_list = None,bin_label_list = None, bin_border_list = None, bin_border_width_list = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legend_title = None, legend_loc_1='upper right', legend_loc_2='lower right',save_name=None, cmap='tab10', color_list=None):
+def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_tanks=False,get_reservoirs=False,bins='automatic', bin_size_list = None, bin_shape_list = None,bin_label_list = None, bin_border_list = None, bin_border_width_list = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legend_title = None, legend_loc_1='upper right', legend_loc_2='lower right',save_name=None, cmap='tab10', color_list=None):
     """Plots discrete Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1143,7 +1143,7 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reser
     
   
     
-def plot_discrete_links(model, ax,bin_edge_num, parameter=None, value=None, bins='automatic', bin_width_list=None, bin_label_list=None,color_list=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legend_title=None, legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None):
+def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, bins='automatic', bin_width_list=None, bin_label_list=None,color_list=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legend_title=None, legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None):
     """Plots discrete Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1265,37 +1265,37 @@ def plot_continuous_links(model,ax,parameter=None,value=None,min_width=1,max_wid
     
     
     
-def animate_plot(model,ax,function,**kwargs):
+def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif_save_name='gif',**kwargs):
     
     
-    values = int(model['wn'].options.time.duration/model['wn'].options.time.report_value)
-    
+    timesteps = int(model['wn'].options.time.duration/model['wn'].options.time.report_timestep)
+    values = range(timesteps)
+    if last_timestep != None:
+        values = values[first_timestep:last_timestep]
     
     filenames = []
     
     
-    for value in range(values):
+    for value in values:
         
-        function(model,value=value,**kwargs)
+        function(model,ax,value=value,**kwargs)
         
         
         handles, labels = [], []
         
         
-        legend3 = plt.legend(handles, labels, title = 'Timestep ' + str(value*model['wn'].options.time.report_value) + " Seconds", loc='lower left')
-        
-        
-        ax.add_artist(legend3)
+        plt.legend(handles, labels, title = 'Timestep ' + str(value*model['wn'].options.time.report_timestep) + " Seconds", loc='lower left')
         
         
         plt.savefig(str(value) + '.png')
         
         
         filenames = np.append(filenames, str(value) + '.png')
-
+        
+        ax.clear()
 
     # builds gif
-    with imageio.get_writer('mygif.gif', mode='I',fps=3) as writer:
+    with imageio.get_writer('mygif.gif', mode='I',fps=fps) as writer:
         
         for filename in filenames:
             

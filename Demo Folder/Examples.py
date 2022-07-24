@@ -45,7 +45,7 @@ wdn.plot_basic_elements(model,ax,savefig=False, save_name='Basic')
 
 fig, ax = plt.subplots(figsize=(15,25))
 #Plots network parameter that does not change with time. 
-wdn.plot_discrete_nodes(model,ax,5,parameter='elevation',legend=False)
+wdn.plot_discrete_nodes(model,ax,bin_edge_num=5,parameter='elevation',legend=False)
 
 
 # In[7]:
@@ -53,7 +53,7 @@ wdn.plot_discrete_nodes(model,ax,5,parameter='elevation',legend=False)
 
 fig, ax = plt.subplots(figsize=(15,25))
 #Plots network parameter that changes with time (pressure, demand, etc.) at timestep 13
-wdn.plot_discrete_nodes(model,ax,5,parameter='pressure', value=12)
+wdn.plot_discrete_nodes(model,ax,bin_edge_num=5,parameter='pressure', value=12)
 
 
 # In[8]:
@@ -61,7 +61,7 @@ wdn.plot_discrete_nodes(model,ax,5,parameter='pressure', value=12)
 
 fig, ax = plt.subplots(figsize=(15,25))
 #Plots network max pressure. Can also plot min, mean, or median pressure/other parameters.
-wdn.plot_discrete_nodes(model,ax,5,parameter='pressure', value='max')
+wdn.plot_discrete_nodes(model,ax,bin_edge_num=5,parameter='pressure', value='max')
 
 
 # In[9]:
@@ -69,7 +69,7 @@ wdn.plot_discrete_nodes(model,ax,5,parameter='pressure', value='max')
 
 fig, ax = plt.subplots(figsize=(15,25))
 #Plots network max pressure with custom bins
-wdn.plot_discrete_nodes(model,ax,5,bins=[-0.0001,20,40,60,80],parameter='pressure', value='max')
+wdn.plot_discrete_nodes(model,ax,bin_edge_num=5,bins=[-0.0001,20,40,60,80],parameter='pressure', value='max')
 
 
 # In[10]:
@@ -77,7 +77,7 @@ wdn.plot_discrete_nodes(model,ax,5,bins=[-0.0001,20,40,60,80],parameter='pressur
 
 fig, ax = plt.subplots(figsize=(15,25))
 #Plots network elevation with all customization options used
-wdn.plot_discrete_nodes(model,ax,5,parameter='elevation',bin_size_list = [100,125,150,175,200], bin_shape_list = ['.','v','8','D','1'], bin_border_list=['b','k','y','b','k'],bin_border_width_list=[1,1.1,0.5,0.9,1],cmap=None,color_list=['#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22'],savefig=True, legend_title= 'Elevation Groups', save_name = 'ElevationMap2')
+wdn.plot_discrete_nodes(model,ax,bin_edge_num=5,parameter='elevation',bin_size_list = [100,125,150,175,200], bin_shape_list = ['.','v','8','D','1'], bin_border_list=['b','k','y','b','k'],bin_border_width_list=[1,1.1,0.5,0.9,1],cmap=None,color_list=['#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22'],savefig=True, legend_title= 'Elevation Groups', save_name = 'ElevationMap2')
 
 
 # In[11]:
@@ -101,7 +101,7 @@ wdn.plot_continuous_nodes(model,ax,parameter='demand',value='mean',cmap='autumn'
 
 fig, ax = plt.subplots(figsize=(15,25))
 #Plots mean flowrate with 5 bin edges.
-wdn.plot_discrete_links(model,ax,5,parameter='flowrate',value='mean',pumps=False)
+wdn.plot_discrete_links(model,ax,bin_edge_num=5,parameter='flowrate',value='mean',pumps=False)
 
 
 # In[14]:
@@ -109,7 +109,7 @@ wdn.plot_discrete_links(model,ax,5,parameter='flowrate',value='mean',pumps=False
 
 fig, ax = plt.subplots(figsize=(15,25))
 #Plots mean flowrate with 5 bin edges with custom bin edges, no reservoirs or tanks and custom cmap
-wdn.plot_discrete_links(model,ax,5,parameter='flowrate',value='mean',bin_width_list=[1,1,2,2], reservoirs=False,tanks=False,cmap='autumn')
+wdn.plot_discrete_links(model,ax,bin_edge_num=5,parameter='flowrate',value='mean',bin_width_list=[1,1,2,2], reservoirs=False,tanks=False,cmap='autumn')
 
 
 # In[15]:
@@ -136,7 +136,7 @@ wdn.plot_continuous_links(model,ax,parameter='flowrate',value='mean', cmap='bwr'
 #Special Labels
 fig, ax = plt.subplots(figsize=(15,25))
 #Draws distinct elevation.
-wdn.plot_discrete_nodes(model,ax,5,parameter='elevation')
+wdn.plot_discrete_nodes(model,ax,bin_edge_num=5,parameter='elevation')
 #Draws label without providing list of nodes. This means that the coordinates provided (the first set being x and the second being y coordinates) are absolute from 0 to 1. 
 wdn.draw_label(model,ax,['label','not a label'],[0.5,0.3],[0.1,0.7])
 #Draws label by providing list of nodes. This means that coordiantes are relative, and the value you will need to input will depend on the network.
@@ -149,7 +149,7 @@ wdn.draw_label(model,ax,['label2','really not a label trust me'],[50,-50],[75,20
 #Special Labels
 fig, ax = plt.subplots(figsize=(15,25))
 #Draws distinct elevation.
-wdn.plot_discrete_nodes(model,ax,5,parameter='elevation')
+wdn.plot_discrete_nodes(model,ax,bin_edge_num=5,parameter='elevation')
 #Plots red square with black outline at specific nodes
 wdn.draw_nodes(model,['J511','J411'],node_size=300,node_color='r',node_shape='s',edge_colors='k',line_widths=2)
 
@@ -160,7 +160,7 @@ wdn.draw_nodes(model,['J511','J411'],node_size=300,node_color='r',node_shape='s'
 #Combination of distinct nodes + continuous links
 fig, ax = plt.subplots(figsize=(15,25))
 ax.set_facecolor((0.1, 0.1, 0.1))
-wdn.plot_discrete_nodes(model,ax,5,parameter='elevation',savefig=True, legend_title= 'Elevation Groups', save_name = 'ElevationMap')
+wdn.plot_discrete_nodes(model,ax,bin_edge_num=5,parameter='elevation',savefig=True, legend_title= 'Elevation Groups', save_name = 'ElevationMap')
 
 wdn.plot_continuous_links(model,ax,parameter='flowrate',value=11,pumps=False,cmap='bwr',color_bar_title="Flowrate", save_name="ContinuousFlowrate")
 
@@ -262,6 +262,6 @@ wdn.plot_unique_data(model,ax,parameter='custom_data',data_type='discrete',bin_e
 
 
 #Animates pressure at all timesteps
-
-#wdn.animate_plot(model,ax,wdn.plot_distinct_nodes,figsize=[24,14],parameter='pressure',bins=[-25,0,25,50,75], bin_size_list = [300,300,300,300,300,300],legend_title= 'Pressure Groups', save_name = 'PresMap',savefig=False)
+fig, ax = plt.subplots(figsize=(15,25))
+wdn.animate_plot(model,ax,wdn.plot_discrete_nodes,first_timestep=0,last_timestep=30,bin_edge_num=5,bins=[-0.0001,20,40,60,80],parameter='pressure')
 
