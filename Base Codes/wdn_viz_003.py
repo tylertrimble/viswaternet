@@ -1318,7 +1318,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
         return
     
     
-    if parameter=='diameter':
+    if parameter=='diameter' or 'roughness':
         
         parameter_results, link_list = get_parameter(model,'link',parameter)
         
