@@ -1276,7 +1276,7 @@ def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif
         ax.clear()
 
     # builds gif
-    with imageio.get_writer(model['image_path'] + r'\mygif.gif', mode='I',fps=fps) as writer:
+    with imageio.get_writer(model['image_path'] + '\\' + gif_save_name + '.gif', mode='I',fps=fps) as writer:
         
         for filename in filenames:
             
