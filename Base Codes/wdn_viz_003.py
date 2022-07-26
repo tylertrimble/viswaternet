@@ -648,7 +648,7 @@ def draw_nodes(model,node_list,parameter_results=[],node_size=300,node_color='k'
             cmap = mpl.cm.get_cmap(cmap)
             
             
-            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results, cmap=cmap, node_shape = node_shape)
+            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results, cmap=cmap, node_shape = node_shape,linewidths=line_widths,edgecolors=edge_colors)
             
             
             return g
@@ -1082,7 +1082,7 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_
     
 
 
-def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat', color_bar_title=None,node_size=100, node_shape='.',savefig=True, save_name=None):
+def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat', color_bar_title=None,node_size=100, node_shape='.',edge_colors=None,line_widths=None,savefig=True, save_name=None):
     """Plots continuous Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1108,7 +1108,7 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reser
         parameter_results, node_list = get_parameter(model,'node',parameter, value=value)
         
         
-        g = draw_nodes(model,node_list,parameter_results=parameter_results,node_size=node_size,cmap=cmap,node_shape=node_shape)
+        g = draw_nodes(model,node_list,parameter_results=parameter_results,node_size=node_size,cmap=cmap,node_shape=node_shape,edge_colors=edge_colors,line_widths=line_widths)
             
         
         draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)

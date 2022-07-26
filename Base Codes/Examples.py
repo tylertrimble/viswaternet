@@ -85,7 +85,7 @@ wdn.plot_discrete_nodes(model,ax,bin_edge_num=5,parameter='elevation',bin_size_l
 
 fig, ax = plt.subplots(figsize=(15,25))
 #Plots network elevation continuously with color bar.
-wdn.plot_continuous_nodes(model,ax,parameter='elevation',color_bar_title="Elevation", save_name="ContinuousElevation")
+wdn.plot_continuous_nodes(model,ax,parameter='elevation',color_bar_title="Elevation", save_name="ContinuousElevation",edge_colors='r',line_widths=10)
 
 
 # In[12]:
