@@ -1268,15 +1268,15 @@ def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif
         plt.legend(handles, labels, title = 'Timestep ' + str(value*model['wn'].options.time.report_timestep) + " Seconds", loc='lower left')
         
         
-        plt.savefig(str(value) + '.png')
+        plt.savefig(model['image_path'] + '\\' + str(value) + '.png')
         
         
-        filenames = np.append(filenames, str(value) + '.png')
+        filenames = np.append(filenames, model['image_path'] + '\\' + str(value) + '.png')
         
         ax.clear()
 
     # builds gif
-    with imageio.get_writer('mygif.gif', mode='I',fps=fps) as writer:
+    with imageio.get_writer(model['image_path'] + r'\mygif.gif', mode='I',fps=fps) as writer:
         
         for filename in filenames:
             
