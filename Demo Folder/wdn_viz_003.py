@@ -118,26 +118,6 @@ def initialize_model(inp_file):
 
 
 
-def pattern_match(model,node_pattern,pattern, junc_name,demand_pattern_nodes):
-    """Determines if demand pattern of node is the one specified, then stores 
-    it with the apropriate dictionary key.
-    Arguments:
-    node_pattern: The demand pattern of the node
-    pattern: Which pattern the node demand pattern is being checked against
-    junc_name: Name of node/junction being checked
-    demand_pattern_nodes: Name of demand pattern dictionary"""
-    
-    
-    if node_pattern == pattern:
-        
-        demand_pattern_nodes[pattern][junc_name] = model['node_names'].index(junc_name)
-        
-        
-    return demand_pattern_nodes
-
-
-
-
 def convert_excel(model,file,data_type,element_index,value_index):
     """Converts an excel file into the correct dictionary structure needed to
     be used with drawing functions.
@@ -227,7 +207,7 @@ def save_fig(model, save_name=None):
     
   
     
-def get_parameter(model,parameter_type,parameter,value = None,tanks=False,reservoirs=False):
+def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoirs=False):
     """Gets parameter for each node in the network and stores it in
     parameter_results. Also grabs the indices of the nodes that had that
     parameter.
@@ -465,13 +445,14 @@ def get_demand_patterns(model):
         
         demand_pattern_nodes[pattern] = {}
         
-        
-    for i in range(len(model['junc_names'])):
+    counter = 0  
+    for junc_name in model['junc_names']:
         
         for pattern in patterns:
-            
-            demand_pattern_nodes = pattern_match(model,demandPatterns[i],pattern,model['junc_names'][i],demand_pattern_nodes)
-            
+            if demandPatterns[counter] == pattern:
+                
+                demand_pattern_nodes[pattern][junc_name] = model['junc_names'].index(junc_name)
+        counter += 1
             
     for pattern in patterns:
         
@@ -482,7 +463,7 @@ def get_demand_patterns(model):
             
             del demand_pattern_nodes[pattern]
             
-            
+    print(demand_pattern_nodes)        
     return demand_pattern_nodes, patterns  
     
 
@@ -667,7 +648,7 @@ def draw_nodes(model,node_list,parameter_results=[],node_size=300,node_color='k'
             cmap = mpl.cm.get_cmap(cmap)
             
             
-            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results, cmap=cmap, node_shape = node_shape)
+            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results, cmap=cmap, node_shape = node_shape,linewidths=line_widths,edgecolors=edge_colors)
             
             
             return g
@@ -1101,7 +1082,7 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_
     
 
 
-def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat', color_bar_title=None,node_size=100, node_shape='.',savefig=True, save_name=None):
+def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat', color_bar_title=None,node_size=100, node_shape='.',edge_colors=None,line_widths=None,savefig=True, save_name=None):
     """Plots continuous Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1127,7 +1108,7 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reser
         parameter_results, node_list = get_parameter(model,'node',parameter, value=value)
         
         
-        g = draw_nodes(model,node_list,parameter_results=parameter_results,node_size=node_size,cmap=cmap,node_shape=node_shape)
+        g = draw_nodes(model,node_list,parameter_results=parameter_results,node_size=node_size,cmap=cmap,node_shape=node_shape,edge_colors=edge_colors,line_widths=line_widths)
             
         
         draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1337,7 +1318,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
         return
     
     
-    if parameter=='diameter':
+    if parameter=='diameter' or 'roughness':
         
         parameter_results, link_list = get_parameter(model,'link',parameter)
         
