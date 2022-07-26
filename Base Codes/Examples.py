@@ -45,7 +45,7 @@ wdn.plot_basic_elements(model,ax,savefig=False, save_name='Basic')
 
 fig, ax = plt.subplots(figsize=(15,25))
 #Plots network parameter that does not change with time. 
-wdn.plot_discrete_nodes(model,ax,bin_edge_num=5,parameter='elevation',legend=False)
+wdn.plot_discrete_nodes(model,ax,bin_edge_num=5,parameter='initial_quality')
 
 
 # In[7]:

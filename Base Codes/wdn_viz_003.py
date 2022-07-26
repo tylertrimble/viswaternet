@@ -118,26 +118,6 @@ def initialize_model(inp_file):
 
 
 
-def pattern_match(model,node_pattern,pattern, junc_name,demand_pattern_nodes):
-    """Determines if demand pattern of node is the one specified, then stores 
-    it with the apropriate dictionary key.
-    Arguments:
-    node_pattern: The demand pattern of the node
-    pattern: Which pattern the node demand pattern is being checked against
-    junc_name: Name of node/junction being checked
-    demand_pattern_nodes: Name of demand pattern dictionary"""
-    
-    
-    if node_pattern == pattern:
-        
-        demand_pattern_nodes[pattern][junc_name] = model['node_names'].index(junc_name)
-        
-        
-    return demand_pattern_nodes
-
-
-
-
 def convert_excel(model,file,data_type,element_index,value_index):
     """Converts an excel file into the correct dictionary structure needed to
     be used with drawing functions.
@@ -227,7 +207,7 @@ def save_fig(model, save_name=None):
     
   
     
-def get_parameter(model,parameter_type,parameter,value = None,tanks=False,reservoirs=False):
+def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoirs=False):
     """Gets parameter for each node in the network and stores it in
     parameter_results. Also grabs the indices of the nodes that had that
     parameter.
@@ -465,13 +445,14 @@ def get_demand_patterns(model):
         
         demand_pattern_nodes[pattern] = {}
         
-        
-    for i in range(len(model['junc_names'])):
+    counter = 0  
+    for junc_name in model['junc_names']:
         
         for pattern in patterns:
-            
-            demand_pattern_nodes = pattern_match(model,demandPatterns[i],pattern,model['junc_names'][i],demand_pattern_nodes)
-            
+            if demandPatterns[counter] == pattern:
+                
+                demand_pattern_nodes[pattern][junc_name] = model['junc_names'].index(junc_name)
+        counter += 1
             
     for pattern in patterns:
         
@@ -482,7 +463,7 @@ def get_demand_patterns(model):
             
             del demand_pattern_nodes[pattern]
             
-            
+    print(demand_pattern_nodes)        
     return demand_pattern_nodes, patterns  
     
 
