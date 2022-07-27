@@ -1,5 +1,5 @@
 import warnings
-warnings.filterwarnings("ignore")
+warnings.filterwarnings("ignore",category=UserWarning)
 import wntr
 import numpy as np
 import matplotlib.pyplot as plt
@@ -837,7 +837,7 @@ def draw_discrete_nodes(model,ax,nodes, bin_list, bin_size_list=None, bin_label_
         
         for binName in bin_list:
             
-            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = bin_size_list[counter], node_color = cmap(float(cmapValue)), node_shape = bin_shape_list[counter],label=bin_label_list[counter], edgecolors = bin_border_list[counter],linewidths = bin_border_width_list[counter])
+            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = bin_size_list[counter], node_color = [cmap(float(cmapValue))], node_shape = bin_shape_list[counter],label=bin_label_list[counter], edgecolors = bin_border_list[counter],linewidths = bin_border_width_list[counter])
             
             
             cmapValue += 1/len(bin_list)
@@ -1025,7 +1025,7 @@ def plot_basic_elements(model,ax,pumps=True,valves=True,reservoirs=True,tanks=Tr
 
 
 
-def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_tanks=False,get_reservoirs=False,bins='automatic', bin_size_list = None, bin_shape_list = None,bin_label_list = None, bin_border_list = None, bin_border_width_list = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legend_title = None, legend_loc_1='upper right', legend_loc_2='lower right',save_name=None, cmap='tab10', color_list=None):
+def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_tanks=False,get_reservoirs=False,bins='automatic', bin_size_list = None, bin_shape_list = None,bin_label_list = None, bin_border_list = None, bin_border_width_list = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legend_title = None, legend_loc_1='upper right', legend_loc_2='lower right',save_name=None, cmap='gist_heat', color_list=None):
     """Plots discrete Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1268,15 +1268,15 @@ def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif
         plt.legend(handles, labels, title = 'Timestep ' + str(value*model['wn'].options.time.report_timestep) + " Seconds", loc='lower left')
         
         
-        plt.savefig(str(value) + '.png')
+        plt.savefig(model['image_path'] + '\\' + str(value) + '.png')
         
         
-        filenames = np.append(filenames, str(value) + '.png')
+        filenames = np.append(filenames, model['image_path'] + '\\' + str(value) + '.png')
         
         ax.clear()
 
     # builds gif
-    with imageio.get_writer('mygif.gif', mode='I',fps=fps) as writer:
+    with imageio.get_writer(model['image_path'] + '\\' + gif_save_name + '.gif', mode='I',fps=fps) as writer:
         
         for filename in filenames:
             
@@ -1289,7 +1289,9 @@ def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif
         for filename in set(filenames):
             
             os.remove(filename)
-            
+
+
+
             
 def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=None,excel_columns=None,customDataValues=None, bins='automatic',bin_size_list = None, bin_shape_list = None, bin_edge_num=None, bin_width_list=None, bin_label_list=None,bin_border_list = None, bin_border_width_list = None,color_list=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legend_title=None,node_size=100, node_shape='.',legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None,color_bar_title=None):
     
@@ -1318,7 +1320,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
         return
     
     
-    if parameter=='diameter' or 'roughness':
+    if parameter=='diameter' or parameter=='roughness':
         
         parameter_results, link_list = get_parameter(model,'link',parameter)
         
