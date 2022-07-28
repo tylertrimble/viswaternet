@@ -165,7 +165,47 @@ def convert_excel(model,file,data_type,element_index,value_index):
         data['index'] = list(str(i) for i in list(element_list.index))
         return data
 
-
+def unit_conversion(parameter_results,parameter,new_unit):
+    conversion_factors = {'base_demand':{'LPS':1000,
+                                         'LPM':60000,
+                                         'MLD':86.4,
+                                         'CMH':3600,
+                                         'CMD':86400,
+                                         'CFS':35.31467,
+                                         'GPM':15850.32314,
+                                         'MGD':22.82447,
+                                         'IMGD':13198.15490,
+                                         'AFD':70.04562},
+                          'demand':{'LPS':1000,
+                                    'LPM':60000,
+                                    'MLD':86.4,
+                                    'CMH':3600,
+                                    'CMD':86400,
+                                    'CFS':35.31467,
+                                    'GPM':15850.32314,
+                                    'MGD':22.82447,
+                                    'IMGD':13198.15490,
+                                    'AFD':70.04562},
+                          'diameter':{'ft':3.28084},
+                          'elevation':{'ft':3.28084},
+                          'flowrate':{'LPS':1000,
+                                      'LPM':60000,
+                                      'MLD':86.4,
+                                      'CMH':3600,
+                                      'CMD':86400,
+                                      'CFS':35.31467,
+                                      'GPM':15850.32314,
+                                      'MGD':22.82447,
+                                      'IMGD':13198.15490,
+                                      'AFD':70.04562},
+                          'head':{'ft':3.28084},
+                          'length':{'ft':3.28084},
+                          'pressure':{'psi':1.42197},
+                          'velocity':{'ft/s':3.28084}}
+    parameter_results = parameter_results*conversion_factors[parameter][new_unit]
+    return parameter_results
+    
+    
 def save_fig(model, save_name=None):
     """Saves figure to the <file directory>/Images.
     Arguments:
@@ -1027,7 +1067,7 @@ def plot_basic_elements(model,ax,pumps=True,valves=True,reservoirs=True,tanks=Tr
 
 
 
-def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_tanks=False,get_reservoirs=False,bins='automatic', bin_size_list = None, bin_shape_list = None,bin_label_list = None, bin_border_list = None, bin_border_width_list = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legend_title = None, legend_loc_1='upper right', legend_loc_2='lower right',save_name=None, cmap= default_cmap, color_list=None):
+def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, unit=None,get_tanks=False,get_reservoirs=False,bins='automatic', bin_size_list = None, bin_shape_list = None,bin_label_list = None, bin_border_list = None, bin_border_width_list = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legend_title = None, legend_loc_1='upper right', legend_loc_2='lower right',save_name=None, cmap= default_cmap, color_list=None):
     """Plots discrete Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1062,6 +1102,10 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_
         
         parameter_results, node_list = get_parameter(model,'node',parameter, value=value,tanks=get_tanks,reservoirs=get_reservoirs)
         
+        if unit != None:
+            parameter_results = unit_conversion(parameter_results,parameter,unit)
+            
+            
         binnedResults,binNames = bin_parameter(model,parameter_results,node_list,bin_list=bins, bin_edge_num=bin_edge_num) 
         
         
@@ -1084,7 +1128,7 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_
     
 
 
-def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap= default_cmap, color_bar_title=None,node_size=100, node_shape='.',edge_colors=None,line_widths=None,legend=True,legend_loc='upper right',legend_title=None,savefig=True, save_name=None,):
+def plot_continuous_nodes(model,ax,parameter=None, value=None, unit=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap= default_cmap, color_bar_title=None,node_size=100, node_shape='.',edge_colors=None,line_widths=None,legend=True,legend_loc='upper right',legend_title=None,savefig=True, save_name=None,):
     """Plots continuous Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1109,7 +1153,9 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reser
         
         parameter_results, node_list = get_parameter(model,'node',parameter, value=value)
         
-        
+        if unit != None:
+            parameter_results = unit_conversion(parameter_results,parameter,unit)
+            
         g = draw_nodes(model,node_list,parameter_results=parameter_results,node_size=node_size,cmap=cmap,node_shape=node_shape,edge_colors=edge_colors,line_widths=line_widths)
             
         
@@ -1129,7 +1175,7 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reser
     
   
     
-def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, bins='automatic', bin_width_list=None, bin_label_list=None,color_list=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None, legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None):
+def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, unit=None,bins='automatic', bin_width_list=None, bin_label_list=None,color_list=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None, legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None):
     """Plots discrete Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1164,6 +1210,10 @@ def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, bi
         parameter_results, link_list = get_parameter(model,'link',parameter, value=value)
         
         
+        if unit != None:
+            parameter_results = unit_conversion(parameter_results,parameter,unit)
+            
+        
         binnedResults,binNames = bin_parameter(model,parameter_results,link_list,bin_list=bins, bin_edge_num=bin_edge_num)
         
         
@@ -1185,7 +1235,7 @@ def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, bi
          
    
     
-def plot_continuous_links(model,ax,parameter=None,value=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,color_bar_title=None,legend=True,legend_loc='upper right',legend_title=None,savefig=True, save_name=None):
+def plot_continuous_links(model,ax,parameter=None,value=None,unit=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,color_bar_title=None,legend=True,legend_loc='upper right',legend_title=None,savefig=True, save_name=None):
     """Plots continuous Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1214,6 +1264,10 @@ def plot_continuous_links(model,ax,parameter=None,value=None,min_width=1,max_wid
         parameter_results, link_list = get_parameter(model,'link',parameter, value=value)
         
         
+        if unit != None:
+            parameter_results = unit_conversion(parameter_results,parameter,unit)
+            
+            
         minParameter = np.min(parameter_results)
         maxParameter = np.max(parameter_results)
         
@@ -1301,7 +1355,7 @@ def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif
 
 
             
-def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=None,excel_columns=None,customDataValues=None, bins='automatic',bin_size_list = None, bin_shape_list = None, bin_edge_num=None, bin_width_list=None, bin_label_list=None,bin_border_list = None, bin_border_width_list = None,color_list=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None,node_size=100, node_shape='.',legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None,color_bar_title=None):
+def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=None,excel_columns=None,customDataValues=None, unit=None,bins='automatic',bin_size_list = None, bin_shape_list = None, bin_edge_num=None, bin_width_list=None, bin_label_list=None,bin_border_list = None, bin_border_width_list = None,color_list=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None,node_size=100, node_shape='.',legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None,color_bar_title=None):
     
     
     if parameter=='demand_patterns':
@@ -1332,7 +1386,10 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
         
         parameter_results, link_list = get_parameter(model,'link',parameter)
         
-        
+        if unit != None:
+            parameter_results = unit_conversion(parameter_results,parameter,unit)
+            
+            
         uniques = pd.unique(parameter_results)
         
         
