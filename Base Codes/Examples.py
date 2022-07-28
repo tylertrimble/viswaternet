@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
 import wdn_viz_003 as wdn
 import matplotlib.pyplot as plt
 
 
-# In[3]:
+# In[2]:
 
 
 #Runs simulations and stores necessary information about network and the simulation in a dataframe
@@ -41,7 +41,7 @@ fig, ax = plt.subplots(figsize=(15,25))
 wdn.plot_basic_elements(model,ax,savefig=False, save_name='Basic')
 
 
-# In[ ]:
+# In[3]:
 
 
 fig, ax = plt.subplots(figsize=(15,25))
@@ -49,12 +49,20 @@ fig, ax = plt.subplots(figsize=(15,25))
 wdn.plot_discrete_nodes(model,ax,5,parameter='elevation',legend=False)
 
 
-# In[ ]:
+# In[4]:
 
 
 fig, ax = plt.subplots(figsize=(15,25))
 #Plots network parameter that changes with time (pressure, demand, etc.) at timestep 13
 wdn.plot_discrete_nodes(model,ax,5,parameter='pressure', value=12)
+
+
+# In[5]:
+
+
+fig, ax = plt.subplots(figsize=(15,25))
+#One can also convert to US Customary Units.
+wdn.plot_discrete_nodes(model,ax,5,parameter='pressure', value=12,unit='psi')
 
 
 # In[ ]:
@@ -97,7 +105,7 @@ fig, ax = plt.subplots(figsize=(15,25))
 wdn.plot_continuous_nodes(model,ax,parameter='demand',value='mean',cmap='autumn',node_shape='X',node_size=75,color_bar_title="Demand", save_name="ContinuousDemand")
 
 
-# In[10]:
+# In[ ]:
 
 
 fig, ax = plt.subplots(figsize=(15,25))
@@ -105,7 +113,7 @@ fig, ax = plt.subplots(figsize=(15,25))
 wdn.plot_continuous_nodes(model,ax,parameter='demand',value='mean',cmap='autumn',node_size=75,edge_colors='k',line_widths=1.2,color_bar_title="Demand", save_name="ContinuousDemand")
 
 
-# In[5]:
+# In[ ]:
 
 
 fig, ax = plt.subplots(figsize=(15,25))
@@ -267,10 +275,16 @@ for node in model['node_names']:
 wdn.plot_unique_data(model,ax,parameter='custom_data',data_type='discrete',bin_edge_num=5,parameter_type='node',customDataValues=[index,data],cmap='autumn')
 
 
-# In[ ]:
+# In[4]:
 
 
 #Animates pressure at all timesteps
 fig, ax = plt.subplots(figsize=(15,25))
-wdn.animate_plot(model,ax,wdn.plot_discrete_nodes,first_timestep=0,last_timestep=30,gif_save_name='DiscretePressure',bin_edge_num=5,bins=[-0.0001,20,40,60,80],parameter='pressure')
+wdn.animate_plot(model,ax,wdn.plot_discrete_nodes,first_timestep=0,last_timestep=30,bin_edge_num=5,bins=[-0.0001,20,40,60,80],parameter='pressure')
+
+
+# In[ ]:
+
+
+
 
