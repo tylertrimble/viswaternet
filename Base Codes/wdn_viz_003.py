@@ -1,5 +1,5 @@
 import warnings
-warnings.filterwarnings("ignore",category=UserWarning)
+warnings.filterwarnings("ignore")
 import wntr
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,6 +9,9 @@ import matplotlib.patches as mpatches
 import os
 import pandas as pd
 import imageio
+
+default_cmap = mpl.cm.get_cmap('autumn_r')
+
 
 def initialize_model(inp_file):
     """Initializes all variables needed to perform other plotting functions
@@ -463,7 +466,6 @@ def get_demand_patterns(model):
             
             del demand_pattern_nodes[pattern]
             
-    print(demand_pattern_nodes)        
     return demand_pattern_nodes, patterns  
     
 
@@ -1025,7 +1027,7 @@ def plot_basic_elements(model,ax,pumps=True,valves=True,reservoirs=True,tanks=Tr
 
 
 
-def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_tanks=False,get_reservoirs=False,bins='automatic', bin_size_list = None, bin_shape_list = None,bin_label_list = None, bin_border_list = None, bin_border_width_list = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legend_title = None, legend_loc_1='upper right', legend_loc_2='lower right',save_name=None, cmap='gist_heat', color_list=None):
+def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_tanks=False,get_reservoirs=False,bins='automatic', bin_size_list = None, bin_shape_list = None,bin_label_list = None, bin_border_list = None, bin_border_width_list = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legend_title = None, legend_loc_1='upper right', legend_loc_2='lower right',save_name=None, cmap= default_cmap, color_list=None):
     """Plots discrete Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1071,7 +1073,7 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_
     
         if legend == True:
             
-            draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
+            draw_legend(ax,bin_list=binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
     
     
     if savefig == True:
@@ -1082,7 +1084,7 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, get_
     
 
 
-def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat', color_bar_title=None,node_size=100, node_shape='.',edge_colors=None,line_widths=None,savefig=True, save_name=None):
+def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reservoirs=True, pumps=True, valves=True,cmap= default_cmap, color_bar_title=None,node_size=100, node_shape='.',edge_colors=None,line_widths=None,legend=True,legend_loc='upper right',legend_title=None,savefig=True, save_name=None,):
     """Plots continuous Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1116,6 +1118,9 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reser
         
         draw_color_bar(ax,g,cmap,color_bar_title=color_bar_title)
 
+    if legend == True:
+        
+        draw_legend(ax,title=legend_title,pumps=pumps,loc=legend_loc)
         
     if savefig == True:
         
@@ -1124,7 +1129,7 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, tanks=True, reser
     
   
     
-def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, bins='automatic', bin_width_list=None, bin_label_list=None,color_list=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legend_title=None, legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None):
+def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, bins='automatic', bin_width_list=None, bin_label_list=None,color_list=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None, legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None):
     """Plots discrete Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1170,7 +1175,7 @@ def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, bi
         
         if legend == True:
             
-            draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
+            draw_legend(ax,bin_list=binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
 
 
     if savefig == True:
@@ -1180,7 +1185,7 @@ def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, bi
          
    
     
-def plot_continuous_links(model,ax,parameter=None,value=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',color_bar_title=None,savefig=True, save_name=None):
+def plot_continuous_links(model,ax,parameter=None,value=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,color_bar_title=None,legend=True,legend_loc='upper right',legend_title=None,savefig=True, save_name=None):
     """Plots continuous Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1238,6 +1243,9 @@ def plot_continuous_links(model,ax,parameter=None,value=None,min_width=1,max_wid
     
         draw_color_bar(ax,g,cmap,color_bar_title=color_bar_title)
     
+    if legend == True:
+        
+        draw_legend(ax,title=legend_title,pumps=pumps,loc=legend_loc)
     
     if savefig == True:
         
@@ -1293,7 +1301,7 @@ def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif
 
 
             
-def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=None,excel_columns=None,customDataValues=None, bins='automatic',bin_size_list = None, bin_shape_list = None, bin_edge_num=None, bin_width_list=None, bin_label_list=None,bin_border_list = None, bin_border_width_list = None,color_list=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap='gist_heat',legend=True, legend_title=None,node_size=100, node_shape='.',legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None,color_bar_title=None):
+def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=None,excel_columns=None,customDataValues=None, bins='automatic',bin_size_list = None, bin_shape_list = None, bin_edge_num=None, bin_width_list=None, bin_label_list=None,bin_border_list = None, bin_border_width_list = None,color_list=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None,node_size=100, node_shape='.',legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None,color_bar_title=None):
     
     
     if parameter=='demand_patterns':
@@ -1536,7 +1544,10 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
             draw_color_bar(ax,g,cmap)
             
-            
+            if legend == True:
+                
+                draw_legend(ax,title=legend_title,pumps=pumps,loc=legend_loc_1)
+                
             if savefig == True:
                 
                 save_fig(model, save_name=save_name)
@@ -1656,6 +1667,10 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
             
             draw_color_bar(ax,g,cmap)
+            
+            draw_legend(ax,title=legend_title,pumps=pumps,loc=legend_loc_1)
+            
+            
             if savefig == True:
                 
                 save_fig(model, save_name=save_name)
