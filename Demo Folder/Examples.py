@@ -272,5 +272,5 @@ wdn.plot_unique_data(model,ax,parameter='custom_data',data_type='discrete',bin_e
 
 #Animates pressure at all timesteps
 fig, ax = plt.subplots(figsize=(15,25))
-wdn.animate_plot(model,ax,wdn.plot_discrete_nodes,first_timestep=0,last_timestep=30,bin_edge_num=5,bins=[-0.0001,20,40,60,80],parameter='pressure')
+wdn.animate_plot(model,ax,wdn.plot_discrete_nodes,first_timestep=0,last_timestep=30,gif_save_name='DiscretePressure',bin_edge_num=5,bins=[-0.0001,20,40,60,80],parameter='pressure')
 
