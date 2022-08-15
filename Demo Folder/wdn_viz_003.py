@@ -187,10 +187,10 @@ def unit_conversion(parameter_results,parameter,new_unit):
                                     'IMGD':13198.15490,
                                     'AFD':70.04562},
                           'diameter':{'ft':3.28084,
-                                      'in':39.37008,
+                                      'in:':39.37008,
                                       'cm:':100},
                           'elevation':{'ft':3.28084,
-                                      'in':39.37008,
+                                      'in:':39.37008,
                                       'cm:':100},
                           'flowrate':{'LPS':1000,
                                       'LPM':60000,
@@ -203,10 +203,10 @@ def unit_conversion(parameter_results,parameter,new_unit):
                                       'IMGD':13198.15490,
                                       'AFD':70.04562},
                           'head':{'ft':3.28084,
-                                      'in':39.37008,
+                                      'in:':39.37008,
                                       'cm:':100},
                           'length':{'ft':3.28084,
-                                      'in':39.37008,
+                                      'in:':39.37008,
                                       'cm:':100},
                           'pressure':{'psi':1.42197},
                           'velocity':{'ft/s':3.28084}}
@@ -718,16 +718,17 @@ def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',
         
         widths = np.ones(len(link_list))*1
     
-    for i in link_list:
-        
-        edgeList[i] = link_list.index(i)
     
     
+   
     negativeValues = False
     
     
     if len(parameter_results) != 0:
-        
+        for i in link_list:
+            
+            edgeList[i] = link_list.index(i)
+            
         for value in parameter_results:
             
             if value < -1e-5:
@@ -755,8 +756,10 @@ def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',
             return g
             
     else:
-        
-        nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=edge_color, arrows=False)
+        for i in link_list:
+            edgeList[i] = model['G_pipe_name_list'].index(i)
+            print(edgeList)
+        nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=edge_color, arrows=False,width=widths)
     
     
 def draw_base_elements(model,ax,nodes=True,links=True,reservoirs=True,tanks=True,pumps=True,valves=True,legend=True):
@@ -1055,7 +1058,7 @@ def draw_label(model,ax,labels,x_coords,y_coords,nodes=None):
     
     
     
-def plot_basic_elements(model,ax,pumps=True,valves=True,reservoirs=True,tanks=True,links=True,nodes=True,savefig=False, save_name=None, legend=True):
+def plot_basic_elements(model,ax,pumps=True,valves=True,reservoirs=True,tanks=True,links=True,nodes=True,savefig=False, save_name=None, legend=True,legend_loc='upper right'):
     """Creates a basic plot, similar to the default seen in EPANET.
     Arguments:
     model: Saved initilization done with initializeModel
@@ -1066,7 +1069,7 @@ def plot_basic_elements(model,ax,pumps=True,valves=True,reservoirs=True,tanks=Tr
     
     if legend == True:
         
-        draw_legend(ax)
+        draw_legend(ax,pumps=pumps,loc=legend_loc)
     
     if savefig == True:
         
@@ -1136,7 +1139,7 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, unit
     
 
 
-def plot_continuous_nodes(model,ax,parameter=None, value=None, unit=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap= default_cmap, color_bar_title=None,node_size=100, node_shape='.',edge_colors=None,line_widths=None,legend=True,legend_loc='upper right',legend_title=None,savefig=True, save_name=None,):
+def plot_continuous_nodes(model,ax,parameter=None, value=None, unit=None,get_tanks=False,get_reservoirs=False,tanks=True, reservoirs=True, pumps=True, valves=True,cmap= default_cmap, color_bar_title=None,node_size=100, node_shape='.',edge_colors=None,line_widths=None,legend=True,legend_loc='upper right',savefig=True, save_name=None):
     """Plots continuous Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1159,7 +1162,7 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, unit=None,tanks=T
     
     if parameter != None:
         
-        parameter_results, node_list = get_parameter(model,'node',parameter, value=value)
+        parameter_results, node_list = get_parameter(model,'node',parameter, value=value, tanks=get_tanks, reservoirs=get_reservoirs)
         
         if unit != None:
             parameter_results = unit_conversion(parameter_results,parameter,unit)
@@ -1174,7 +1177,7 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, unit=None,tanks=T
 
     if legend == True:
         
-        draw_legend(ax,title=legend_title,pumps=pumps,loc=legend_loc)
+        draw_legend(ax,pumps=pumps,loc=legend_loc)
         
     if savefig == True:
         
@@ -1363,7 +1366,7 @@ def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif
 
 
             
-def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=None,excel_columns=None,customDataValues=None, unit=None,bins='automatic',bin_size_list = None, bin_shape_list = None, bin_edge_num=None, bin_width_list=None, bin_label_list=None,bin_border_list = None, bin_border_width_list = None,color_list=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None,node_size=100, node_shape='.',legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None,color_bar_title=None):
+def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=None,excel_columns=None,custom_data_values=None, unit=None,bins='automatic',bin_size_list = None, bin_shape_list = None, bin_edge_num=5, bin_width_list=None, bin_label_list=None,bin_border_list = None, bin_border_width_list = None,color_list=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None,node_size=100, node_shape='.',legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None,color_bar_title=None):
     
     
     if parameter=='demand_patterns':
@@ -1509,7 +1512,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
             if parameter_type == 'link':
                 
-                draw_discrete_links(model,ax,customDataValues[0], customDataValues[1],bin_width_list=bin_width_list, bin_label_list=bin_label_list,cmap=cmap, color_list=color_list)
+                draw_discrete_links(model,ax,custom_data_values[0], custom_data_values[1],bin_width_list=bin_width_list, bin_label_list=bin_label_list,cmap=cmap, color_list=color_list)
                 
                 
                 draw_base_elements(model,ax,links=False,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1517,7 +1520,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
             elif parameter_type == 'node':
                 
-                draw_discrete_nodes(model,ax,customDataValues[0], customDataValues[1],bin_size_list=bin_size_list,bin_shape_list=bin_shape_list, bin_label_list=bin_label_list,bin_border_list = bin_border_list, bin_border_width_list = bin_border_width_list,cmap=cmap, color_list=color_list)
+                draw_discrete_nodes(model,ax,custom_data_values[0], custom_data_values[1],bin_size_list=bin_size_list,bin_shape_list=bin_shape_list, bin_label_list=bin_label_list,bin_border_list = bin_border_list, bin_border_width_list = bin_border_width_list,cmap=cmap, color_list=color_list)
             
             
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1526,7 +1529,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
            
             if legend == True:
                 
-                draw_legend(ax,customDataValues[1],title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
+                draw_legend(ax,custom_data_values[1],title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
             
             
             if savefig == True:
@@ -1537,7 +1540,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             return
         
         if data_type == 'discrete':
-            binnedResults,binNames = bin_parameter(model,customDataValues[1],customDataValues[0],bin_list=bins, bin_edge_num=bin_edge_num) 
+            binnedResults,binNames = bin_parameter(model,custom_data_values[1],custom_data_values[0],bin_list=bins, bin_edge_num=bin_edge_num) 
             
             
             if parameter_type == 'link':
@@ -1570,17 +1573,17 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
         if data_type == 'continuous':
             
-            minParameter = np.min(customDataValues[1])
-            maxParameter = np.max(customDataValues[1])
+            minParameter = np.min(custom_data_values[1])
+            maxParameter = np.max(custom_data_values[1])
             
             
-            normalizedParameter = np.copy(customDataValues[1])
+            normalizedParameter = np.copy(custom_data_values[1])
             
             
             counter = 0
             
             
-            for parameter in customDataValues[1]:
+            for parameter in custom_data_values[1]:
                 
                 normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
                 
@@ -1593,7 +1596,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
             if parameter_type == 'link':
                 
-                g = draw_links(model,customDataValues[0], parameter_results=customDataValues[1],cmap=cmap,widths=widths)
+                g = draw_links(model,custom_data_values[0], parameter_results=custom_data_values[1],cmap=cmap,widths=widths)
                 
                 
                 draw_base_elements(model,ax,links=False,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1601,7 +1604,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
             elif parameter_type == 'node':
                 
-                g = draw_nodes(model,customDataValues[0], parameter_results=customDataValues[1],node_size=node_size,cmap=cmap,node_shape=node_shape)
+                g = draw_nodes(model,custom_data_values[0], parameter_results=custom_data_values[1],node_size=node_size,cmap=cmap,node_shape=node_shape)
             
             
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)

@@ -718,16 +718,17 @@ def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',
         
         widths = np.ones(len(link_list))*1
     
-    for i in link_list:
-        
-        edgeList[i] = link_list.index(i)
     
     
+   
     negativeValues = False
     
     
     if len(parameter_results) != 0:
-        
+        for i in link_list:
+            
+            edgeList[i] = link_list.index(i)
+            
         for value in parameter_results:
             
             if value < -1e-5:
@@ -755,8 +756,10 @@ def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',
             return g
             
     else:
-        
-        nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=edge_color, arrows=False)
+        for i in link_list:
+            edgeList[i] = model['G_pipe_name_list'].index(i)
+            print(edgeList)
+        nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=edge_color, arrows=False,width=widths)
     
     
 def draw_base_elements(model,ax,nodes=True,links=True,reservoirs=True,tanks=True,pumps=True,valves=True,legend=True):
