@@ -519,7 +519,7 @@ def get_demand_patterns(model):
 
 
 
-def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='automatic'):
+def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='automatic',disable_bin_deleting=False):
     """Bins results from get_parameter based on user specifications.
     Arguments:
     model: Takes Dictionary. Gets pipe or node name list.
@@ -655,22 +655,22 @@ def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='au
                     
                 counter += 1
                 
+    if disable_bin_deleting == False:            
+        for binName in binNames:
+            
+            if len(binnedParameter[binName]) == 0:
                 
-    for binName in binNames:
-        
-        if len(binnedParameter[binName]) == 0:
-            
-            binNames = np.delete(binNames,np.where(binNames == binName))
-            
-            
-            del binnedParameter[binName]
+                binNames = np.delete(binNames,np.where(binNames == binName))
+                
+                
+                del binnedParameter[binName]
     
 
     return binnedParameter, binNames
 
 
 
-def draw_nodes(model,node_list,parameter_results=[],node_size=300,node_color='k',cmap='tab10',node_shape='.',edge_colors='k',line_widths=0,label=None):
+def draw_nodes(model,node_list,parameter_results=[],vmin=None,vmax=None,node_size=300,node_color='k',cmap='tab10',node_shape='.',edge_colors='k',line_widths=0,label=None):
     
     if len(parameter_results) != 0:
         
@@ -686,9 +686,10 @@ def draw_nodes(model,node_list,parameter_results=[],node_size=300,node_color='k'
                 
                 cmap = mpl.cm.get_cmap(cmap)
     
-    
-                g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results,vmax=np.max(parameter_results),vmin=-np.max(parameter_results), cmap=cmap,node_shape = node_shape,linewidths=line_widths,edgecolors=edge_colors,label=label)
-                
+                if vmin == None and vmax == None:
+                    g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results,vmax=np.max(parameter_results),vmin=-np.max(parameter_results), cmap=cmap,node_shape = node_shape,linewidths=line_widths,edgecolors=edge_colors,label=label)
+                else:
+                    g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results,vmax=vmax,vmin=vmin, cmap=cmap,node_shape = node_shape,linewidths=line_widths,edgecolors=edge_colors,label=label)
                 
                 return g
     
@@ -698,7 +699,7 @@ def draw_nodes(model,node_list,parameter_results=[],node_size=300,node_color='k'
             cmap = mpl.cm.get_cmap(cmap)
             
             
-            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results, cmap=cmap, node_shape = node_shape,linewidths=line_widths,edgecolors=edge_colors)
+            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results, cmap=cmap, node_shape = node_shape,linewidths=line_widths,edgecolors=edge_colors, vmin=vmin, vmax=vmax)
             
             
             return g
@@ -710,7 +711,7 @@ def draw_nodes(model,node_list,parameter_results=[],node_size=300,node_color='k'
     
     
     
-def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',widths=[]):
+def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',widths=[],vmin=None,vmax=None):
     
     edgeList = {}
     
@@ -738,9 +739,10 @@ def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',
                 
                 cmap = mpl.cm.get_cmap(cmap)
                 
-                
-                g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_vmax=np.max(parameter_results),edge_vmin=-np.max(parameter_results),edge_cmap=cmap,arrows=False,width=widths)
-                
+                if vmin == None and vmax == None:
+                    g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_vmax=np.max(parameter_results),edge_vmin=-np.max(parameter_results),edge_cmap=cmap,arrows=False,width=widths)
+                else:
+                    g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_vmax=vmax,edge_vmin=vmin,edge_cmap=cmap,arrows=False,width=widths)
                 
                 return g
 
@@ -750,7 +752,7 @@ def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',
             cmap = mpl.cm.get_cmap(cmap)
             
             
-            g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_cmap=cmap, arrows=False,width=widths)
+            g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_cmap=cmap, arrows=False,width=widths,vmin=vmin,vmax=vmax)
             
             
             return g
@@ -758,7 +760,6 @@ def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',
     else:
         for i in link_list:
             edgeList[i] = model['G_pipe_name_list'].index(i)
-            print(edgeList)
         nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=edge_color, arrows=False,width=widths)
     
     
@@ -880,7 +881,7 @@ def draw_discrete_nodes(model,ax,nodes, bin_list, bin_size_list=None, bin_label_
             
             
     counter = 0
-    
+    empty_bin = False
     
     if (color_list != None and cmap != None) == True or cmap != None:    
         
@@ -889,26 +890,47 @@ def draw_discrete_nodes(model,ax,nodes, bin_list, bin_size_list=None, bin_label_
         
         
         for binName in bin_list:
-            
-            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = bin_size_list[counter], node_color = [cmap(float(cmapValue))], node_shape = bin_shape_list[counter],label=bin_label_list[counter], edgecolors = bin_border_list[counter],linewidths = bin_border_width_list[counter])
+            node_list = ([model['node_names'][i] for i in nodes.get(binName).values()])
+            if len(node_list) == 0:
+                nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = [model['node_names'][0]], node_size = bin_size_list[counter], node_color = [cmap(float(cmapValue))], node_shape = bin_shape_list[counter],label=bin_label_list[counter], edgecolors = bin_border_list[counter],linewidths = bin_border_width_list[counter])
+                empty_bin = True
+            else:
+                nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = node_list, node_size = bin_size_list[counter], node_color = [cmap(float(cmapValue))], node_shape = bin_shape_list[counter],label=bin_label_list[counter], edgecolors = bin_border_list[counter],linewidths = bin_border_width_list[counter])
             
             
             cmapValue += 1/len(bin_list)
             
             
             counter += 1
-            
+        if empty_bin == True:
+           counter2 = 0
+           cmap2 = mpl.cm.get_cmap(cmap)
+           cmapValue2 = 1/len(bin_list)
+           for binName in bin_list:
+               node_list = ([model['node_names'][i] for i in nodes.get(binName).values()])
+               nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = node_list, node_size = bin_size_list[counter2], node_color = [cmap2(float(cmapValue2))], node_shape = bin_shape_list[counter2], edgecolors = bin_border_list[counter2],linewidths = bin_border_width_list[counter2])
+               cmapValue2 += 1/len(bin_list)
+               counter2 += 1
             
     else:
         
         for binName in bin_list:
-            
-            nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = bin_size_list[counter], node_color = color_list[counter], node_shape = bin_shape_list[counter],label=bin_label_list[counter], edgecolors = bin_border_list[counter],linewidths = bin_border_width_list[counter])
-            
+            node_list = ([model['node_names'][i] for i in nodes.get(binName).values()])
+            if len(node_list) == 0:
+                nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = [model['node_names'][0]], node_size = bin_size_list[counter], node_color = color_list[counter], node_shape = bin_shape_list[counter],label=bin_label_list[counter], edgecolors = bin_border_list[counter],linewidths = bin_border_width_list[counter])
+                empty_bin == True
+            else:
+                nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = ([model['node_names'][i] for i in nodes.get(binName).values()]), node_size = bin_size_list[counter], node_color = color_list[counter], node_shape = bin_shape_list[counter],label=bin_label_list[counter], edgecolors = bin_border_list[counter],linewidths = bin_border_width_list[counter])
+        
             
             counter += 1
 
-
+        if empty_bin == True:
+            counter2 = 0
+            for binName in bin_list:
+                node_list = ([model['node_names'][i] for i in nodes.get(binName).values()])
+                nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = node_list, node_size = bin_size_list[counter2], node_color = color_list[counter2], node_shape = bin_shape_list[counter2], edgecolors = bin_border_list[counter2],linewidths = bin_border_width_list[counter2])
+                counter2 += 1
 
 
 def draw_discrete_links(model,ax,links, bin_list, bin_width_list=None, bin_label_list=None,cmap='tab10', color_list =  None):
@@ -938,7 +960,7 @@ def draw_discrete_links(model,ax,links, bin_list, bin_width_list=None, bin_label
         
         
     counter = 0
-    
+    empty_bin = False
     
     if (color_list != None and cmap != None) == True or cmap != None:    
         
@@ -947,24 +969,45 @@ def draw_discrete_links(model,ax,links, bin_list, bin_width_list=None, bin_label
         
         
         for binName in bin_list:
-            
-            nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = ([model['pipe_list'][i] for i in links.get(binName).values()]),edge_color = cmap(float(cmapValue)),width = bin_width_list[counter],arrows = False,label=bin_label_list[counter])
-            
-            
+            edge_list = ([model['pipe_list'][i] for i in links.get(binName).values()])
+            if len(edge_list) == 0:
+                nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = [model['pipe_list'][0]],edge_color = cmap(float(cmapValue)),width = bin_width_list[counter],arrows = False,label=bin_label_list[counter])
+                empty_bin = True
+            else:
+                nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = edge_list,edge_color = cmap(float(cmapValue)),width = bin_width_list[counter],arrows = False,label=bin_label_list[counter])
             cmapValue += 1/len(bin_list)
             
             
             counter += 1
             
-            
+        if empty_bin == True:
+            counter2 = 0
+            cmap2 = mpl.cm.get_cmap(cmap)
+            cmapValue2 = 1/len(bin_list)
+            for binName in bin_list:
+                edge_list = ([model['pipe_list'][i] for i in links.get(binName).values()])
+                nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = edge_list,edge_color = cmap2(float(cmapValue2)),width = bin_width_list[counter2],arrows = False)      
+                cmapValue2 += 1/len(bin_list)
+                counter2 += 1
     else:
         
-        for binName in bin_list:
-            
-            nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = ([model['pipe_list'][i] for i in links.get(binName).values()]),edge_color = color_list[counter],width = bin_width_list[counter],arrows = False,label=bin_label_list[counter])
-            
-            
-            counter += 1        
+       for binName in bin_list:
+           edge_list = ([model['pipe_list'][i] for i in links.get(binName).values()])
+           if len(edge_list) == 0:
+               nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = [model['pipe_list'][0]],edge_color = color_list[counter],width = bin_width_list[counter],arrows = False,label=bin_label_list[counter])
+               empty_bin = True
+           else:
+               nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = edge_list,edge_color = color_list[counter],width = bin_width_list[counter],arrows = False,label=bin_label_list[counter])
+           
+           
+           counter += 1
+           
+       if empty_bin == True:
+           counter2 = 0
+           for binName in bin_list:
+               edge_list = ([model['pipe_list'][i] for i in links.get(binName).values()])
+               nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = edge_list,edge_color = color_list[counter2],width = bin_width_list[counter2],arrows = False)      
+               counter2 += 1   
         
    
     
@@ -981,7 +1024,6 @@ def draw_legend(ax,bin_list=[],title=None,pumps=True,loc='upper right',loc2='low
     
     
     handles, labels = ax.get_legend_handles_labels()
-    
     
     if pumps == True:
         
@@ -1028,7 +1070,7 @@ def draw_color_bar(ax,g,cmap,color_bar_title=None):
     cmap: Colormap
     color_bar_title: Takes String. Title of Color Bar."""
 
-    
+    global cbar
     cbar = plt.colorbar(g)
     cbar.set_label(color_bar_title, fontsize = 15)
     
@@ -1078,7 +1120,7 @@ def plot_basic_elements(model,ax,pumps=True,valves=True,reservoirs=True,tanks=Tr
 
 
 
-def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, unit=None,get_tanks=False,get_reservoirs=False,bins='automatic', bin_size_list = None, bin_shape_list = None,bin_label_list = None, bin_border_list = None, bin_border_width_list = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legend_title = None, legend_loc_1='upper right', legend_loc_2='lower right',save_name=None, cmap= default_cmap, color_list=None):
+def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, unit=None,get_tanks=False,get_reservoirs=False,bins='automatic', bin_size_list = None, bin_shape_list = None,bin_label_list = None, bin_border_list = None, bin_border_width_list = None, savefig=True, tanks=True, reservoirs=True, pumps=True, valves=True,legend=True,legend_title = None, legend_loc_1='upper right', legend_loc_2='lower right',save_name=None, cmap= default_cmap, color_list=None,disable_bin_deleting=False):
     """Plots discrete Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1117,7 +1159,7 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, unit
             parameter_results = unit_conversion(parameter_results,parameter,unit)
             
             
-        binnedResults,binNames = bin_parameter(model,parameter_results,node_list,bin_list=bins, bin_edge_num=bin_edge_num) 
+        binnedResults,binNames = bin_parameter(model,parameter_results,node_list,bin_list=bins, bin_edge_num=bin_edge_num,disable_bin_deleting=disable_bin_deleting) 
         
         
         draw_discrete_nodes(model,ax,binnedResults,binNames,bin_size_list=bin_size_list,bin_shape_list=bin_shape_list, bin_label_list=bin_label_list,bin_border_list = bin_border_list, bin_border_width_list = bin_border_width_list,cmap=cmap, color_list=color_list)
@@ -1127,7 +1169,7 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, unit
     
     
         if legend == True:
-            
+            print(binNames)
             draw_legend(ax,bin_list=binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
     
     
@@ -1139,7 +1181,7 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, unit
     
 
 
-def plot_continuous_nodes(model,ax,parameter=None, value=None, unit=None,get_tanks=False,get_reservoirs=False,tanks=True, reservoirs=True, pumps=True, valves=True,cmap= default_cmap, color_bar_title=None,node_size=100, node_shape='.',edge_colors=None,line_widths=None,legend=True,legend_loc='upper right',savefig=True, save_name=None):
+def plot_continuous_nodes(model,ax,parameter=None, value=None, unit=None,vmin=None,vmax=None,get_tanks=False,get_reservoirs=False,tanks=True, reservoirs=True, pumps=True, valves=True,cmap= default_cmap, color_bar_title=None,node_size=100, node_shape='.',edge_colors=None,line_widths=None,legend=True,legend_loc='upper right',savefig=True, save_name=None):
     """Plots continuous Nodes.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1167,7 +1209,7 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, unit=None,get_tan
         if unit != None:
             parameter_results = unit_conversion(parameter_results,parameter,unit)
             
-        g = draw_nodes(model,node_list,parameter_results=parameter_results,node_size=node_size,cmap=cmap,node_shape=node_shape,edge_colors=edge_colors,line_widths=line_widths)
+        g = draw_nodes(model,node_list,parameter_results=parameter_results,vmin=vmin,vmax=vmax,node_size=node_size,cmap=cmap,node_shape=node_shape,edge_colors=edge_colors,line_widths=line_widths)
             
         
         draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1186,7 +1228,7 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, unit=None,get_tan
     
   
     
-def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, unit=None,bins='automatic', bin_width_list=None, bin_label_list=None,color_list=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None, legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None):
+def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, unit=None,bins='automatic', bin_width_list=None, bin_label_list=None,color_list=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None, legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None,disable_bin_deleting=False):
     """Plots discrete Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1225,7 +1267,7 @@ def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, un
             parameter_results = unit_conversion(parameter_results,parameter,unit)
             
         
-        binnedResults,binNames = bin_parameter(model,parameter_results,link_list,bin_list=bins, bin_edge_num=bin_edge_num)
+        binnedResults,binNames = bin_parameter(model,parameter_results,link_list,bin_list=bins, bin_edge_num=bin_edge_num,disable_bin_deleting=disable_bin_deleting)
         
         
         draw_discrete_links(model,ax,binnedResults,binNames,bin_width_list=bin_width_list, bin_label_list=bin_label_list,cmap=cmap, color_list=color_list)
@@ -1246,7 +1288,7 @@ def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, un
          
    
     
-def plot_continuous_links(model,ax,parameter=None,value=None,unit=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,color_bar_title=None,legend=True,legend_loc='upper right',legend_title=None,savefig=True, save_name=None):
+def plot_continuous_links(model,ax,parameter=None,value=None,unit=None,min_width=1,max_width=5,vmin=None,vmax=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,color_bar_title=None,legend=True,legend_loc='upper right',legend_title=None,savefig=True, save_name=None):
     """Plots continuous Links.
     Arguments:
     figsize: Figure size. Takes a 2-element List.
@@ -1300,7 +1342,7 @@ def plot_continuous_links(model,ax,parameter=None,value=None,unit=None,min_width
         widths = normalizedParameter
         
         
-        g = draw_links(model,link_list,parameter_results=parameter_results,cmap=cmap,widths=widths)
+        g = draw_links(model,link_list,parameter_results=parameter_results,cmap=cmap,widths=widths,vmin=vmin,vmax=vmax)
       
     
         draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
@@ -1321,15 +1363,41 @@ def plot_continuous_links(model,ax,parameter=None,value=None,unit=None,min_width
     
 def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif_save_name='gif',**kwargs):
     
-    
     timesteps = int(model['wn'].options.time.duration/model['wn'].options.time.report_timestep)
     values = range(timesteps)
     if last_timestep != None:
         values = values[first_timestep:last_timestep]
     
     filenames = []
-    
-    
+    if function == plot_continuous_links or function == plot_continuous_nodes:
+        if kwargs.get('vmin',None) == None or kwargs.get('vmax',None) == None:
+            if function == plot_continuous_links:
+                parameter_results, link_list = get_parameter(model,'link',kwargs.get('parameter'),kwargs.get('value',None))
+            if function == plot_continuous_nodes:
+                parameter_results, node_list = get_parameter(model,'node',kwargs.get('parameter'),kwargs.get('value',None))
+            for value in np.min(parameter_results):   
+                if value < -1e-5:
+                    if kwargs.get('vmin',None) == None:
+                        kwargs['vmin'] = -np.max(np.max(parameter_results))
+                    if kwargs.get('vmax',None) == None:
+                        kwargs['vmax'] = np.max(np.max(parameter_results))
+                    break
+                else:
+                    if kwargs.get('vmin',None) == None:
+                        kwargs['vmin'] = np.min(np.min(parameter_results))
+                    if kwargs.get('vmax',None) == None:
+                        kwargs['vmax'] = np.max(np.max(parameter_results))
+    if function == plot_discrete_links or function == plot_discrete_nodes:
+        kwargs['disable_bin_deleting'] = True
+        
+        if kwargs.get('bins',None) == None:
+            if function == plot_discrete_links:
+                parameter_results, link_list = get_parameter(model,'link',kwargs.get('parameter'),kwargs.get('value',None))
+                
+            if function == plot_discrete_nodes:
+                parameter_results, node_list = get_parameter(model,'node',kwargs.get('parameter'),kwargs.get('value',None))
+            
+            kwargs['bins'] = np.linspace(np.min(np.min(parameter_results)),np.max(np.max(parameter_results)),kwargs.get('bin_edge_num',5))
     for value in values:
         
         function(model,ax,value=value,**kwargs)
@@ -1345,9 +1413,10 @@ def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif
         
         
         filenames = np.append(filenames, model['image_path'] + '\\' + str(value) + '.png')
-        
         ax.clear()
-
+        if function == plot_continuous_links or function == plot_continuous_nodes:
+           cbar.remove()
+        
     # builds gif
     with imageio.get_writer(model['image_path'] + '\\' + gif_save_name + '.gif', mode='I',fps=fps) as writer:
         
@@ -1364,9 +1433,8 @@ def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif
             os.remove(filename)
 
 
-
             
-def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=None,excel_columns=None,custom_data_values=None, unit=None,bins='automatic',bin_size_list = None, bin_shape_list = None, bin_edge_num=5, bin_width_list=None, bin_label_list=None,bin_border_list = None, bin_border_width_list = None,color_list=None,min_width=1,max_width=5,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None,node_size=100, node_shape='.',legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None,color_bar_title=None):
+def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=None,excel_columns=None,custom_data_values=None, unit=None,bins='automatic',bin_size_list = None, bin_shape_list = None, bin_edge_num=5, bin_width_list=None, bin_label_list=None,bin_border_list = None, bin_border_width_list = None,color_list=None,min_width=1,max_width=5,vmin=None,vmax=None,tanks=True, reservoirs=True, pumps=True, valves=True,cmap=default_cmap,legend=True, legend_title=None,node_size=100, node_shape='.',legend_loc_1='upper right', legend_loc_2='lower right',savefig=True,save_name=None,color_bar_title=None):
     
     
     if parameter=='demand_patterns':

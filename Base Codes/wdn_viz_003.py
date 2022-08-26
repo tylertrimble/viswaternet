@@ -1169,7 +1169,6 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, unit
     
     
         if legend == True:
-            print(binNames)
             draw_legend(ax,bin_list=binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
     
     
@@ -1361,7 +1360,7 @@ def plot_continuous_links(model,ax,parameter=None,value=None,unit=None,min_width
     
     
     
-def animate_plot(model,fig,ax,function,fps=3,first_timestep=0,last_timestep=None,gif_save_name='gif',**kwargs):
+def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif_save_name='gif',**kwargs):
     
     timesteps = int(model['wn'].options.time.duration/model['wn'].options.time.report_timestep)
     values = range(timesteps)
@@ -1416,7 +1415,7 @@ def animate_plot(model,fig,ax,function,fps=3,first_timestep=0,last_timestep=None
         ax.clear()
         if function == plot_continuous_links or function == plot_continuous_nodes:
            cbar.remove()
-
+        
     # builds gif
     with imageio.get_writer(model['image_path'] + '\\' + gif_save_name + '.gif', mode='I',fps=fps) as writer:
         
@@ -1431,7 +1430,6 @@ def animate_plot(model,fig,ax,function,fps=3,first_timestep=0,last_timestep=None
         for filename in set(filenames):
             
             os.remove(filename)
-
 
 
             
