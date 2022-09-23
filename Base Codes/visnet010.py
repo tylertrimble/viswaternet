@@ -334,8 +334,10 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
                     
             try:   
                 
-                if tanks == False:
-                    
+                if tanks:
+                    pass
+                
+                else:
                     for tank in model['tank_names']:
                         
                         parameter_results.drop(tank, axis=0, inplace=True)
@@ -344,8 +346,10 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
                         element_list.remove(tank)
                         
                         
-                if reservoirs == False:
-                    
+                if reservoirs:
+                    pass
+                
+                else:
                     for reservoir in model['reservoir_names']:
                         
                         parameter_results.drop(reservoir, axis=0, inplace=True)
@@ -373,8 +377,10 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
             
             try:   
                 
-                if tanks == False:
-                    
+                if tanks:
+                    pass
+                
+                else:                  
                     for tank in model['tank_names']:
                         
                         parameter_results.drop(tank, axis=0, inplace=True)
@@ -383,8 +389,10 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
                         element_list.remove(tank)
                         
                         
-                if reservoirs == False:
-                    
+                if reservoirs:
+                    pass
+                
+                else:
                     for reservoir in model['reservoir_names']:
                         
                         parameter_results.drop(reservoir, axis=0, inplace=True)
@@ -572,7 +580,7 @@ def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='au
             binNames = np.append(binNames, '{0:1.3f} - {1:1.3f}'.format(bin_list[i], bin_list[i+1]))
             
             
-        elif (i<len(bin_list) - 1) == True:
+        elif (i<len(bin_list) - 1):
             
             binNames = np.append(binNames, '{0:1.3f} - {1:1.3f}'.format(bin_list[i], bin_list[i+1]))
             
@@ -626,7 +634,7 @@ def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='au
                 counter += 1
                 
                 
-        elif (i<len(bin_list) - 2) == True:
+        elif (i<len(bin_list) - 2):
             
             counter = 0
             
@@ -655,7 +663,10 @@ def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='au
                     
                 counter += 1
                 
-    if disable_bin_deleting == False:            
+    if disable_bin_deleting:        
+        pass
+    
+    else:
         for binName in binNames:
             
             if len(binnedParameter[binName]) == 0:
@@ -694,8 +705,10 @@ def draw_nodes(model,node_list,parameter_results=[],vmin=None,vmax=None,node_siz
                 return g
     
     
-        if negativeValues == False:
-            
+        if negativeValues:
+            pass
+        
+        else:
             cmap = mpl.cm.get_cmap(cmap)
             
             
@@ -747,8 +760,10 @@ def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',
                 return g
 
         
-        if negativeValues == False:
-            
+        if negativeValues:
+            pass
+        
+        else:
             cmap = mpl.cm.get_cmap(cmap)
             
             
@@ -774,22 +789,22 @@ def draw_base_elements(model,ax,nodes=True,links=True,reservoirs=True,tanks=True
     pumps: Takes Boolean. Determines whether to draw pumps or not.
     valves: Takes Boolean. Determines whether to draw valves or not.
     legend: Takes Boolean. Determines whether to draw legend or not."""
-    if nodes == True:
+    if nodes:
         
         nxp.draw_networkx_nodes(model['G'], model['pos_dict'], node_size = 30, node_color = 'k')
         
         
-    if reservoirs == True:
+    if reservoirs:
         
         nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = model['reservoir_names'], node_size = 200, node_color = 'black',linewidths=3,node_shape = 's', label='Reservoirs')
     
     
-    if tanks == True:
+    if tanks:
         
         nxp.draw_networkx_nodes(model['G'], model['pos_dict'], ax=ax, nodelist = model['tank_names'], node_size = 200, node_color = 'black',linewidths=3, node_shape = 'd', label='Tanks')
    
     
-    if valves == True:
+    if valves:
         
         valve_coordinates = {}
         valveCounter = 0
@@ -806,12 +821,12 @@ def draw_base_elements(model,ax,nodes=True,links=True,reservoirs=True,tanks=True
             
         nxp.draw_networkx_nodes(model['G'], valve_coordinates, ax=ax, nodelist = model['valve_names'], node_size = 200, node_color = 'orange', edgecolors='black',linewidths=1,node_shape = 'P', label='Valves')
         
-    if links == True:  
+    if links:  
         
         nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, arrows = False, edge_color = 'k')
     
     
-    if pumps == True:
+    if pumps:
         
         nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, edgelist = model['G_list_pumps_only'], node_size = 200, edge_color = 'b', width=3, arrows=False)  
         
@@ -883,7 +898,7 @@ def draw_discrete_nodes(model,ax,nodes, bin_list, bin_size_list=None, bin_label_
     counter = 0
     empty_bin = False
     
-    if (color_list is not None and cmap is not None) == True or cmap is not None:    
+    if (color_list is not None and cmap is not None) or cmap is not None:    
         
         cmap = mpl.cm.get_cmap(cmap)
         cmapValue = 1/len(bin_list)
@@ -902,7 +917,7 @@ def draw_discrete_nodes(model,ax,nodes, bin_list, bin_size_list=None, bin_label_
             
             
             counter += 1
-        if empty_bin == True:
+        if empty_bin:
            counter2 = 0
            cmap2 = mpl.cm.get_cmap(cmap)
            cmapValue2 = 1/len(bin_list)
@@ -925,7 +940,7 @@ def draw_discrete_nodes(model,ax,nodes, bin_list, bin_size_list=None, bin_label_
             
             counter += 1
 
-        if empty_bin == True:
+        if empty_bin:
             counter2 = 0
             for binName in bin_list:
                 node_list = ([model['node_names'][i] for i in nodes.get(binName).values()])
@@ -962,7 +977,7 @@ def draw_discrete_links(model,ax,links, bin_list, bin_width_list=None, bin_label
     counter = 0
     empty_bin = False
     
-    if (color_list is not None and cmap is not None) == True or cmap is not None:    
+    if (color_list is not None and cmap is not None) or cmap is not None:    
         
         cmap = mpl.cm.get_cmap(cmap)
         cmapValue = 1/len(bin_list)
@@ -980,7 +995,7 @@ def draw_discrete_links(model,ax,links, bin_list, bin_width_list=None, bin_label
             
             counter += 1
             
-        if empty_bin == True:
+        if empty_bin:
             counter2 = 0
             cmap2 = mpl.cm.get_cmap(cmap)
             cmapValue2 = 1/len(bin_list)
@@ -1002,7 +1017,7 @@ def draw_discrete_links(model,ax,links, bin_list, bin_width_list=None, bin_label
            
            counter += 1
            
-       if empty_bin == True:
+       if empty_bin:
            counter2 = 0
            for binName in bin_list:
                edge_list = ([model['pipe_list'][i] for i in links.get(binName).values()])
@@ -1025,7 +1040,7 @@ def draw_legend(ax,bin_list=[],title=None,pumps=True,loc='upper right',loc2='low
     
     handles, labels = ax.get_legend_handles_labels()
     
-    if pumps == True:
+    if pumps:
         
         patch1 = mpatches.Patch(color='blue', label='Pumps')
         patch2 = mpatches.Patch(color='black', label='Pipes')
@@ -1109,11 +1124,11 @@ def plot_basic_elements(model,ax,pumps=True,valves=True,reservoirs=True,tanks=Tr
     
     draw_base_elements(model,ax,nodes=nodes,reservoirs=reservoirs,tanks=tanks,links=links,valves=valves,pumps=pumps,legend=True)
     
-    if legend == True:
+    if legend:
         
         draw_legend(ax,pumps=pumps,loc=legend_loc)
     
-    if savefig == True:
+    if savefig:
         
         save_fig(model, save_name=save_name)
 
@@ -1168,11 +1183,11 @@ def plot_discrete_nodes(model,ax,bin_edge_num=5,parameter=None, value=None, unit
         draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
     
     
-        if legend == True:
+        if legend:
             draw_legend(ax,bin_list=binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
     
     
-    if savefig == True:
+    if savefig:
         
          save_fig(model, save_name=save_name)
 
@@ -1216,11 +1231,11 @@ def plot_continuous_nodes(model,ax,parameter=None, value=None, unit=None,vmin=No
         
         draw_color_bar(ax,g,cmap,color_bar_title=color_bar_title)
 
-    if legend == True:
+    if legend:
         
         draw_legend(ax,pumps=pumps,loc=legend_loc)
         
-    if savefig == True:
+    if savefig:
         
         save_fig(model, save_name=save_name)
   
@@ -1275,12 +1290,12 @@ def plot_discrete_links(model, ax,bin_edge_num=5, parameter=None, value=None, un
         draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
         
         
-        if legend == True:
+        if legend:
             
             draw_legend(ax,bin_list=binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
 
 
-    if savefig == True:
+    if savefig:
         
          save_fig(model, save_name=save_name)
    
@@ -1349,11 +1364,11 @@ def plot_continuous_links(model,ax,parameter=None,value=None,unit=None,min_width
     
         draw_color_bar(ax,g,cmap,color_bar_title=color_bar_title)
     
-    if legend == True:
+    if legend:
         
         draw_legend(ax,title=legend_title,pumps=pumps,loc=legend_loc)
     
-    if savefig == True:
+    if savefig:
         
         save_fig(model, save_name=save_name)
     
@@ -1447,12 +1462,12 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
         draw_base_elements(model,ax,nodes=False)  
         
         
-        if legend == True:
+        if legend:
             
             draw_legend(ax,patterns,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
             
             
-        if savefig == True:
+        if savefig:
             
             save_fig(model, save_name=save_name)
             
@@ -1498,12 +1513,12 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
         draw_base_elements(model,ax,nodes=False,links=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
         
         
-        if legend == True:
+        if legend:
             
             draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
         
         
-        if savefig == True:
+        if savefig:
             
             save_fig(model, save_name=save_name)
             
@@ -1560,12 +1575,12 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
         draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
         
         
-        if legend == True:
+        if legend:
             
             draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
         
         
-        if savefig == True:
+        if savefig:
             
             save_fig(model, save_name=save_name)
             
@@ -1594,12 +1609,12 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
            
             
            
-            if legend == True:
+            if legend:
                 
                 draw_legend(ax,custom_data_values[1],title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
             
             
-            if savefig == True:
+            if savefig:
                 
                 save_fig(model, save_name=save_name)
                 
@@ -1626,12 +1641,12 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
             
         
-            if legend == True:
+            if legend:
                 
                 draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
         
         
-            if savefig == True:
+            if savefig:
             
              save_fig(model, save_name=save_name)
              
@@ -1679,11 +1694,11 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
             draw_color_bar(ax,g,cmap)
             
-            if legend == True:
+            if legend:
                 
                 draw_legend(ax,title=legend_title,pumps=pumps,loc=legend_loc_1)
                 
-            if savefig == True:
+            if savefig:
                 
                 save_fig(model, save_name=save_name)
                 
@@ -1714,12 +1729,12 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
             
             
-            if legend == True:
+            if legend:
                 
                 draw_legend(ax,bin_list,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
             
             
-            if savefig == True:
+            if savefig:
                 
                 save_fig(model, save_name=save_name)
             
@@ -1749,12 +1764,12 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
             
         
-            if legend == True:
+            if legend:
                 
                 draw_legend(ax,binNames,title=legend_title,pumps=pumps,loc=legend_loc_1,loc2=legend_loc_2)
         
         
-            if savefig == True:
+            if savefig:
             
              save_fig(model, save_name=save_name)    
          
@@ -1806,7 +1821,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             draw_legend(ax,title=legend_title,pumps=pumps,loc=legend_loc_1)
             
             
-            if savefig == True:
+            if savefig:
                 
                 save_fig(model, save_name=save_name)
                 
