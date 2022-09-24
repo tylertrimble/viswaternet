@@ -1706,7 +1706,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             return
         
         
-    if type(parameter) == str:
+    if isinstance(parameter,str):
         
         if data_type == 'unique':
             
