@@ -235,7 +235,7 @@ def save_fig(model, save_name=None):
             networkName = networkName[prefixRemove+1:]
             
             
-        except:
+        except Exception:
             
             pass
             
@@ -681,12 +681,24 @@ def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='au
 
 
 
-def draw_nodes(model,node_list,parameter_results=[],vmin=None,vmax=None,node_size=300,node_color='k',cmap='tab10',node_shape='.',edge_colors='k',line_widths=0,label=None):
+def draw_nodes(model,node_list,parameter_results=None,vmin=None,vmax=None,node_size=None,node_color='k',cmap='tab10',node_shape='.',edge_colors='k',line_widths=0,label=None):
     
+    if parameter_results is None:
+        parameter_results = []
+        
+    if node_size is None:
+        node_size = []
+        
     if len(parameter_results) != 0:
         
         negativeValues = False
         
+    if isinstance(node_size,list) and len(node_size) == 0:
+        
+        node_size = np.ones(len(node_list))*100
+        
+    if isinstance(node_size,int):
+        node_size = np.ones(len(node_list))*node_size
         
         for value in parameter_results:
             
@@ -724,8 +736,14 @@ def draw_nodes(model,node_list,parameter_results=[],vmin=None,vmax=None,node_siz
     
     
     
-def draw_links(model,link_list,parameter_results=[],edge_color='k',cmap='tab10',widths=[],vmin=None,vmax=None):
+def draw_links(model,link_list,parameter_results=None,edge_color='k',cmap='tab10',widths=[],vmin=None,vmax=None):
     
+    if parameter_results is None:
+        parameter_results = []
+    
+    if widths is None:
+        widths = []
+        
     edgeList = {}
     
     if len(widths) == 0:
@@ -1027,7 +1045,7 @@ def draw_discrete_links(model,ax,links, bin_list, bin_width_list=None, bin_label
    
     
     
-def draw_legend(ax,bin_list=[],title=None,pumps=True,loc='upper right',loc2='lower right'):
+def draw_legend(ax,bin_list=None,title=None,pumps=True,loc='upper right',loc2='lower right'):
     """Draws legend for basic elements.
     Arguments:
     ax: Axis of the figure the user wants the elements to be plotted on.
@@ -1037,7 +1055,9 @@ def draw_legend(ax,bin_list=[],title=None,pumps=True,loc='upper right',loc2='low
     loc: Takes String. Location of elements legend.
     loc2 = Takes String. Location of bins legend"""
     
-    
+    if bin_list is None:
+        bin_list = []
+        
     handles, labels = ax.get_legend_handles_labels()
     
     if pumps:
@@ -1706,7 +1726,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             return
         
         
-    if type(parameter) == str:
+    if isinstance(parameter,str):
         
         if data_type == 'unique':
             
