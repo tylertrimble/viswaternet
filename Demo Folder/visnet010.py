@@ -255,8 +255,19 @@ def save_fig(model, save_name=None):
     
     plt.savefig(model['image_path']+image_path2)
   
+def normalize_parameter(model,parameter_results,min_value,max_value):
+    minParameter = np.min(parameter_results)
+    maxParameter = np.max(parameter_results)
     
-  
+    
+    normalized_parameter = np.copy(parameter_results)
+    
+    for counter,parameter in enumerate(parameter_results):
+        
+        normalized_parameter[counter] = ((max_value - min_value)*((parameter - minParameter)/(maxParameter - minParameter))) + min_value
+    
+    return normalized_parameter
+    
     
 def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoirs=False):
     """Gets parameter for each node in the network and stores it in
@@ -706,7 +717,8 @@ def draw_nodes(model,node_list,parameter_results=None,vmin=None,vmax=None,node_s
         
     if isinstance(node_size,int):
         node_size = np.ones(len(node_list))*node_size
-        
+    
+    if len(parameter_results) != 0:
         for value in parameter_results:
             
             if value < -1e-5:
@@ -1132,18 +1144,20 @@ def draw_label(model,ax,labels,x_coords,y_coords,nodes=None,draw_arrow=True):
             
             if draw_arrow:
                 edge_list = []
-                
-                model['G'].add_node(label,pos=(xCoord,yCoord))
-                
-                model['pos_dict'][label]=(model['wn'].get_node(node).coordinates[0]+xCoord,model['wn'].get_node(node).coordinates[1]+yCoord)
-                
-                edge_list.append((node,label))
-                
-                nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = edge_list,edge_color = 'g',width=0.8,arrows=False) 
-                
-                model['G'].remove_node(label)
-                model['pos_dict'].pop(label,None)
-                edge_list.append((node,label)) 
+                if label == node:
+                    pass
+                else:
+                    model['G'].add_node(label,pos=(xCoord,yCoord))
+                    
+                    model['pos_dict'][label]=(model['wn'].get_node(node).coordinates[0]+xCoord,model['wn'].get_node(node).coordinates[1]+yCoord)
+                    
+                    edge_list.append((node,label))
+                    
+                    nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = edge_list,edge_color = 'g',width=0.8,arrows=False) 
+                    
+                    model['G'].remove_node(label)
+                    model['pos_dict'].pop(label,None)
+                    edge_list.append((node,label)) 
             if xCoord < 0:    
                 plt.text(model['wn'].get_node(node).coordinates[0]+xCoord,model['wn'].get_node(node).coordinates[1]+yCoord,s = label, bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right',verticalalignment='center', fontsize = 11)
             if xCoord >= 0:    
@@ -1384,25 +1398,9 @@ def plot_continuous_links(model,ax,parameter=None,value=None,unit=None,min_width
             parameter_results = unit_conversion(parameter_results,parameter,unit)
             
             
-        minParameter = np.min(parameter_results)
-        maxParameter = np.max(parameter_results)
-        
-        
-        normalizedParameter = np.copy(parameter_results)
-        
-        
-        counter = 0
-        
-        
-        for parameter in parameter_results:
-            
-            normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
-           
-            
-            counter += 1
-        
-        
-        widths = normalizedParameter
+        normalized_parameter = normalize_parameter(model,parameter_results,min_width,max_width)
+         
+        widths = normalized_parameter
         
         
         g = draw_links(model,link_list,parameter_results=parameter_results,cmap=cmap,widths=widths,vmin=vmin,vmax=vmax)
@@ -1704,28 +1702,12 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
         if data_type == 'continuous':
             
-            minParameter = np.min(custom_data_values[1])
-            maxParameter = np.max(custom_data_values[1])
-            
-            
-            normalizedParameter = np.copy(custom_data_values[1])
-            
-            
-            counter = 0
-            
-            
-            for parameter in custom_data_values[1]:
-                
-                normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
-                
-                
-                counter += 1
-            
-            
-            widths = normalizedParameter
-            
             
             if parameter_type == 'link':
+                            
+                normalized_parameter = normalize_parameter(model,custom_data_values[1],min_width,max_width)
+                
+                widths = normalized_parameter
                 
                 g = draw_links(model,custom_data_values[0], parameter_results=custom_data_values[1],cmap=cmap,widths=widths)
                 
@@ -1741,7 +1723,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
             
             
-            draw_color_bar(ax,g,cmap)
+            draw_color_bar(ax,g,cmap,color_bar_title=color_bar_title)
             
             if legend:
                 
@@ -1827,29 +1809,11 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
             data = convert_excel(model,parameter,data_type,excel_columns[0],excel_columns[1])
             
-            
-            minParameter = np.min(data['element_list'])
-            maxParameter = np.max(data['element_list'])
-            
-            
-            normalizedParameter = np.copy(data['element_list'])
-            
-            
-            counter = 0
-            
-            
-            for parameter in data['element_list']:
-                
-                normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
-                
-                
-                counter += 1
-            
-            
-            widths = normalizedParameter
-            
-            
             if parameter_type == 'link':
+                
+                normalized_parameter = normalize_parameter(model,data['element_list'],min_width,max_width)
+                
+                widths = normalized_parameter
                 
                 g = draw_links(model,data['index'], parameter_results=data['element_list'],cmap=cmap,widths=widths)
                 
@@ -1865,7 +1829,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
             
             
-            draw_color_bar(ax,g,cmap)
+            draw_color_bar(ax,g,cmap,color_bar_title=color_bar_title)
             
             draw_legend(ax,title=legend_title,pumps=pumps,loc=legend_loc_1)
             
