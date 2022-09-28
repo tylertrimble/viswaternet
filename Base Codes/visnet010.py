@@ -1704,29 +1704,28 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
         if data_type == 'continuous':
             
-            minParameter = np.min(custom_data_values[1])
-            maxParameter = np.max(custom_data_values[1])
-            
-            
-            normalizedParameter = np.copy(custom_data_values[1])
-            
-            
-            counter = 0
-            
-            
-            for parameter in custom_data_values[1]:
-                
-                normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
-                
-                
-                counter += 1
-            
-            
-            widths = normalizedParameter
-            
             
             if parameter_type == 'link':
+                            
+                minParameter = np.min(custom_data_values[1])
+                maxParameter = np.max(custom_data_values[1])
                 
+                
+                normalizedParameter = np.copy(custom_data_values[1])
+                
+                
+                counter = 0
+                
+                
+                for parameter in custom_data_values[1]:
+                    
+                    normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
+                    
+                    
+                    counter += 1
+                
+                
+                widths = normalizedParameter
                 g = draw_links(model,custom_data_values[0], parameter_results=custom_data_values[1],cmap=cmap,widths=widths)
                 
                 
@@ -1827,29 +1826,26 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
             data = convert_excel(model,parameter,data_type,excel_columns[0],excel_columns[1])
             
-            
-            minParameter = np.min(data['element_list'])
-            maxParameter = np.max(data['element_list'])
-            
-            
-            normalizedParameter = np.copy(data['element_list'])
-            
-            
-            counter = 0
-            
-            
-            for parameter in data['element_list']:
-                
-                normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
-                
-                
-                counter += 1
-            
-            
-            widths = normalizedParameter
-            
-            
             if parameter_type == 'link':
+                minParameter = np.min(data['element_list'])
+                maxParameter = np.max(data['element_list'])
+                
+                
+                normalizedParameter = np.copy(data['element_list'])
+                
+                
+                counter = 0
+                
+                
+                for parameter in data['element_list']:
+                    
+                    normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
+                    
+                    
+                    counter += 1
+                
+                
+                widths = normalizedParameter
                 
                 g = draw_links(model,data['index'], parameter_results=data['element_list'],cmap=cmap,widths=widths)
                 
