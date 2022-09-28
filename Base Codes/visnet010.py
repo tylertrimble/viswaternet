@@ -706,7 +706,8 @@ def draw_nodes(model,node_list,parameter_results=None,vmin=None,vmax=None,node_s
         
     if isinstance(node_size,int):
         node_size = np.ones(len(node_list))*node_size
-        
+    
+    if len(parameter_results) != 0:
         for value in parameter_results:
             
             if value < -1e-5:
@@ -1740,7 +1741,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
             
             
-            draw_color_bar(ax,g,cmap)
+            draw_color_bar(ax,g,cmap,color_bar_title=color_bar_title)
             
             if legend:
                 
@@ -1861,7 +1862,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
                 draw_base_elements(model,ax,nodes=False,tanks=tanks,reservoirs=reservoirs,pumps=pumps,valves=valves)
             
             
-            draw_color_bar(ax,g,cmap)
+            draw_color_bar(ax,g,cmap,color_bar_title=color_bar_title)
             
             draw_legend(ax,title=legend_title,pumps=pumps,loc=legend_loc_1)
             

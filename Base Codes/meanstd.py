@@ -20,8 +20,8 @@ mean,element_list = vis.get_parameter(model,'node',parameter='pressure',value='m
 
 standard_deviation,element_list = vis.get_parameter(model,'node',parameter='pressure',value='stddev')
 
-max_size=300
-min_size=100
+max_size=500
+min_size=10
 
 minParameter = np.min(standard_deviation)
 maxParameter = np.max(standard_deviation)
@@ -37,4 +37,4 @@ for counter,parameter in enumerate(standard_deviation):
 
 node_size = normalizedParameter
 
-vis.plot_unique_data(model,ax,parameter='custom_data',parameter_type='node',data_type='continuous',custom_data_values=[element_list,mean],node_size=node_size)
+vis.plot_unique_data(model,ax,parameter='custom_data',parameter_type='node',data_type='continuous',custom_data_values=[element_list,mean],node_size=node_size,color_bar_title='Mean Pressure',cmap='winter')
