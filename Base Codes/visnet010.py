@@ -1144,18 +1144,20 @@ def draw_label(model,ax,labels,x_coords,y_coords,nodes=None,draw_arrow=True):
             
             if draw_arrow:
                 edge_list = []
-                
-                model['G'].add_node(label,pos=(xCoord,yCoord))
-                
-                model['pos_dict'][label]=(model['wn'].get_node(node).coordinates[0]+xCoord,model['wn'].get_node(node).coordinates[1]+yCoord)
-                
-                edge_list.append((node,label))
-                
-                nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = edge_list,edge_color = 'g',width=0.8,arrows=False) 
-                
-                model['G'].remove_node(label)
-                model['pos_dict'].pop(label,None)
-                edge_list.append((node,label)) 
+                if label == node:
+                    pass
+                else:
+                    model['G'].add_node(label,pos=(xCoord,yCoord))
+                    
+                    model['pos_dict'][label]=(model['wn'].get_node(node).coordinates[0]+xCoord,model['wn'].get_node(node).coordinates[1]+yCoord)
+                    
+                    edge_list.append((node,label))
+                    
+                    nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist = edge_list,edge_color = 'g',width=0.8,arrows=False) 
+                    
+                    model['G'].remove_node(label)
+                    model['pos_dict'].pop(label,None)
+                    edge_list.append((node,label)) 
             if xCoord < 0:    
                 plt.text(model['wn'].get_node(node).coordinates[0]+xCoord,model['wn'].get_node(node).coordinates[1]+yCoord,s = label, bbox=dict(facecolor='mediumaquamarine', alpha=0.9, edgecolor='black'),horizontalalignment='right',verticalalignment='center', fontsize = 11)
             if xCoord >= 0:    
@@ -1809,7 +1811,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
             if parameter_type == 'link':
                 
-                normalized_parameter = normalize_parameter(model,excel_columns[1],min_width,max_width)
+                normalized_parameter = normalize_parameter(model,data['element_list'],min_width,max_width)
                 
                 widths = normalized_parameter
                 
