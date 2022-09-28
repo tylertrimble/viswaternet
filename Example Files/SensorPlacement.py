@@ -16,7 +16,7 @@ fig, ax = plt.subplots(figsize=(10,15))
 #Removes border from figure
 plt.box(False)
 #Draws distinct elevation.
-vis.plot_discrete_nodes(model,ax,5,parameter='elevation')
+vis.plot_discrete_nodes(model,ax,5,parameter='elevation',savefig=False)
 
 #Plots red square with black outline at specific nodes
 vis.draw_nodes(model,['J511','J411'],

@@ -323,6 +323,10 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
                     
                     element_list = list(parameter_results.index)
                     
+                elif value == 'stddev':
+                    parameter_results = np.std(model['results'].node[parameter])
+                    
+                    element_list = list(parameter_results.index)
                     
                 elif type(value) == int:
                     
@@ -446,7 +450,10 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
                     
                     element_list = list(parameter_results.index)
                     
+                elif value == 'stddev':
+                    parameter_results = np.std(model['results'].link[parameter])    
                     
+                    element_list = list(parameter_results.index)
                 elif type(value) == int:
                     
                     parameter_results = model['results'].link[parameter].iloc[value]
@@ -723,8 +730,10 @@ def draw_nodes(model,node_list,parameter_results=None,vmin=None,vmax=None,node_s
         else:
             cmap = mpl.cm.get_cmap(cmap)
             
-            
-            g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results, cmap=cmap, node_shape = node_shape,linewidths=line_widths,edgecolors=edge_colors, vmin=vmin, vmax=vmax)
+            if vmin is None and vmax is None:
+                g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results, cmap=cmap, node_shape = node_shape,linewidths=line_widths,edgecolors=edge_colors)
+            else:
+                g = nxp.draw_networkx_nodes(model['G'], model['pos_dict'], nodelist=node_list,node_size = node_size, node_color=parameter_results, cmap=cmap, node_shape = node_shape,linewidths=line_widths,edgecolors=edge_colors, vmin=vmin, vmax=vmax)
             
             
             return g
@@ -736,7 +745,7 @@ def draw_nodes(model,node_list,parameter_results=None,vmin=None,vmax=None,node_s
     
     
     
-def draw_links(model,link_list,parameter_results=None,edge_color='k',cmap='tab10',widths=[],vmin=None,vmax=None):
+def draw_links(model,link_list,parameter_results=None,edge_color='k',cmap='tab10',widths=None,vmin=None,vmax=None):
     
     if parameter_results is None:
         parameter_results = []
@@ -784,8 +793,10 @@ def draw_links(model,link_list,parameter_results=None,edge_color='k',cmap='tab10
         else:
             cmap = mpl.cm.get_cmap(cmap)
             
-            
-            g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_cmap=cmap, arrows=False,width=widths,vmin=vmin,vmax=vmax)
+            if vmin is None and vmax is None:
+                g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_cmap=cmap, arrows=False,width=widths)
+            else:
+                g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_cmap=cmap, arrows=False,width=widths,vmin=vmin,vmax=vmax)
             
             
             return g
