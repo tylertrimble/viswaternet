@@ -255,8 +255,19 @@ def save_fig(model, save_name=None):
     
     plt.savefig(model['image_path']+image_path2)
   
+def normalize_parameter(model,parameter_results,min_value,max_value):
+    minParameter = np.min(parameter_results)
+    maxParameter = np.max(parameter_results)
     
-  
+    
+    normalized_parameter = np.copy(parameter_results)
+    
+    for counter,parameter in enumerate(parameter_results):
+        
+        normalized_parameter[counter] = ((max_value - min_value)*((parameter - minParameter)/(maxParameter - minParameter))) + min_value
+    
+    return normalized_parameter
+    
     
 def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoirs=False):
     """Gets parameter for each node in the network and stores it in
@@ -1385,25 +1396,9 @@ def plot_continuous_links(model,ax,parameter=None,value=None,unit=None,min_width
             parameter_results = unit_conversion(parameter_results,parameter,unit)
             
             
-        minParameter = np.min(parameter_results)
-        maxParameter = np.max(parameter_results)
-        
-        
-        normalizedParameter = np.copy(parameter_results)
-        
-        
-        counter = 0
-        
-        
-        for parameter in parameter_results:
-            
-            normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
-           
-            
-            counter += 1
-        
-        
-        widths = normalizedParameter
+        normalized_parameter = normalize_parameter(model,parameter_results,min_width,max_width)
+         
+        widths = normalized_parameter
         
         
         g = draw_links(model,link_list,parameter_results=parameter_results,cmap=cmap,widths=widths,vmin=vmin,vmax=vmax)
@@ -1708,25 +1703,10 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             
             if parameter_type == 'link':
                             
-                minParameter = np.min(custom_data_values[1])
-                maxParameter = np.max(custom_data_values[1])
+                normalized_parameter = normalize_parameter(model,custom_data_values[1],min_width,max_width)
                 
+                widths = normalized_parameter
                 
-                normalizedParameter = np.copy(custom_data_values[1])
-                
-                
-                counter = 0
-                
-                
-                for parameter in custom_data_values[1]:
-                    
-                    normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
-                    
-                    
-                    counter += 1
-                
-                
-                widths = normalizedParameter
                 g = draw_links(model,custom_data_values[0], parameter_results=custom_data_values[1],cmap=cmap,widths=widths)
                 
                 
@@ -1828,25 +1808,10 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             data = convert_excel(model,parameter,data_type,excel_columns[0],excel_columns[1])
             
             if parameter_type == 'link':
-                minParameter = np.min(data['element_list'])
-                maxParameter = np.max(data['element_list'])
                 
+                normalized_parameter = normalize_parameter(model,excel_columns[1],min_width,max_width)
                 
-                normalizedParameter = np.copy(data['element_list'])
-                
-                
-                counter = 0
-                
-                
-                for parameter in data['element_list']:
-                    
-                    normalizedParameter[counter] = ((max_width - min_width)*((parameter - minParameter)/(maxParameter - minParameter))) + min_width
-                    
-                    
-                    counter += 1
-                
-                
-                widths = normalizedParameter
+                widths = normalized_parameter
                 
                 g = draw_links(model,data['index'], parameter_results=data['element_list'],cmap=cmap,widths=widths)
                 
