@@ -371,7 +371,7 @@ def get_parameter(model,parameter_type,parameter,value=None,element_list=None,ta
                     pass
                 else:
                     element_list.remove(element)
-            print(element_list)    
+                    
             indices = [model['node_names'].index(i) for i in element_list]
             
             parameter_results = parameter_results.iloc[indices]

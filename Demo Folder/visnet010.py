@@ -364,12 +364,17 @@ def get_parameter(model,parameter_type,parameter,value=None,element_list=None,ta
             
             parameter_results = model['wn'].query_node_attribute(parameter)
             
-            elements_in_results = element_list in list(parameter_results.index)
-            element_list=element_list[elements_in_results]
+            elements_in_results = list(parameter_results.index)
+            
+            for element in element_list:
+                if element in elements_in_results:
+                    pass
+                else:
+                    element_list.remove(element)
+                    
             indices = [model['node_names'].index(i) for i in element_list]
             
             parameter_results = parameter_results.iloc[indices]
-            print(parameter_results)
             try:   
                 
                 if tanks:
@@ -445,10 +450,19 @@ def get_parameter(model,parameter_type,parameter,value=None,element_list=None,ta
         except KeyError:
             
             
-            parameter_results = model['wn'].query_link_attribute(parameter).iloc[indices]
+            parameter_results = model['wn'].query_node_attribute(parameter)
             
+            elements_in_results = list(parameter_results.index)
             
-            element_list = list(parameter_results.index)
+            for element in element_list:
+                if element in elements_in_results:
+                    pass
+                else:
+                    element_list.remove(element)
+            print(element_list)    
+            indices = [model['G_pipe_name_list'].index(i) for i in element_list]
+            
+            parameter_results = parameter_results.iloc[indices]
             
             return parameter_results, element_list
 
