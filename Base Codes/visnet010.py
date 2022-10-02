@@ -269,7 +269,7 @@ def normalize_parameter(model,parameter_results,min_value,max_value):
     return normalized_parameter
     
     
-def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoirs=False):
+def get_parameter(model,parameter_type,parameter,value=None,element_list=None,tanks=False,reservoirs=False):
     """Gets parameter for each node in the network and stores it in
     parameter_results. Also grabs the indices of the nodes that had that
     parameter.
@@ -302,49 +302,35 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
         'link_quality'"""
     
     if parameter_type == 'node':
+        if element_list is None:
+            element_list = model['node_names']
+            
+        indices = [model['node_names'].index(i) for i in element_list]
         try:
             
             if value is None:
                 
-                parameter_results = model['results'].node[parameter]
-                element_list = list(parameter_results.index)
-                
-                
+                parameter_results = model['results'].node[parameter].iloc[:,indices]
+
             else:
                 if value == 'max':
                     
-                    parameter_results = np.max(model['results'].node[parameter])
-                    
-                    
-                    element_list = list(parameter_results.index)
-                    
-                    
+                    parameter_results = np.max(model['results'].node[parameter].iloc[:,indices])
+   
                 elif value == 'min':
                     
-                    parameter_results = np.min(model['results'].node[parameter])
-                    
-                    
-                    element_list = list(parameter_results.index)
-                    
-                    
+                    parameter_results = np.min(model['results'].node[parameter].iloc[:,indices])
+
                 elif value == 'mean':
                     
-                    parameter_results = np.mean(model['results'].node[parameter])
-                    
-                    
-                    element_list = list(parameter_results.index)
-                    
+                    parameter_results = np.mean(model['results'].node[parameter].iloc[:,indices])
+
                 elif value == 'stddev':
-                    parameter_results = np.std(model['results'].node[parameter])
+                    parameter_results = np.std(model['results'].node[parameter].iloc[:,indices])
                     
-                    element_list = list(parameter_results.index)
+                elif isinstance(value,int):
                     
-                elif type(value) == int:
-                    
-                    parameter_results = model['results'].node[parameter].iloc[value]
-                    
-                    
-                    element_list = list(parameter_results.index)
+                    parameter_results = model['results'].node[parameter].iloc[value,indices]
                     
                     
             try:   
@@ -356,11 +342,7 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
                     for tank in model['tank_names']:
                         
                         parameter_results.drop(tank, axis=0, inplace=True)
-                        
-                        
-                        element_list.remove(tank)
-                        
-                        
+
                 if reservoirs:
                     pass
                 
@@ -368,11 +350,7 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
                     for reservoir in model['reservoir_names']:
                         
                         parameter_results.drop(reservoir, axis=0, inplace=True)
-                        
-                        
-                        element_list.remove(reservoir) 
-            
-            
+
             except KeyError:
                 
                 pass
@@ -386,10 +364,17 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
             
             parameter_results = model['wn'].query_node_attribute(parameter)
             
+            elements_in_results = list(parameter_results.index)
             
-            element_list = list(parameter_results.index)
+            for element in element_list:
+                if element in elements_in_results:
+                    pass
+                else:
+                    element_list.remove(element)
+            print(element_list)    
+            indices = [model['node_names'].index(i) for i in element_list]
             
-            
+            parameter_results = parameter_results.iloc[indices]
             try:   
                 
                 if tanks:
@@ -425,52 +410,38 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
         
         
     elif parameter_type == 'link':
-        
+        if element_list is None:
+            element_list = model['G_pipe_name_list']
+            
+        indices = [model['G_pipe_name_list'].index(i) for i in element_list]
         try:
             
             if value is None:
                 
-                parameter_results = model['results'].link[parameter]
-                
-                
-                element_list = list(parameter_results.index)
-                
+                parameter_results = model['results'].link[parameter].iloc[:,indices]
                 
             else:
                 
                 if value == 'max':
                     
-                    parameter_results = np.max(model['results'].link[parameter])
-                    
-                    
-                    element_list = list(parameter_results.index)
-                    
+                    parameter_results = np.max(model['results'].link[parameter].iloc[:,indices])
                     
                 elif value == 'min':
                     
-                    parameter_results = np.min(model['results'].link[parameter])
-                    
-                    
-                    element_list = list(parameter_results.index)
+                    parameter_results = np.min(model['results'].link[parameter].iloc[:,indices])
                     
                     
                 elif value == 'mean':
                     
-                    parameter_results = np.mean(model['results'].link[parameter])
+                    parameter_results = np.mean(model['results'].link[parameter].iloc[:,indices])
                     
-                    
-                    element_list = list(parameter_results.index)
                     
                 elif value == 'stddev':
-                    parameter_results = np.std(model['results'].link[parameter])    
+                    parameter_results = np.std(model['results'].link[parameter].iloc[:,indices])    
                     
-                    element_list = list(parameter_results.index)
                 elif type(value) == int:
                     
-                    parameter_results = model['results'].link[parameter].iloc[value]
-                    
-                    
-                    element_list = list(parameter_results.index)   
+                    parameter_results = model['results'].link[parameter].iloc[value,indices]
                     
                     
             return parameter_results, element_list
@@ -479,10 +450,19 @@ def get_parameter(model,parameter_type,parameter,value=None,tanks=False,reservoi
         except KeyError:
             
             
-            parameter_results = model['wn'].query_link_attribute(parameter)
+            parameter_results = model['wn'].query_node_attribute(parameter)
             
+            elements_in_results = list(parameter_results.index)
             
-            element_list = list(parameter_results.index)
+            for element in element_list:
+                if element in elements_in_results:
+                    pass
+                else:
+                    element_list.remove(element)
+            print(element_list)    
+            indices = [model['G_pipe_name_list'].index(i) for i in element_list]
+            
+            parameter_results = parameter_results.iloc[indices]
             
             return parameter_results, element_list
 
@@ -757,7 +737,7 @@ def draw_nodes(model,node_list,parameter_results=None,vmin=None,vmax=None,node_s
     
     
     
-def draw_links(model,link_list,parameter_results=None,edge_color='k',cmap='tab10',widths=None,vmin=None,vmax=None):
+def draw_links(model,ax,link_list,parameter_results=None,edge_color='k',cmap='tab10',widths=None,vmin=None,vmax=None):
     
     if parameter_results is None:
         parameter_results = []
@@ -779,8 +759,7 @@ def draw_links(model,link_list,parameter_results=None,edge_color='k',cmap='tab10
     
     if len(parameter_results) != 0:
         for i in link_list:
-            
-            edgeList[i] = link_list.index(i)
+            edgeList[i] = model['G_pipe_name_list'].index(i)
             
         for value in parameter_results:
             
@@ -792,9 +771,9 @@ def draw_links(model,link_list,parameter_results=None,edge_color='k',cmap='tab10
                 cmap = mpl.cm.get_cmap(cmap)
                 
                 if vmin is None and vmax is None:
-                    g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_vmax=np.max(parameter_results),edge_vmin=-np.max(parameter_results),edge_cmap=cmap,arrows=False,width=widths)
+                    g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_vmax=np.max(parameter_results),edge_vmin=-np.max(parameter_results),edge_cmap=cmap,arrows=False,width=widths)
                 else:
-                    g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_vmax=vmax,edge_vmin=vmin,edge_cmap=cmap,arrows=False,width=widths)
+                    g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_vmax=vmax,edge_vmin=vmin,edge_cmap=cmap,arrows=False,width=widths)
                 
                 return g
 
@@ -806,9 +785,9 @@ def draw_links(model,link_list,parameter_results=None,edge_color='k',cmap='tab10
             cmap = mpl.cm.get_cmap(cmap)
             
             if vmin is None and vmax is None:
-                g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_cmap=cmap, arrows=False,width=widths)
+                g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_cmap=cmap, arrows=False,width=widths)
             else:
-                g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_cmap=cmap, arrows=False,width=widths,vmin=vmin,vmax=vmax)
+                g = nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=parameter_results, edge_cmap=cmap, arrows=False,width=widths,vmin=vmin,vmax=vmax)
             
             
             return g
@@ -816,7 +795,7 @@ def draw_links(model,link_list,parameter_results=None,edge_color='k',cmap='tab10
     else:
         for i in link_list:
             edgeList[i] = model['G_pipe_name_list'].index(i)
-        nxp.draw_networkx_edges(model['G'], model['pos_dict'], edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=edge_color, arrows=False,width=widths)
+        nxp.draw_networkx_edges(model['G'], model['pos_dict'], ax=ax, edgelist=([model['pipe_list'][i] for i in edgeList.values()]), edge_color=edge_color, arrows=False,width=widths)
     
     
 def draw_base_elements(model,ax,nodes=True,links=True,reservoirs=True,tanks=True,pumps=True,valves=True,legend=True):

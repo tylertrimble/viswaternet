@@ -7,8 +7,6 @@ Created on Wed Sep 28 12:57:31 2022
 
 import visnet010 as vis
 import matplotlib.pyplot as plt
-import os
-import numpy as np
 
 #Initialize model
 model = vis.initialize_model('Networks\CTown.inp')
@@ -20,21 +18,9 @@ mean,element_list = vis.get_parameter(model,'node',parameter='pressure',value='m
 
 standard_deviation,element_list = vis.get_parameter(model,'node',parameter='pressure',value='stddev')
 
+min_size=50
 max_size=500
-min_size=10
 
-minParameter = np.min(standard_deviation)
-maxParameter = np.max(standard_deviation)
-
-normalizedParameter = np.copy(standard_deviation)
-
-
-
-for counter,parameter in enumerate(standard_deviation):
-    
-    normalizedParameter[counter] = ((max_size - min_size)*((parameter - minParameter)/(maxParameter - minParameter))) + min_size
-
-
-node_size = normalizedParameter
+node_size = vis.normalize_parameter(model,standard_deviation,min_size,max_size)
 
 vis.plot_unique_data(model,ax,parameter='custom_data',parameter_type='node',data_type='continuous',custom_data_values=[element_list,mean],node_size=node_size,color_bar_title='Mean Pressure',cmap='winter')

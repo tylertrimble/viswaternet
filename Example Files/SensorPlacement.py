@@ -11,6 +11,12 @@ import os
 #Initialize model
 model = vis.initialize_model('Networks\CTown.inp')
 
+fig, ax = plt.subplots(figsize = (9,15))
+#Removes border from figure
+plt.box(False)
+#Creates discrete nodes plot of elevation.
+vis.plot_discrete_nodes(model, ax, parameter='elevation')
+#%%
 #Special Labels
 fig, ax = plt.subplots(figsize=(10,15))
 #Removes border from figure
