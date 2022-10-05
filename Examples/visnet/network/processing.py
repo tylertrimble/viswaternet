@@ -79,7 +79,8 @@ def get_parameter(model,parameter_type,parameter,value=None,element_list=None,ta
                     for tank in model['tank_names']:
                         
                         parameter_results.drop(tank, axis=0, inplace=True)
-
+                        
+                        element_list.remove(tank)
                 if reservoirs:
                     pass
                 
@@ -87,7 +88,8 @@ def get_parameter(model,parameter_type,parameter,value=None,element_list=None,ta
                     for reservoir in model['reservoir_names']:
                         
                         parameter_results.drop(reservoir, axis=0, inplace=True)
-
+                        
+                        element_list.remove(reservoir)
             except KeyError:
                 
                 pass
@@ -104,12 +106,10 @@ def get_parameter(model,parameter_type,parameter,value=None,element_list=None,ta
             elements_in_results = list(parameter_results.index)
             element_list_temp = list.copy(element_list)
             for element in element_list_temp:
-                element_present = False
-                for result_element in elements_in_results:
-                    if str(element) == str(result_element):
-                        element_present = True
-                        break
-                if element_present == False:
+                try:
+                    if elements_in_results.index(element):
+                        pass
+                except ValueError:
                     element_list.remove(element)
 
             indices = [elements_in_results.index(i) for i in element_list]
@@ -193,12 +193,10 @@ def get_parameter(model,parameter_type,parameter,value=None,element_list=None,ta
             elements_in_results = list(parameter_results.index)
             element_list_temp = list.copy(element_list)
             for element in element_list_temp:
-                element_present = False
-                for result_element in elements_in_results:
-                    if str(element) == str(result_element):
-                        element_present = True
-                        break
-                if element_present == False:
+                try:
+                    if elements_in_results.index(element):
+                        pass
+                except ValueError:
                     element_list.remove(element)
             
             indices = [elements_in_results.index(i) for i in element_list]

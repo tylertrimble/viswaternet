@@ -50,8 +50,7 @@ def plot_unique_data(model, ax, parameter=None, parameter_type=None,data_type=No
             parameter_results = unit_conversion(parameter_results,parameter,unit)
             
             
-        uniques = pd.unique(parameter_results)
-        
+        uniques = sorted(pd.unique(parameter_results))
         
         binNames = []
         
