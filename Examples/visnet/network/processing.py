@@ -200,7 +200,7 @@ def get_parameter(model,parameter_type,parameter,value=None,element_list=None,ta
                         break
                 if element_present == False:
                     element_list.remove(element)
-
+            
             indices = [elements_in_results.index(i) for i in element_list]
             parameter_results = parameter_results.iloc[indices]
             

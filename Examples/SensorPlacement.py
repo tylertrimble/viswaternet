@@ -15,9 +15,11 @@ fig, ax = plt.subplots(figsize=(10,15))
 #Removes border from figure
 plt.box(False)
 #Draws distinct elevation.
-vis.drawing.plot_discrete_nodes(model,ax,5,parameter='elevation',savefig=False)
+vis.drawing.plot_discrete_nodes(model,ax,5,parameter='elevation',savefig=False,
+                                legend_loc_1='upper left',
+                                legend_loc_2='lower left')
 
-vis.drawing.draw_nodes(model,['J511','J411'],
+vis.drawing.draw_nodes(model,ax,['J511','J411'],
                node_size=[150,150],
                node_color='#00FFFF',
                node_shape='o',
