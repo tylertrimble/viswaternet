@@ -1,6 +1,6 @@
-; Filename: D:\Class Projects\wdn-viz\Examples\Networks/Net3Tracer.inp
+; Filename: D:\Class Projects\wdn-viz\Examples\Networks\Net3.inp
 ; WNTR: 0.3.1
-; Created: 2022-10-04 23:30:13
+; Created: 2022-10-08 20:08:21
 [TITLE]
 EPANET Example Network 3, updated to include longer duration
 Example showing how the percent of Lake water in a dual-source
@@ -369,7 +369,7 @@ UNBALANCED           CONTINUE 10
 PATTERN              1                   
 DEMAND MULTIPLIER    1
 EMITTER EXPONENT     0.5
-QUALITY              TRACE River
+QUALITY              Chemical mg/L
 DIFFUSIVITY          1
 TOLERANCE            0.01
 
@@ -477,11 +477,11 @@ Lake                8.000000000         27.530000000
 ;Link      X-Coord    Y-Coord   
 
 [LABELS]
- 8.000             	29.420            	"LAKE"
- 25.000            	31.100            	"RIVER"
+ 8.00             29.42            "LAKE"
+ 25.00            31.10            "RIVER"
 
 [BACKDROP]
-DIMENSIONS    6.160    -1.550    46.700    32.610
+DIMENSIONS    6.16    -1.55    46.70    32.61
 UNITS    NONE
 OFFSET    0.00    0.00
 

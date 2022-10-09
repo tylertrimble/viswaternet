@@ -83,7 +83,7 @@ def plot_basic_elements(model,ax,pumps=True,valves=True,reservoirs=True,tanks=Tr
         
         
         
-def draw_legend(ax,bin_list=None,title=None,pumps=True,loc='upper right',loc2='lower right'):
+def draw_legend(ax,bin_list=None,title=None,pumps=True,loc='upper right',loc2='lower right',font_size=15,draw_frame=False,legend_title_font_size=17,font_color='k'):
     """Draws legend for basic elements.
     Arguments:
     ax: Axis of the figure the user wants the elements to be plotted on.
@@ -119,17 +119,18 @@ def draw_legend(ax,bin_list=None,title=None,pumps=True,loc='upper right',loc2='l
     
     if len(bin_list) != 0:
         
-        legend = ax.legend(handles=handles[len(bin_list):], loc=loc,fontsize = '15',frameon=False)
+        legend = ax.legend(handles=handles[len(bin_list):], loc=loc,fontsize = font_size,labelcolor=font_color,frameon=draw_frame)
         ax.add_artist(legend)
         
         
-        legend2 = ax.legend(title=title,handles=handles[:len(bin_list)], loc=loc2,fontsize = '15', title_fontsize = '17',frameon=False)
+        legend2 = ax.legend(title=title,handles=handles[:len(bin_list)], loc=loc2,fontsize = font_size,labelcolor=font_color, title_fontsize = legend_title_font_size,frameon=draw_frame)
+        plt.setp(legend2.get_title(), color=font_color)
         ax.add_artist(legend2)
         
         
     else:
         
-        legend = ax.legend(handles=handles, loc=loc,fontsize = '15',frameon=False)
+        legend = ax.legend(handles=handles, loc=loc,fontsize = font_size,labelcolor=font_color,frameon=False)
         ax.add_artist(legend)
     
 

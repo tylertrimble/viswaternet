@@ -93,9 +93,6 @@ def get_parameter(model,parameter_type,parameter,value=None,element_list=None,ta
             except KeyError:
                 
                 pass
-            
-            
-            return parameter_results, element_list
         
         
         except KeyError:
@@ -293,7 +290,7 @@ def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='au
 
         if (elementWithParameter in model['node_names']) is True:
 
-            break
+            continue
         else:   
             element_list = model['G_pipe_name_list']
             elementType = "link"
@@ -303,7 +300,6 @@ def bin_parameter(model,parameter_results,element_list,bin_edge_num,bin_list='au
     if elementType != "link":
         
         element_list = model['node_names']
-
     for i in range(len(bin_list)):
         
         if i == 0:

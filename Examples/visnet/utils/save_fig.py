@@ -45,5 +45,5 @@ def save_fig(model, save_name=None):
         image_path2 = '\\' +  networkName + '.png'
     
     
-    plt.savefig(model['image_path']+image_path2)
+    plt.savefig(model['image_path']+image_path2,bbox_inches='tight')
   
