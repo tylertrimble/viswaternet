@@ -38,3 +38,4 @@ visplot.plot_unique_data(model, ax, parameter='diameter',cmap='Blues',
                          legend_title='Pipe Diameter (in)',
                          font_color='k',
                          legend_sig_figs=0)
+plt.show()

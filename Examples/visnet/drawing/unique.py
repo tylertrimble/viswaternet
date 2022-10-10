@@ -234,17 +234,15 @@ def plot_unique_data(
         )
 
         uniques = pd.unique(parameter_results)
-        uniques = uniques[uniques is not None]
-
+        uniques = sorted(uniques[uniques is not None])
         binNames = []
-
-        if len(uniques) != 0:
-
+        if None in uniques:
+            pass
+        else:
             for binName in uniques:
 
-                binNames = binName
-        binNames = np.append(binNames, "No Tag")
-
+                binNames.append(binName)
+        binNames.append('No Tag')
         binnedResults = {}
 
         for binName in binNames:
