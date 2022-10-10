@@ -12,7 +12,7 @@ Created on Sat Oct  8 16:36:38 2022
 @author: Tyler
 """
 import visnet.network as visinit
-import visnet.drawing as visplotz
+import visnet.drawing as visplot
 
 import matplotlib.pyplot as plt
 import os
@@ -36,4 +36,5 @@ visplot.plot_unique_data(model, ax, parameter='diameter',cmap='Blues',
                          bin_width_list=[2,2.4,2.8,3.2,3.6,4,4.4,4.8,5.2,5.6],
                          legend_loc_2='lower left',
                          legend_title='Pipe Diameter (in)',
-                         font_color='k')
+                         font_color='k',
+                         legend_sig_figs=0)
