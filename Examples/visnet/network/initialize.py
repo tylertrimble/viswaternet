@@ -19,13 +19,13 @@ def initialize_model(inp_file=None,network_model=None):
     # =============================================================================
     model = {}
     dirname = os.getcwd()
-    if inp_file is not None:
+    
+    if network_model is not None:
+        wn=network_model
+    else:
         inp_file = os.path.join(dirname, inp_file)
         model["inp_file"] = inp_file
         wn = wntr.network.WaterNetworkModel(inp_file)
-    else:
-        wn=network_model
-        
     image_path = os.path.join(dirname)
     model["image_path"] = image_path
     
