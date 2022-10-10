@@ -20,6 +20,24 @@ def draw_base_elements(
     pumps=True,
     valves=True,
     legend=True,
+    reservoir_size=200,
+    reservoir_color='k',
+    reservoir_shape='s',
+    reservoir_border_color=None,
+    reservoir_border_width=None,
+    tank_size=200,
+    tank_color='k',
+    tank_shape='d',
+    tank_border_color=None,
+    tank_border_width=None,
+    valve_size=200,
+    valve_color='orange',
+    valve_shape='P',
+    valve_border_color='k',
+    valve_border_width=1,
+    pump_color='b',
+    base_node_color='k',
+    base_link_color='k'
 ):
     """Draws nodes, links, resevoirs, tanks, pumps and valves without any data
     attached to them.
@@ -34,7 +52,7 @@ def draw_base_elements(
     if nodes:
 
         nxp.draw_networkx_nodes(
-            model["G"], model["pos_dict"], node_size=30, node_color="k"
+            model["G"], model["pos_dict"], node_size=30, node_color=base_node_color
         )
     if reservoirs:
 
@@ -43,10 +61,11 @@ def draw_base_elements(
             model["pos_dict"],
             ax=ax,
             nodelist=model["reservoir_names"],
-            node_size=200,
-            node_color="black",
-            linewidths=3,
-            node_shape="s",
+            node_size=reservoir_size,
+            node_color=reservoir_color,
+            edgecolors=reservoir_border_color,
+            linewidths=reservoir_border_width,
+            node_shape=reservoir_shape,
             label="Reservoirs",
         )
     if tanks:
@@ -56,10 +75,11 @@ def draw_base_elements(
             model["pos_dict"],
             ax=ax,
             nodelist=model["tank_names"],
-            node_size=200,
-            node_color="black",
-            linewidths=3,
-            node_shape="d",
+            node_size=tank_size,
+            node_color=tank_color,
+            edgecolors=tank_border_color,
+            linewidths=tank_border_width,
+            node_shape=tank_shape,
             label="Tanks",
         )
     if valves:
@@ -89,17 +109,17 @@ def draw_base_elements(
             valve_coordinates,
             ax=ax,
             nodelist=model["valve_names"],
-            node_size=200,
-            node_color="orange",
-            edgecolors="black",
-            linewidths=1,
-            node_shape="P",
+            node_size=valve_size,
+            node_color=valve_color,
+            edgecolors=valve_border_color,
+            linewidths=valve_border_width,
+            node_shape=valve_shape,
             label="Valves",
         )
     if links:
 
         nxp.draw_networkx_edges(
-            model["G"], model["pos_dict"], ax=ax, arrows=False, edge_color="k"
+            model["G"], model["pos_dict"], ax=ax, arrows=False, edge_color=base_link_color
         )
     if pumps:
 
@@ -108,7 +128,6 @@ def draw_base_elements(
             model["pos_dict"],
             ax=ax,
             edgelist=model["G_list_pumps_only"],
-            node_size=200,
             edge_color="b",
             width=3,
             arrows=False,
@@ -165,7 +184,6 @@ def draw_legend(
     draw_frame=False,
     legend_title_font_size=17,
     font_color="k",
-    legend_sig_figs=3,
 ):
     """Draws legend for basic elements.
     Arguments:
