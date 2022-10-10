@@ -387,7 +387,7 @@ def plot_continuous_links(
     value=None,
     unit=None,
     min_width=1,
-    max_width=5,
+    max_width=1,
     vmin=None,
     vmax=None,
     tanks=True,

@@ -35,7 +35,7 @@ def plot_unique_data(
     bin_border_width_list=None,
     color_list=None,
     min_width=1,
-    max_width=5,
+    max_width=1,
     vmin=None,
     vmax=None,
     tanks=True,
