@@ -8,7 +8,7 @@ import os
 import wntr
 
 
-def initialize_model(inp_file):
+def initialize_model(inp_file=None,network_model=None):
     """Initializes all variables needed to perform other plotting functions
         Arguments:
     inp_file: Takes a string. Directorty location of network input file. Ends with .inp"""
@@ -19,20 +19,23 @@ def initialize_model(inp_file):
     # =============================================================================
     model = {}
     dirname = os.getcwd()
-    inp_file = os.path.join(dirname, inp_file)
-    model["inp_file"] = inp_file
+    
+    if network_model is not None:
+        wn=network_model
+    else:
+        inp_file = os.path.join(dirname, inp_file)
+        model["inp_file"] = inp_file
+        wn = wntr.network.WaterNetworkModel(inp_file)
     image_path = os.path.join(dirname)
     model["image_path"] = image_path
-
+    
     # Run hydraulic simulation and store results
-    wn = wntr.network.WaterNetworkModel(inp_file)
     model["wn"] = wn
     sim = wntr.sim.EpanetSimulator(wn)
     model["sim"] = sim
-
     results = sim.run_sim()
     model["results"] = results
-
+    
     # =============================================================================
     #   Create name lists for easy reference
     #   junc_names excludes resevoirs and tanks

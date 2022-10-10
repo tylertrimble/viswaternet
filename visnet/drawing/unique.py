@@ -35,7 +35,7 @@ def plot_unique_data(
     bin_border_width_list=None,
     color_list=None,
     min_width=1,
-    max_width=5,
+    max_width=1,
     vmin=None,
     vmax=None,
     tanks=True,
@@ -58,7 +58,25 @@ def plot_unique_data(
     font_color='k',
     legend_title_font_size=17,
     draw_frame=False,
-    legend_sig_figs=3
+    legend_sig_figs=3,
+    reservoir_size=200,
+    reservoir_color='k',
+    reservoir_shape='s',
+    reservoir_border_color=None,
+    reservoir_border_width=None,
+    tank_size=200,
+    tank_color='k',
+    tank_shape='d',
+    tank_border_color=None,
+    tank_border_width=None,
+    valve_size=200,
+    valve_color='orange',
+    valve_shape='P',
+    valve_border_color='k',
+    valve_border_width=1,
+    pump_color='b',
+    base_node_color='k',
+    base_link_color='k'
 ):
 
     if parameter == "demand_patterns":
@@ -79,7 +97,31 @@ def plot_unique_data(
             color_list=color_list,
         )
 
-        base.draw_base_elements(model, ax, nodes=False)
+        base.draw_base_elements(model, 
+                                ax, 
+                                nodes=False,
+                                tanks=tanks,
+                                reservoirs=reservoirs,
+                                pumps=pumps,
+                                valves=valves,
+                                reservoir_size=reservoir_size,
+                                reservoir_color=reservoir_color,
+                                reservoir_shape=reservoir_shape,
+                                reservoir_border_color=reservoir_border_color,
+                                reservoir_border_width=reservoir_border_width,
+                                tank_size=tank_size,
+                                tank_color=tank_color,
+                                tank_shape=tank_shape,
+                                tank_border_color=tank_border_color,
+                                tank_border_width=tank_border_width,
+                                valve_size=valve_size,
+                                valve_color=valve_color,
+                                valve_shape=valve_shape,
+                                valve_border_color=valve_border_color,
+                                valve_border_width=valve_border_width,
+                                pump_color=pump_color,
+                                base_node_color=base_node_color,
+                                base_link_color=base_link_color)
 
         if legend:
 
@@ -147,6 +189,24 @@ def plot_unique_data(
             reservoirs=reservoirs,
             pumps=pumps,
             valves=valves,
+            reservoir_size=reservoir_size,
+            reservoir_color=reservoir_color,
+            reservoir_shape=reservoir_shape,
+            reservoir_border_color=reservoir_border_color,
+            reservoir_border_width=reservoir_border_width,
+            tank_size=tank_size,
+            tank_color=tank_color,
+            tank_shape=tank_shape,
+            tank_border_color=tank_border_color,
+            tank_border_width=tank_border_width,
+            valve_size=valve_size,
+            valve_color=valve_color,
+            valve_shape=valve_shape,
+            valve_border_color=valve_border_color,
+            valve_border_width=valve_border_width,
+            pump_color=pump_color,
+            base_node_color=base_node_color,
+            base_link_color=base_link_color
         )
 
         if legend:
@@ -172,19 +232,23 @@ def plot_unique_data(
         parameter_results, node_list = processing.get_parameter(
             model, "node", parameter
         )
-
-        uniques = pd.unique(parameter_results)
-        uniques = uniques[uniques is not None]
-
+        
+        uniques=[]
+        
+        if any(i is not None for i in (parameter_results.values.tolist())):
+            uniques = pd.unique(parameter_results).tolist()
         binNames = []
-
-        if len(uniques) != 0:
-
+        if not uniques:
+            pass
+        else:
             for binName in uniques:
 
-                binNames = binName
-        binNames = np.append(binNames, "No Tag")
-
+                binNames.append(binName)
+                
+        if None in binNames:
+            binNames.remove(None)
+            
+        binNames.append('No Tag')
         binnedResults = {}
 
         for binName in binNames:
@@ -222,6 +286,24 @@ def plot_unique_data(
             reservoirs=reservoirs,
             pumps=pumps,
             valves=valves,
+            reservoir_size=reservoir_size,
+            reservoir_color=reservoir_color,
+            reservoir_shape=reservoir_shape,
+            reservoir_border_color=reservoir_border_color,
+            reservoir_border_width=reservoir_border_width,
+            tank_size=tank_size,
+            tank_color=tank_color,
+            tank_shape=tank_shape,
+            tank_border_color=tank_border_color,
+            tank_border_width=tank_border_width,
+            valve_size=valve_size,
+            valve_color=valve_color,
+            valve_shape=valve_shape,
+            valve_border_color=valve_border_color,
+            valve_border_width=valve_border_width,
+            pump_color=pump_color,
+            base_node_color=base_node_color,
+            base_link_color=base_link_color
         )
 
         if legend:
@@ -268,6 +350,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             elif parameter_type == "node":
 
@@ -293,6 +393,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             if legend:
 
@@ -344,6 +462,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             if parameter_type == "node":
 
@@ -369,6 +505,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             if legend:
 
@@ -417,6 +571,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             elif parameter_type == "node":
 
@@ -438,6 +610,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
 
@@ -486,6 +676,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             elif parameter_type == "node":
 
@@ -511,6 +719,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             if legend:
 
@@ -567,6 +793,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             if parameter_type == "node":
 
@@ -592,6 +836,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             if legend:
 
@@ -643,6 +905,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             elif parameter_type == "node":
 
@@ -664,6 +944,24 @@ def plot_unique_data(
                     reservoirs=reservoirs,
                     pumps=pumps,
                     valves=valves,
+                    reservoir_size=reservoir_size,
+                    reservoir_color=reservoir_color,
+                    reservoir_shape=reservoir_shape,
+                    reservoir_border_color=reservoir_border_color,
+                    reservoir_border_width=reservoir_border_width,
+                    tank_size=tank_size,
+                    tank_color=tank_color,
+                    tank_shape=tank_shape,
+                    tank_border_color=tank_border_color,
+                    tank_border_width=tank_border_width,
+                    valve_size=valve_size,
+                    valve_color=valve_color,
+                    valve_shape=valve_shape,
+                    valve_border_color=valve_border_color,
+                    valve_border_width=valve_border_width,
+                    pump_color=pump_color,
+                    base_node_color=base_node_color,
+                    base_link_color=base_link_color
                 )
             base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
             if legend:

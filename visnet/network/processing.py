@@ -137,7 +137,7 @@ def get_parameter(
             except KeyError:
 
                 pass
-            return parameter_results, element_list
+            
     elif parameter_type == "link":
         if element_list is None:
             element_list = list.copy(model["G_pipe_name_list"])
@@ -173,7 +173,6 @@ def get_parameter(
                     parameter_results = (
                         model["results"].link[parameter].iloc[value, indices]
                     )
-            return parameter_results, element_list
         except KeyError:
 
             parameter_results = model["wn"].query_link_attribute(parameter)
@@ -189,7 +188,7 @@ def get_parameter(
             indices = [elements_in_results.index(i) for i in element_list]
             parameter_results = parameter_results.iloc[indices]
 
-            return parameter_results, element_list
+    return parameter_results, element_list
 
 
 def get_demand_patterns(model):
@@ -197,9 +196,8 @@ def get_demand_patterns(model):
     demandPatterns = []
 
     patterns = model["wn"].pattern_name_list
-
-    patterns = np.append(patterns, "None")
-
+    patterns.append("None")
+    patterns = sorted(patterns)
     for junction in model["junc_names"]:
 
         try:
@@ -227,13 +225,11 @@ def get_demand_patterns(model):
                     junc_name
                 )
         counter += 1
-    for pattern in patterns:
 
-        if len(demand_pattern_nodes[pattern]) == 0:
-
-            patterns = np.delete(patterns, np.where(patterns == pattern))
-
-            del demand_pattern_nodes[pattern]
+    if len(demand_pattern_nodes['None'])==0:
+        patterns.remove("None")
+        del demand_pattern_nodes['None']
+       
     return demand_pattern_nodes, patterns
 
 

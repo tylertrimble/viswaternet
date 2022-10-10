@@ -25,7 +25,7 @@ def convert_excel(model, file, data_type, element_index, value_index):
         dataFile = os.path.join(dirname, file)
 
         df = pd.read_excel(dataFile, dtype=str)
-        bins = pd.unique(df.iloc[:, value_index])
+        bins = sorted(pd.unique(df.iloc[:, value_index]))
 
         for binName in bins:
 
