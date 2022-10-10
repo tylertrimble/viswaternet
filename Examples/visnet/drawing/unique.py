@@ -232,16 +232,22 @@ def plot_unique_data(
         parameter_results, node_list = processing.get_parameter(
             model, "node", parameter
         )
-
-        uniques = pd.unique(parameter_results)
-        uniques = sorted(uniques[uniques is not None])
+        
+        uniques=[]
+        
+        if any(i is not None for i in (parameter_results.values.tolist())):
+            uniques = pd.unique(parameter_results).tolist()
         binNames = []
-        if None in uniques:
+        if not uniques:
             pass
         else:
             for binName in uniques:
 
                 binNames.append(binName)
+                
+        if None in binNames:
+            binNames.remove(None)
+            
         binNames.append('No Tag')
         binnedResults = {}
 
