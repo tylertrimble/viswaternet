@@ -57,7 +57,8 @@ def plot_unique_data(
     font_size=15,
     font_color='k',
     legend_title_font_size=17,
-    draw_frame=False
+    draw_frame=False,
+    legend_sig_figs=3
 ):
 
     if parameter == "demand_patterns":
@@ -89,6 +90,10 @@ def plot_unique_data(
                 pumps=pumps,
                 loc=legend_loc_1,
                 loc2=legend_loc_2,
+                font_size=font_size,
+                font_color=font_color,
+                legend_title_font_size=legend_title_font_size,
+                draw_frame=draw_frame,
             )
         if savefig:
 
@@ -108,7 +113,7 @@ def plot_unique_data(
 
         for binName in uniques:
 
-            binNames = np.append(binNames, ("{:.4f}".format(binName)))
+            binNames = np.append(binNames, ("{:.{j}f}".format(binName,j=legend_sig_figs)))
         binnedResults = {}
 
         for binName in binNames:
@@ -117,7 +122,7 @@ def plot_unique_data(
             
         for link in link_list:
 
-            binnedResults["{:.4f}".format(parameter_results.loc[link])][link] = model[
+            binnedResults["{:.{j}f}".format(parameter_results.loc[link],j=legend_sig_figs)][link] = model[
                 "G_pipe_name_list"
             ].index(link)
         
@@ -156,7 +161,7 @@ def plot_unique_data(
                 font_size=font_size,
                 font_color=font_color,
                 legend_title_font_size=legend_title_font_size,
-                draw_frame=draw_frame
+                draw_frame=draw_frame,
             )
         if savefig:
 
@@ -228,6 +233,10 @@ def plot_unique_data(
                 pumps=pumps,
                 loc=legend_loc_1,
                 loc2=legend_loc_2,
+                font_size=font_size,
+                font_color=font_color,
+                legend_title_font_size=legend_title_font_size,
+                draw_frame=draw_frame,
             )
         if savefig:
 
@@ -294,6 +303,10 @@ def plot_unique_data(
                     pumps=pumps,
                     loc=legend_loc_1,
                     loc2=legend_loc_2,
+                    font_size=font_size,
+                    font_color=font_color,
+                    legend_title_font_size=legend_title_font_size,
+                    draw_frame=draw_frame,
                 )
             if savefig:
 
@@ -306,6 +319,7 @@ def plot_unique_data(
                 custom_data_values[0],
                 bin_list=bins,
                 bin_edge_num=bin_edge_num,
+                legend_sig_figs=legend_sig_figs
             )
 
             if parameter_type == "link":
@@ -365,6 +379,10 @@ def plot_unique_data(
                     pumps=pumps,
                     loc=legend_loc_1,
                     loc2=legend_loc_2,
+                    font_size=font_size,
+                    font_color=font_color,
+                    legend_title_font_size=legend_title_font_size,
+                    draw_frame=draw_frame,
                 )
             if savefig:
 
@@ -425,7 +443,15 @@ def plot_unique_data(
 
             if legend:
 
-                base.draw_legend(ax, title=legend_title, pumps=pumps, loc=legend_loc_1)
+                base.draw_legend(ax, 
+                                 title=legend_title, 
+                                 pumps=pumps, 
+                                 loc=legend_loc_1,
+                                 font_size=font_size,
+                                 font_color=font_color,
+                                 legend_title_font_size=legend_title_font_size,
+                                 draw_frame=draw_frame,
+                                 )
             if savefig:
 
                 save_fig(model, save_name=save_name)
@@ -495,6 +521,10 @@ def plot_unique_data(
                     pumps=pumps,
                     loc=legend_loc_1,
                     loc2=legend_loc_2,
+                    font_size=font_size,
+                    font_color=font_color,
+                    legend_title_font_size=legend_title_font_size,
+                    draw_frame=draw_frame,
                 )
             if savefig:
 
@@ -512,6 +542,7 @@ def plot_unique_data(
                 data["index"],
                 bin_list=bins,
                 bin_edge_num=bin_edge_num,
+                legend_sig_figs=legend_sig_figs
             )
 
             if parameter_type == "link":
@@ -571,6 +602,10 @@ def plot_unique_data(
                     pumps=pumps,
                     loc=legend_loc_1,
                     loc2=legend_loc_2,
+                    font_size=font_size,
+                    font_color=font_color,
+                    legend_title_font_size=legend_title_font_size,
+                    draw_frame=draw_frame,
                 )
             if savefig:
 
@@ -631,8 +666,17 @@ def plot_unique_data(
                     valves=valves,
                 )
             base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
-
-            base.draw_legend(ax, title=legend_title, pumps=pumps, loc=legend_loc_1)
+            if legend:
+                
+                base.draw_legend(ax, 
+                                 title=legend_title, 
+                                 pumps=pumps, 
+                                 loc=legend_loc_1,
+                                 font_size=font_size,
+                                 font_color=font_color,
+                                 legend_title_font_size=legend_title_font_size,
+                                 draw_frame=draw_frame,
+                                 )
 
             if savefig:
 

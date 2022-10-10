@@ -9,5 +9,3 @@ import warnings
 from visnet import utils
 from visnet import network
 from visnet import drawing
-
-warnings.filterwarnings("ignore")

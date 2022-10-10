@@ -11,75 +11,107 @@ import os
 from visnet.network import processing
 from visnet.drawing import discrete, continuous
 
-cbar=0
+cbar = 0
 
-def animate_plot(model,ax,function,fps=3,first_timestep=0,last_timestep=None,gif_save_name='gif',**kwargs):
-    
-    timesteps = int(model['wn'].options.time.duration/model['wn'].options.time.report_timestep)
+
+def animate_plot(
+    model,
+    ax,
+    function,
+    data_type,
+    parameter_type,
+    fps=3,
+    first_timestep=0,
+    last_timestep=None,
+    gif_save_name="gif",
+    **kwargs
+):
+
+    timesteps = int(
+        model["wn"].options.time.duration / model["wn"].options.time.report_timestep
+    )
     values = range(timesteps)
     if last_timestep is not None:
         values = values[first_timestep:last_timestep]
-    
+    print(function is discrete.plot_discrete_links)
     filenames = []
-    if function == continuous.plot_continuous_links or function == continuous.plot_continuous_nodes:
-        if kwargs.get('vmin',None) is None or kwargs.get('vmax',None) is None:
-            if function == continuous.plot_continuous_links:
-                parameter_results, link_list = processing.get_parameter(model,'link',kwargs.get('parameter'),kwargs.get('value',None))
-            if function == continuous.plot_continuous_nodes:
-                parameter_results, node_list = processing.get_parameter(model,'node',kwargs.get('parameter'),kwargs.get('value',None))
-            for value in np.min(parameter_results):   
+    if data_type == "continuous":
+        if kwargs.get("vmin", None) is None or kwargs.get("vmax", None) is None:
+            if parameter_type == "link":
+                parameter_results, link_list = processing.get_parameter(
+                    model, "link", kwargs.get("parameter"), kwargs.get("value", None)
+                )
+            if parameter_type == "node":
+                parameter_results, node_list = processing.get_parameter(
+                    model, "node", kwargs.get("parameter"), kwargs.get("value", None)
+                )
+            for value in np.min(parameter_results):
                 if value < -1e-5:
-                    if kwargs.get('vmin',None) is None:
-                        kwargs['vmin'] = -np.max(np.max(parameter_results))
-                    if kwargs.get('vmax',None) is None:
-                        kwargs['vmax'] = np.max(np.max(parameter_results))
+                    if kwargs.get("vmin", None) is None:
+                        kwargs["vmin"] = -np.max(np.max(parameter_results))
+                    if kwargs.get("vmax", None) is None:
+                        kwargs["vmax"] = np.max(np.max(parameter_results))
                     break
                 else:
-                    if kwargs.get('vmin',None) is None:
-                        kwargs['vmin'] = np.min(np.min(parameter_results))
-                    if kwargs.get('vmax',None) is None:
-                        kwargs['vmax'] = np.max(np.max(parameter_results))
-    if function == discrete.plot_discrete_links or function == discrete.plot_discrete_nodes:
-        kwargs['disable_bin_deleting'] = True
-        
-        if kwargs.get('bins',None) is None:
-            if function == discrete.plot_discrete_links:
-                parameter_results, link_list = processing.get_parameter(model,'link',kwargs.get('parameter'),kwargs.get('value',None))
-                
-            if function == discrete.plot_discrete_nodes:
-                parameter_results, node_list = processing.get_parameter(model,'node',kwargs.get('parameter'),kwargs.get('value',None))
-            
-            kwargs['bins'] = np.linspace(np.min(np.min(parameter_results)),np.max(np.max(parameter_results)),kwargs.get('bin_edge_num',5))
+                    if kwargs.get("vmin", None) is None:
+                        kwargs["vmin"] = np.min(np.min(parameter_results))
+                    if kwargs.get("vmax", None) is None:
+                        kwargs["vmax"] = np.max(np.max(parameter_results))
+    if data_type == "discrete":
+        kwargs["disable_bin_deleting"] = True
+
+        if kwargs.get("bins", None) is None:
+            if parameter_type == "link":
+                parameter_results, link_list = processing.get_parameter(
+                    model, "link", kwargs.get("parameter"), kwargs.get("value", None)
+                )
+            if parameter_type == "node":
+                parameter_results, node_list = processing.get_parameter(
+                    model, "node", kwargs.get("parameter"), kwargs.get("value", None)
+                )
+            kwargs["bins"] = np.linspace(
+                np.min(np.min(parameter_results)),
+                np.max(np.max(parameter_results)),
+                kwargs.get("bin_edge_num", 5),
+            )
+            print(len(kwargs["bins"]))
     for value in values:
-        
-        function(model,ax,value=value,**kwargs)
-        
-        
+
+        function(model, ax, value=value, **kwargs)
+
         handles, labels = [], []
-        
-        
-        plt.legend(handles, labels, title = 'Timestep ' + str(value*model['wn'].options.time.report_timestep) + " Seconds", loc='lower left',frameon=False)
-        
-        
-        plt.savefig(model['image_path'] + '\\' + str(value) + '.png')
-        
-        
-        filenames = np.append(filenames, model['image_path'] + '\\' + str(value) + '.png')
+
+        plt.legend(
+            handles,
+            labels,
+            title="Timestep "
+            + str(value * model["wn"].options.time.report_timestep)
+            + " Seconds",
+            loc="lower left",
+            frameon=False,
+        )
+
+        plt.savefig(model["image_path"] + "\\" + str(value) + ".png")
+
+        filenames = np.append(
+            filenames, model["image_path"] + "\\" + str(value) + ".png"
+        )
         ax.clear()
-        if function == continuous.plot_continuous_links or function == continuous.plot_continuous_nodes:
-           cbar.remove()
-        
+        if (
+            function == continuous.plot_continuous_links
+            or function == continuous.plot_continuous_nodes
+        ):
+            cbar.remove()
     # builds gif
-    with imageio.get_writer(model['image_path'] + '\\' + gif_save_name + '.gif', mode='I',fps=fps) as writer:
-        
+    with imageio.get_writer(
+        model["image_path"] + "\\" + gif_save_name + ".gif", mode="I", fps=fps
+    ) as writer:
+
         for filename in filenames:
-            
+
             image = imageio.imread(filename)
-            
-            
+
             writer.append_data(image)
-        
-        
         for filename in set(filenames):
-            
+
             os.remove(filename)

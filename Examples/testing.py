@@ -22,7 +22,7 @@ fig, ax = plt.subplots(figsize = (9,15))
 #Removes border from figure
 plt.box(False)
 #Creates discrete nodes plot of elevation. Doesn't draw reservoirs, tanks, pumps or valves
-visplot.plot_discrete_nodes(model, ax, parameter='elevation',font_size=11,legend_title='Elevation (ft)',legend_title_font_size=17)
+visplot.plot_discrete_nodes(model, ax, parameter='elevation',legend_sig_figs=2,font_size=11,legend_title='Elevation (ft)',legend_title_font_size=17)
 #%%
 def test_func(**kwargs):
     return kwargs

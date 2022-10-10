@@ -359,7 +359,8 @@ def plot_discrete_nodes(
     font_size=15,
     font_color='k',
     legend_title_font_size=17,
-    draw_frame=False
+    draw_frame=False,
+    legend_sig_figs=3
 ):
     """Plots discrete Nodes.
     Arguments:
@@ -411,6 +412,7 @@ def plot_discrete_nodes(
             bin_list=bins,
             bin_edge_num=bin_edge_num,
             disable_bin_deleting=disable_bin_deleting,
+            legend_sig_figs=legend_sig_figs
         )
 
         draw_discrete_nodes(
@@ -448,7 +450,7 @@ def plot_discrete_nodes(
                 font_size=font_size,
                 font_color=font_color,
                 legend_title_font_size=legend_title_font_size,
-                draw_frame=draw_frame
+                draw_frame=draw_frame,
             )
     if savefig:
 
@@ -482,7 +484,8 @@ def plot_discrete_links(
     font_size=15,
     font_color='k',
     legend_title_font_size=17,
-    draw_frame=False
+    draw_frame=False,
+    legend_sig_figs=3
 ):
     """Plots discrete Links.
     Arguments:
@@ -528,6 +531,7 @@ def plot_discrete_links(
             bin_list=bins,
             bin_edge_num=bin_edge_num,
             disable_bin_deleting=disable_bin_deleting,
+            legend_sig_figs=legend_sig_figs
         )
         draw_discrete_links(
             model,
@@ -563,7 +567,7 @@ def plot_discrete_links(
                 font_size=font_size,
                 font_color=font_color,
                 legend_title_font_size=legend_title_font_size,
-                draw_frame=draw_frame
+                draw_frame=draw_frame,
             )
     if savefig:
 
