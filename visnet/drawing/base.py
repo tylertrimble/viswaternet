@@ -128,7 +128,7 @@ def draw_base_elements(
             model["pos_dict"],
             ax=ax,
             edgelist=model["G_list_pumps_only"],
-            edge_color="b",
+            edge_color=pump_color,
             width=3,
             arrows=False,
         )
