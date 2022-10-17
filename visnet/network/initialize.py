@@ -8,7 +8,7 @@ import os
 import wntr
 
 
-def initialize_model(inp_file=None,network_model=None):
+def initialize_model(inp_file,network_model=None):
     """Initializes all variables needed to perform other plotting functions
         Arguments:
     inp_file: Takes a string. Directorty location of network input file. Ends with .inp"""
@@ -22,6 +22,8 @@ def initialize_model(inp_file=None,network_model=None):
     
     if network_model is not None:
         wn=network_model
+        inp_file = os.path.join(dirname, inp_file)
+        model["inp_file"] = inp_file
     else:
         inp_file = os.path.join(dirname, inp_file)
         model["inp_file"] = inp_file

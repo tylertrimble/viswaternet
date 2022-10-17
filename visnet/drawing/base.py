@@ -4,9 +4,12 @@ Created on Sun Oct  2 20:58:38 2022
 
 @author: Tyler
 """
+import numpy as np
 import networkx.drawing.nx_pylab as nxp
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from matplotlib.lines import Line2D
+
 from visnet.utils import save_fig
 
 
@@ -36,8 +39,11 @@ def draw_base_elements(
     valve_border_color='k',
     valve_border_width=1,
     pump_color='b',
+    pump_width=3,
     base_node_color='k',
-    base_link_color='k'
+    base_node_size=30,
+    base_link_color='k',
+    base_link_width=1
 ):
     """Draws nodes, links, resevoirs, tanks, pumps and valves without any data
     attached to them.
@@ -52,7 +58,7 @@ def draw_base_elements(
     if nodes:
 
         nxp.draw_networkx_nodes(
-            model["G"], model["pos_dict"], node_size=30, node_color=base_node_color
+            model["G"], model["pos_dict"], node_size=base_node_size, node_color=base_node_color
         )
     if reservoirs:
 
@@ -119,7 +125,11 @@ def draw_base_elements(
     if links:
 
         nxp.draw_networkx_edges(
-            model["G"], model["pos_dict"], ax=ax, arrows=False, edge_color=base_link_color
+            model["G"],
+            model["pos_dict"],
+            ax=ax, arrows=False,
+            edge_color=base_link_color,
+            width=base_link_width
         )
     if pumps:
 
@@ -129,7 +139,7 @@ def draw_base_elements(
             ax=ax,
             edgelist=model["G_list_pumps_only"],
             edge_color=pump_color,
-            width=3,
+            width=pump_width,
             arrows=False,
         )
 
@@ -147,6 +157,32 @@ def plot_basic_elements(
     save_name=None,
     legend=True,
     legend_loc="upper right",
+    font_size=15,
+    font_color='k',
+    legend_title_font_size=17,
+    draw_frame=False,
+    legend_sig_figs=3,
+    reservoir_size=200,
+    reservoir_color='k',
+    reservoir_shape='s',
+    reservoir_border_color=None,
+    reservoir_border_width=None,
+    tank_size=200,
+    tank_color='k',
+    tank_shape='d',
+    tank_border_color=None,
+    tank_border_width=None,
+    valve_size=200,
+    valve_color='orange',
+    valve_shape='P',
+    valve_border_color='k',
+    valve_border_width=1,
+    pump_color='b',
+    pump_width=3,
+    base_node_color='k',
+    base_node_size=30,
+    base_link_color='k',
+    base_link_width=1
 ):
     """Creates a basic plot, similar to the default seen in EPANET.
     Arguments:
@@ -162,12 +198,40 @@ def plot_basic_elements(
         links=links,
         valves=valves,
         pumps=pumps,
-        legend=True,
+        reservoir_size=reservoir_size,
+        reservoir_color=reservoir_color,
+        reservoir_shape=reservoir_shape,
+        reservoir_border_color=reservoir_border_color,
+        reservoir_border_width=reservoir_border_width,
+        tank_size=tank_size,
+        tank_color=tank_color,
+        tank_shape=tank_shape,
+        tank_border_color=tank_border_color,
+        tank_border_width=tank_border_width,
+        valve_size=valve_size,
+        valve_color=valve_color,
+        valve_shape=valve_shape,
+        valve_border_color=valve_border_color,
+        valve_border_width=valve_border_width,
+        pump_color=pump_color,
+        pump_width=pump_width,
+        base_node_color=base_node_color,
+        base_node_size=base_node_size,
+        base_link_color=base_link_color,
+        base_link_width=base_link_width
     )
 
     if legend:
 
-        draw_legend(ax, pumps=pumps, loc=legend_loc)
+        draw_legend(ax, 
+                    pumps=pumps, 
+                    loc=legend_loc,
+                    font_size=font_size,
+                    font_color=font_color,
+                    legend_title_font_size=legend_title_font_size,
+                    draw_frame=draw_frame,
+                    pump_color=pump_color,
+                    base_link_color=base_link_color)
     if savefig:
 
         save_fig(model, save_name=save_name)
@@ -184,6 +248,16 @@ def draw_legend(
     draw_frame=False,
     legend_title_font_size=17,
     font_color="k",
+    pump_color='b',
+    base_link_color='k',
+    node_sizes=None,
+    link_sizes=None,
+    element_size_bins=None,
+    element_size_legend_title=None,
+    element_size_legend_loc=None,
+    element_size_legend_labels=None,
+    draw_base_legend=True,
+    draw_bins_legend=True
 ):
     """Draws legend for basic elements.
     Arguments:
@@ -200,47 +274,103 @@ def draw_legend(
 
     if pumps:
 
-        patch1 = mpatches.Patch(color="blue", label="Pumps")
-        patch2 = mpatches.Patch(color="black", label="Pipes")
+        patch1 = mpatches.Patch(color=pump_color, label="Pumps")
+        patch2 = mpatches.Patch(color=base_link_color, label="Pipes")
 
         handles.extend([patch1, patch2])
     else:
-
-        patch = mpatches.Patch(color="black", label="Pipes")
-
+        patch = mpatches.Patch(color=base_link_color, label="Pipes")
+    
         handles.extend([patch])
+    
     if len(bin_list) != 0:
-
-        legend = ax.legend(
-            handles=handles[len(bin_list) :],
-            loc=loc,
-            fontsize=font_size,
-            labelcolor=font_color,
-            frameon=draw_frame,
-        )
-        ax.add_artist(legend)
-
-        legend2 = ax.legend(
-            title=title,
-            handles=handles[: len(bin_list)],
-            loc=loc2,
-            fontsize=font_size,
-            labelcolor=font_color,
-            title_fontsize=legend_title_font_size,
-            frameon=draw_frame,
-        )
-        plt.setp(legend2.get_title(), color=font_color)
-        ax.add_artist(legend2)
+        if draw_base_legend==True:
+            legend = ax.legend(
+                handles=handles[len(bin_list) :],
+                loc=loc,
+                fontsize=font_size,
+                labelcolor=font_color,
+                frameon=draw_frame,
+            )
+            legend._legend_box.align = "left"
+            ax.add_artist(legend)
+        if draw_bins_legend==True:
+            legend2 = ax.legend(
+                title=title,
+                handles=handles[: len(bin_list)],
+                loc=loc2,
+                fontsize=font_size,
+                labelcolor=font_color,
+                title_fontsize=legend_title_font_size,
+                frameon=draw_frame,
+            )
+            legend2._legend_box.align = "left"
+            plt.setp(legend2.get_title(), color=font_color)
+            ax.add_artist(legend2)
     else:
-
-        legend = ax.legend(
-            handles=handles,
-            loc=loc,
-            fontsize=font_size,
-            labelcolor=font_color,
-            frameon=False,
-        )
-        ax.add_artist(legend)
+        if draw_base_legend==True:
+            legend = ax.legend(
+                handles=handles,
+                loc=loc,
+                fontsize=font_size,
+                labelcolor=font_color,
+                frameon=False,
+            )
+            legend._legend_box.align = "left"
+            ax.add_artist(legend)
+    
+    if node_sizes is not None:
+        if len(node_sizes) > 1:
+            handles_2=[]
+            min_size=np.min(node_sizes)
+            max_size=np.max(node_sizes)
+            marker_sizes=np.linspace(min_size,max_size,element_size_bins)
+            print(marker_sizes)
+            for size,label in zip(marker_sizes,element_size_legend_labels):
+                handles_2.append(Line2D([],
+                                         [],
+                                         marker='.',
+                                         color='w',
+                                         label=label,
+                                         markerfacecolor='k',
+                                         markersize=np.sqrt(size)))
+            legend3 = ax.legend(
+                handles=handles_2,
+                title=element_size_legend_title,
+                loc=element_size_legend_loc,
+                fontsize=font_size,
+                title_fontsize=legend_title_font_size,
+                labelcolor=font_color,
+                frameon=False,
+                )
+            legend3._legend_box.align = "left"
+            ax.add_artist(legend3)
+    if link_sizes is not None:
+        if len(link_sizes) > 1:
+            handles_2=[]
+            min_size=np.min(link_sizes)
+            max_size=np.max(link_sizes)
+            marker_sizes=np.linspace(min_size,max_size,element_size_bins)
+            for size, label in zip(marker_sizes,element_size_legend_labels):
+                handles_2.append([Line2D([0],
+                                         [0],
+                                         marker='o',
+                                         color='w',
+                                         label=label,
+                                         markerfacecolor='k',
+                                         markersize=size)])
+            legend3 = ax.legend(
+                handles_2,
+                element_size_legend_labels,
+                title=element_size_legend_title,
+                loc=element_size_legend_loc,
+                fontsize=font_size,
+                title_fontsize=legend_title_font_size,
+                labelcolor=font_color,
+                frameon=False,
+                )
+            legend3._legend_box.align = "left"
+            ax.add_artist(legend3)
 
 
 def draw_color_bar(ax, g, cmap, color_bar_title=None):
@@ -251,11 +381,11 @@ def draw_color_bar(ax, g, cmap, color_bar_title=None):
     color_bar_title: Takes String. Title of Color Bar."""
 
     global cbar
-    cbar = plt.colorbar(g)
+    cbar = plt.colorbar(g,ax=ax,pad=0.04)
     cbar.set_label(color_bar_title, fontsize=15)
 
 
-def draw_label(model, ax, labels, x_coords, y_coords, nodes=None, draw_arrow=True):
+def draw_label(model, ax, labels, x_coords, y_coords, nodes=None, draw_arrow=True,label_font_size=11):
 
     if nodes is not None:
 
@@ -287,40 +417,53 @@ def draw_label(model, ax, labels, x_coords, y_coords, nodes=None, draw_arrow=Tru
                     model["G"].remove_node(label)
                     model["pos_dict"].pop(label, None)
                     edge_list.append((node, label))
-            if xCoord < 0:
-                plt.text(
+            if draw_arrow==True:
+                if xCoord < 0:
+                    ax.text(
+                        model["wn"].get_node(node).coordinates[0] + xCoord,
+                        model["wn"].get_node(node).coordinates[1] + yCoord,
+                        s=label,
+                        bbox=dict(
+                            facecolor="mediumaquamarine", alpha=0.9, edgecolor="black"
+                        ),
+                        horizontalalignment="right",
+                        verticalalignment="center",
+                        fontsize=label_font_size,
+                    )
+                if xCoord >= 0:
+                    ax.text(
+                        model["wn"].get_node(node).coordinates[0] + xCoord,
+                        model["wn"].get_node(node).coordinates[1] + yCoord,
+                        s=label,
+                        bbox=dict(
+                            facecolor="mediumaquamarine", alpha=0.9, edgecolor="black"
+                        ),
+                        horizontalalignment="left",
+                        verticalalignment="center",
+                        fontsize=label_font_size,
+                    )
+            else:
+                ax.text(
                     model["wn"].get_node(node).coordinates[0] + xCoord,
                     model["wn"].get_node(node).coordinates[1] + yCoord,
                     s=label,
                     bbox=dict(
                         facecolor="mediumaquamarine", alpha=0.9, edgecolor="black"
                     ),
-                    horizontalalignment="right",
+                    horizontalalignment="center",
                     verticalalignment="center",
-                    fontsize=11,
-                )
-            if xCoord >= 0:
-                plt.text(
-                    model["wn"].get_node(node).coordinates[0] + xCoord,
-                    model["wn"].get_node(node).coordinates[1] + yCoord,
-                    s=label,
-                    bbox=dict(
-                        facecolor="mediumaquamarine", alpha=0.9, edgecolor="black"
-                    ),
-                    horizontalalignment="left",
-                    verticalalignment="center",
-                    fontsize=11,
-                )
+                    fontsize=label_font_size,
+                    )
     elif nodes is None:
 
         for label, xCoord, yCoord in zip(labels, x_coords, y_coords):
 
-            plt.text(
+            ax.text(
                 xCoord,
                 yCoord,
                 s=label,
                 bbox=dict(facecolor="mediumaquamarine", alpha=0.9, edgecolor="black"),
-                horizontalalignment="right",
-                fontsize=11,
+                horizontalalignment="center",
+                fontsize=label_font_size,
                 transform=ax.transAxes,
             )
