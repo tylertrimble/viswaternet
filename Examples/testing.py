@@ -19,10 +19,12 @@ model['image_path'] = cwd + '\Images'
 #Defines a matplotlib figure and axis. The user can customize the size of the plot in this way.
 
 fig, ax = plt.subplots(figsize = (9,15))
+plt.title("Pipe Diameters for CTown Network")
 #Removes border from figure
 plt.box(False)
 #Creates discrete nodes plot of elevation. Doesn't draw reservoirs, tanks, pumps or valves
-visplot.plot_discrete_nodes(model, ax, parameter='pressure',value=5,legend_sig_figs=2,font_size=11,legend_title='Elevation (ft)',legend_title_font_size=17,reservoir_border_color='b',reservoir_border_width=2)
+visplot.plot_discrete_nodes(model,ax)
+visplot.plot_unique_data(model, ax, parameter='demand_patterns',value=5,legend_sig_figs=2,font_size=11,legend_title='Elevation (ft)',legend_title_font_size=17,reservoir_border_color='b',reservoir_border_width=2)
 #%%
 def test_func(**kwargs):
     return kwargs

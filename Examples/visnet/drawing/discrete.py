@@ -231,6 +231,7 @@ def draw_discrete_links(
                 nxp.draw_networkx_edges(
                     model["G"],
                     model["pos_dict"],
+                    ax=ax,
                     edgelist=[model["pipe_list"][0]],
                     edge_color=color_list[counter],
                     width=bin_width_list[counter],
@@ -243,6 +244,7 @@ def draw_discrete_links(
                 nxp.draw_networkx_edges(
                     model["G"],
                     model["pos_dict"],
+                    ax=ax,
                     edgelist=edge_list,
                     edge_color=color_list[counter],
                     width=bin_width_list[counter],
@@ -256,6 +258,7 @@ def draw_discrete_links(
                 nxp.draw_networkx_edges(
                     model["G"],
                     model["pos_dict"],
+                    ax=ax,
                     edgelist=edge_list,
                     edge_color=color_list[counter],
                     width=bin_width_list[counter],
@@ -278,6 +281,7 @@ def draw_discrete_links(
                 nxp.draw_networkx_edges(
                     model["G"],
                     model["pos_dict"],
+                    ax=ax,
                     edgelist=[model["pipe_list"][0]],
                     edge_color=[cmap(float(cmapValue))],
                     width=bin_width_list[counter],
@@ -291,6 +295,7 @@ def draw_discrete_links(
                     model["G"],
                     model["pos_dict"],
                     edgelist=edge_list,
+                    ax=ax,
                     edge_color=[cmap(float(cmapValue))],
                     width=bin_width_list[counter],
                     arrows=False,
@@ -317,6 +322,7 @@ def draw_discrete_links(
                 nxp.draw_networkx_edges(
                     model["G"],
                     model["pos_dict"],
+                    ax=ax,
                     edgelist=edge_list,
                     edge_color=[cmap2(float(cmapValue2))],
                     width=bin_width_list[counter],
@@ -376,8 +382,11 @@ def plot_discrete_nodes(
     valve_border_color='k',
     valve_border_width=1,
     pump_color='b',
+    pump_width=3,
     base_node_color='k',
-    base_link_color='k'
+    base_node_size=30,
+    base_link_color='k',
+    base_link_width=1
 ):
     """Plots discrete Nodes.
     Arguments:
@@ -470,8 +479,11 @@ def plot_discrete_nodes(
             valve_border_color=valve_border_color,
             valve_border_width=valve_border_width,
             pump_color=pump_color,
+            pump_width=pump_width,
             base_node_color=base_node_color,
-            base_link_color=base_link_color
+            base_node_size=base_node_size,
+            base_link_color=base_link_color,
+            base_link_width=base_link_width
         )
 
         if legend:
@@ -486,6 +498,8 @@ def plot_discrete_nodes(
                 font_color=font_color,
                 legend_title_font_size=legend_title_font_size,
                 draw_frame=draw_frame,
+                pump_color=pump_color,
+                base_link_color=base_link_color
             )
     if savefig:
 
@@ -537,8 +551,11 @@ def plot_discrete_links(
     valve_border_color='k',
     valve_border_width=1,
     pump_color='b',
+    pump_width=3,
     base_node_color='k',
-    base_link_color='k'
+    base_node_size=30,
+    base_link_color='k',
+    base_link_width=1
 ):
     """Plots discrete Links.
     Arguments:
@@ -576,7 +593,6 @@ def plot_discrete_links(
         )
         if unit is not None:
             parameter_results = unit_conversion(parameter_results, parameter, unit)
-        print(link_list)
         binnedResults, binNames = processing.bin_parameter(
             model,
             parameter_results,
@@ -596,7 +612,6 @@ def plot_discrete_links(
             cmap=cmap,
             color_list=color_list,
         )
-
         base.draw_base_elements(
             model,
             ax,
@@ -622,8 +637,11 @@ def plot_discrete_links(
             valve_border_color=valve_border_color,
             valve_border_width=valve_border_width,
             pump_color=pump_color,
+            pump_width=pump_width,
             base_node_color=base_node_color,
-            base_link_color=base_link_color
+            base_node_size=base_node_size,
+            base_link_color=base_link_color,
+            base_link_width=base_link_width
         )
 
         if legend:
@@ -639,6 +657,8 @@ def plot_discrete_links(
                 font_color=font_color,
                 legend_title_font_size=legend_title_font_size,
                 draw_frame=draw_frame,
+                pump_color=pump_color,
+                base_link_color=base_link_color
             )
     if savefig:
 

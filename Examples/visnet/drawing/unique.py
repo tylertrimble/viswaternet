@@ -59,6 +59,12 @@ def plot_unique_data(
     legend_title_font_size=17,
     draw_frame=False,
     legend_sig_figs=3,
+    element_size_bins=None,
+    element_size_legend_title=None,
+    element_size_legend_loc=None,
+    element_size_legend_labels=None,
+    draw_base_legend=True,
+    draw_bins_legend=True,
     reservoir_size=200,
     reservoir_color='k',
     reservoir_shape='s',
@@ -75,8 +81,11 @@ def plot_unique_data(
     valve_border_color='k',
     valve_border_width=1,
     pump_color='b',
+    pump_width=3,
     base_node_color='k',
-    base_link_color='k'
+    base_node_size=30,
+    base_link_color='k',
+    base_link_width=1
 ):
 
     if parameter == "demand_patterns":
@@ -120,8 +129,11 @@ def plot_unique_data(
                                 valve_border_color=valve_border_color,
                                 valve_border_width=valve_border_width,
                                 pump_color=pump_color,
+                                pump_width=pump_width,
                                 base_node_color=base_node_color,
-                                base_link_color=base_link_color)
+                                base_node_size=base_node_size,
+                                base_link_color=base_link_color,
+                                base_link_width=base_link_width)
 
         if legend:
 
@@ -136,6 +148,8 @@ def plot_unique_data(
                 font_color=font_color,
                 legend_title_font_size=legend_title_font_size,
                 draw_frame=draw_frame,
+                pump_color=pump_color,
+                base_link_color=base_link_color
             )
         if savefig:
 
@@ -205,8 +219,11 @@ def plot_unique_data(
             valve_border_color=valve_border_color,
             valve_border_width=valve_border_width,
             pump_color=pump_color,
+            pump_width=pump_width,
             base_node_color=base_node_color,
-            base_link_color=base_link_color
+            base_node_size=base_node_size,
+            base_link_color=base_link_color,
+            base_link_width=base_link_width
         )
 
         if legend:
@@ -222,6 +239,8 @@ def plot_unique_data(
                 font_color=font_color,
                 legend_title_font_size=legend_title_font_size,
                 draw_frame=draw_frame,
+                pump_color=pump_color,
+                base_link_color=base_link_color
             )
         if savefig:
 
@@ -302,8 +321,11 @@ def plot_unique_data(
             valve_border_color=valve_border_color,
             valve_border_width=valve_border_width,
             pump_color=pump_color,
+            pump_width=pump_width,
             base_node_color=base_node_color,
-            base_link_color=base_link_color
+            base_node_size=base_node_size,
+            base_link_color=base_link_color,
+            base_link_width=base_link_width
         )
 
         if legend:
@@ -319,6 +341,8 @@ def plot_unique_data(
                 font_color=font_color,
                 legend_title_font_size=legend_title_font_size,
                 draw_frame=draw_frame,
+                pump_color=pump_color,
+                base_link_color=base_link_color
             )
         if savefig:
 
@@ -366,8 +390,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             elif parameter_type == "node":
 
@@ -409,8 +436,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             if legend:
 
@@ -425,6 +455,8 @@ def plot_unique_data(
                     font_color=font_color,
                     legend_title_font_size=legend_title_font_size,
                     draw_frame=draw_frame,
+                    pump_color=pump_color,
+                    base_link_color=base_link_color
                 )
             if savefig:
 
@@ -478,8 +510,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             if parameter_type == "node":
 
@@ -521,8 +556,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             if legend:
 
@@ -537,6 +575,8 @@ def plot_unique_data(
                     font_color=font_color,
                     legend_title_font_size=legend_title_font_size,
                     draw_frame=draw_frame,
+                    pump_color=pump_color,
+                    base_link_color=base_link_color
                 )
             if savefig:
 
@@ -559,6 +599,8 @@ def plot_unique_data(
                     custom_data_values[0],
                     parameter_results=custom_data_values[1],
                     cmap=cmap,
+                    vmin=vmin,
+                    vmax=vmax,
                     widths=widths,
                 )
 
@@ -587,8 +629,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             elif parameter_type == "node":
 
@@ -599,6 +644,8 @@ def plot_unique_data(
                     parameter_results=custom_data_values[1],
                     node_size=node_size,
                     cmap=cmap,
+                    vmin=vmin,
+                    vmax=vmax,
                     node_shape=node_shape,
                 )
 
@@ -626,8 +673,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
 
@@ -641,6 +691,15 @@ def plot_unique_data(
                                  font_color=font_color,
                                  legend_title_font_size=legend_title_font_size,
                                  draw_frame=draw_frame,
+                                 pump_color=pump_color,
+                                 base_link_color=base_link_color,
+                                 node_sizes=node_size,
+                                 element_size_bins=element_size_bins,
+                                 element_size_legend_title=element_size_legend_title,
+                                 element_size_legend_loc=element_size_legend_loc,
+                                 element_size_legend_labels=element_size_legend_labels,
+                                 draw_base_legend= draw_base_legend,
+                                 draw_bins_legend=draw_bins_legend
                                  )
             if savefig:
 
@@ -692,8 +751,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             elif parameter_type == "node":
 
@@ -735,8 +797,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             if legend:
 
@@ -751,6 +816,8 @@ def plot_unique_data(
                     font_color=font_color,
                     legend_title_font_size=legend_title_font_size,
                     draw_frame=draw_frame,
+                    pump_color=pump_color,
+                    base_link_color=base_link_color
                 )
             if savefig:
 
@@ -809,8 +876,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             if parameter_type == "node":
 
@@ -852,8 +922,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             if legend:
 
@@ -868,6 +941,8 @@ def plot_unique_data(
                     font_color=font_color,
                     legend_title_font_size=legend_title_font_size,
                     draw_frame=draw_frame,
+                    pump_color=pump_color,
+                    base_link_color=base_link_color
                 )
             if savefig:
 
@@ -893,6 +968,8 @@ def plot_unique_data(
                     data["index"],
                     parameter_results=data["element_list"],
                     cmap=cmap,
+                    vmin=vmin,
+                    vmax=vmax,
                     widths=widths,
                 )
 
@@ -921,8 +998,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             elif parameter_type == "node":
 
@@ -933,6 +1013,8 @@ def plot_unique_data(
                     parameter_results=data["element_list"],
                     node_size=node_size,
                     cmap=cmap,
+                    vmin=vmin,
+                    vmax=vmax,
                     node_shape=node_shape,
                 )
 
@@ -960,8 +1042,11 @@ def plot_unique_data(
                     valve_border_color=valve_border_color,
                     valve_border_width=valve_border_width,
                     pump_color=pump_color,
+                    pump_width=pump_width,
                     base_node_color=base_node_color,
-                    base_link_color=base_link_color
+                    base_node_size=base_node_size,
+                    base_link_color=base_link_color,
+                    base_link_width=base_link_width
                 )
             base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
             if legend:
@@ -974,6 +1059,15 @@ def plot_unique_data(
                                  font_color=font_color,
                                  legend_title_font_size=legend_title_font_size,
                                  draw_frame=draw_frame,
+                                 pump_color=pump_color,
+                                 base_link_color=base_link_color,
+                                 node_sizes=node_size,
+                                 element_size_bins= element_size_bins,
+                                 element_size_legend_title=element_size_legend_title,
+                                 element_size_legend_loc=element_size_legend_loc,
+                                 element_size_legend_labels=element_size_legend_labels,
+                                 draw_base_legend= draw_base_legend,
+                                 draw_bins_legend=draw_bins_legend
                                  )
 
             if savefig:
