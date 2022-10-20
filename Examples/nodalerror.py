@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 #Initialize model
 
 #Special Labels
-fig, ax = plt.subplots(figsize=(10,15))
+fig, ax = plt.subplots(figsize=(12,12))
 
 
 wn = wntr.network.WaterNetworkModel(r'Networks\CTown.inp')
@@ -35,10 +35,13 @@ for _, junc in wn.junctions():
 visplot.plot_unique_data(model,
                              ax,
                              parameter='custom_data',
+                             node_size=200,
+                             line_widths=1,
+                             edge_colors='k',
                              parameter_type='node',
                              data_type='continuous',
                              custom_data_values=[element_list,error_list],
-                             color_bar_title='Mean Pressure',
+                             color_bar_title='Error (%)',
                              cmap='autumn_r')
 
 plt.show()

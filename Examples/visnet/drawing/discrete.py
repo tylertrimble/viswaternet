@@ -360,7 +360,7 @@ def plot_discrete_nodes(
     save_name=None,
     cmap=default_cmap,
     color_list=None,
-    disable_bin_deleting=False,
+    disable_bin_deleting=True,
     font_size=15,
     font_color='k',
     legend_title_font_size=17,
@@ -386,7 +386,9 @@ def plot_discrete_nodes(
     base_node_color='k',
     base_node_size=30,
     base_link_color='k',
-    base_link_width=1
+    base_link_width=1,
+    draw_base_legend=True,
+    draw_bins_legend=True
 ):
     """Plots discrete Nodes.
     Arguments:
@@ -499,7 +501,9 @@ def plot_discrete_nodes(
                 legend_title_font_size=legend_title_font_size,
                 draw_frame=draw_frame,
                 pump_color=pump_color,
-                base_link_color=base_link_color
+                base_link_color=base_link_color,
+                draw_base_legend=draw_base_legend,
+                draw_bins_legend=draw_bins_legend
             )
     if savefig:
 
@@ -529,7 +533,7 @@ def plot_discrete_links(
     legend_loc_2="lower right",
     savefig=True,
     save_name=None,
-    disable_bin_deleting=False,
+    disable_bin_deleting=True,
     font_size=15,
     font_color='k',
     legend_title_font_size=17,
@@ -555,7 +559,10 @@ def plot_discrete_links(
     base_node_color='k',
     base_node_size=30,
     base_link_color='k',
-    base_link_width=1
+    base_link_width=1,
+    draw_base_legend=True,
+    draw_bins_legend=True
+    
 ):
     """Plots discrete Links.
     Arguments:
@@ -658,7 +665,9 @@ def plot_discrete_links(
                 legend_title_font_size=legend_title_font_size,
                 draw_frame=draw_frame,
                 pump_color=pump_color,
-                base_link_color=base_link_color
+                base_link_color=base_link_color,
+                draw_base_legend=draw_base_legend,
+                draw_bins_legend=draw_bins_legend
             )
     if savefig:
 

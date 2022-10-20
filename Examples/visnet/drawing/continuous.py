@@ -297,7 +297,8 @@ def plot_continuous_nodes(
     base_node_color='k',
     base_node_size=30,
     base_link_color='k',
-    base_link_width=1
+    base_link_width=1,
+    draw_color_bar=True,
 ):
     """Plots continuous Nodes.
     Arguments:
@@ -376,8 +377,8 @@ def plot_continuous_nodes(
             base_link_color=base_link_color,
             base_link_width=base_link_width
         )
-
-        base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
+        if draw_color_bar == True:
+            base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
     if legend:
 
         base.draw_legend(ax, 
@@ -457,7 +458,8 @@ def plot_continuous_links(
     base_node_color='k',
     base_node_size=30,
     base_link_color='k',
-    base_link_width=1
+    base_link_width=1,
+    draw_color_bar=True,
 ):
     """Plots continuous Links.
     Arguments:
@@ -534,8 +536,9 @@ def plot_continuous_links(
             base_link_color=base_link_color,
             base_link_width=base_link_width
         )
-
-        base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
+        if draw_color_bar == True:
+            base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
+        
     if legend:
 
         base.draw_legend(ax, 

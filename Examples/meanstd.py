@@ -31,7 +31,7 @@ min_size=150
 max_size=150
 
 node_size = visutils.normalize_parameter(model,standard_deviation,min_size,max_size)
-print(node_size)
+
 binnedParameter, bin_names=visinit.bin_parameter(model,standard_deviation,element_list,5)
 
 bin_names=bin_names.tolist()

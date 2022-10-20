@@ -47,6 +47,8 @@ def plot_unique_data(
     legend_title=None,
     node_size=100,
     node_shape=".",
+    line_widths=None,
+    edge_colors=None,
     legend_loc_1="upper right",
     legend_loc_2="lower right",
     savefig=True,
@@ -85,7 +87,9 @@ def plot_unique_data(
     base_node_color='k',
     base_node_size=30,
     base_link_color='k',
-    base_link_width=1
+    base_link_width=1,
+    disable_bin_deleting=True,
+    draw_color_bar=True,
 ):
 
     if parameter == "demand_patterns":
@@ -104,6 +108,7 @@ def plot_unique_data(
             bin_border_width_list=bin_border_width_list,
             cmap=cmap,
             color_list=color_list,
+            disable_bin_deleting=disable_bin_deleting,
         )
 
         base.draw_base_elements(model, 
@@ -469,7 +474,8 @@ def plot_unique_data(
                 custom_data_values[0],
                 bin_list=bins,
                 bin_edge_num=bin_edge_num,
-                legend_sig_figs=legend_sig_figs
+                legend_sig_figs=legend_sig_figs,
+                disable_bin_deleting=disable_bin_deleting,
             )
 
             if parameter_type == "link":
@@ -647,6 +653,8 @@ def plot_unique_data(
                     vmin=vmin,
                     vmax=vmax,
                     node_shape=node_shape,
+                    line_widths= line_widths,
+                    edge_colors=edge_colors,
                 )
 
                 base.draw_base_elements(
@@ -679,7 +687,8 @@ def plot_unique_data(
                     base_link_color=base_link_color,
                     base_link_width=base_link_width
                 )
-            base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
+            if draw_color_bar==True:
+                base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
 
             if legend:
 
@@ -835,7 +844,8 @@ def plot_unique_data(
                 data["index"],
                 bin_list=bins,
                 bin_edge_num=bin_edge_num,
-                legend_sig_figs=legend_sig_figs
+                legend_sig_figs=legend_sig_figs,
+                disable_bin_deleting=disable_bin_deleting,
             )
 
             if parameter_type == "link":
@@ -1016,6 +1026,8 @@ def plot_unique_data(
                     vmin=vmin,
                     vmax=vmax,
                     node_shape=node_shape,
+                    line_widths= line_widths,
+                    edge_colors=edge_colors,
                 )
 
                 base.draw_base_elements(
@@ -1048,7 +1060,9 @@ def plot_unique_data(
                     base_link_color=base_link_color,
                     base_link_width=base_link_width
                 )
-            base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
+                
+            if draw_color_bar==True:
+                base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
             if legend:
                 
                 base.draw_legend(ax, 
