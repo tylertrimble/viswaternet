@@ -58,5 +58,4 @@ for i,(axes,tank,x_coord,y_coord) in enumerate(zip(ax_list,tanks,x_coords,y_coor
                        draw_arrow=False,
                        label_font_size=9
                        )
-    axes.set_aspect('equal')
 plt.show()

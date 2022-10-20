@@ -10,8 +10,9 @@ cwd = os.getcwd()
 model["image_path"] = cwd + "\Images"
 
 fig, ax = plt.subplots(figsize=(12, 12))
-
-ax.set_frame_on(False)
+standard_deviation, element_list = visinit.get_parameter(
+    model, "node", parameter="quality", value=112
+)
 
 visplot.plot_discrete_nodes(
     model,
