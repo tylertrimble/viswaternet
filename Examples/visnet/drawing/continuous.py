@@ -397,7 +397,9 @@ def plot_continuous_nodes(
                          element_size_legend_loc=element_size_legend_loc,
                          element_size_legend_labels=element_size_legend_labels,
                          draw_base_legend= draw_base_legend,
-                         draw_bins_legend=draw_bins_legend
+                         draw_bins_legend=draw_bins_legend,
+                         linewidths=line_widths,
+                         edgecolors=edge_colors,
                          )
     if savefig:
 

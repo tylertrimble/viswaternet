@@ -108,7 +108,6 @@ def plot_unique_data(
             bin_border_width_list=bin_border_width_list,
             cmap=cmap,
             color_list=color_list,
-            disable_bin_deleting=disable_bin_deleting,
         )
 
         base.draw_base_elements(model, 
