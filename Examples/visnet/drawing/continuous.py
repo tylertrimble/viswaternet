@@ -151,6 +151,14 @@ def draw_links(
         parameter_results = []
     if widths is None:
         widths = []
+    
+    if isinstance(widths, list) and len(widths) == 0:
+
+        widths = np.ones(len(widths)) * 100
+        
+    if isinstance(widths, int):
+        widths = np.ones(len(link_list)) * widths
+        
     edgeList = {}
 
     if len(widths) == 0:
@@ -258,6 +266,8 @@ def plot_continuous_nodes(
     cmap=default_cmap,
     color_bar_title=None,
     node_size=100,
+    min_size=None,
+    max_size=None,
     node_shape=".",
     edge_colors=None,
     line_widths=None,
@@ -333,6 +343,13 @@ def plot_continuous_nodes(
 
         if unit is not None:
             parameter_results = unit_conversion(parameter_results, parameter, unit)
+        if min_size is not None and max_size is not None:
+            normalized_parameter = normalize_parameter(
+                model, parameter_results, min_size, max_size
+            )
+
+            node_size = normalized_parameter
+            
         g = draw_nodes(
             model,
             ax,
@@ -413,8 +430,9 @@ def plot_continuous_links(
     element_list=None,
     value=None,
     unit=None,
-    min_width=1,
-    max_width=1,
+    widths=1,
+    min_width=None,
+    max_width=None,
     vmin=None,
     vmax=None,
     tanks=True,
@@ -553,7 +571,7 @@ def plot_continuous_links(
                          draw_frame=draw_frame,
                          pump_color=pump_color,
                          base_link_color=base_link_color,
-                         link_sizes=link_sizes,
+                         link_sizes=widths,
                          element_size_bins=element_size_bins,
                          element_size_legend_title=element_size_legend_title,
                          element_size_legend_loc=element_size_legend_loc,

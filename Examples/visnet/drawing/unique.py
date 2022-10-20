@@ -34,8 +34,11 @@ def plot_unique_data(
     bin_border_list=None,
     bin_border_width_list=None,
     color_list=None,
-    min_width=1,
-    max_width=1,
+    widths=1,
+    min_width=None,
+    max_width=None,
+    min_size=None,
+    max_size=None,
     vmin=None,
     vmax=None,
     tanks=True,
@@ -591,12 +594,12 @@ def plot_unique_data(
         if data_type == "continuous":
 
             if parameter_type == "link":
-
-                normalized_parameter = normalize_parameter(
-                    model, custom_data_values[1], min_width, max_width
-                )
-
-                widths = normalized_parameter
+                if min_width is not None and max_width is not None:
+                    normalized_parameter = normalize_parameter(
+                        model, custom_data_values[1], min_width, max_width
+                    )
+    
+                    widths = normalized_parameter
 
                 g = continuous.draw_links(
                     model,
@@ -641,7 +644,12 @@ def plot_unique_data(
                     base_link_width=base_link_width
                 )
             elif parameter_type == "node":
-
+                if min_size is not None and max_size is not None:
+                    normalized_parameter = normalize_parameter(
+                        model, custom_data_values[1], min_size, max_size
+                    )
+    
+                    node_size = normalized_parameter
                 g = continuous.draw_nodes(
                     model,
                     ax,
@@ -701,6 +709,7 @@ def plot_unique_data(
                                  draw_frame=draw_frame,
                                  pump_color=pump_color,
                                  base_link_color=base_link_color,
+                                 link_sizes=widths,
                                  node_sizes=node_size,
                                  element_size_bins=element_size_bins,
                                  element_size_legend_title=element_size_legend_title,
@@ -965,11 +974,12 @@ def plot_unique_data(
 
             if parameter_type == "link":
 
-                normalized_parameter = normalize_parameter(
-                    model, data["element_list"], min_width, max_width
-                )
-
-                widths = normalized_parameter
+                if min_width is not None and max_width is not None:
+                    normalized_parameter = normalize_parameter(
+                        model, custom_data_values[1], min_width, max_width
+                    )
+    
+                    widths = normalized_parameter
 
                 g = continuous.draw_links(
                     model,
@@ -1014,7 +1024,12 @@ def plot_unique_data(
                     base_link_width=base_link_width
                 )
             elif parameter_type == "node":
-
+                if min_size is not None and max_size is not None:
+                    normalized_parameter = normalize_parameter(
+                        model, custom_data_values[1], min_size, max_size
+                    )
+    
+                    node_size = normalized_parameter
                 g = continuous.draw_nodes(
                     model,
                     ax,
@@ -1075,6 +1090,7 @@ def plot_unique_data(
                                  pump_color=pump_color,
                                  base_link_color=base_link_color,
                                  node_sizes=node_size,
+                                 link_sizes=widths,
                                  element_size_bins= element_size_bins,
                                  element_size_legend_title=element_size_legend_title,
                                  element_size_legend_loc=element_size_legend_loc,

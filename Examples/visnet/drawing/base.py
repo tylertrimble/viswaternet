@@ -324,7 +324,7 @@ def draw_legend(
             ax.add_artist(legend)
             
     if node_sizes is not None:
-        if len(node_sizes) > 1:
+        if isinstance(node_sizes,list):
             handles_2=[]
             min_size=np.min(node_sizes)
             max_size=np.max(node_sizes)
@@ -352,20 +352,21 @@ def draw_legend(
             legend3._legend_box.align = "left"
             ax.add_artist(legend3)
     if link_sizes is not None:
-        if len(link_sizes) > 1:
+        if isinstance(link_sizes,list):
             handles_2=[]
             min_size=np.min(link_sizes)
             max_size=np.max(link_sizes)
             marker_sizes=np.linspace(min_size,max_size,element_size_bins)
-            for size, label in zip(marker_sizes,element_size_legend_labels):
-                handles_2.append([Line2D([0],
-                                         [0],
-                                         color='w',
-                                         label=label,
-                                         markersize=size)])
+            print(marker_sizes)
+            for size,label in zip(marker_sizes,element_size_legend_labels):
+                handles_2.append(Line2D([],
+                                         [],
+                                         marker=None,
+                                         color='k',
+                                         linewidth=size,
+                                         label=label))
             legend3 = ax.legend(
-                handles_2,
-                element_size_legend_labels,
+                handles=handles_2,
                 title=element_size_legend_title,
                 loc=element_size_legend_loc,
                 fontsize=font_size,
