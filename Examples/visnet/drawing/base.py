@@ -385,9 +385,9 @@ def draw_color_bar(ax, g, cmap, color_bar_title=None):
     color_bar_title: Takes String. Title of Color Bar."""
 
     global cbar
-    divider = make_axes_locatable(ax)
-    ax.set_aspect('equal')
-    cax = divider.append_axes("right", size="5%", pad=0.05)
+    fig=plt.gcf()
+    ax.set_aspect('auto')
+    cax = fig.add_axes([0.9,0.2, 0.03, 0.6])
     cbar = plt.colorbar(g,cax=cax)
     cbar.set_label(color_bar_title, fontsize=10)
 

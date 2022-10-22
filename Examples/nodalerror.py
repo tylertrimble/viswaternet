@@ -11,10 +11,12 @@ import visnet.network as visinit
 import visnet.drawing as visplot
 import random
 import matplotlib.pyplot as plt
-#Initialize model
 
-#Special Labels
-fig, ax = plt.subplots(figsize=(12,12))
+# Define figure to be drawn to
+fig, ax = plt.subplots(figsize=(12, 12))  
+
+# Disables frame around figure
+ax.set_frame_on(False)
 
 
 wn = wntr.network.WaterNetworkModel(r'Networks\CTown.inp')
@@ -42,6 +44,7 @@ visplot.plot_unique_data(model,
                              data_type='continuous',
                              custom_data_values=[element_list,error_list],
                              color_bar_title='Error (%)',
-                             cmap='autumn_r')
+                             cmap='bwr',
+                             draw_color_bar=True)
 
 plt.show()

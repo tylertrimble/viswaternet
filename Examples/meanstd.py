@@ -2,12 +2,14 @@ import visnet.network as visinit
 import visnet.drawing as visplot
 import matplotlib.pyplot as plt
 
-# Initialize model
-model = visinit.initialize_model("Networks\CTown.inp")
+# Run EPANET2.0 Simulation and store results
+model = visinit.initialize_model(r"Networks\CTown.inp")  
 
+# Define figure to be drawn to
+fig, ax = plt.subplots(figsize=(12, 12))  
 
-# Special Labels
-fig, ax = plt.subplots(figsize=(12, 12))
+# Disables frame around figure
+ax.set_frame_on(False)
 
 mean, element_list = visinit.get_parameter(
     model, "node", parameter="pressure", value="mean"

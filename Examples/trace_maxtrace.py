@@ -38,4 +38,13 @@ visplot.plot_discrete_nodes(model,
                          valves=False,
                          pumps=False,
                          disable_bin_deleting=True)
+visplot.draw_label(model,
+                   ax,
+                   labels=['T3'],
+                   x_coords=[0],
+                   y_coords=[-150],
+                   nodes=['T3'],
+                   draw_arrow=False,
+                   label_font_size=9
+                   )
 plt.show()

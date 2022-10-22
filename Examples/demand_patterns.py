@@ -26,6 +26,8 @@ visplot.plot_unique_data(
     model,
     ax,
     parameter="demand_patterns",
+    bin_size_list=[300,300,300,300,300,300],
+    bin_label_list=['Pattern 1','Pattern 2','Pattern 3','Pattern 4','Pattern 5', 'No Pattern'],
     cmap="Dark2",
     legend_loc_2="lower left",
     legend_title="Demand Patterns",

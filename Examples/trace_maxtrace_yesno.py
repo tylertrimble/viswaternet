@@ -21,21 +21,32 @@ model = visinit.initialize_model(r'Networks\CTown.inp',network_model=wn)
 
 wn.options.quality.parameter = 'TRACE'
 
-# Define figure to be drawn to
-fig, ax = plt.subplots(figsize=(12, 12))  
-
-# Disables frame around figure
-ax.set_frame_on(False)
+fig, ax= plt.subplots(figsize=(12,12))
 
 wn.options.quality.trace_node = "T3"
 model = visinit.initialize_model(r'Networks\CTown.inp',network_model=wn)
+
 visplot.plot_discrete_nodes(model, 
                          ax, 
                          parameter='quality',
                          value='max',
+                         unit='hr',
+                         bin_edge_num=2,
+                         bins=[0,0.00001],
+                         bin_label_list=['No', 'Yes'],
+                         color_list=['k','r'],
                          legend_loc_2='lower left',
-                         legend_title='Max Trace (%)',
+                         legend_title='Trace From T3',
                          valves=False,
                          pumps=False,
                          disable_bin_deleting=True)
+visplot.draw_label(model,
+                   ax,
+                   labels=['T3'],
+                   x_coords=[0],
+                   y_coords=[-150],
+                   nodes=['T3'],
+                   draw_arrow=False,
+                   label_font_size=9
+                   )
 plt.show()

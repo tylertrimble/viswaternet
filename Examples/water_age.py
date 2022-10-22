@@ -4,29 +4,29 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import os
 
-model = visinit.initialize_model(r"Networks\CTown.inp")
+# Run EPANET2.0 Simulation and store results
+model = visinit.initialize_model(r"Networks\CTown.inp")  
 
-cwd = os.getcwd()
-model["image_path"] = cwd + "\Images"
+# Define figure to be drawn to
+fig, ax = plt.subplots(figsize=(12, 12))  
 
-fig, ax = plt.subplots(figsize=(12, 12))
-standard_deviation, element_list = visinit.get_parameter(
-    model, "node", parameter="quality", value=112
-)
+# Disables frame around figure
+ax.set_frame_on(False)
 
 visplot.plot_discrete_nodes(
     model,
     ax,
     parameter="quality",
-    value=112,
+    value='max',
     unit="hr",
     bin_edge_num=5,
+    bins=[0,6,12,24],
     bin_size_list=[100, 150, 250, 400], #Node sizes
     bin_border_list=["k", "k", "k", "k"],
     bin_border_width_list=[1, 1, 1, 1],
-    cmap='Blues',
+    cmap='Greens',
     legend_loc_2="lower left",
-    legend_title="Water Age (hr) at 28 Hours",
+    legend_title="Max Water Age (hr)",
     font_color="k",
     legend_title_font_size="16",
     legend_sig_figs=0, #No decimal places
