@@ -19,8 +19,8 @@ fig, ax = plt.subplots(figsize=(12, 12))
 ax.set_frame_on(False)
 
 
-wn = wntr.network.WaterNetworkModel(r'Networks\CTown.inp')
-model = visinit.initialize_model(r'Networks\CTown.inp',network_model=wn)
+wn = wntr.network.WaterNetworkModel(r'Networks/CTown.inp')
+model = visinit.initialize_model(r'Networks/CTown.inp',network_model=wn)
 random.seed(1)
 error_list = []
 element_list=wn.junction_name_list

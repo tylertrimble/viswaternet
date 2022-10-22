@@ -9,6 +9,8 @@ import networkx.drawing.nx_pylab as nxp
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.lines import Line2D
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
 
 from visnet.utils import save_fig
 
@@ -257,7 +259,9 @@ def draw_legend(
     element_size_legend_loc=None,
     element_size_legend_labels=None,
     draw_base_legend=True,
-    draw_bins_legend=True
+    draw_bins_legend=True,
+    edge_colors='k',
+    linewidths=1
 ):
     """Draws legend for basic elements.
     Arguments:
@@ -318,9 +322,9 @@ def draw_legend(
             )
             legend._legend_box.align = "left"
             ax.add_artist(legend)
-    
+            
     if node_sizes is not None:
-        if len(node_sizes) > 1:
+        if isinstance(node_sizes,list):
             handles_2=[]
             min_size=np.min(node_sizes)
             max_size=np.max(node_sizes)
@@ -331,6 +335,8 @@ def draw_legend(
                                          [],
                                          marker='.',
                                          color='w',
+                                         markeredgecolor=edge_colors,
+                                         markeredgewidth=linewidths,
                                          label=label,
                                          markerfacecolor='k',
                                          markersize=np.sqrt(size)))
@@ -346,22 +352,21 @@ def draw_legend(
             legend3._legend_box.align = "left"
             ax.add_artist(legend3)
     if link_sizes is not None:
-        if len(link_sizes) > 1:
+        if isinstance(link_sizes,list):
             handles_2=[]
             min_size=np.min(link_sizes)
             max_size=np.max(link_sizes)
             marker_sizes=np.linspace(min_size,max_size,element_size_bins)
-            for size, label in zip(marker_sizes,element_size_legend_labels):
-                handles_2.append([Line2D([0],
-                                         [0],
-                                         marker='o',
-                                         color='w',
-                                         label=label,
-                                         markerfacecolor='k',
-                                         markersize=size)])
+            print(marker_sizes)
+            for size,label in zip(marker_sizes,element_size_legend_labels):
+                handles_2.append(Line2D([],
+                                         [],
+                                         marker=None,
+                                         color='k',
+                                         linewidth=size,
+                                         label=label))
             legend3 = ax.legend(
-                handles_2,
-                element_size_legend_labels,
+                handles=handles_2,
                 title=element_size_legend_title,
                 loc=element_size_legend_loc,
                 fontsize=font_size,
@@ -372,7 +377,6 @@ def draw_legend(
             legend3._legend_box.align = "left"
             ax.add_artist(legend3)
 
-
 def draw_color_bar(ax, g, cmap, color_bar_title=None):
     """Draws Color Bar.
     Arguments:
@@ -381,8 +385,11 @@ def draw_color_bar(ax, g, cmap, color_bar_title=None):
     color_bar_title: Takes String. Title of Color Bar."""
 
     global cbar
-    cbar = plt.colorbar(g,ax=ax,pad=0.04)
-    cbar.set_label(color_bar_title, fontsize=15)
+    fig=plt.gcf()
+    ax.set_aspect('auto')
+    cax = fig.add_axes([0.9,0.2, 0.03, 0.6])
+    cbar = plt.colorbar(g,cax=cax)
+    cbar.set_label(color_bar_title, fontsize=10)
 
 
 def draw_label(model, ax, labels, x_coords, y_coords, nodes=None, draw_arrow=True,label_font_size=11):

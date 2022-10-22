@@ -151,6 +151,14 @@ def draw_links(
         parameter_results = []
     if widths is None:
         widths = []
+    
+    if isinstance(widths, list) and len(widths) == 0:
+
+        widths = np.ones(len(widths)) * 100
+        
+    if isinstance(widths, int):
+        widths = np.ones(len(link_list)) * widths
+        
     edgeList = {}
 
     if len(widths) == 0:
@@ -258,6 +266,8 @@ def plot_continuous_nodes(
     cmap=default_cmap,
     color_bar_title=None,
     node_size=100,
+    min_size=None,
+    max_size=None,
     node_shape=".",
     edge_colors=None,
     line_widths=None,
@@ -277,16 +287,16 @@ def plot_continuous_nodes(
     element_size_legend_labels=None,
     draw_base_legend=True,
     draw_bins_legend=True,
-    reservoir_size=200,
-    reservoir_color='k',
+    reservoir_size=150,
+    reservoir_color='b',
     reservoir_shape='s',
-    reservoir_border_color=None,
-    reservoir_border_width=None,
+    reservoir_border_color='k',
+    reservoir_border_width=3,
     tank_size=200,
-    tank_color='k',
-    tank_shape='d',
-    tank_border_color=None,
-    tank_border_width=None,
+    tank_color='b',
+    tank_shape='h',
+    tank_border_color='k',
+    tank_border_width=2,
     valve_size=200,
     valve_color='orange',
     valve_shape='P',
@@ -297,7 +307,8 @@ def plot_continuous_nodes(
     base_node_color='k',
     base_node_size=30,
     base_link_color='k',
-    base_link_width=1
+    base_link_width=1,
+    draw_color_bar=True,
 ):
     """Plots continuous Nodes.
     Arguments:
@@ -332,6 +343,13 @@ def plot_continuous_nodes(
 
         if unit is not None:
             parameter_results = unit_conversion(parameter_results, parameter, unit)
+        if min_size is not None and max_size is not None:
+            normalized_parameter = normalize_parameter(
+                model, parameter_results, min_size, max_size
+            )
+
+            node_size = normalized_parameter
+            
         g = draw_nodes(
             model,
             ax,
@@ -376,8 +394,8 @@ def plot_continuous_nodes(
             base_link_color=base_link_color,
             base_link_width=base_link_width
         )
-
-        base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
+        if draw_color_bar == True:
+            base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
     if legend:
 
         base.draw_legend(ax, 
@@ -396,7 +414,9 @@ def plot_continuous_nodes(
                          element_size_legend_loc=element_size_legend_loc,
                          element_size_legend_labels=element_size_legend_labels,
                          draw_base_legend= draw_base_legend,
-                         draw_bins_legend=draw_bins_legend
+                         draw_bins_legend=draw_bins_legend,
+                         linewidths=line_widths,
+                         edgecolors=edge_colors,
                          )
     if savefig:
 
@@ -410,8 +430,9 @@ def plot_continuous_links(
     element_list=None,
     value=None,
     unit=None,
-    min_width=1,
-    max_width=1,
+    widths=1,
+    min_width=None,
+    max_width=None,
     vmin=None,
     vmax=None,
     tanks=True,
@@ -437,16 +458,16 @@ def plot_continuous_links(
     element_size_legend_labels=None,
     draw_base_legend=True,
     draw_bins_legend=True,
-    reservoir_size=200,
-    reservoir_color='k',
+    reservoir_size=150,
+    reservoir_color='b',
     reservoir_shape='s',
-    reservoir_border_color=None,
-    reservoir_border_width=None,
+    reservoir_border_color='k',
+    reservoir_border_width=3,
     tank_size=200,
-    tank_color='k',
-    tank_shape='d',
-    tank_border_color=None,
-    tank_border_width=None,
+    tank_color='b',
+    tank_shape='h',
+    tank_border_color='k',
+    tank_border_width=2,
     valve_size=200,
     valve_color='orange',
     valve_shape='P',
@@ -457,7 +478,8 @@ def plot_continuous_links(
     base_node_color='k',
     base_node_size=30,
     base_link_color='k',
-    base_link_width=1
+    base_link_width=1,
+    draw_color_bar=True,
 ):
     """Plots continuous Links.
     Arguments:
@@ -534,8 +556,9 @@ def plot_continuous_links(
             base_link_color=base_link_color,
             base_link_width=base_link_width
         )
-
-        base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
+        if draw_color_bar == True:
+            base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
+        
     if legend:
 
         base.draw_legend(ax, 
@@ -548,7 +571,7 @@ def plot_continuous_links(
                          draw_frame=draw_frame,
                          pump_color=pump_color,
                          base_link_color=base_link_color,
-                         link_sizes=link_sizes,
+                         link_sizes=widths,
                          element_size_bins=element_size_bins,
                          element_size_legend_title=element_size_legend_title,
                          element_size_legend_loc=element_size_legend_loc,

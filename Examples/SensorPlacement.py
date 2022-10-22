@@ -9,7 +9,7 @@ import visnet as vis
 import matplotlib.pyplot as plt
 
 #Initialize model
-model = vis.network.initialize_model('Networks\CTown.inp')
+model = vis.network.initialize_model('Networks/CTown.inp')
 
 fig, ax = plt.subplots(figsize=(10,15))
 #Removes border from figure

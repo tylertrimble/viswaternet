@@ -3,7 +3,7 @@ import visnet.drawing as visplot
 import matplotlib.pyplot as plt
 
 # Run EPANET2.0 Simulation and store results
-model = visinit.initialize_model(r"Networks\CTown.inp")  
+model = visinit.initialize_model(r"Networks/CTown.inp")  
 
 # Define figure to be drawn to
 fig, ax = plt.subplots(figsize=(12, 12))  

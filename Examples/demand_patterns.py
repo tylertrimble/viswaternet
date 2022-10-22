@@ -16,7 +16,7 @@ import visnet.drawing as visplot
 import matplotlib.pyplot as plt
 import os
 
-model = visinit.initialize_model(r'Networks\CTown.inp')
+model = visinit.initialize_model(r'Networks/CTown.inp')
 
 fig, ax = plt.subplots(figsize=(12,12))
 
