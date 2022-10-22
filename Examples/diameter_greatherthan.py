@@ -24,8 +24,8 @@ visplot.plot_discrete_links(
     parameter="diameter", 
     unit="in", 
     bin_edge_num=2,
-    bins=[0,12],
-    bin_label_list=["< 12","> 12"],
+    bins=[0,11.999],
+    bin_label_list=["< 12",">= 12"],
     bin_width_list=[1,5],
     color_list=['k','r'],
     cmap="Blues", #Controls link widths
