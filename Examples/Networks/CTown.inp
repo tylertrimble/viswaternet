@@ -1032,38 +1032,38 @@
 
 [CURVES]
 ;ID              	X-Value     	Y-Value
-;PUMP: PUMP: PUMP: UNKNOWN: 6
+;PUMP: PUMP: PUMP: PUMP: UNKNOWN: 6
  6               	16.888890   	156.700000  
  6               	19.500000   	146.500000  
  6               	22.138890   	136.200000  
  6               	25.944450   	117.900000  
  6               	33.333340   	50.000000   
-;PUMP: PUMP: PUMP: UNKNOWN: 7
+;PUMP: PUMP: PUMP: PUMP: UNKNOWN: 7
  7               	18.250000   	75.000000   
  7               	23.388890   	64.000000   
  7               	30.638890   	46.000000   
  7               	38.888890   	0.000000    
-;PUMP: PUMP: PUMP: UNKNOWN: 4
+;PUMP: PUMP: PUMP: PUMP: UNKNOWN: 4
  4               	30.122220   	221.760000  
  4               	37.636120   	202.410000  
  4               	43.730560   	182.160000  
  4               	47.222230   	160.000000  
-;PUMP: PUMP: PUMP: UNKNOWN: 5
+;PUMP: PUMP: PUMP: PUMP: UNKNOWN: 5
  5               	31.913890   	217.270000  
  5               	37.877780   	201.910000  
  5               	42.552780   	187.150000  
  5               	50.000000   	140.000000  
-;PUMP: PUMP: PUMP: UNKNOWN: 2
+;PUMP: PUMP: PUMP: PUMP: UNKNOWN: 2
  2               	9.888889    	72.200000   
  2               	12.527780   	62.300000   
  2               	13.333330   	57.900000   
  2               	18.055560   	0.000000    
-;PUMP: PUMP: PUMP: UNKNOWN: 3
+;PUMP: PUMP: PUMP: PUMP: UNKNOWN: 3
  3               	11.302780   	76.590000   
  3               	12.658330   	68.190000   
  3               	14.030560   	60.290000   
  3               	18.055560   	0.000000    
-;PUMP: PUMP: PUMP: UNKNOWN: 1
+;PUMP: PUMP: PUMP: PUMP: UNKNOWN: 1
  1               	3.997222    	64.860000   
  1               	41.905560   	48.480000   
  1               	56.136110   	43.960000   
@@ -1071,19 +1071,19 @@
  1               	77.294450   	34.530000   
  1               	97.661110   	28.830000   
  1               	138.888900  	1.000000    
-;PUMP: PUMP: PUMP: PUMP: 8
+;PUMP: PUMP: PUMP: PUMP: PUMP: 8
  8               	0.000000    	70.000000   
  8               	60.000000   	50.000000   
  8               	100.000000  	30.000000   
-;PUMP: PUMP: PUMP: PUMP: 9
+;PUMP: PUMP: PUMP: PUMP: PUMP: 9
  9               	0.000000    	90.000000   
  9               	30.000000   	70.000000   
  9               	50.000000   	30.000000   
-;PUMP: PUMP: PUMP: PUMP: 10
+;PUMP: PUMP: PUMP: PUMP: PUMP: 10
  10              	0.000000    	120.000000  
  10              	30.000000   	110.000000  
  10              	70.000000   	30.000000   
-;PUMP: PUMP: PUMP: PUMP: 11
+;PUMP: PUMP: PUMP: PUMP: PUMP: 11
  11              	0.000000    	90.000000   
  11              	30.000000   	50.000000   
  11              	40.000000   	10.000000   
@@ -1113,7 +1113,9 @@ Pump PU11 Closed IF Tank T7 above 3.0
 
 
 
+
 [RULES]
+
 
 
 
@@ -1160,7 +1162,7 @@ Pump PU11 Closed IF Tank T7 above 3.0
 ;Tank            	Model
 
 [TIMES]
- Duration           	48:00 
+ Duration           	168:00
  Hydraulic Timestep 	0:15 
  Quality Timestep   	0:05 
  Pattern Timestep   	1:00 

@@ -14,14 +14,13 @@ Created on Sat Oct  8 16:36:38 2022
 import visnet.network as visinit
 import visnet.drawing as visplot
 import matplotlib.pyplot as plt
-import os
 
 model = visinit.initialize_model(r'Networks/CTown.inp')
 
 fig, ax = plt.subplots(figsize=(12,12))
 
 ax.set_frame_on(False);
-
+#Plot demand pattern for each node
 visplot.plot_unique_data(
     model,
     ax,
