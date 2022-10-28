@@ -13,14 +13,14 @@ wn = wntr.network.WaterNetworkModel(r"Networks/CTown.inp")
 wn.options.quality.parameter = "TRACE"
 wn.options.quality.trace_node = "T1"
 model = visinit.initialize_model(r"Networks/CTown.inp", network_model=wn)
-
+#Plots trace quality parameter
 visplot.plot_discrete_nodes(
     model,ax,
     parameter="quality",value="max",
     legend_loc_2="lower left",legend_title="Max Trace from T1 (%)",
     valves=False,pumps=False,
-    disable_bin_deleting=True,
 )
+#Draws label over tank T1
 visplot.draw_label(
     model,ax,
     labels=["T1"],nodes=["T1"],
