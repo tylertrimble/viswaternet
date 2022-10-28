@@ -12,7 +12,7 @@ fig, ax = plt.subplots(figsize=(12, 12))
 # Disables frame around figure
 ax.set_frame_on(False)
 
-
+#Plots pipe diameters
 visplot.plot_unique_data(
     model, ax, 
     parameter="diameter", 
