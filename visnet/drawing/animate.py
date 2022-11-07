@@ -10,12 +10,13 @@ import imageio
 import os
 from visnet.network import processing
 from visnet.drawing import discrete, continuous
+from visnet.utils import unit_conversion
 
 cbar = 0
 
 
 def animate_plot(
-    model,
+    self,
     ax,
     function,
     data_type,
@@ -24,9 +25,10 @@ def animate_plot(
     first_timestep=0,
     last_timestep=None,
     gif_save_name="gif",
+    unit='s',
     **kwargs
 ):
-
+    model=self.model
     timesteps = int(
         model["wn"].options.time.duration / model["wn"].options.time.report_timestep
     )
@@ -39,11 +41,11 @@ def animate_plot(
         if kwargs.get("vmin", None) is None or kwargs.get("vmax", None) is None:
             if parameter_type == "link":
                 parameter_results, link_list = processing.get_parameter(
-                    model, "link", kwargs.get("parameter"), kwargs.get("value", None)
+                    self, "link", kwargs.get("parameter"), kwargs.get("value", None)
                 )
             if parameter_type == "node":
                 parameter_results, node_list = processing.get_parameter(
-                    model, "node", kwargs.get("parameter"), kwargs.get("value", None)
+                    self, "node", kwargs.get("parameter"), kwargs.get("value", None)
                 )
             for value in np.min(parameter_results):
                 if value < -1e-5:
@@ -63,11 +65,11 @@ def animate_plot(
         if kwargs.get("bins", None) is None:
             if parameter_type == "link":
                 parameter_results, link_list = processing.get_parameter(
-                    model, "link", kwargs.get("parameter"), kwargs.get("value", None)
+                    self, "link", kwargs.get("parameter"), kwargs.get("value", None)
                 )
             if parameter_type == "node":
                 parameter_results, node_list = processing.get_parameter(
-                    model, "node", kwargs.get("parameter"), kwargs.get("value", None)
+                    self, "node", kwargs.get("parameter"), kwargs.get("value", None)
                 )
             kwargs["bins"] = np.linspace(
                 np.min(np.min(parameter_results)),
@@ -77,24 +79,23 @@ def animate_plot(
             print(len(kwargs["bins"]))
     for value in values:
 
-        function(model, ax, value=value, **kwargs)
+        function(self, ax, value=value, **kwargs)
 
         handles, labels = [], []
-
+        time=value*model["wn"].options.time.report_timestep
+        time = unit_conversion(time, "time", unit)
         plt.legend(
             handles,
             labels,
-            title="Timestep "
-            + str(value * model["wn"].options.time.report_timestep)
-            + " Seconds",
+            title="Timestep "+str(time)+" "+unit,
             loc="lower left",
             frameon=False,
         )
 
-        plt.savefig(model["image_path"] + "\\" + str(value) + ".png")
+        plt.savefig(model["image_path"] + "/" + str(value) + ".png")
 
         filenames = np.append(
-            filenames, model["image_path"] + "\\" + str(value) + ".png"
+            filenames, model["image_path"] + "/" + str(value) + ".png"
         )
         ax.clear()
         if (
@@ -104,7 +105,7 @@ def animate_plot(
             cbar.remove()
     # builds gif
     with imageio.get_writer(
-        model["image_path"] + "\\" + gif_save_name + ".gif", mode="I", fps=fps
+        model["image_path"] + "/" + gif_save_name + ".gif", mode="I", fps=fps
     ) as writer:
 
         for filename in filenames:

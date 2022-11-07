@@ -50,7 +50,8 @@ def unit_conversion(parameter_results, parameter, new_unit):
         "length": {"ft": 3.28084, "in": 39.37008, "cm": 100},
         "pressure": {"psi": 1.42197},
         "velocity": {"ft/s": 3.28084},
-        "quality": {"min":1/60, "hr":1/3600, "day":1/86400}
+        "quality": {"min":1/60, "hr":1/3600, "day":1/86400},
+        "time": {"s":1,"min":1/60, "hr":1/3600, "day":1/86400}
     }
     parameter_results = parameter_results * conversion_factors[parameter][new_unit]
     return parameter_results

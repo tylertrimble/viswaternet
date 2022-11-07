@@ -4,8 +4,7 @@ Created on Wed Sep 28 12:57:31 2022
 
 @author: Tyler
 """
-import visnet.network as visinit
-import visnet.drawing as visplot
+import visnet as vis
 import matplotlib.pyplot as plt
 
 from nodalerror_generation import wn,error_list,element_list
@@ -16,11 +15,11 @@ fig, ax = plt.subplots(figsize=(12, 12))
 ax.set_frame_on(False)
 
 #Create water network model
-model = visinit.initialize_model(r"Networks/CTown.inp", network_model=wn)
+model = vis.visnet_model(r"Networks/CTown.inp", network_model=wn)
 
 #Plot custom data generated in nodalerror_generation.py
-visplot.plot_unique_data(
-    model,ax,
+model.plot_unique_data(
+    ax,
     parameter="custom_data",node_size=200,line_widths=1,
     edge_colors="k",parameter_type="node",data_type="continuous",
     custom_data_values=[element_list, error_list],

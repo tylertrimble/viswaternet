@@ -8,4 +8,5 @@ import warnings
 
 from visnet import utils
 from visnet import network
+from visnet.network.initialize import visnet_model
 from visnet import drawing

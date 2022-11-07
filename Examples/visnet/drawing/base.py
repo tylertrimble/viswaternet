@@ -9,14 +9,13 @@ import networkx.drawing.nx_pylab as nxp
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.lines import Line2D
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 from visnet.utils import save_fig
 
 
 def draw_base_elements(
-    model,
+    self,
     ax,
     nodes=True,
     links=True,
@@ -42,21 +41,16 @@ def draw_base_elements(
     valve_border_width=1,
     pump_color='b',
     pump_width=3,
+    pump_line_style='-',
+    pump_arrows=False,
     base_node_color='k',
     base_node_size=30,
     base_link_color='k',
-    base_link_width=1
+    base_link_width=1,
+    base_link_line_style='-',
+    base_link_arrows=False
 ):
-    """Draws nodes, links, resevoirs, tanks, pumps and valves without any data
-    attached to them.
-    Arguments:
-    model: Takes dictionary.
-    ax: Axis of the figure the user wants the elements to be plotted on.
-    reservoirs: Takes Boolean. Determines whether to draw reservoirs or not.
-    tanks: Takes Boolean. Determines whether to draw tanks or not.
-    pumps: Takes Boolean. Determines whether to draw pumps or not.
-    valves: Takes Boolean. Determines whether to draw valves or not.
-    legend: Takes Boolean. Determines whether to draw legend or not."""
+    model=self.model
     if nodes:
 
         nxp.draw_networkx_nodes(
@@ -129,9 +123,11 @@ def draw_base_elements(
         nxp.draw_networkx_edges(
             model["G"],
             model["pos_dict"],
-            ax=ax, arrows=False,
+            ax=ax,
             edge_color=base_link_color,
-            width=base_link_width
+            width=base_link_width,
+            style=base_link_line_style,
+            arrows=base_link_arrows,
         )
     if pumps:
 
@@ -142,12 +138,13 @@ def draw_base_elements(
             edgelist=model["G_list_pumps_only"],
             edge_color=pump_color,
             width=pump_width,
-            arrows=False,
+            style=base_link_line_style,
+            arrows=pump_arrows
         )
 
 
 def plot_basic_elements(
-    model,
+    self,
     ax,
     pumps=True,
     valves=True,
@@ -157,6 +154,8 @@ def plot_basic_elements(
     nodes=True,
     savefig=True,
     save_name=None,
+    dpi='figure',
+    save_format='png',
     legend=True,
     legend_loc="upper right",
     font_size=15,
@@ -181,18 +180,18 @@ def plot_basic_elements(
     valve_border_width=1,
     pump_color='b',
     pump_width=3,
+    pump_line_style='-',
+    pump_arrows=False,
     base_node_color='k',
     base_node_size=30,
     base_link_color='k',
-    base_link_width=1
+    base_link_width=1,
+    base_link_line_style='-',
+    base_link_arrows=False
 ):
-    """Creates a basic plot, similar to the default seen in EPANET.
-    Arguments:
-    model: Saved initilization done with initializeModel
-    savefig: Boolean. Determines whether plot is saved to /Images directory"""
-
+    
     draw_base_elements(
-        model,
+        self,
         ax,
         nodes=nodes,
         reservoirs=reservoirs,
@@ -217,10 +216,14 @@ def plot_basic_elements(
         valve_border_width=valve_border_width,
         pump_color=pump_color,
         pump_width=pump_width,
+        pump_line_style=pump_line_style,
+        pump_arrows=pump_arrows,
         base_node_color=base_node_color,
         base_node_size=base_node_size,
         base_link_color=base_link_color,
-        base_link_width=base_link_width
+        base_link_width=base_link_width,
+        base_link_line_style=base_link_line_style,
+        base_link_arrows=base_link_arrows
     )
 
     if legend:
@@ -236,12 +239,12 @@ def plot_basic_elements(
                     base_link_color=base_link_color)
     if savefig:
 
-        save_fig(model, save_name=save_name)
+        save_fig(self, save_name=save_name,dpi=dpi,save_format=save_format)
 
 
 def draw_legend(
     ax,
-    bin_list=None,
+    intervals=None,
     title=None,
     pumps=True,
     loc="upper right",
@@ -254,26 +257,17 @@ def draw_legend(
     base_link_color='k',
     node_sizes=None,
     link_sizes=None,
-    element_size_bins=None,
+    element_size_intervals=None,
     element_size_legend_title=None,
     element_size_legend_loc=None,
     element_size_legend_labels=None,
     draw_base_legend=True,
-    draw_bins_legend=True,
+    draw_intervals_legend=True,
     edge_colors='k',
     linewidths=1
 ):
-    """Draws legend for basic elements.
-    Arguments:
-    ax: Axis of the figure the user wants the elements to be plotted on.
-    bin_list: Takes List. List of bins.
-    title: Takes String. Legend title.
-    pumps: Takes Boolean. Determines whether pumps are drawn or not.
-    loc: Takes String. Location of elements legend.
-    loc2 = Takes String. Location of bins legend"""
-
-    if bin_list is None:
-        bin_list = []
+    if intervals is None:
+        intervals = []
     handles, labels = ax.get_legend_handles_labels()
 
     if pumps:
@@ -287,10 +281,10 @@ def draw_legend(
     
         handles.extend([patch])
     
-    if len(bin_list) != 0:
+    if len(intervals) != 0:
         if draw_base_legend==True:
             legend = ax.legend(
-                handles=handles[len(bin_list) :],
+                handles=handles[len(intervals) :],
                 loc=loc,
                 fontsize=font_size,
                 labelcolor=font_color,
@@ -298,10 +292,10 @@ def draw_legend(
             )
             legend._legend_box.align = "left"
             ax.add_artist(legend)
-        if draw_bins_legend==True:
+        if draw_intervals_legend==True:
             legend2 = ax.legend(
                 title=title,
-                handles=handles[: len(bin_list)],
+                handles=handles[: len(intervals)],
                 loc=loc2,
                 fontsize=font_size,
                 labelcolor=font_color,
@@ -328,7 +322,7 @@ def draw_legend(
             handles_2=[]
             min_size=np.min(node_sizes)
             max_size=np.max(node_sizes)
-            marker_sizes=np.linspace(min_size,max_size,element_size_bins)
+            marker_sizes=np.linspace(min_size,max_size,element_size_intervals)
             print(marker_sizes)
             for size,label in zip(marker_sizes,element_size_legend_labels):
                 handles_2.append(Line2D([],
@@ -356,7 +350,7 @@ def draw_legend(
             handles_2=[]
             min_size=np.min(link_sizes)
             max_size=np.max(link_sizes)
-            marker_sizes=np.linspace(min_size,max_size,element_size_bins)
+            marker_sizes=np.linspace(min_size,max_size,element_size_intervals)
             print(marker_sizes)
             for size,label in zip(marker_sizes,element_size_legend_labels):
                 handles_2.append(Line2D([],
@@ -392,8 +386,8 @@ def draw_color_bar(ax, g, cmap, color_bar_title=None):
     cbar.set_label(color_bar_title, fontsize=10)
 
 
-def draw_label(model, ax, labels, x_coords, y_coords, nodes=None, draw_arrow=True,label_font_size=11):
-
+def draw_label(self, ax, labels, x_coords, y_coords, nodes=None, draw_arrow=True,label_font_size=11):
+    model=self.model
     if nodes is not None:
 
         for label, node, xCoord, yCoord in zip(labels, nodes, x_coords, y_coords):

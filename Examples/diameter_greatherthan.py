@@ -5,12 +5,11 @@ Created on Sat Oct 22 16:03:53 2022
 @author: Tyler
 """
 
-import visnet.network as visinit
-import visnet.drawing as visplot
+import visnet as vis
 import matplotlib.pyplot as plt
 
 # Run EPANET2.0 Simulation and store results
-model = visinit.initialize_model(r"Networks\CTown.inp")  
+model = vis.visnet_model(r"Networks/CTown.inp")  
 
 # Define figure to be drawn to
 fig, ax = plt.subplots(figsize=(12, 12))  
@@ -19,17 +18,17 @@ fig, ax = plt.subplots(figsize=(12, 12))
 ax.set_frame_on(False)
 
 
-visplot.plot_discrete_links(
-    model, ax, 
+model.plot_discrete_links(
+    ax, 
     parameter="diameter", 
     unit="in", 
-    bin_edge_num=2,
-    bins=[0,11.999],
-    bin_label_list=["< 12",">= 12"],
-    bin_width_list=[1,5],
+    num_intervals=2,
+    intervals=[0,11.999],
+    interval_label_list=["< 12",">= 12"],
+    interval_link_width_list=[1,5],
     color_list=['k','r'],
     cmap="Blues", #Controls link widths
-    legend_loc_2="lower left", #Location of legend with bins
+    legend_loc_2="lower left", #Location of legend with intervals
     legend_title="Pipe Diameter (in)",
     legend_sig_figs=0, #Whole numbers only
     pump_color="mediumseagreen", 

@@ -8,7 +8,7 @@ import numpy as np
 
 
 def get_parameter(
-    model,
+    self,
     parameter_type,
     parameter,
     value=None,
@@ -16,37 +16,7 @@ def get_parameter(
     tanks=False,
     reservoirs=False,
 ):
-    """Gets parameter for each node in the network and stores it in
-    parameter_results. Also grabs the indices of the nodes that had that
-    parameter.
-    Arguments:
-    model: Takes dictionary. Utilizes network model and results from WNTR to
-    get parameters.
-    parameter_type: Takes String. The type of node, can be 'Node' or 'Link'.
-    parameter: Takes String. The name of the parameter.
-    value: Takes Integer. Parameters from results must include a value
-    with it. The value given is the value index, not time.
-    Takes node parameters:
-        'base_demand'
-        'elevation'
-    Takes node-value parameters:
-        'pressure'
-        'quality'
-        'head'
-        'demand'
-    Takes link parameters:
-        'length'
-        'diameter'
-        'roughness'
-        'minor_loss'
-    Takes link-value parameters:
-        'velocity'
-        'flowrate'
-        'headloss'
-        'friction_factor'
-        'reaction_rate'
-        'link_quality'"""
-
+    model=self.model
     if parameter_type == "node":
         if element_list is None:
             element_list = list.copy(model["node_names"])
@@ -191,8 +161,8 @@ def get_parameter(
     return parameter_results, element_list
 
 
-def get_demand_patterns(model):
-
+def get_demand_patterns(self):
+    model=self.model
     demandPatterns = []
 
     patterns = model["wn"].pattern_name_list
@@ -234,31 +204,25 @@ def get_demand_patterns(model):
 
 
 def bin_parameter(
-    model,
+    self,
     parameter_results,
     element_list,
-    bin_edge_num,
-    bin_list="automatic",
-    disable_bin_deleting=False,
+    num_intervals,
+    intervals="automatic",
+    disable_interval_deleting=False,
     legend_sig_figs=3,
 ):
-    """Bins results from get_parameter based on user specifications.
-    Arguments:
-    model: Takes Dictionary. Gets pipe or node name list.
-    parameter_results: Takes Series. Results from get_parameter.
-    bin_edge_num: Number of bin edges that the user wants.
-    bin_list: List of bin edges. When set to 'Automatic' it will create bin
-    edges."""
+    model=self.model
+    
+    if intervals == "automatic":
 
-    if bin_list == "automatic":
+        bins = num_intervals
 
-        bins = bin_edge_num
-
-        bin_list = np.linspace(
+        intervals = np.linspace(
             np.min(parameter_results), np.max(parameter_results), bins
         )
-    binnedParameter = {}
-    binNames = []
+    interval_results = {}
+    interval_names = []
 
     elementsWithParameter = element_list
     elementType = None
@@ -276,30 +240,30 @@ def bin_parameter(
     if elementType != "link":
 
         element_list = model["node_names"]
-    for i in range(len(bin_list)):
+    for i in range(len(intervals)):
 
         if i == 0:
 
-            if np.min(parameter_results) < bin_list[i]:
+            if np.min(parameter_results) < intervals[i]:
 
-                binNames = np.append(binNames, "< {0:1.{j}f}".format(bin_list[i],j=legend_sig_figs))
-            binNames = np.append(
-                binNames, "{0:1.{j}f} - {1:1.{j}f}".format(bin_list[i], bin_list[i + 1],j=legend_sig_figs)
+                interval_names = np.append(interval_names, "< {0:1.{j}f}".format(intervals[i],j=legend_sig_figs))
+            interval_names = np.append(
+                interval_names, "{0:1.{j}f} - {1:1.{j}f}".format(intervals[i], intervals[i + 1],j=legend_sig_figs)
             )
-        elif i < len(bin_list) - 1:
+        elif i < len(intervals) - 1:
 
-            binNames = np.append(
-                binNames, "{0:1.{j}f} - {1:1.{j}f}".format(bin_list[i], bin_list[i + 1],j=legend_sig_figs)
+            interval_names = np.append(
+                interval_names, "{0:1.{j}f} - {1:1.{j}f}".format(intervals[i], intervals[i + 1],j=legend_sig_figs)
             )
-        elif i == len(bin_list) - 1:
+        elif i == len(intervals) - 1:
 
-            if np.max(parameter_results) > bin_list[i]:
+            if np.max(parameter_results) > intervals[i]:
 
-                binNames = np.append(binNames, "> {0:1.{j}f}".format(bin_list[i],j=legend_sig_figs))
-    for binName in binNames:
+                interval_names = np.append(interval_names, "> {0:1.{j}f}".format(intervals[i],j=legend_sig_figs))
+    for binName in interval_names:
 
-        binnedParameter[binName] = {}
-    for i in range(len(bin_list)):
+        interval_results[binName] = {}
+    for i in range(len(intervals)):
 
         if i == 0:
 
@@ -307,67 +271,67 @@ def bin_parameter(
 
             for parameter in parameter_results:
 
-                if parameter >= bin_list[i] and parameter < bin_list[i + 1]:
+                if parameter >= intervals[i] and parameter < intervals[i + 1]:
 
-                    binnedParameter[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(bin_list[i], bin_list[i + 1],j=legend_sig_figs)
+                    interval_results[
+                        "{0:1.{j}f} - {1:1.{j}f}".format(intervals[i], intervals[i + 1],j=legend_sig_figs)
                     ][elementsWithParameter[counter]] = element_list.index(
                         elementsWithParameter[counter]
                     )
-                if parameter < bin_list[i]:
+                if parameter < intervals[i]:
 
-                    binnedParameter["< {0:1.{j}f}".format(bin_list[i],j=legend_sig_figs)][
+                    interval_results["< {0:1.{j}f}".format(intervals[i],j=legend_sig_figs)][
                         elementsWithParameter[counter]
                     ] = element_list.index(elementsWithParameter[counter],)
                 counter += 1
-        elif i == len(bin_list) - 2:
+        elif i == len(intervals) - 2:
 
             counter = 0
 
             for parameter in parameter_results:
 
-                if parameter >= bin_list[i] and parameter <= bin_list[i + 1]:
+                if parameter >= intervals[i] and parameter <= intervals[i + 1]:
 
-                    binnedParameter[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(bin_list[i], bin_list[i + 1],j=legend_sig_figs)
+                    interval_results[
+                        "{0:1.{j}f} - {1:1.{j}f}".format(intervals[i], intervals[i + 1],j=legend_sig_figs)
                     ][elementsWithParameter[counter]] = element_list.index(
                         elementsWithParameter[counter]
                     )
                 counter += 1
-        elif i < len(bin_list) - 2:
+        elif i < len(intervals) - 2:
 
             counter = 0
 
             for parameter in parameter_results:
 
-                if parameter >= bin_list[i] and parameter < bin_list[i + 1]:
+                if parameter >= intervals[i] and parameter < intervals[i + 1]:
 
-                    binnedParameter[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(bin_list[i], bin_list[i + 1],j=legend_sig_figs)
+                    interval_results[
+                        "{0:1.{j}f} - {1:1.{j}f}".format(intervals[i], intervals[i + 1],j=legend_sig_figs)
                     ][elementsWithParameter[counter]] = element_list.index(
                         elementsWithParameter[counter]
                     )
                 counter += 1
-        elif i == len(bin_list) - 1:
+        elif i == len(intervals) - 1:
 
             counter = 0
 
             for parameter in parameter_results:
 
-                if parameter > bin_list[i]:
+                if parameter > intervals[i]:
 
-                    binnedParameter["> {0:1.{j}f}".format(bin_list[i],j=legend_sig_figs)][
+                    interval_results["> {0:1.{j}f}".format(intervals[i],j=legend_sig_figs)][
                         elementsWithParameter[counter]
                     ] = element_list.index(elementsWithParameter[counter])
                 counter += 1
-    if disable_bin_deleting:
+    if disable_interval_deleting:
         pass
     else:
-        for binName in binNames:
+        for binName in interval_names:
 
-            if len(binnedParameter[binName]) == 0:
+            if len(interval_results[binName]) == 0:
 
-                binNames = np.delete(binNames, np.where(binNames == binName))
+                interval_names = np.delete(interval_names, np.where(interval_names == binName))
 
-                del binnedParameter[binName]
-    return binnedParameter, binNames
+                del interval_results[binName]
+    return interval_results, interval_names

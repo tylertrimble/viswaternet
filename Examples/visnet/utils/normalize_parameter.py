@@ -7,7 +7,7 @@ Created on Sun Oct  2 20:45:59 2022
 import numpy as np
 
 
-def normalize_parameter(model, parameter_results, min_value, max_value):
+def normalize_parameter(parameter_results, min_value, max_value):
     minParameter = np.min(parameter_results)
     maxParameter = np.max(parameter_results)
 

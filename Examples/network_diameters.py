@@ -1,10 +1,9 @@
-import visnet.network as visinit
-import visnet.drawing as visplot
+import visnet as vis
 import matplotlib.pyplot as plt
 import numpy as np
 
 # Run EPANET2.0 Simulation and store results
-model = visinit.initialize_model(r"Networks/CTown.inp")  
+model = vis.visnet_model(r"Networks/CTown.inp")  
 
 # Define figure to be drawn to
 fig, ax = plt.subplots(figsize=(12, 12))  
@@ -13,11 +12,11 @@ fig, ax = plt.subplots(figsize=(12, 12))
 ax.set_frame_on(False)
 
 #Plots pipe diameters
-visplot.plot_unique_data(
-    model, ax, 
+model.plot_unique_data(
+    ax, 
     parameter="diameter", 
     unit="in", 
-    bin_width_list=np.linspace(1,7,10),
+    interval_link_width_list=np.linspace(1,7,10),
     cmap="Blues", #Controls link widths
     legend_loc_2="lower left", #Location of legend with bins
     legend_title="Pipe Diameter (in)",font_size=12,
