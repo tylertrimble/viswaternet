@@ -30,22 +30,31 @@ def get_parameter(
                 if value == "max":
 
                     parameter_results = np.max(
-                        model["results"].node[parameter].iloc[:, indices]
+                        model["results"].node[parameter].iloc[:, indices],
+                        axis=0
                     )
                 elif value == "min":
 
                     parameter_results = np.min(
-                        model["results"].node[parameter].iloc[:, indices]
+                        model["results"].node[parameter].iloc[:, indices],
+                        axis=0
                     )
                 elif value == "mean":
 
                     parameter_results = np.mean(
-                        model["results"].node[parameter].iloc[:, indices]
+                        model["results"].node[parameter].iloc[:, indices],
+                        axis=0
                     )
                 elif value == "stddev":
                     parameter_results = np.std(
-                        model["results"].node[parameter].iloc[:, indices]
+                        model["results"].node[parameter].iloc[:, indices],
+                        axis=0
                     )
+                elif value == "range":
+                    parameter_results = np.ptp(
+                        model["results"].node[parameter].iloc[:, indices],
+                        axis=0
+                        )
                 elif isinstance(value, int):
 
                     parameter_results = (
@@ -122,22 +131,31 @@ def get_parameter(
                 if value == "max":
 
                     parameter_results = np.max(
-                        model["results"].link[parameter].iloc[:, indices]
+                        model["results"].link[parameter].iloc[:, indices],
+                        axis=0
                     )
                 elif value == "min":
 
                     parameter_results = np.min(
-                        model["results"].link[parameter].iloc[:, indices]
+                        model["results"].link[parameter].iloc[:, indices],
+                        axis=0
                     )
                 elif value == "mean":
 
                     parameter_results = np.mean(
-                        model["results"].link[parameter].iloc[:, indices]
+                        model["results"].link[parameter].iloc[:, indices],
+                        axis=0
                     )
                 elif value == "stddev":
                     parameter_results = np.std(
-                        model["results"].link[parameter].iloc[:, indices]
+                        model["results"].link[parameter].iloc[:, indices],
+                        axis=0
                     )
+                elif value == "range":
+                    parameter_results = np.ptp(
+                        model["results"].link[parameter].iloc[:, indices],
+                        axis=0
+                        )
                 elif type(value) == int:
 
                     parameter_results = (
