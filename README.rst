@@ -52,8 +52,7 @@ To get started, import both visnet and matplotlib.pyplot:
     import visnet as vis
     import matplotlib.pyplot as plt
 
-The user can then call on the following function to reduce a hydraulic model of a water distribution network. 
-Next, initialize a matplotlib figure and . For example we use the CTown network included in the Examples folder:
+Next, initialize a matplotlib figure and Visnet model. For example purposes we use the CTown network included in the Examples folder:
 
 .. code:: python
 
