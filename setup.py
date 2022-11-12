@@ -10,7 +10,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['pandas',
+requirements = ['pandas==1.4.4',
                'numpy',
                'matplotlib',
                'wntr',
@@ -22,7 +22,7 @@ test_requirements = [ ]
 setup(
     author="Tyler Trimble",
     author_email='TylerL.Trimble@gmail.com',
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
