@@ -23,7 +23,7 @@ A python package for easy generation and customization of water network graphs.
 * Documentation: https://visnet.readthedocs.io.
 
 Dependencies
-------------
+--------
 * Python 3.7+
 * Numpy
 * Pandas
@@ -34,6 +34,7 @@ Dependencies
 Features
 --------
 Visnet is designed to plot simulation data onto a network graph, with a large variety of customization options available. The package includes the capabilities to:
+
 * Discretize network or simulation data.
 * Visualize discretized or continuous data on network graphs.
 * Import data from excel files or data generated with python.
