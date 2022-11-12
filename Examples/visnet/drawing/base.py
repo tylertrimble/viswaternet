@@ -138,7 +138,7 @@ def draw_base_elements(
             edgelist=model["G_list_pumps_only"],
             edge_color=pump_color,
             width=pump_width,
-            style=base_link_line_style,
+            style=pump_line_style,
             arrows=pump_arrows
         )
 
