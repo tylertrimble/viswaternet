@@ -2,7 +2,7 @@ import visnet as vis
 import matplotlib.pyplot as plt
 
 #Create visnet model
-model = vis.visnet_model(r"Networks/CTown.inp")  
+model = vis.VisnetModel(r"Networks/CTown.inp")  
 
 # Define figure to be drawn to
 fig, ax = plt.subplots(figsize=(12, 12))  

@@ -7,7 +7,7 @@ Created on Sun Oct  2 20:51:37 2022
 import os
 import wntr
 
-class visnet_model:
+class VisnetModel:
     def __init__(self,inp_file,network_model=None):
         model = {}
         dirname = os.getcwd()

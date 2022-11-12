@@ -11,7 +11,7 @@ ax.set_frame_on(False)
 wn = wntr.network.WaterNetworkModel(r"Networks/CTown.inp")
 wn.options.quality.parameter = "TRACE"
 wn.options.quality.trace_node = "T1"
-model = vis.visnet_model(r"Networks/CTown.inp", network_model=wn)
+model = vis.VisnetModel(r"Networks/CTown.inp", network_model=wn)
 #Plots trace quality parameter
 model.plot_discrete_nodes(
     ax,

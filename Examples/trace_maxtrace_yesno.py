@@ -16,14 +16,14 @@ import wntr
 import matplotlib.pyplot as plt
 
 wn = wntr.network.WaterNetworkModel(r'Networks/CTown.inp')
-model = vis.visnet_model(r'Networks/CTown.inp',network_model=wn)
+model = vis.VisnetModel(r'Networks/CTown.inp',network_model=wn)
 
 wn.options.quality.parameter = 'TRACE'
 
 fig, ax= plt.subplots(figsize=(12,12))
 
 wn.options.quality.trace_node = "T3"
-model = vis.visnet_model(r'Networks/CTown.inp',network_model=wn)
+model = vis.VisnetModel(r'Networks/CTown.inp',network_model=wn)
 
 model.plot_discrete_nodes(
                          ax, 

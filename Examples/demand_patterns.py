@@ -14,7 +14,7 @@ Created on Sat Oct  8 16:36:38 2022
 import visnet as vis
 import matplotlib.pyplot as plt
 
-model = vis.visnet_model(r'Networks/CTown.inp')
+model = vis.VisnetModel(r'Networks/CTown.inp')
 
 fig, ax = plt.subplots(figsize=(12,12))
 
