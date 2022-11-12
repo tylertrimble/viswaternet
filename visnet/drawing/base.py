@@ -24,16 +24,16 @@ def draw_base_elements(
     pumps=True,
     valves=True,
     legend=True,
-    reservoir_size=200,
-    reservoir_color='k',
+    reservoir_size=150,
+    reservoir_color='b',
     reservoir_shape='s',
-    reservoir_border_color=None,
-    reservoir_border_width=None,
+    reservoir_border_color='k',
+    reservoir_border_width=3,
     tank_size=200,
-    tank_color='k',
-    tank_shape='d',
-    tank_border_color=None,
-    tank_border_width=None,
+    tank_color='b',
+    tank_shape='h',
+    tank_border_color='k',
+    tank_border_width=2,
     valve_size=200,
     valve_color='orange',
     valve_shape='P',
@@ -48,7 +48,7 @@ def draw_base_elements(
     base_link_color='k',
     base_link_width=1,
     base_link_line_style='-',
-    base_link_arrows=False
+    base_link_arrows=False,
 ):
     model=self.model
     if nodes:
@@ -119,10 +119,10 @@ def draw_base_elements(
             label="Valves",
         )
     if links:
-
         nxp.draw_networkx_edges(
             model["G"],
             model["pos_dict"],
+            edgelist=[i for i in model["pipe_list"] if i not in model["G_list_pumps_only"]],
             ax=ax,
             edge_color=base_link_color,
             width=base_link_width,
@@ -138,7 +138,7 @@ def draw_base_elements(
             edgelist=model["G_list_pumps_only"],
             edge_color=pump_color,
             width=pump_width,
-            style=base_link_line_style,
+            style=pump_line_style,
             arrows=pump_arrows
         )
 
@@ -163,16 +163,16 @@ def plot_basic_elements(
     legend_title_font_size=17,
     draw_frame=False,
     legend_sig_figs=3,
-    reservoir_size=200,
-    reservoir_color='k',
+    reservoir_size=150,
+    reservoir_color='b',
     reservoir_shape='s',
-    reservoir_border_color=None,
-    reservoir_border_width=None,
+    reservoir_border_color='k',
+    reservoir_border_width=3,
     tank_size=200,
-    tank_color='k',
-    tank_shape='d',
-    tank_border_color=None,
-    tank_border_width=None,
+    tank_color='b',
+    tank_shape='h',
+    tank_border_color='k',
+    tank_border_width=2,
     valve_size=200,
     valve_color='orange',
     valve_shape='P',
@@ -187,7 +187,7 @@ def plot_basic_elements(
     base_link_color='k',
     base_link_width=1,
     base_link_line_style='-',
-    base_link_arrows=False
+    base_link_arrows=False,
 ):
     
     draw_base_elements(
