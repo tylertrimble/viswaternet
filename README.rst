@@ -3,8 +3,8 @@ visnet
 ======
 
 
-.. image:: https://img.shields.io/pypi/v/visnet.svg
-        :target: https://pypi.python.org/pypi/visnet
+.. image:: https://img.shields.io/pypi/v/visnetwork.svg
+        :target: https://pypi.python.org/pypi/visnetwork
 
 .. image:: https://img.shields.io/travis/tylertrimble/visnet.svg
         :target: https://travis-ci.com/tylertrimble/visnet
