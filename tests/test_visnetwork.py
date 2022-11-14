@@ -5,9 +5,9 @@
 
 import unittest
 
-import visnet
+import visnetwork
 
-class TestVisnet(unittest.TestCase):
+class TestVisnetwork(unittest.TestCase):
     """Tests for `visnet` package."""
 
     def setUp(self):
