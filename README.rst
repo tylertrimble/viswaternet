@@ -1,6 +1,6 @@
-======
-visnet
-======
+==========
+Visnetwork
+==========
 
 
 .. image:: https://img.shields.io/pypi/v/visnetwork.svg
@@ -23,7 +23,7 @@ A python package for easy generation and customization of water network graphs.
 * Documentation: https://visnet.readthedocs.io.
 
 Dependencies
---------
+------------
 * Python 3.7+
 * Numpy
 * Pandas
@@ -44,7 +44,7 @@ Visnet is designed to plot simulation data onto a network graph, with a large va
 * Draw specific nodes or links with their own data and style.
 
 Getting Started
---------
+---------------
 To get started, import both visnet and matplotlib.pyplot:
 
 .. code:: python
