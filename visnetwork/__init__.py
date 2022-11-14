@@ -6,7 +6,7 @@ __version__ = '0.1.1'
 
 import warnings
 
-from visnet import utils
-from visnet import network
-from visnet.network.initialize import VisnetModel
-from visnet import drawing
+from visnetwork import utils
+from visnetwork import network
+from visnetwork.network.initialize import VisnetModel
+from visnetwork import drawing

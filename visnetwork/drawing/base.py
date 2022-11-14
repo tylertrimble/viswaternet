@@ -11,7 +11,7 @@ import matplotlib.patches as mpatches
 from matplotlib.lines import Line2D
 
 
-from visnet.utils import save_fig
+from visnetwork.utils import save_fig
 
 
 def draw_base_elements(
