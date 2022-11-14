@@ -4,7 +4,7 @@ Created on Sat Oct  8 16:36:38 2022
 
 @author: Tyler
 """
-import visnet.network as visinit
+import visnetwork.network as visinit
 import visnet.drawing as visplot
 
 import matplotlib.pyplot as plt

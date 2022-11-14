@@ -4,7 +4,7 @@ Created on Wed Sep 28 12:57:31 2022
 
 @author: Tyler
 """
-import visnet as vis
+import visnetwork as vis
 import matplotlib.pyplot as plt
 
 from nodalerror_generation import wn,error_list,element_list

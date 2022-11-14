@@ -1,4 +1,4 @@
-import visnet as vis
+import visnetwork as vis
 import matplotlib.pyplot as plt
 
 #Create visnet model

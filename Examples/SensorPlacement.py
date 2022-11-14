@@ -5,7 +5,7 @@ Created on Wed Sep 28 12:22:40 2022
 @author: Tyler
 """
 
-import visnet as vis
+import visnetwork as vis
 import matplotlib.pyplot as plt
 
 #Initialize model

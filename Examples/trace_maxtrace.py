@@ -1,4 +1,4 @@
-import visnet as vis
+import visnetwork as vis
 import wntr
 import matplotlib.pyplot as plt
 

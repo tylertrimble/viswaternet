@@ -5,7 +5,7 @@ Created on Sat Oct 22 16:03:53 2022
 @author: Tyler
 """
 
-import visnet as vis
+import visnetwork as vis
 import matplotlib.pyplot as plt
 
 # Run EPANET2.0 Simulation and store results

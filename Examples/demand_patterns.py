@@ -11,7 +11,7 @@ Created on Sat Oct  8 16:36:38 2022
 
 @author: Tyler
 """
-import visnet as vis
+import visnetwork as vis
 import matplotlib.pyplot as plt
 
 model = vis.VisnetModel(r'Networks/CTown.inp')
