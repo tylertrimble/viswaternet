@@ -49,10 +49,10 @@ To get started, import both visnet and matplotlib.pyplot:
 
 .. code:: python
 
-    import visnet as vis
+    import visnetwork as vis
     import matplotlib.pyplot as plt
 
-Next, initialize a matplotlib figure and Visnet model. For example purposes we use the CTown network included in the Examples folder:
+Next, initialize a matplotlib figure and Visnetwork model. For example purposes we use the CTown network included in the Examples folder:
 
 .. code:: python
 
