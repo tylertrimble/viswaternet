@@ -8,9 +8,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import imageio
 import os
-from visnet.network import processing
-from visnet.drawing import discrete, continuous
-from visnet.utils import unit_conversion
+from visnetwork.network import processing
+from visnetwork.drawing import discrete, continuous
+from visnetwork.utils import unit_conversion
 
 cbar = 0
 

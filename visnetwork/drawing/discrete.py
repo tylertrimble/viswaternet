@@ -7,9 +7,9 @@ Created on Sun Oct  2 20:55:15 2022
 import numpy as np
 import matplotlib as mpl
 import networkx.drawing.nx_pylab as nxp
-from visnet.network import processing
-from visnet.utils import save_fig, unit_conversion
-from visnet.drawing import base
+from visnetwork.network import processing
+from visnetwork.utils import save_fig, unit_conversion
+from visnetwork.drawing import base
 
 default_cmap = mpl.cm.get_cmap("autumn_r")
 
