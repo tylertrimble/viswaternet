@@ -8,5 +8,5 @@ import warnings
 
 from viswaternet import utils
 from viswaternet import network
-from viswaternet.network.initialize import VisnetModel
+from viswaternet.network.initialize import VisWNModel
 from viswaternet import drawing
