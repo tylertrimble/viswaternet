@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
-"""Tests for `visnet` package."""
+"""Tests for `viswaternet` package."""
 
 
 import unittest
 
 import visnetwork
 
-class TestVisnetwork(unittest.TestCase):
-    """Tests for `visnet` package."""
+class TestViswaternet(unittest.TestCase):
+    """Tests for `viswaternet` package."""
 
     def setUp(self):
         """Set up test fixtures, if any."""

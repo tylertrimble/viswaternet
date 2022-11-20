@@ -7,11 +7,11 @@ Created on Sun Oct  2 21:09:29 2022
 import numpy as np
 import pandas as pd
 import matplotlib as mpl
-from visnetwork.network import processing
-from visnetwork.utils import convert_excel, save_fig, normalize_parameter, unit_conversion
-from visnetwork.drawing import base
-from visnetwork.drawing import discrete
-from visnetwork.drawing import continuous
+from viswaternet.network import processing
+from viswaternet.utils import convert_excel, save_fig, normalize_parameter, unit_conversion
+from viswaternet.drawing import base
+from viswaternet.drawing import discrete
+from viswaternet.drawing import continuous
 
 default_cmap = mpl.cm.get_cmap("autumn_r")
 

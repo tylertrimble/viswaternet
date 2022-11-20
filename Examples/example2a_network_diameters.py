@@ -1,9 +1,9 @@
-import visnetwork as vis
+import viswaternet as vis
 import matplotlib.pyplot as plt
 import numpy as np
 
 # Run EPANET2.0 Simulation and store results
-model = vis.VisnetModel(r"Networks/CTown.inp")  
+model = vis.VisWNModel(r"Networks/CTown.inp")  
 
 # Define figure to be drawn to
 fig, ax = plt.subplots(figsize=(12, 12))  

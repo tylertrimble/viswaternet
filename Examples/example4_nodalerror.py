@@ -4,7 +4,7 @@ Created on Wed Sep 28 12:57:31 2022
 
 @author: Tyler
 """
-import visnetwork as vis
+import viswaternet as vis
 import matplotlib.pyplot as plt
 
 from nodalerror_generation import wn,error_list,element_list
@@ -15,7 +15,7 @@ fig, ax = plt.subplots(figsize=(12, 12))
 ax.set_frame_on(False)
 
 #Create water network model
-model = vis.visnet_model(r"Networks/CTown.inp", network_model=wn)
+model = vis.VisWNModel(r"Networks/CTown.inp", network_model=wn)
 
 #Plot custom data generated in nodalerror_generation.py
 model.plot_unique_data(

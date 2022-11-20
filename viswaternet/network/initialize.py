@@ -7,7 +7,7 @@ Created on Sun Oct  2 20:51:37 2022
 import os
 import wntr
 
-class VisnetModel:
+class VisWNModel:
     def __init__(self,inp_file,network_model=None):
         model = {}
         dirname = os.getcwd()
@@ -90,12 +90,12 @@ class VisnetModel:
         
         self.model=model
     
-    from visnetwork.network.processing import get_parameter,bin_parameter
-    from visnetwork.drawing.base import draw_base_elements,plot_basic_elements,draw_label
-    from visnetwork.drawing.discrete import draw_discrete_nodes,draw_discrete_links,plot_discrete_nodes,plot_discrete_links
-    from visnetwork.drawing.continuous import draw_nodes,draw_links,plot_continuous_links,plot_continuous_nodes
-    from visnetwork.drawing.animate import animate_plot
-    from visnetwork.drawing.unique import plot_unique_data
-    from visnetwork.utils.convert_excel import convert_excel
+    from viswaternet.network.processing import get_parameter,bin_parameter
+    from viswaternet.drawing.base import draw_base_elements,plot_basic_elements,draw_label
+    from viswaternet.drawing.discrete import draw_discrete_nodes,draw_discrete_links,plot_discrete_nodes,plot_discrete_links
+    from viswaternet.drawing.continuous import draw_nodes,draw_links,plot_continuous_links,plot_continuous_nodes
+    from viswaternet.drawing.animate import animate_plot
+    from viswaternet.drawing.unique import plot_unique_data
+    from viswaternet.utils.convert_excel import convert_excel
     
     

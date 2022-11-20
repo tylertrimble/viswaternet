@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use visnet in a project::
+To use viswaternet in a project::
 
-    import visnetwork
+    import viswaternet

@@ -3,11 +3,8 @@ Visnetwork
 ==========
 
 
-.. image:: https://img.shields.io/pypi/v/visnetwork.svg
-        :target: https://pypi.python.org/pypi/visnetwork
-
-.. image:: https://img.shields.io/travis/tylertrimble/visnet.svg
-        :target: https://travis-ci.com/tylertrimble/visnet
+.. image:: https://img.shields.io/pypi/v/viswaternet.svg
+        :target: https://pypi.python.org/pypi/viswaternet
 
 .. image:: https://readthedocs.org/projects/visnet/badge/?version=latest
         :target: https://visnet.readthedocs.io/en/latest/?version=latest
@@ -33,7 +30,7 @@ Dependencies
 
 Features
 --------
-Visnet is designed to plot simulation data onto a network graph, with a large variety of customization options available. The package includes the capabilities to:
+Viswaternet is designed to plot simulation data onto a network graph, with a large variety of customization options available. The package includes the capabilities to:
 
 * Discretize network or simulation data.
 * Visualize discretized or continuous data on network graphs.
@@ -45,19 +42,19 @@ Visnet is designed to plot simulation data onto a network graph, with a large va
 
 Getting Started
 ---------------
-To get started, import both visnet and matplotlib.pyplot:
+To get started, import both viswaternet and matplotlib.pyplot:
 
 .. code:: python
 
-    import visnetwork as vis
+    import viswaternet as vis
     import matplotlib.pyplot as plt
 
-Next, initialize a matplotlib figure and Visnetwork model. For example purposes we use the CTown network included in the Examples folder:
+Next, initialize a matplotlib figure and viswaternet model. For example purposes we use the CTown network included in the Examples folder:
 
 .. code:: python
 
     fig, ax = plt.subplots(figsize=(12, 12))
-    model = vis.VisnetModel(r'Networks/CTown.inp')
+    model = vis.VisWNModel(r'Networks/CTown.inp')
     
 Finally, call on any of the plotting functions with the argument inputs of your choice. For example:
 
