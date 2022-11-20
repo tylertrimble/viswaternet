@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# visnet documentation build configuration file, created by
+# visnetwork documentation build configuration file, created by
 # sphinx-quickstart on Fri Jun  9 13:47:02 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -21,7 +21,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-import visnetwork
+import viswaternet
 
 # -- General configuration ---------------------------------------------
 
