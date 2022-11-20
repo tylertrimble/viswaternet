@@ -6,8 +6,8 @@ Visnetwork
 .. image:: https://img.shields.io/pypi/v/viswaternet.svg
         :target: https://pypi.python.org/pypi/viswaternet
 
-.. image:: https://readthedocs.org/projects/visnet/badge/?version=latest
-        :target: https://visnet.readthedocs.io/en/latest/?version=latest
+.. image:: https://readthedocs.org/projects/viswaternet/badge/?version=latest
+        :target: https://viswaternet.readthedocs.io/en/latest/
         :alt: Documentation Status
 
 
