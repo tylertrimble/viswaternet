@@ -46,7 +46,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'visnetwork'
+project = 'viswaternet'
 copyright = "2022, Tyler Trimble"
 author = "Tyler Trimble"
 
