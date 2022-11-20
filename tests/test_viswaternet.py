@@ -5,7 +5,7 @@
 
 import unittest
 
-import visnetwork
+import viswaternet
 
 class TestViswaternet(unittest.TestCase):
     """Tests for `viswaternet` package."""
