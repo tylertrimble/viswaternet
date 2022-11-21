@@ -35,7 +35,7 @@ def animate_plot(
     values = range(timesteps)
     if last_timestep is not None:
         values = values[first_timestep:last_timestep]
-    print(function is discrete.plot_discrete_links)
+
     filenames = []
     if data_type == "continuous":
         if kwargs.get("vmin", None) is None or kwargs.get("vmax", None) is None:
@@ -60,9 +60,9 @@ def animate_plot(
                     if kwargs.get("vmax", None) is None:
                         kwargs["vmax"] = np.max(np.max(parameter_results))
     if data_type == "discrete":
-        kwargs["disable_bin_deleting"] = True
+        kwargs["disable_interval_deleting"] = True
 
-        if kwargs.get("bins", None) is None:
+        if kwargs.get("intervals", None) is None:
             if parameter_type == "link":
                 parameter_results, link_list = processing.get_parameter(
                     self, "link", kwargs.get("parameter"), kwargs.get("value", None)
@@ -71,15 +71,15 @@ def animate_plot(
                 parameter_results, node_list = processing.get_parameter(
                     self, "node", kwargs.get("parameter"), kwargs.get("value", None)
                 )
-            kwargs["bins"] = np.linspace(
+            kwargs["intervals"] = np.linspace(
                 np.min(np.min(parameter_results)),
                 np.max(np.max(parameter_results)),
-                kwargs.get("bin_edge_num", 5),
+                kwargs.get("num_intervals", 5),
             )
-            print(len(kwargs["bins"]))
+            print(len(kwargs["intervals"]))
     for value in values:
 
-        function(self, ax, value=value, **kwargs)
+        function(ax, value=value, **kwargs)
 
         handles, labels = [], []
         time=value*model["wn"].options.time.report_timestep
