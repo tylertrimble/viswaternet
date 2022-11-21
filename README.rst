@@ -1,6 +1,6 @@
-==========
-Visnetwork
-==========
+===========
+VisWaterNet
+===========
 
 
 .. image:: https://img.shields.io/pypi/v/viswaternet.svg
@@ -17,7 +17,7 @@ A python package for easy generation and customization of water network graphs.
 
 
 * Free software: MIT license
-* Documentation: https://visnet.readthedocs.io.
+* Documentation: https://viswaternet.readthedocs.io.
 
 Dependencies
 ------------
