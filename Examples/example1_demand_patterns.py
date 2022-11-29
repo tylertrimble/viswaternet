@@ -1,3 +1,7 @@
+"""
+This example demonstrates how VisWaterNet can be used to illustrate the different nodal demand patterns present in a water distribution network.
+"""
+
 # Import libraries
 import viswaternet as vis
 import matplotlib.pyplot as plt
