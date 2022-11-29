@@ -26,6 +26,6 @@ model.plot_unique_data(
     legend_title="Pipe Diameter (in)",font_size=12,
     legend_sig_figs=0, # Whole numbers only
     pump_color="mediumseagreen", # Customize pump color and width
-    pump_width=5 # In Pixels )
+    pump_width=5) # In Pixels 
     
 plt.show()
