@@ -1,15 +1,23 @@
+"""
+This example demonstrates how one can use VisWaterNet to visualize two different summary measures within a single plot.
+Here, we plot the mean value (color) and standard deviation (size) of nodal pressure.
+
+"""
+
+# Import libraries
 import viswaternet as vis
 import matplotlib.pyplot as plt
 
-# Run EPANET2.0 Simulation and store results
+# Initialize VisWaterNet model
 model = vis.VisWNModel(r"Networks/CTown.inp")  
 
-# Define figure to be drawn to
+# Initialize plot
 fig, ax = plt.subplots(figsize=(12, 12))
 
-# Disables frame around figure
+# Hide frame on plot 
 ax.set_frame_on(False)
 
+# Obtain mean and standard deviation measures corresponding to each node
 #Get mean pressure at each node
 mean, elmnt_list = model.get_parameter("node",parameter="pressure",value="mean")
 #Get standard deviation at  each node
@@ -23,7 +31,8 @@ node_sizes = [None]*len(elmnt_list)
 for interval_name, size in zip(interval_names, interval_sizes):
     for element in binnedParameter[interval_name]:
         node_sizes[elmnt_list.index(element)]=size
-#Plot continuous mean data and pass custom node_sizes
+        
+# Plot continuous mean data and pass custom node_sizes to correspong to standard deviation
 model.plot_unique_data(
     ax,parameter="custom_data",
     parameter_type="node",data_type="continuous",
@@ -33,6 +42,6 @@ model.plot_unique_data(
     element_size_intervals=4,
     element_size_legend_title="Standard Deviation (m)",
     element_size_legend_loc="lower left",
-    element_size_legend_labels=interval_names,
-)
+    element_size_legend_labels=interval_names)
+
 plt.show()
