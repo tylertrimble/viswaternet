@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 27 23:38:12 2022
-
-@author: Tyler
-"""
 import wntr
 
 import random
