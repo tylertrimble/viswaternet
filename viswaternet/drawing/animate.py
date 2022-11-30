@@ -47,6 +47,7 @@ def animate_plot(
             :attr:'pressure'
             :attr:'quality'
         =======================
+    """
     model=self.model
     timesteps = int(
         model["wn"].options.time.duration / model["wn"].options.time.report_timestep
