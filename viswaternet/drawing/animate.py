@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Oct  2 21:14:38 2022
-
-@author: Tyler
+The viswaternet.drawing.animate module facilitates the creation of .gif files
+animating data across timesteps.
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -28,6 +27,26 @@ def animate_plot(
     unit='s',
     **kwargs
 ):
+    """Builds .gif file animating network data across timesteps.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+    
+    function : viswaternet
+        One of the general viswaternet drawing functions.
+        
+        .. rubric:: Usable Functions
+        
+        =======================
+            :function:'base_demand'
+            :attr:'demand'
+            :attr:'elevation'
+            :attr:'head'
+            :attr:'pressure'
+            :attr:'quality'
+        =======================
     model=self.model
     timesteps = int(
         model["wn"].options.time.duration / model["wn"].options.time.report_timestep

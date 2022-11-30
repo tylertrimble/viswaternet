@@ -1,13 +1,24 @@
-# -*- coding: utf-8 -*-
 """
-Created on Sun Oct  2 20:45:59 2022
-
-@author: Tyler
+The viswaternet.utils.normalize_parameter linearlly normalizes network data 
+between two values.
 """
 import numpy as np
 
 
 def normalize_parameter(parameter_results, min_value, max_value):
+    """Normalizes input data between a min and max value.
+    
+    Arguments
+    ---------
+    parameter_results : array-like
+        Network data to be normalized.
+    
+    min_value : float, int
+        Lower bound value for normalization.
+        
+    max_value : float, int
+        Upper bound value for normalization
+    """
     minParameter = np.min(parameter_results)
     maxParameter = np.max(parameter_results)
 

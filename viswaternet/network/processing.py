@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Oct  2 20:50:12 2022
-
-@author: Tyler
+The viswaternet.network.processing module performs data retrieving and processing
+tasks in preparation for drawing functions.
 """
 import numpy as np
 
@@ -16,6 +15,48 @@ def get_parameter(
     tanks=False,
     reservoirs=False,
 ):
+    """Retrieves network data of a specified parameter. 
+    
+    Arguments
+    ---------
+    parameter_type : string
+        Type of parameter (nodal, link)
+        
+    parameter : string
+        Parameter that network data will be retrieved for.
+        
+    value : int, string
+        For time-varying parameters only. Specifies which timestep or data
+        summary will be plotted.
+        
+        .. rubric:: Possible Inputs
+        
+        ======================= =========================================
+            :attr:'int'         Plots element data for specified timestep
+            :attr:'min'         Plots minimum data point for each element
+            :attr:'max'         Plots maximum data point for each element
+            :attr:'mean'        Plots mean for each element
+            :attr:'stddev'      Plots standard deviation for each element
+            :attr:'range'       Plots range for each element
+        ======================= =========================================
+        
+    element_list : array-like
+        List of network elements that data will be retrieved for.
+        
+    tanks : boolean
+        Determines if data for tanks are retrieved.
+        
+    reservoirs : boolean
+        Determines if data for reservoirs are retrieved.
+    
+    Returns
+    -------
+    array-like
+        Network data formatted for use in other functions
+        
+    array-like
+        Elements that have had their data retrieved
+    """
     model=self.model
     if parameter_type == "node":
         if element_list is None:
@@ -180,6 +221,16 @@ def get_parameter(
 
 
 def get_demand_patterns(self):
+    """Retrieves the demand pattern for each network node.
+    
+    Returns
+    -------
+    array-like
+        Demand pattern for each node.
+        
+    array-like
+        Name of each pattern.
+    """
     model=self.model
     demandPatterns = []
 
@@ -230,6 +281,51 @@ def bin_parameter(
     disable_interval_deleting=False,
     legend_sig_figs=3,
 ):
+    """Discretizes network data for use in disrete drawing functions.
+    
+    An important feature of bin_parameter to know of is if the intervals created
+    do not fully encapsulate the full range of network data, then a new interval
+    will be created.
+    
+    Arguments
+    ---------
+    parameter_results : array-like
+        Network data to be discretized.
+    
+    element_list : array-like
+        Network elements to be discretized.
+    
+    num_intervals : int
+        The number of intervals to be created.
+    
+    intervals : array-like, string
+        If set to 'automatic' then intervals are created automatically on a 
+        equal interval basis. Otherwise, it is the edges of the intervals to be
+        created. intervals array length should be num_intervals + 1.
+    
+    disable_interval_deleting : boolean
+        If True, empty intervals will be automatically deleted. 
+        
+    legend_sig_figs : int
+        Number of decimal places that the resulting discretized data will display
+        in the legend.
+    
+    Returns
+    -------
+    dictionary
+        Dictionary of discretized network data.
+    
+    array-like
+        Label names of each interval.
+        
+    Example
+    -------
+    >>>from viswaternet.network.processing import bin_parameter
+    >>>fake_data=[1,6,10,14,15,21]
+    >>>fake_elements=['E1','E2','E3','E4','E5','E6']
+    >>>intervals,interval_names = bin_parameter(self,fake_data,fake_elements,3,intervals=[0,5,10,15])
+    [<dict>,['0.000-5.000','5.000-10.000','10.000-15.000','>15.000']]
+    """
     model=self.model
     
     if intervals == "automatic":

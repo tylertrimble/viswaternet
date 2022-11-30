@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
 """
-Created on Sun Oct  2 20:46:43 2022
-
-@author: Tyler
+The viswaternet.utils.convert_excel converts excel data to a format usable by
+viswaternet.
 """
 import os
 import pandas as pd
@@ -10,14 +8,24 @@ import pandas as pd
 
 def convert_excel(self, file, data_type, element_index, value_index):
     """Converts an excel file into the correct dictionary structure needed to
-    be used with drawing functions.
-    Arguments:
-    model: Takes dictionary. Uses input file name to give each image a unique
-    name.
-    file: Takes string. Location in Directory where excel file is located.
-    data_type: Takes string. Type of data that is being extracted. Unique data
-    is data that is seperated into groups such as pressure groups. Discrete
-    data is numerical and is"""
+    be used with viswaternet functions.
+    
+    Arguments
+    ---------
+    file : string
+        Excel file to be formatted.
+        
+    data_type : string
+        The type of data that the excel data is (Unique, continuous, or discrete.)
+        
+    element_index : int
+        The excel column that contains element names. Column A in excel is
+        considered the 0th column for use with viswaternet.
+        
+    value_index : int
+        The excel column that contains element data. Column A in excel is 
+        considered the 0th column for use with viswaternet.
+    """
     model=self.model
     if data_type == "unique":
         element_list = {}

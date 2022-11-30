@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-Created on Sun Oct  2 20:58:38 2022
-
-@author: Tyler
+The viswaternet.utils.unit_conversion module
 """
 import numpy as np
 import networkx.drawing.nx_pylab as nxp
