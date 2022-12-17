@@ -35,8 +35,8 @@ def save_fig(self, save_name=None,dpi='figure',save_format='png'):
         try:
 
             prefixRemove = networkName.rfind("/")
-
-            networkName = networkName[prefixRemove + 1 :]
+            if prefixRemove == -1:
+                prefixRemove = networkName.rfind("\\")
         except Exception:
 
             pass
