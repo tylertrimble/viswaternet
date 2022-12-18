@@ -39,6 +39,7 @@ def animate_plot(
         
         .. rubric:: Usable Functions
         
+<<<<<<< HEAD
         ================================= ==
             :attr:'plot_basic_elements'
             :attr:'plot_discrete_nodes'
@@ -80,6 +81,17 @@ def animate_plot(
         can be passed into animate_plot.
     """
     
+=======
+        =======================
+            :function:'base_demand'
+            :attr:'demand'
+            :attr:'elevation'
+            :attr:'head'
+            :attr:'pressure'
+            :attr:'quality'
+        =======================
+    """
+>>>>>>> c30ef4d779df5eff25e4dba9d00a59a63bbcfadf
     model=self.model
     timesteps = int(
         model["wn"].options.time.duration / model["wn"].options.time.report_timestep
