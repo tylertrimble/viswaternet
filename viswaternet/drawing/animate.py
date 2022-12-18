@@ -39,14 +39,47 @@ def animate_plot(
         
         .. rubric:: Usable Functions
         
-        =======================
-            :function:'base_demand'
-            :attr:'demand'
-            :attr:'elevation'
-            :attr:'head'
-            :attr:'pressure'
-            :attr:'quality'
-        =======================
+        ================================= ==
+            :attr:'plot_basic_elements'
+            :attr:'plot_discrete_nodes'
+            :attr:'plot_discrete_links'
+            :attr:'plot_continuous_nodes'
+            :attr:'plot_continuous_links'
+            :attr:'plot_unique_data'
+        ================================= ==
+        
+    data_type : string
+        The type of data that the excel data is (Unique, continuous, or discrete.)
+        
+    parameter_type : string
+        Type of parameter (nodal, link)
+        
+    fps : integer
+        Framerate that the .gif file will be generated with.
+        
+    first_timestep : integer
+        The starting timestep of the .gif file.
+        
+    last_timestep : integer
+        The last timestep of the .gif file.
+        
+    unit : string
+        The time unit that will be reported for each frame of the .gif file.
+        
+        .. rubric:: Time Units
+
+        ====================  ====================================  ====================
+            :attr:'~Default'  :math:'s'                             :attr:'N/A'
+            :attr:'~min'      :math:'min'                           :attr:'N/A'
+            :attr:'~hr'       :math:'hr'                            :attr:'N/A'
+            :attr:'~day'      :math:'day'                           :attr:'N/A'
+        ====================  ====================================  ====================
+    
+    kwargs : Any
+        Any arguments for the plotting function passed into the function argument
+        can be passed into animate_plot.
+    """
+    
     model=self.model
     timesteps = int(
         model["wn"].options.time.duration / model["wn"].options.time.report_timestep

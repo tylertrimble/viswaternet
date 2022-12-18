@@ -639,7 +639,7 @@ def plot_unique_data(
             if parameter_type == "link":
                 if min_width is not None and max_width is not None:
                     normalized_parameter = normalize_parameter(
-                        self, custom_data_values[1], min_width, max_width
+                        custom_data_values[1], min_width, max_width
                     )
     
                     widths = normalized_parameter
@@ -695,7 +695,7 @@ def plot_unique_data(
             elif parameter_type == "node":
                 if min_size is not None and max_size is not None:
                     normalized_parameter = normalize_parameter(
-                        self, custom_data_values[1], min_size, max_size
+                        custom_data_values[1], min_size, max_size
                     )
     
                     node_size = normalized_parameter
@@ -1049,7 +1049,7 @@ def plot_unique_data(
 
                 if min_width is not None and max_width is not None:
                     normalized_parameter = normalize_parameter(
-                        self, custom_data_values[1], min_width, max_width
+                        custom_data_values[1], min_width, max_width
                     )
     
                     widths = normalized_parameter
@@ -1105,7 +1105,7 @@ def plot_unique_data(
             elif parameter_type == "node":
                 if min_size is not None and max_size is not None:
                     normalized_parameter = normalize_parameter(
-                        self, custom_data_values[1], min_size, max_size
+                        custom_data_values[1], min_size, max_size
                     )
     
                     node_size = normalized_parameter

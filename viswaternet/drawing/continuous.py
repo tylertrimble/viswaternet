@@ -273,8 +273,8 @@ def plot_continuous_nodes(
     cmap=default_cmap,
     color_bar_title=None,
     node_size=100,
-    min_size=None,
-    max_size=None,
+    min_size=100,
+    max_size=100,
     node_shape=".",
     edge_colors=None,
     line_widths=None,
@@ -358,7 +358,7 @@ def plot_continuous_nodes(
             parameter_results = unit_conversion(parameter_results, parameter, unit)
         if min_size is not None and max_size is not None:
             normalized_parameter = normalize_parameter(
-                self, parameter_results, min_size, max_size
+                parameter_results, min_size, max_size
             )
 
             node_size = normalized_parameter
@@ -433,7 +433,7 @@ def plot_continuous_nodes(
                          draw_base_legend= draw_base_legend,
                          draw_intervals_legend=draw_intervals_legend,
                          linewidths=line_widths,
-                         edgecolors=edge_colors,
+                         edge_colors=edge_colors,
                          )
     if savefig:
 
@@ -448,8 +448,8 @@ def plot_continuous_links(
     value=None,
     unit=None,
     widths=1,
-    min_width=None,
-    max_width=None,
+    min_width=1,
+    max_width=1,
     vmin=None,
     vmax=None,
     link_style='-',
@@ -516,7 +516,7 @@ def plot_continuous_links(
         if unit is not None:
             parameter_results = unit_conversion(parameter_results, parameter, unit)
         normalized_parameter = normalize_parameter(
-            self, parameter_results, min_width, max_width
+            parameter_results, min_width, max_width
         )
 
         widths = normalized_parameter

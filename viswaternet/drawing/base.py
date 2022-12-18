@@ -1,5 +1,7 @@
 """
-The viswaternet.utils.unit_conversion module
+The viswaternet.utils.base module contains plotting functions that are 
+frequently utilized by other plotting functions. This includes base element
+drawing, legend drawing, color map, and label drawing functions.
 """
 import numpy as np
 import networkx.drawing.nx_pylab as nxp
@@ -47,6 +49,117 @@ def draw_base_elements(
     base_link_line_style='-',
     base_link_arrows=False,
 ):
+    """Draws base elements (nodes, links, reservoirs, tanks, pumps, and valves)
+    without any data associated with the elements.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+    
+    nodes : boolean
+        Determines if base nodes with no data associated with them are drawn.
+        Set to False for all functions excep plot_basic_elements by default.
+    
+    links : boolean
+        Determines if base links with no data associated with them are drawn.
+        Set to False for all functions that deal with link data plotting.
+        
+    reservoirs : boolean
+        Determines if reservoirs with no data associated with them are drawn.
+    
+    tanks : boolean
+        Determines if reservoirs with no data associated with them are drawn.
+        
+    pumps : boolean
+        Determines if pumps with no data associated with them are drawn.
+        
+    valves : boolean
+        Determines if valves with no data associated with them are drawn.
+        
+    legend : boolean
+        Determines if the base elements legend will be drawn. 
+    
+    reservoir_size : integer
+        The size of the reservoir marker on the plot in points^2. 
+        
+    reservoir_color : string
+        The color of the reservoir marker. Refer to matplotlib documentation for 
+        available colors.
+        
+    reservoir_shape : string
+        The shape of the reservoir marker. Refer to matplotlib documentation for
+        available marker types.
+        
+    reservoir_border_color : string
+        The color of the border around the reservoir marker.
+    
+    reservoir_border_width : integer
+        The width in points of the border around the reservoir marker.
+    
+    tank_size : integer
+        The size of the tank marker on the plot in points^2. 
+        
+    tank_color : string
+        The color of the tank marker.
+        
+    tank_shape : string
+        The shape of the tank marker.
+        
+    tank_border_color : string
+        The color of the border around the tank marker.
+    
+    tank_border_width : integer
+        The width in points of the border around the tank marker.
+    
+    valve_size : integer
+        The size of the valve marker on the plot in points^2. 
+        
+    valve_color : string
+        The color of the valve marker.
+        
+    valve_shape : string
+        The shape of the valve marker.
+        
+    valve_border_color : string
+        The color of the border around the valve marker.
+    
+    valve_border_width : integer
+        The width in points of the border around the valve marker.
+        
+    pump_color : string
+        The color of the pump line.
+        
+    pump_width : integer
+        The width of the pump line in points.
+        
+    pump_line_style : string
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to 
+        matplotlib documentation for available line styles.
+        
+    pump_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+        
+    base_node_color : string
+        The color of the nodes without data associated with them.
+        
+    base_node_size : integer
+        The size of the nodes without data associated with them in points^2.
+        
+    base_link_color : string
+        The color of the links without data associated with them.
+        
+    base_link_width : integer
+        The width of the links without data associated with them in points.
+        
+    base_link_line_style : string
+        The style (solid, dashed, dotted, etc) of the links with no data associated
+        with them.
+        
+    base_link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the links
+        with no data associated with them.
+    """
     model=self.model
     if nodes:
 
@@ -143,12 +256,12 @@ def draw_base_elements(
 def plot_basic_elements(
     self,
     ax,
-    pumps=True,
-    valves=True,
+    nodes=True,
+    links=True,
     reservoirs=True,
     tanks=True,
-    links=True,
-    nodes=True,
+    pumps=True,
+    valves=True,
     savefig=True,
     save_name=None,
     dpi='figure',
@@ -186,6 +299,157 @@ def plot_basic_elements(
     base_link_line_style='-',
     base_link_arrows=False,
 ):
+    """User-level function that draws base elements with no data assocaited with
+    them, draws a legend, and saves the figure.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+        
+    nodes : boolean
+        Determines if base nodes with no data associated with them are drawn.
+        Set to False for all functions excep plot_basic_elements by default.
+    
+    links : boolean
+        Determines if base links with no data associated with them are drawn.
+        Set to False for all functions that deal with link data plotting.
+        
+    reservoirs : boolean
+        Determines if reservoirs with no data associated with them are drawn.
+    
+    tanks : boolean
+        Determines if reservoirs with no data associated with them are drawn.
+        
+    pumps : boolean
+        Determines if pumps with no data associated with them are drawn.
+        
+    valves : boolean
+        Determines if valves with no data associated with them are drawn.
+        
+    savefig : boolean
+        Determines if the figure is saved. 
+        
+    save_name : string
+        The inputted string will be appended to the name of the network.
+         
+        Example
+        -------
+        >>>import viswaternet as vis
+        >>>model = vis.VisWNModel(r'Networks/Net3.inp')
+        ...
+        >>>model.save_fig(save_name='_example')
+        <Net3_example.png>
+     
+    dpi : int, string
+        The dpi that the figure will be saved with.
+         
+    save_format : string
+        The file format that the figure will be saved as.
+        
+    legend : boolean
+        Determines if the base elements legend will be drawn. 
+         
+    legend_loc_1 : string
+        The location of the base elements legend on the figure. Refer to matplotlib
+        documentation for possible inputs.
+        
+    font_size : integer
+        The font size of the non-title text for legends. 
+        
+    font_color : string
+        The color of the legend text. Refer to matplotlib documentation for 
+        available colors.
+        
+    legend_title_font_size : integer
+        The font size of the title text for legends.
+        
+    draw_frame : boolean
+        Determines if the frame around the legend is drawn.
+        
+    legend_sig_figs : integer
+        The number of significant figures, or decimal points, that numbers in the
+        legend will be displayed with. 0 should be passed for whole numbers.
+        
+    reservoir_size : integer
+        The size of the reservoir marker on the plot in points^2. 
+        
+    reservoir_color : string
+        The color of the reservoir marker.
+        
+    reservoir_shape : string
+        The shape of the reservoir marker. Refer to matplotlib documentation for
+        available marker types.
+        
+    reservoir_border_color : string
+        The color of the border around the reservoir marker.
+    
+    reservoir_border_width : integer
+        The width in points of the border around the reservoir marker.
+    
+    tank_size : integer
+        The size of the tank marker on the plot in points^2. 
+        
+    tank_color : string
+        The color of the tank marker.
+        
+    tank_shape : string
+        The shape of the tank marker.
+        
+    tank_border_color : string
+        The color of the border around the tank marker.
+    
+    tank_border_width : integer
+        The width in points of the border around the tank marker.
+    
+    valve_size : integer
+        The size of the valve marker on the plot in points^2. 
+        
+    valve_color : string
+        The color of the valve marker.
+        
+    valve_shape : string
+        The shape of the valve marker.
+        
+    valve_border_color : string
+        The color of the border around the valve marker.
+    
+    valve_border_width : integer
+        The width in points of the border around the valve marker.
+        
+    pump_color : string
+        The color of the pump line.
+        
+    pump_width : integer
+        The width of the pump line in points.
+        
+    pump_line_style : string
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to 
+        matplotlib documentation for available line styles.
+        
+    pump_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+        
+    base_node_color : string
+        The color of the nodes without data associated with them.
+        
+    base_node_size : integer
+        The size of the nodes without data associated with them in points^2.
+        
+    base_link_color : string
+        The color of the links without data associated with them.
+        
+    base_link_width : integer
+        The width of the links without data associated with them in points.
+        
+    base_link_line_style : string
+        The style (solid, dashed, dotted, etc) of the links with no data associated
+        with them.
+        
+    base_link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the links
+        with no data associated with them.
+    """
     
     draw_base_elements(
         self,
@@ -247,9 +511,9 @@ def draw_legend(
     loc="upper right",
     loc2="lower right",
     font_size=15,
-    draw_frame=False,
-    legend_title_font_size=17,
     font_color="k",
+    legend_title_font_size=17,
+    draw_frame=False,
     pump_color='b',
     base_link_color='k',
     node_sizes=None,
@@ -263,6 +527,54 @@ def draw_legend(
     edge_colors='k',
     linewidths=1
 ):
+    """Draws the legends for all other plotting functions. There are two legends
+    that might be drawn. One is the base elements legend with displays what markers
+    are associated with each element type (nodes, links, etc.) The other legend
+    is the intervals legend which is the legend for discrete drawing.
+    
+    Under normal use, draw_legends is not normally called by the user directly,
+    even with more advanced applications. However, some specialized plots may 
+    require draw_legend to be called directly.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+        
+    intervals : array-like, string
+        If set to 'automatic' then intervals are created automatically on a 
+        equal interval basis. Otherwise, it is the edges of the intervals to be
+        created. intervals array length should be num_intervals + 1.
+    
+    title : string
+        The title text of the legend.
+        
+    loc : string
+        The location of the base elements legend on the figure. Refer to matplotlib
+        documentation for possible inputs.
+        
+    loc2 : string
+        The location of the intervals legend on the figure.
+        
+    font_size : integer
+        The font size of the non-title text for legends. 
+        
+    font_color : string
+        The color of the legend text. Refer to matplotlib documentation for 
+        available colors.
+        
+    legend_title_font_size : integer
+        The font size of the title text for legends.
+        
+    draw_frame : boolean
+        Determines if the frame around the legend is drawn.
+    
+    pump_color : string
+        The color of the pump line.
+    
+    base_link_color : string
+        The color of the links without data associated with them.
+    """
     if intervals is None:
         intervals = []
     handles, labels = ax.get_legend_handles_labels()
