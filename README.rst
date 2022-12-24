@@ -23,7 +23,7 @@ Dependencies
 * Python 3.7+
 * Numpy
 * Pandas
-* Matplotlib
+* Matplotlib 3.3.0+
 * NetworkX
 * imageio
 
@@ -38,6 +38,26 @@ Viswaternet is designed to plot simulation data onto a network graph, with a lar
 * Customize style of virtually every element of the network graph, including: reservoirs, tanks, valves, pumps, links, and nodes.
 * Draw labels relative to nodes or based on an absolute position on the figure.
 * Draw specific nodes or links with their own data and style.
+
+Installation
+---------------
+To install VisWaterNet, run this command in your terminal:
+
+.. code:: python
+
+    pip install viswaternet
+    
+Alternatively, the sources for VisWaterNet can be downloaded from the Github repo. You can clone the public repository:
+
+.. code:: python
+
+    git clone git://github.com/tylertrimble/viswaternet
+
+Once you have a copy of the source, you can install it with:
+
+.. code:: python
+
+    python setup.py install
 
 Getting Started
 ---------------
@@ -60,6 +80,14 @@ Finally, call on any of the plotting functions with the argument inputs of your 
 .. code:: python
 
     model.plot_discrete_nodes(ax,parameter="quality",value='max',unit="hr")
+
+Contact
+-------
+Tyler Trimble - tylerl.trimble@utexas.edu
+
+Meghna Thomas - meghnathomas@utexas.edu
+
+Lina Sela - linasela@utexas.edu
 
 Credits
 -------
