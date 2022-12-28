@@ -40,12 +40,12 @@ def animate_plot(
         .. rubric:: Usable Functions
     
         ================================= ==
-            :attr:'plot_basic_elements'
-            :attr:'plot_discrete_nodes'
-            :attr:'plot_discrete_links'
-            :attr:'plot_continuous_nodes'
-            :attr:'plot_continuous_links'
-            :attr:'plot_unique_data'
+            plot_basic_elements
+            plot_discrete_nodes
+            plot_discrete_links
+            plot_continuous_nodes
+            plot_continuous_links
+            plot_unique_data
         ================================= ==
         
     data_type : string
@@ -68,12 +68,12 @@ def animate_plot(
         
         .. rubric:: Time Units
 
-        ====================  ====================================  ====================
-            :attr:'~Default'  :math:'s'                             :attr:'N/A'
-            :attr:'~min'      :math:'min'                           :attr:'N/A'
-            :attr:'~hr'       :math:'hr'                            :attr:'N/A'
-            :attr:'~day'      :math:'day'                           :attr:'N/A'
-        ====================  ====================================  ====================
+        ====================  ====================================
+        Default               :math:`s`
+        min                   :math:`min`
+        hr                    :math:`hr`
+        day                   :math:`day`
+        ====================  ====================================
     
     kwargs : Any
         Any arguments for the plotting function passed into the function argument

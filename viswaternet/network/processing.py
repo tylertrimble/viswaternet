@@ -32,12 +32,12 @@ def get_parameter(
         .. rubric:: Possible Inputs
         
         ======================= =========================================
-            :attr:'int'         Plots element data for specified timestep
-            :attr:'min'         Plots minimum data point for each element
-            :attr:'max'         Plots maximum data point for each element
-            :attr:'mean'        Plots mean for each element
-            :attr:'stddev'      Plots standard deviation for each element
-            :attr:'range'       Plots range for each element
+            int                 lots element data for specified timestep
+            min                 Plots minimum data point for each element
+            max                 Plots maximum data point for each element
+            mean                Plots mean for each element
+            stddev              Plots standard deviation for each element
+            range               Plots range for each element
         ======================= =========================================
         
     element_list : array-like

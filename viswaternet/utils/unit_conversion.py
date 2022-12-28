@@ -5,49 +5,49 @@ units from WNTR's base SI units.
 .. rubric:: Base Demand, Demand, and Flowrate Units
 
 ====================  ====================================  ====================
-    :attr:'~Default'  :math:'m^3\,/\,s'                     :attr:'Metric'
-    :attr:`~LPS`      :math:`L\,/\,s`                       :attr:`Metric`
-    :attr:`~LPM`      :math:`L\,/\,min`                     :attr:`Metric`
-    :attr:`~MLD`      :math:`ML\,/\,day`                    :attr:`Metric`
-    :attr:`~CMH`      :math:`m^3\,\,hr`                     :attr:`Metric`
-    :attr:`~CMD`      :math:`m^3\,/\,day`                   :attr:`Metric`
-    :attr:`~CFS`      :math:`ft^3\,/\,s`                    :attr:`USC`
-    :attr:`~GPM`      :math:`gal\,/\,min`                   :attr:`USC`
-    :attr:`~MGD`      :math:`10^6\,gal\,/\,day`             :attr:`USC`
-    :attr:`~IMGD`     :math:`10^6\,Imp.\,gal\,/\,day`       :attr:`USC`
-    :attr:`~AFD`      :math:`acre\cdot\,ft\,/\,day`         :attr:`USC`
+    Default           :math:'m^3\,/\,s'                     Metric
+    LPS               :math:`L\,/\,s`                       Metric
+    LPM               :math:`L\,/\,min`                     Metric
+    MLD               :math:`ML\,/\,day`                    Metric
+    CMH               :math:`m^3\,\,hr`                     Metric
+    CMD               :math:`m^3\,/\,day`                   Metric
+    CFS               :math:`ft^3\,/\,s`                    USC
+    GPM               :math:`gal\,/\,min`                   USC
+    MGD               :math:`10^6\,gal\,/\,day`             USC
+    IMGD              :math:`10^6\,Imp.\,gal\,/\,day`       USC
+    AFD               :math:`acre\cdot\,ft\,/\,day`         USC
 ====================  ====================================  ====================
 
 .. rubric:: Diameter, Elevation, Head, and Length Units
 
 ====================  ====================================  ====================
-    :attr:'~Default'  :math:'m'                             :attr:'Metric'
-    :attr:'~cm'       :math:'cm'                            :attr:'Metric'
-    :attr:'~ft'       :math:'ft'                            :attr:'USC'
-    :attr:'~in'       :math:'in'                            :attr:'USC'
+    Default           :math:`m`                             Metric
+    cm                :math:`cm`                            Metric
+    ft                :math:`ft`                            USC
+    in                :math:`in'`                           USC
 ====================  ====================================  ====================
 
 .. rubric:: Presure Units
 
 ====================  ====================================  ====================
-    :attr:'~Default'  :math:'m'                             :attr:'Metric'
-    :attr:'~psi'      :math:'psi'                           :attr:'USC'
+    Default           :math:`m`                             Metric
+    psi               :math:`psi`                           USC
 ====================  ====================================  ====================
 
 .. rubric:: Velocity Units
 
 ====================  ====================================  ====================
-    :attr:'~Default'  :math:'m/s'                           :attr:'Metric'
-    :attr:'~ft/s'     :math:'ft/s'                          :attr:'USC'
+    Default           :math:`m/s`                           Metric
+    ft/s              :math:`ft/s`                          USC
 ====================  ====================================  ====================
 
 .. rubric:: Time, Quality (Water Age) Units
 
 ====================  ====================================  ====================
-    :attr:'~Default'  :math:'s'                             :attr:'N/A'
-    :attr:'~min'      :math:'min'                           :attr:'N/A'
-    :attr:'~hr'       :math:'hr'                            :attr:'N/A'
-    :attr:'~day'      :math:'day'                           :attr:'N/A'
+    Default           :math:`s`                             N/A
+    min               :math:`min`                           N/A
+    hr                :math:`hr`                            N/A
+    day               :math:`day`                           N/A
 ====================  ====================================  ====================
 """
 def unit_conversion(parameter_results, parameter, new_unit):
@@ -65,27 +65,27 @@ def unit_conversion(parameter_results, parameter, new_unit):
         .. rubric:: Nodal Parameters
         
         =======================
-            :attr:'base_demand'
-            :attr:'demand'
-            :attr:'elevation'
-            :attr:'head'
-            :attr:'pressure'
-            :attr:'quality'
+            base_demand
+            demand
+            elevation
+            head
+            pressure
+            qualit'
         =======================
             
         .. rubric:: Nodal Parameters
         
         =======================
-            :attr:'diameter'
-            :attr:'flowrate'
-            :attr:'velocity'
-            :attr:'quality'
+            diameter
+            flowrate
+            velocity
+            quality
         =======================
         
         .. rubric:: Other Parameters
         
         =======================
-            :attr:'time'
+            time
         =======================
       
     new_unit : string

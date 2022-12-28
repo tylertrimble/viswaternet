@@ -574,6 +574,38 @@ def draw_legend(
     
     base_link_color : string
         The color of the links without data associated with them.
+    
+    node_sizes : integer, array-like
+        The size of the node elements. Can either be an integer if the node
+        sizes are uniform, or an array-like if variable node sizes are present.
+        
+    link_sizes : integer, array-like
+        The size of the link elements. Can either be an integer if the link
+        sizes are uniform, or an array-like if variable link sizes are present.
+        
+    element_size_intervals : integer
+        The number of intervals to be used if an element size legend is used.
+    
+    element_size_legend_title : string
+        The title of the element size legend.
+    
+    element_size_legend_loc : string
+        The location of the element size legend on the figure.
+        
+    element_size_legend_labels : array-like
+        The labels of each interval of the element size legend.
+        
+    draw_base_legend : boolean
+        Determine if the base elements legend is drawn.
+        
+    draw_intervals_legend : boolean
+        Determine if the intervals legend is drawn.
+        
+    edge_colors : string
+        The color of the legend nodes edges when plotting element size legend.
+        
+    linewidths: integer
+        The width of the line of the legend nodes when plotting element size legend.
     """
     if intervals is None:
         intervals = []
@@ -681,21 +713,71 @@ def draw_legend(
             ax.add_artist(legend3)
 
 def draw_color_bar(ax, g, cmap, color_bar_title=None):
-    """Draws Color Bar.
-    Arguments:
-    g: NetworkX graph of plotted elements.
-    cmap: Colormap
-    color_bar_title: Takes String. Title of Color Bar."""
-
+    """Draws the color bar for all continuous plotting functions.
+    
+    Like draw_legends, under normal use, draw_color_bar is not normally called 
+    by the user directly, even with more advanced applications. However, some 
+    specialized plots may require draw_color_bar to be called directly.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+    
+    g : NetworkX path collection
+        The list of elements drawn by NetworkX function.
+        
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib
+        documentation for possible inputs.
+        
+    color_bar_title : string
+        The title of the color bar.
+    """
     global cbar
     fig=plt.gcf()
     ax.set_aspect('auto')
     cax = fig.add_axes([0.9,0.2, 0.03, 0.6])
     cbar = plt.colorbar(g,cax=cax)
     cbar.set_label(color_bar_title, fontsize=10)
-
-
+    
 def draw_label(self, ax, labels, x_coords, y_coords, nodes=None, draw_arrow=True,label_font_size=11):
+    """Draws customizable labels on the figure.
+    
+    There are two modes of coordinate input:
+    If the 'nodes' argument is not specified, then the label coordinates are 
+    processed as absolute coordinates with possible values from 0 to 1. For 
+    instance, (0,0) would place the label in the bottom left of the figure, 
+    while (1,1) would place the label in the top right of the figure.
+    
+    If the 'nodes' argument IS specified, then the coordinates are processed
+    as coordinates relative to it's associated node. The scale of the coordinates
+    scaling differs between networks. For instance, (50,100) would place the 
+    label 50 units to the right, and 100 units above the associated node.
+
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+    
+    labels : string, array-like
+        The label(s) textual content.
+        
+    x_coords : integer, array-like
+        The x coordinate(s) of the labels.
+        
+    y_coords : integer, array-like
+        The y coordinate(s) of the labels.
+        
+    nodes : string, array-like
+        A list of the nodes the labels are to be associated with.
+        
+    draw_arrow : boolean
+        Determine if an arrow is drawn from the associated nodes to labels.
+        
+    label_font_size : integer
+        The font size of the labels.
+    """
     model=self.model
     if nodes is not None:
 

@@ -12,7 +12,7 @@ with open('HISTORY.rst') as history_file:
 
 requirements = ['pandas',
                'numpy',
-               'matplotlib',
+               'matplotlib>=3.3.0',
                'wntr',
                'imageio',
                'networkx']
@@ -44,6 +44,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/tylertrimble/viswaternet',
-    version='0.1.3',
+    version='0.1.4',
     zip_safe=False,
 )
