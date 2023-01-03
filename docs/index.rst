@@ -5,7 +5,6 @@ Welcome to visnet's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   readme
    installation
    usage
    source/modules
