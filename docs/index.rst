@@ -7,6 +7,7 @@ Welcome to visnet's documentation!
 
    readme
    installation
+   examples
    usage
    source/modules
    contributing
