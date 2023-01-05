@@ -6,11 +6,8 @@ Welcome to visnet's documentation!
    :caption: Contents:
 
    readme
-   installation
    examples
-   usage
    source/modules
-   contributing
    authors
    history
 
