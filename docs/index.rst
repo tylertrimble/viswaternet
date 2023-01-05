@@ -1,4 +1,4 @@
-Welcome to visnet's documentation!
+Welcome to VisWaterNet's documentation!
 ======================================
 
 .. toctree::
