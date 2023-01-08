@@ -51,8 +51,9 @@ This example demonstrates the basic plotting functionality provided by VisWaterN
    :alt: Basic network layout modified
 
 
-All customization inputs can be found here.
+All customization inputs can be found `here`_.
 
+.. _`here`: https://viswaternet.readthedocs.io/en/latest/source/viswaternet.drawing.html#viswaternet.drawing.base.draw_base_elements
 
 Example 2 - Continuous Data Plots
 -----------------------------
@@ -66,12 +67,22 @@ This example demonstrates how to visualize data in a continuous manner, i.e., by
 .. code:: python
 
     model.plot_continuous_nodes(ax, parameter = "pressure", value = 10)
+    
+.. _basic3:
+.. figure:: figures/eg_plot_3.png
+   :scale: 100 %
+   :alt: Continuous node plot
 
-3. Create a continuous data plot for mean flow rate over the simulation duration.
+3. Create a continuous data plot for mean flow rate over the simulation duration. Here, we change the color map and vary the width of the links according to flowrate.
 
 .. code:: python
 
-    
+    model.plot_continuous_links(ax, parameter = "flowrate", value = 'mean', cmap = 'summer_r', min_width = 2, max_width = 6)
+
+.. _basic4:
+.. figure:: figures/eg_plot_4.png
+   :scale: 100 %
+   :alt: Continuous link plot
 
 Example 3 - Discrete Data Plots
 -----------------------------
