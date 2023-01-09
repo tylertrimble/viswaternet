@@ -73,7 +73,7 @@ This example demonstrates how to visualize data in a continuous manner, i.e., by
    :scale: 100 %
    :alt: Continuous node plot
 
-3. Create a continuous data plot for mean flow rate over the simulation duration. Here, we change the color map and vary the width of the links according to flowrate.
+3. Create a continuous data plot for mean flow rate over the simulation duration. Here, we change the color map and vary the width of the links (between :code:`min_width` and :code:`max_width`) according to the link flow rate value.
 
 .. code:: python
 
