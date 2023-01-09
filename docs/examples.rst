@@ -7,27 +7,27 @@ Example 1 - Basic Network Layout Plots
 
 This example demonstrates the basic plotting functionality provided by VisWaterNet. The plot_basic_elements function is used to generate a view of the network layout, depicting the locations of nodes (junctions, tanks, and reservoirs) and links (pipes, pumps, and valves).
 
-1.  Import the VisWaterNet and matplotlib.pyplot packages 
+1.  Import the VisWaterNet and matplotlib.pyplot packages.
 
 .. code:: python
 
     import viswaternet as vis
     import matplotlib.pyplot as plt
     
-2. Initialize a VisWaterNet model object for the .INP file of the water distribution network
+2. Initialize a VisWaterNet model object for the .INP file of the water distribution network.
 
 .. code:: python
 
     model = vis.VisWNModel("CTown.inp")
 
-3. Initialize and customize a matplotlib figure and axis
+3. Initialize and customize a matplotlib figure and axis.
 
 .. code:: python
 
     fig, ax = plt.subplots(figsize=(11,11))  
     ax.set_frame_on(False) # remove frame from figure
 
-4. Create a basic network plot
+4. Create a basic network plot.
 
 .. code:: python
 
@@ -38,7 +38,7 @@ This example demonstrates the basic plotting functionality provided by VisWaterN
    :scale: 100 %
    :alt: Basic network layout
 
-5. Customize the basic network plot
+5. Customize the basic network plot by changing the location of the legend, color of the tank marker, and pump line style.
 
 .. code:: python
 
