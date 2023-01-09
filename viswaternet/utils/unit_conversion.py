@@ -5,7 +5,7 @@ units from WNTR's base SI units.
 .. rubric:: Base Demand, Demand, and Flowrate Units
 
 ====================  ====================================  ====================
-    Default           :math:'m^3\,/\,s'                     Metric
+    Default           :math:`m^3\,/\,s`                     Metric
     LPS               :math:`L\,/\,s`                       Metric
     LPM               :math:`L\,/\,min`                     Metric
     MLD               :math:`ML\,/\,day`                    Metric
