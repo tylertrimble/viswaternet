@@ -106,7 +106,7 @@ def plot_unique_data(
     There are three distinct modes of operation, and which one is used is controlled
     by the 'parameter' argument, which differs from previous use of the argument.
     
-    Setting the parameter argument to 'demand_patterns', 'pipe_diameters', 
+    Setting the parameter argument to 'demand_patterns', 'diameter', 
     or 'roughness' simply plots that parameter. These parameters are treated 
     differently from others because in usually they are categorical. For 
     instance, pipe diameters are not randomly chosen, and instead are chosen from
