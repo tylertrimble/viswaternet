@@ -150,11 +150,9 @@ def animate_plot(
             filenames, model["image_path"] + "/" + str(value) + ".png"
         )
         ax.clear()
-        if (
-            function == continuous.plot_continuous_links
-            or function == continuous.plot_continuous_nodes
-        ):
+        if (data_type=='continuous'):
             cbar.remove()
+            
     # builds gif
     with imageio.get_writer(
         model["image_path"] + "/" + gif_save_name + ".gif", mode="I", fps=fps
