@@ -99,18 +99,18 @@ def animate_plot(
                 parameter_results, node_list = processing.get_parameter(
                     self, "node", kwargs.get("parameter"), kwargs.get("value", None)
                 )
-            for value in np.min(parameter_results):
+            for value in np.min(parameter_results,axis=0):
                 if value < -1e-5:
                     if kwargs.get("vmin", None) is None:
-                        kwargs["vmin"] = -np.max(np.max(parameter_results))
+                        kwargs["vmin"] = -np.max(np.max(parameter_results,axis=0))
                     if kwargs.get("vmax", None) is None:
-                        kwargs["vmax"] = np.max(np.max(parameter_results))
+                        kwargs["vmax"] = np.max(np.max(parameter_results,axis=0))
                     break
                 else:
                     if kwargs.get("vmin", None) is None:
-                        kwargs["vmin"] = np.min(np.min(parameter_results))
+                        kwargs["vmin"] = np.min(np.min(parameter_results,axis=0))
                     if kwargs.get("vmax", None) is None:
-                        kwargs["vmax"] = np.max(np.max(parameter_results))
+                        kwargs["vmax"] = np.max(np.max(parameter_results,axis=0))
     if data_type == "discrete":
         kwargs["disable_interval_deleting"] = True
 
@@ -124,8 +124,8 @@ def animate_plot(
                     self, "node", kwargs.get("parameter"), kwargs.get("value", None)
                 )
             kwargs["intervals"] = np.linspace(
-                np.min(np.min(parameter_results)),
-                np.max(np.max(parameter_results)),
+                np.min(np.min(parameter_results,axis=0),axis=0),
+                np.max(np.max(parameter_results,axis=0),axis=0),
                 kwargs.get("num_intervals", 5),
             )
             print(len(kwargs["intervals"]))
