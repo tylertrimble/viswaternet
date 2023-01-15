@@ -7,12 +7,327 @@ import numpy as np
 import networkx.drawing.nx_pylab as nxp
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import matplotlib as mpl
 from matplotlib.lines import Line2D
 
 
 from viswaternet.utils import save_fig
 
+def draw_nodes(
+    self,
+    ax,
+    node_list,
+    parameter_results=None,
+    vmin=None,
+    vmax=None,
+    node_size=None,
+    node_color="k",
+    cmap="tab10",
+    node_shape=".",
+    edge_colors="k",
+    line_widths=0,
+    label=None,
+):
+    """Draws continuous nodal data onto the figure.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+    
+    node_list : string, array-like
+        List of nodes to be drawn.
+        
+    parameter_results : array-like
+        The data associated with each node.
+        
+    vmin : integer
+        The minimum value of the color bar. 
+        
+    vmax : integer
+        The maximum value of the color bar.
+        
+    node_size : integer, array-like
+        Integer representing all node sizes, or array of sizes for each node.
+        
+    node_color : string
+        Color of the nodes.
 
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib
+        documentation for possible inputs.
+        
+    node_shape : string
+        Shape of the nodes. Refer to matplotlib documentation for available 
+        marker types.
+        
+    edge_colors : string
+        Color of the node borders.
+        
+    line_widths : integer
+        Width of the node borders.
+        
+    label : string
+        Matplotlib label of plotting instance.
+    """
+    model=self.model
+    if parameter_results is None:
+        parameter_results = []
+    if node_size is None:
+        node_size = []
+    if len(parameter_results) != 0:
+
+        negativeValues = False
+    if isinstance(node_size, list) and len(node_size) == 0:
+
+        node_size = np.ones(len(node_list)) * 100
+    if isinstance(node_size, int):
+        node_size = np.ones(len(node_list)) * node_size
+    if len(parameter_results) != 0:
+        for value in parameter_results:
+
+            if value < -1e-5:
+
+                negativeValues = True
+
+                cmap = mpl.cm.get_cmap(cmap)
+
+                if vmin is None and vmax is None:
+                    g = nxp.draw_networkx_nodes(
+                        model["G"],
+                        model["pos_dict"],
+                        ax=ax,
+                        nodelist=node_list,
+                        node_size=node_size,
+                        node_color=parameter_results,
+                        vmax=np.max(parameter_results),
+                        vmin=-np.max(parameter_results),
+                        cmap=cmap,
+                        node_shape=node_shape,
+                        linewidths=line_widths,
+                        edgecolors=edge_colors,
+                        label=label,
+                    )
+                else:
+                    g = nxp.draw_networkx_nodes(
+                        model["G"],
+                        model["pos_dict"],
+                        ax=ax,
+                        nodelist=node_list,
+                        node_size=node_size,
+                        node_color=parameter_results,
+                        vmax=vmax,
+                        vmin=vmin,
+                        cmap=cmap,
+                        node_shape=node_shape,
+                        linewidths=line_widths,
+                        edgecolors=edge_colors,
+                        label=label,
+                    )
+                return g
+        if negativeValues:
+            pass
+        else:
+            cmap = mpl.cm.get_cmap(cmap)
+
+            if vmin is None and vmax is None:
+                g = nxp.draw_networkx_nodes(
+                    model["G"],
+                    model["pos_dict"],
+                    ax=ax,
+                    nodelist=node_list,
+                    node_size=node_size,
+                    node_color=parameter_results,
+                    cmap=cmap,
+                    node_shape=node_shape,
+                    linewidths=line_widths,
+                    edgecolors=edge_colors,
+                )
+            else:
+                g = nxp.draw_networkx_nodes(
+                    model["G"],
+                    model["pos_dict"],
+                    ax=ax,
+                    nodelist=node_list,
+                    node_size=node_size,
+                    node_color=parameter_results,
+                    cmap=cmap,
+                    node_shape=node_shape,
+                    linewidths=line_widths,
+                    edgecolors=edge_colors,
+                    vmin=vmin,
+                    vmax=vmax,
+                )
+            return g
+    else:
+
+        nxp.draw_networkx_nodes(
+            model["G"],
+            model["pos_dict"],
+            ax=ax,
+            nodelist=node_list,
+            node_size=node_size,
+            node_color=node_color,
+            node_shape=node_shape,
+            edgecolors=edge_colors,
+            linewidths=line_widths,
+            label=label,
+        )
+
+def draw_links(
+    self,
+    ax,
+    link_list,
+    parameter_results=None,
+    edge_color="k",
+    cmap="tab10",
+    widths=None,
+    vmin=None,
+    vmax=None,
+    link_style='-',
+    link_arrows=False
+):
+    """Draws continuous link data onto the figure.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+    
+    link_list : string, array-like
+        List of links to be drawn.
+        
+    parameter_results : array-like
+        The data associated with each node.
+    
+    edge_colors : string
+        Color of links.
+        
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib
+        documentation for possible inputs.
+        
+    widths : integer, array-like
+        Integer representing all link widrths, or array of widths for each link.
+        
+    vmin : integer
+        The minimum value of the color bar. 
+        
+    vmax : integer
+        The maximum value of the color bar.
+    
+    link_style : string
+        The style (solid, dashed, dotted, etc.) of the links. Refer to 
+        matplotlib documentation for available line styles.
+        
+    link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+    """
+    model=self.model
+    if parameter_results is None:
+        parameter_results = []
+    if widths is None:
+        widths = []
+    
+    if isinstance(widths, list) and len(widths) == 0:
+
+        widths = np.ones(len(widths)) * 100
+        
+    if isinstance(widths, int):
+        widths = np.ones(len(link_list)) * widths
+        
+    edgeList = {}
+
+    if len(widths) == 0:
+
+        widths = np.ones(len(link_list)) * 1
+    negativeValues = False
+
+    if len(parameter_results) != 0:
+        for i in link_list:
+            edgeList[i] = model["G_pipe_name_list"].index(i)
+        for value in parameter_results:
+
+            if value < -1e-5:
+
+                negativeValues = True
+
+                cmap = mpl.cm.get_cmap(cmap)
+
+                if vmin is None and vmax is None:
+                    g = nxp.draw_networkx_edges(
+                        model["G"],
+                        model["pos_dict"],
+                        ax=ax,
+                        edgelist=([model["pipe_list"][i] for i in edgeList.values()]),
+                        edge_color=parameter_results,
+                        edge_vmax=np.max(parameter_results),
+                        edge_vmin=-np.max(parameter_results),
+                        edge_cmap=cmap,
+                        style=link_style,
+                        arrows=link_arrows,
+                        width=widths,
+                    )
+                else:
+                    g = nxp.draw_networkx_edges(
+                        model["G"],
+                        model["pos_dict"],
+                        ax=ax,
+                        edgelist=([model["pipe_list"][i] for i in edgeList.values()]),
+                        edge_color=parameter_results,
+                        edge_vmax=vmax,
+                        edge_vmin=vmin,
+                        edge_cmap=cmap,
+                        style=link_style,
+                        arrows=link_arrows,
+                        width=widths,
+                    )
+                return g
+        if negativeValues:
+            pass
+        else:
+            cmap = mpl.cm.get_cmap(cmap)
+
+            if vmin is None and vmax is None:
+                g = nxp.draw_networkx_edges(
+                    model["G"],
+                    model["pos_dict"],
+                    ax=ax,
+                    edgelist=([model["pipe_list"][i] for i in edgeList.values()]),
+                    edge_color=parameter_results,
+                    edge_cmap=cmap,
+                    style=link_style,
+                    arrows=link_arrows,
+                    width=widths,
+                )
+            else:
+                g = nxp.draw_networkx_edges(
+                    model["G"],
+                    model["pos_dict"],
+                    ax=ax,
+                    edgelist=([model["pipe_list"][i] for i in edgeList.values()]),
+                    edge_color=parameter_results,
+                    edge_cmap=cmap,
+                    style=link_style,
+                    arrows=link_arrows,
+                    width=widths,
+                    edge_vmin=vmin,
+                    edge_vmax=vmax
+                )
+            return g
+    else:
+        for i in link_list:
+            edgeList[i] = model["G_pipe_name_list"].index(i)
+        nxp.draw_networkx_edges(
+            model["G"],
+            model["pos_dict"],
+            ax=ax,
+            edgelist=([model["pipe_list"][i] for i in edgeList.values()]),
+            edge_color=edge_color,
+            style=link_style,
+            arrows=link_arrows,
+            width=widths,
+        )
 def draw_base_elements(
     self,
     ax,

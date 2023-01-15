@@ -11,7 +11,6 @@ from viswaternet.network import processing
 from viswaternet.utils import convert_excel, save_fig, normalize_parameter, unit_conversion
 from viswaternet.drawing import base
 from viswaternet.drawing import discrete
-from viswaternet.drawing import continuous
 
 default_cmap = mpl.cm.get_cmap("autumn_r")
 
@@ -940,7 +939,7 @@ def plot_unique_data(
     
                     widths = normalized_parameter
 
-                g = continuous.draw_links(
+                g = base.draw_links(
                     self,
                     ax,
                     custom_data_values[0],
@@ -995,7 +994,7 @@ def plot_unique_data(
                     )
     
                     node_size = normalized_parameter
-                g = continuous.draw_nodes(
+                g = base.draw_nodes(
                     self,
                     ax,
                     custom_data_values[0],
@@ -1350,7 +1349,7 @@ def plot_unique_data(
     
                     widths = normalized_parameter
 
-                g = continuous.draw_links(
+                g = base.draw_links(
                     self,
                     ax,
                     data["index"],
@@ -1405,7 +1404,7 @@ def plot_unique_data(
                     )
     
                     node_size = normalized_parameter
-                g = continuous.draw_nodes(
+                g = base.draw_nodes(
                     self,
                     ax,
                     data["index"],

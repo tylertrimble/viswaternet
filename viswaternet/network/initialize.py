@@ -102,9 +102,9 @@ class VisWNModel:
         self.model=model
     
     from viswaternet.network.processing import get_parameter,bin_parameter
-    from viswaternet.drawing.base import draw_base_elements,plot_basic_elements,draw_label
+    from viswaternet.drawing.base import draw_nodes,draw_links,draw_base_elements,plot_basic_elements,draw_label
     from viswaternet.drawing.discrete import draw_discrete_nodes,draw_discrete_links,plot_discrete_nodes,plot_discrete_links
-    from viswaternet.drawing.continuous import draw_nodes,draw_links,plot_continuous_links,plot_continuous_nodes
+    from viswaternet.drawing.continuous import plot_continuous_links,plot_continuous_nodes
     from viswaternet.drawing.animate import animate_plot
     from viswaternet.drawing.unique import plot_unique_data
     from viswaternet.utils.convert_excel import convert_excel
