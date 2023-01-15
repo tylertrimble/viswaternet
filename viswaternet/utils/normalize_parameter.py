@@ -19,8 +19,8 @@ def normalize_parameter(parameter_results, min_value, max_value):
     max_value : float, int
         Upper bound value for normalization
     """
-    minParameter = np.min(parameter_results)
-    maxParameter = np.max(parameter_results)
+    minParameter = np.min(parameter_results,axis=0)
+    maxParameter = np.max(parameter_results,axis=0)
 
     normalized_parameter = np.copy(parameter_results)
 
