@@ -8,11 +8,7 @@ import matplotlib.pyplot as plt
 import imageio
 import os
 from viswaternet.network import processing
-from viswaternet.drawing import discrete, continuous
 from viswaternet.utils import unit_conversion
-
-cbar = 0
-
 
 def animate_plot(
     self,
@@ -79,7 +75,6 @@ def animate_plot(
         Any arguments for the plotting function passed into the function argument
         can be passed into animate_plot.
     """
-    
     model=self.model
     timesteps = int(
         model["wn"].options.time.duration / model["wn"].options.time.report_timestep
@@ -127,8 +122,8 @@ def animate_plot(
                 np.min(np.min(parameter_results,axis=0),axis=0),
                 np.max(np.max(parameter_results,axis=0),axis=0),
                 kwargs.get("num_intervals", 5),
-            )
-            print(len(kwargs["intervals"]))
+            ).tolist()
+
     for value in values:
 
         function(ax, value=value, **kwargs)
@@ -136,7 +131,7 @@ def animate_plot(
         handles, labels = [], []
         time=value*model["wn"].options.time.report_timestep
         time = unit_conversion(time, "time", unit)
-        plt.legend(
+        ax.legend(
             handles,
             labels,
             title="Timestep "+str(time)+" "+unit,
@@ -151,6 +146,7 @@ def animate_plot(
         )
         ax.clear()
         if (data_type=='continuous'):
+            from viswaternet.drawing.base import cbar
             cbar.remove()
             
     # builds gif
