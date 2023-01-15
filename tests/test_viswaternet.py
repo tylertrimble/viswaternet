@@ -6,8 +6,9 @@ import unittest
 import viswaternet
 import os
 import matplotlib.pyplot as plt
+import numpy as np
 
-model = viswaternet.VisWNModel("net1.inp")
+model = viswaternet.VisWNModel("tests/net1.inp")
 
 class TestViswaternet(unittest.TestCase):
     """Tests for `viswaternet` package."""
@@ -61,7 +62,25 @@ class TestParameterBinning(unittest.TestCase):
         self.assertListEqual(interval_names.tolist(),['1 - 6','6 - 10'],"Interval names are not following sig-fig adjustments correctly.")
         
     def test_interval_dict_structure(self):
-        """"""
+        """Tests that the dictionary produced by bin_parameter() is correct using trival case."""
+        self.model = {}
+        self.model['node_names'] = ['E1','E2','E3','E4','E5','E6']
+        dummy_data=[1,2,3,5,6,7]
+        # =============================================================================
+        # Correct dict structure should be a nested dict with two layers, including
+        # the interval name, the node names in that interval and then the index number
+        # in the model['node_names] list.
+        #
+        # Nodes with values on the edge between two intervals should always be placed in
+        # the interval with that value as the minimum.
+        # =============================================================================
+        correct_dict={'1.000 - 3.000': {'E1':0,'E2':1},
+                      '3.000 - 5.000': {'E3':2},
+                      '5.000 - 7.000': {'E4':3,'E5':4,'E6':5}}
+        
+        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],4)
+        self.assertDictEqual(correct_dict,interval_results,"bin_parameter is not producing correct dictionary structure.")
+        
 class TestPlottingFunctions(unittest.TestCase):
     """Tests if plotting functions produce a plot."""
     
@@ -119,13 +138,51 @@ class TestPlottingFunctions(unittest.TestCase):
         model.animate_plot(ax,function=model.plot_discrete_nodes,parameter='pressure',data_type='discrete',parameter_type='node',last_timestep=5,gif_save_name='discrete')
         self.assertTrue(os.path.isfile('discrete.gif'),"animate_plot() is not generating discrete plot gif file.")
         
-        fig,ax=plt.subplots()
+        fig,ax=plt.subplots(figsize=(15,15))
         
         model.animate_plot(ax,function=model.plot_continuous_nodes,parameter='pressure',data_type='continuous',parameter_type='node',last_timestep=5,gif_save_name='continuous')
         self.assertTrue(os.path.isfile('continuous.gif'),"animate_plot() is not generating continuous plot gif file.")
         
-        # os.remove('discrete.gif')
-        # os.remove('continuous.gif')
+        os.remove('discrete.gif')
+        os.remove('continuous.gif')
+
+class TestNormalizeParameter(unittest.TestCase):
+    """Tests parameter normalizing function"""
+    
+    def test_normalize_parameter(self):
+        dummy_data=[0.0,50.0,100.0]
+        test_normalized=[0,0.5,1]
+        normalized_parameter = viswaternet.utils.normalize_parameter(dummy_data,0,1)
+        self.assertListEqual(test_normalized,normalized_parameter.tolist(),"Data is not being normalized correctly.")
+
+class TestUnitConversion(unittest.TestCase):
+    """Tests unit conversion function"""
+
+    def test_unit_conversion(self):
+        dummy_data=np.array((10.0,15.0,25.0)) #in meters
+        correct_output=dummy_data*3.28084
+
+        output = viswaternet.utils.unit_conversion(dummy_data,'length','ft')   
+        self.assertListEqual(correct_output.tolist(),output.tolist(),"Data is not being converted to another unit correctly.")
+        
+class TestGetParameter(unittest.TestCase):
+    
+    def test_reservoir_tank_fetching(self):
+        results, elements = model.get_parameter('node','pressure',5,tanks=True,reservoirs=True)
+        self.assertAlmostEqual(results.iloc[0],91.91539,places=6,msg="Parameters are not in the correct order.")
+        self.assertAlmostEqual(results.iloc[9],0,msg="Parameters are not in the correct order when reservoir data is collected.")
+        self.assertAlmostEqual(results.iloc[10],40.014896,places=6,msg="Parameters are not in the correct order when tank data is collected.")
+        
+class TestInitalizeFunction(unittest.TestCase):
+    
+    def test_list_sizes(self):
+        self.assertEqual(len(model.model['junc_names']),9,"Junctions are not being collected properly.")
+        self.assertEqual(len(model.model['valve_names']),0,"Valves are not being collected properly.")
+        self.assertEqual(len(model.model['tank_names']),1,"Tanks are not being collected properly.")
+        self.assertEqual(len(model.model['reservoir_names']),1,"Reservoirs are not being collected properly.")
+        self.assertEqual(len(model.model['G_pipe_name_list']),13,"Pipes are not being collected properly.")
+        self.assertEqual(len(model.model['G_list_pumps_only']),1,"Pump pipes are not being collected properly.")
+        self.assertEqual(len(model.model['G_list_valves_only']),0,"Pump pipes are not being collected properly.")
 if __name__ == '__main__':
     unittest.main()    
     
