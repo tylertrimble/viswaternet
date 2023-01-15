@@ -330,7 +330,7 @@ def bin_parameter(
     
     if intervals == "automatic":
 
-        bins = num_intervals
+        bins = num_intervals - 1
 
         intervals = np.linspace(
             np.min(parameter_results), np.max(parameter_results), bins
