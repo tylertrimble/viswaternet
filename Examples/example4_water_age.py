@@ -20,7 +20,7 @@ ax.set_frame_on(False)
 model.plot_discrete_nodes(
     ax,
     parameter="quality",value='max',unit="hr", # The "value" parameter can take in a time step multiplier or one of the following: mean, min, max, range
-    num_intervals=5,intervals=[0,6,12,24,48],
+    num_intervals=4,intervals=[0,6,12,24,48],
     interval_node_size_list=[100,150,250,350,450], # Node sizes corresponding to each interval
     interval_node_border_color_list=['k','k','k','k','k'],
     interval_node_border_width_list=[1,1,1,1,1],

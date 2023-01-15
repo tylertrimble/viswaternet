@@ -23,7 +23,7 @@ mean, elmnt_list = model.get_parameter("node",parameter="pressure",value="mean")
 #Get standard deviation at  each node
 stddev, elmnt_list = model.get_parameter("node",parameter="pressure",value="stddev")
 #Bin standard deviation values
-binnedParameter, interval_names = model.bin_parameter(stddev, elmnt_list, 5)
+binnedParameter, interval_names = model.bin_parameter(stddev, elmnt_list, 4)
 #Set bin_sizes and create node_sizes array
 interval_sizes = [100, 200, 300, 400]
 node_sizes = [None]*len(elmnt_list)

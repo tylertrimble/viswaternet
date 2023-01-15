@@ -21,7 +21,7 @@ model.plot_discrete_links(
     ax, 
     parameter="diameter", 
     unit="in", 
-    num_intervals=2,
+    num_intervals=1,
     intervals=[0,11.999],
     interval_label_list=["< 12",">= 12"],
     interval_link_width_list=[1,5],
