@@ -54,11 +54,11 @@ class TestParameterBinning(unittest.TestCase):
         self.model['node_names'] = ['E1','E2','E3','E4','E5','E6']
         dummy_data=[1,2,3,5,6,7]
         
-        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],4)
+        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],3)
         self.assertListEqual(interval_names.tolist(),['1.000 - 3.000', '3.000 - 5.000', '5.000 - 7.000'],"Intervals are not being named properly.")
         
         dummy_data=[1,2,3,5,6,10]
-        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],3,legend_sig_figs=0)
+        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],2,legend_sig_figs=0)
         self.assertListEqual(interval_names.tolist(),['1 - 6','6 - 10'],"Interval names are not following sig-fig adjustments correctly.")
         
     def test_interval_dict_structure(self):
