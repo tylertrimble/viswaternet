@@ -78,7 +78,7 @@ class TestParameterBinning(unittest.TestCase):
                       '3.000 - 5.000': {'E3':2},
                       '5.000 - 7.000': {'E4':3,'E5':4,'E6':5}}
         
-        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],4)
+        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],3)
         self.assertDictEqual(correct_dict,interval_results,"bin_parameter is not producing correct dictionary structure.")
         
 class TestPlottingFunctions(unittest.TestCase):
