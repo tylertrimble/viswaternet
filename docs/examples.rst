@@ -2,10 +2,7 @@
 Example Applications
 ====================
 
-Example 1 - Basic Network Layout Plots
------------------------------
-
-This example demonstrates the basic plotting functionality provided by VisWaterNet. The plot_basic_elements function is used to generate a view of the network layout, depicting the locations of nodes (junctions, tanks, and reservoirs) and links (pipes, pumps, and valves).
+All VisWaterNet scripts should begin with the following three steps:
 
 1.  Import the VisWaterNet and matplotlib.pyplot packages.
 
@@ -14,11 +11,17 @@ This example demonstrates the basic plotting functionality provided by VisWaterN
     import viswaternet as vis
     import matplotlib.pyplot as plt
     
-2. Initialize a VisWaterNet model object for the .INP file of the water distribution network.
+2. Initialize a VisWaterNet model object for the .INP file of the water distribution network. For these examples, we use the CTown network model introduced by Ostfeld et al (cite).
+
+hyperlink
 
 .. code:: python
 
     model = vis.VisWNModel("CTown.inp")
+    
+Alternatively, we can initialize a VisWaterNet model corresponding to a WNTR water network model object.
+
+code, hyperlink
 
 3. Initialize and customize a matplotlib figure and axis.
 
@@ -26,8 +29,13 @@ This example demonstrates the basic plotting functionality provided by VisWaterN
 
     fig, ax = plt.subplots(figsize=(11,11))  
     ax.set_frame_on(False) # remove frame from figure
+    
+After we have initialized our VWN model object and empty matplotlib figure, we can proceed to call on different functions offered by the VisWaterNet library to generate a variety of figures. Below, we provide a series of examples to highlight the different VisWaterNet plotting functions and their wide range of inputs.
 
-4. Create a **basic** network plot.
+Example 1 - Basic Network Layout Plots
+-----------------------------
+
+This example demonstrates the basic plotting functionality provided by VisWaterNet. The ``plot_basic_elements`` function is used to generate a view of the network layout, depicting the locations of nodes (junctions, tanks, and reservoirs) and links (pipes, pumps, and valves).
 
 .. code:: python
 
@@ -38,7 +46,10 @@ This example demonstrates the basic plotting functionality provided by VisWaterN
    :scale: 100 %
    :alt: Basic network layout
 
-5. Customize the **basic** network plot by changing the location of the legend, color of the tank marker, and pump line style.
+Example 2 - Customizing Basic Network Layout Plots
+-----------------------------
+
+Customize the **basic** network plot by changing the location of the legend, color of the tank marker, and pump line style.
 
 .. code:: python
 
@@ -97,18 +108,19 @@ This example demonstrates how to visualize data in a discete manner, i.e., by gr
 
 .. code:: python
 
-    model.plot_discrete_nodes(ax,parameter = "demand", value = 10, num_intervals = 4, legend_loc_2 = 'upper left', unit = 'CMH')
+    model.plot_discrete_nodes(ax,parameter = "demand", value = 10, num_intervals = 3, legend_loc_2 = 'upper left', unit = 'CMH')
     
 .. _basic5:
 .. figure:: figures/eg_plot_5.png
    :scale: 100 %
    :alt: Discrete node plot
 
-3. Create a **discrete** data plot for maximum **link velocity** over the simulation duration. Here, we specify the end points of our data intervals and convert the units of velocity to ft/s. 
+3. Create a **discrete** data plot for **maximum link velocity** over the simulation duration. Here, we specify the intervals we would like to see (*0-2, 2-6, 6-10*) and VisWaterNet groups all parameter data into these intervals, and constructs extra intervals (here, *<0* or *>10*) if any data points fall outside of the specified intervals. We customize the legend by specifying that the legend labels should have zero digits after the decimal point (``legend_sig_figs=0``) and providing a legend title. We also convert the units of velocity to ft/s (from the default SI units of m/s). 
 
 .. code:: python
 
-    model.plot_discrete_links(ax,parameter = "velocity", value = 'max', intervals = [0,2,6,10], legend_loc_2 = 'lower left', unit = 'ft/s')
+    model.plot_discrete_links(ax,parameter = "velocity", value = 'max', intervals = [0,2,6,10], legend_title = 'Link velocity [ft/s]', 
+                          legend_sig_figs = 0, legend_loc_2 = 'lower left', unit = 'ft/s')
 
 .. _basic6:
 .. figure:: figures/eg_plot_6.png
