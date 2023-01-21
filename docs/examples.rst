@@ -43,7 +43,7 @@ This example demonstrates the basic plotting functionality provided by VisWaterN
 
 .. _basic1:
 .. figure:: figures/eg_plot_1.png
-   :scale: 100 %
+   :width: 400
    :alt: Basic network layout
 
 Example 2 - Customizing a Basic Network Layout Plot
@@ -58,7 +58,7 @@ Here, we customize the **basic** network plot by changing the location of the le
 
 .. _basic2:
 .. figure:: figures/eg_plot_2.png
-   :scale: 100 %
+   :width: 400
    :alt: Basic network layout modified
 
 
@@ -79,7 +79,7 @@ Here, we create a **continuous** data plot for **nodal pressure at hour 10**.
     
 .. _basic3:
 .. figure:: figures/eg_plot_3.png
-   :scale: 100 %
+   :width: 400
    :alt: Continuous node plot
 
 Example 4 - Continuous Data Plot for Link Flow Rate
@@ -93,7 +93,7 @@ Here, we create a **continuous** data plot for mean **link flow rate** over the 
 
 .. _basic4:
 .. figure:: figures/eg_plot_4.png
-   :scale: 100 %
+   :width: 400
    :alt: Continuous link plot
 
 Next we demonstrate how to visualize data in a discete manner, i.e., by grouping data into intervals and assigning colors according to each interval shown in a legend.
@@ -111,7 +111,7 @@ Here, we create a **discrete** data plot for **nodal demand at hour 10**. We spe
     
 .. _basic5:
 .. figure:: figures/eg_plot_5.png
-   :scale: 100 %
+   :width: 400
    :alt: Discrete node plot
 
 Example 6 - Discrete Data Plot for Link Velocity
@@ -126,7 +126,7 @@ Here, we create a **discrete** data plot for **maximum link velocity** over the 
 
 .. _basic6:
 .. figure:: figures/eg_plot_6.png
-   :scale: 100 %
+   :width: 400
    :alt: Continuous link plot
    
 Next, we demonstrate the different functionalities offered by the ``plot_unique data`` function:
@@ -148,7 +148,7 @@ Here, we create a **categorical** data plot for **nodal demand pattern**. We mod
 
 .. _basic7:
 .. figure:: figures/eg_plot_7.png
-   :scale: 100 %
+   :width: 400
    :alt: Categorical node plot
 
 Peplacing the *parameter* value with "diameter" or "roughness" will generate categorical plots for link diameters and link roughness coefficients respectively.
