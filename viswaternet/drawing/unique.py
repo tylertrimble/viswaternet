@@ -127,7 +127,7 @@ def plot_unique_data(
         Matplotlib axes object.
     
     parameter : string
-        Should be set to 'demand_patterns', 'roughness', 'custom_data' or 'excel_data'.
+        Should be set to 'demand_patterns', 'diameter', 'roughness', 'custom_data' or 'excel_data'.
     
     parameter_type : string
         Type of parameter (nodal, link)
