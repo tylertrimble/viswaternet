@@ -1,6 +1,13 @@
 =======
 History
 =======
+0.1.5 (2023-01-22)
+------------------
+* Complete documentation
+* Fixed animate plot bugs
+* Changed how num_interval parameter works
+* Fixed warnings
+
 0.1.4 (2022-12-19)
 ------------------
 * Updated requirements
@@ -24,6 +31,5 @@ History
 ------------------
 
 * First release on PyPI.
-
 
 

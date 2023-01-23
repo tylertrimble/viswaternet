@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Oct  2 20:55:15 2022
-
-@author: Tyler
+The viswaternet.drawing.discrete module handles everything related to discrete data drawing.
 """
 import numpy as np
 import matplotlib as mpl

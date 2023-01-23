@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Oct  2 21:09:29 2022
-
-@author: Tyler
+The viswaternet.drawing.unique module handles custom data, excel data, and unique data drawing.
 """
 import numpy as np
 import pandas as pd

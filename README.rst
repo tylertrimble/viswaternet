@@ -1,6 +1,5 @@
-.. raw:: html
-
-   <img src="https://github.com/tylertrimble/viswaternet/blob/master/logo/viswaternet_logo.png" align="center" alt="VisWaterNet">
+.. image:: https://github.com/tylertrimble/viswaternet/blob/master/logo/viswaternet_logo.png?raw=true
+		:target: https://github.com/tylertrimble/viswaternet/blob/master/logo/viswaternet_logo.png?raw=true
 
 .. image:: https://img.shields.io/pypi/v/viswaternet.svg
         :target: https://pypi.python.org/pypi/viswaternet

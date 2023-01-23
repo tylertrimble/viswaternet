@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Oct  2 21:05:57 2022
-
-@author: Tyler
+The viswaternet.drawing.continuous module handles everything related to continuous data drawing.
 """
 import matplotlib as mpl
 from viswaternet.network import processing

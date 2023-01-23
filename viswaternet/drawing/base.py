@@ -364,7 +364,8 @@ def draw_base_elements(
     base_link_line_style='-',
     base_link_arrows=False,
 ):
-    """Draws base elements (nodes, links, reservoirs, tanks, pumps, and valves)
+    """
+    Draws base elements (nodes, links, reservoirs, tanks, pumps, and valves)
     without any data associated with the elements.
     
     Arguments

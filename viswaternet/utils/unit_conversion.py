@@ -49,6 +49,7 @@ units from WNTR's base SI units.
     hr                :math:`hr`                            N/A
     day               :math:`day`                           N/A
 ====================  ====================================  ====================
+
 """
 def unit_conversion(parameter_results, parameter, new_unit):
     """Convert network datapoints from base SI WNTR units to some new unit.
@@ -64,29 +65,19 @@ def unit_conversion(parameter_results, parameter, new_unit):
         
         .. rubric:: Nodal Parameters
         
-        =======================
-            base_demand
-            demand
-            elevation
-            head
-            pressure
-            qualit'
-        =======================
-            
-        .. rubric:: Nodal Parameters
-        
-        =======================
-            diameter
-            flowrate
-            velocity
-            quality
-        =======================
-        
-        .. rubric:: Other Parameters
-        
-        =======================
-            time
-        =======================
+        ======================= =====
+        base_demand             Nodal
+        demand                  Nodal
+        elevation               Nodal
+        head                    Nodal
+        pressure                Nodal
+        quality                 Nodal
+        diameter                Link
+        flowrate                Link
+        velocity                Link
+        quality                 Link
+        time                    N/A
+        ======================= =====
       
     new_unit : string
         The unit that the network data is to be converted to.
@@ -95,6 +86,7 @@ def unit_conversion(parameter_results, parameter, new_unit):
     -------
     float,array-like
         The network data converted into new units
+        
     """
     conversion_factors = {
         "base_demand": {
