@@ -151,7 +151,73 @@ Here, we create a **categorical** data plot for **nodal demand pattern**. We mod
    :width: 400
    :alt: Categorical node plot
 
-Peplacing the *parameter* value with "diameter" or "roughness" will generate categorical plots for link diameters and link roughness coefficients respectively.
+Replacing the *parameter* value with "diameter" or "roughness" will generate categorical plots for link diameters and link roughness coefficients respectively. Below is an example of a catgorical diameter plot.
+
+Example 8 - Categorical Data Plot for Link Diameter
+-----------------------------
+ 
+Here, we create a **categorical** data plot for **link pipe diameter**. In this example we provide several inputs to the function to generate a striking plot highlight different diameter options present in the pipe. First, we import the package ``numpy`` so we can present a linearly spaced list of link widths corresponding to the 10 different unique diameters present in the network to the *interval_width_link_list* parameter. We then change the color scheme to "Blues" and choose to represent diameters in units of inches (to conform to typical US pipe sizing conventions). Finally, we customize the location and appearance of the legend as well as the appearance of the reservoir, tanks, and pumps.
+
+.. code:: python
+
+    model.plot_unique_data(
+            ax, parameter = "diameter", 
+            interval_link_width_list = np.linspace(1,7,10),
+            cmap = 'Blues', unit = 'in', 
+            legend_loc_2 = 'upper left', 
+            legend_title = 'Pipe Diameter (in)', 
+            legend_sig_figs = 0, font_size = 12,
+            pump_color = 'red', pump_width = 3, 
+            tank_color = 'green', reservoir_color = 'k')
+
+.. _basic8:
+.. figure:: figures/eg_plot_8.png
+   :width: 400
+   :alt: Categorical link plot
+
+Example 9 - Importing and Plotting Categorical Data from an Excel File
+-----------------------------
+ 
+Here, we import data from an excel file named "CTown_pipes_age.xlsx" that has two columns: a column headed "Pipe Name" followed by a list of all pipe names in the CTown network, and a column headed "Year" followed by a list of strings desribing the range of years of construction of the corresponding pipe. 
+
+.. code:: python
+
+    import numpy as np
+    
+    model.plot_unique_data(ax,parameter = "demand_patterns", cmap = 'tab10', 
+                       legend_loc_2 = 'lower left', legend_title = 'Demand Patterns', 
+                       legend_title_font_size = 13, font_size = 12,
+                       interval_label_list = ['Pattern 1', 'Pattern 2', 'Pattern 3', 'Patten 4', 'Pattern 5', 'No Pattern'])
+
+.. _basic9:
+.. figure:: figures/eg_plot_9.png
+   :width: 400
+   :alt: Categorical node plot
+
+Example 10 - Plotting Custom Data Generated Within a Python Script
+-----------------------------
+ 
+Here, we demonstrate how lists of data corresponding to nodes or links can be easily visualized using VisWaterNet. This functionality is useful for plotting results of operations or analyses performed on the water network within Python scripts. We call on the ``plot_unique data`` function with *parameter = 'custom_data'*, choose our the element we are plotting (*parameter_type = 'node'* or *link*), and type of plot we would like to generate, *data_type = 'continuous'* or *'discrete'*. *element_list* is a list of the nodes or links in the model, and *data_list* is the list of corresponding data points we would like to plot. As an exmaple, we import the package ``random`` to generate a random set of values in *data_list*.
+
+.. code:: python
+
+    import random
+    
+    element_list = wn.junction_name_list
+    data_list = [random.randrange(1, 50, 1) for i in range(wn.num_junctions)]
+    
+    model.plot_unique_data(ax, parameter = 'custom_data',
+                       parameter_type = 'node', data_type = 'continuous', 
+                       custom_data_values = [element_list, data_list], cmap = 'viridis_r',
+                       node_size = 200)
+
+.. _basic10:
+.. figure:: figures/eg_plot_10.png
+   :width: 400
+   :alt: Custom node plot
+
+
+ 
 
 Additional examples can be found in the `Examples`_ folder. The full range of inputs for each plotting function can be found in `this section`_. 
 
