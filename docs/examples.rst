@@ -11,17 +11,17 @@ All VisWaterNet scripts should begin with the following three steps:
     import viswaternet as vis
     import matplotlib.pyplot as plt
     
-2. Initialize a VisWaterNet model object for the .INP file of the water distribution network. For these examples, we use the CTown network model introduced by Ostfeld et al (cite).
+2. Initialize a VisWaterNet model object for the .INP file of the water distribution network. For these examples, we use the CTown network model introduced by `Ostfeld (2016)`_.
 
-hyperlink
+.. _`Ostfeld (2016)`: https://uknowledge.uky.edu/wdst_models/2/
 
 .. code:: python
 
     model = vis.VisWNModel("CTown.inp")
     
-Alternatively, we can initialize a VisWaterNet model corresponding to a WNTR water network model object.
+Alternatively, we can initialize a VisWaterNet model corresponding to a `WNTR`_ water network model object.
 
-code, hyperlink
+.. _`WNTR`: https://www.osti.gov/biblio/1376816
 
 3. Initialize and customize a matplotlib figure and axis.
 
@@ -30,7 +30,7 @@ code, hyperlink
     fig, ax = plt.subplots(figsize=(11,11))  
     ax.set_frame_on(False) # remove frame from figure
     
-After we have initialized our VWN model object and empty matplotlib figure, we can proceed to call on different functions offered by the VisWaterNet library to generate a variety of figures. Below, we provide a series of examples to highlight the different VisWaterNet plotting functions and their wide range of inputs.
+After we have initialized our VisWaterNet model object and empty matplotlib figure, we can proceed to call on different functions offered by the VisWaterNet library to generate a variety of figures. Below, we provide a series of examples to highlight the different VisWaterNet plotting functions and their wide range of inputs.
 
 Example 1 - Basic Network Layout Plot
 -----------------------------
@@ -43,7 +43,7 @@ This example demonstrates the basic plotting functionality provided by VisWaterN
 
 .. _basic1:
 .. figure:: figures/eg_plot_1.png
-   :width: 400
+   :width: 600
    :alt: Basic network layout
 
 Example 2 - Customizing a Basic Network Layout Plot
@@ -58,7 +58,7 @@ Here, we customize the **basic** network plot by changing the location of the le
 
 .. _basic2:
 .. figure:: figures/eg_plot_2.png
-   :width: 400
+   :width: 600
    :alt: Basic network layout modified
 
 
@@ -79,7 +79,7 @@ Here, we create a **continuous** data plot for **nodal pressure at hour 10**.
     
 .. _basic3:
 .. figure:: figures/eg_plot_3.png
-   :width: 400
+   :width: 600
    :alt: Continuous node plot
 
 Example 4 - Continuous Data Plot for Link Flow Rate
@@ -93,7 +93,7 @@ Here, we create a **continuous** data plot for mean **link flow rate** over the 
 
 .. _basic4:
 .. figure:: figures/eg_plot_4.png
-   :width: 400
+   :width: 600
    :alt: Continuous link plot
 
 Next we demonstrate how to visualize data in a discete manner, i.e., by grouping data into intervals and assigning colors according to each interval shown in a legend.
@@ -111,7 +111,7 @@ Here, we create a **discrete** data plot for **nodal demand at hour 10**. We spe
     
 .. _basic5:
 .. figure:: figures/eg_plot_5.png
-   :width: 400
+   :width: 600
    :alt: Discrete node plot
 
 Example 6 - Discrete Data Plot for Link Velocity
@@ -126,7 +126,7 @@ Here, we create a **discrete** data plot for **maximum link velocity** over the 
 
 .. _basic6:
 .. figure:: figures/eg_plot_6.png
-   :width: 400
+   :width: 600
    :alt: Continuous link plot
    
 Next, we demonstrate the different functionalities offered by the ``plot_unique data`` function:
@@ -148,7 +148,7 @@ Here, we create a **categorical** data plot for **nodal demand pattern**. We mod
 
 .. _basic7:
 .. figure:: figures/eg_plot_7.png
-   :width: 400
+   :width: 600
    :alt: Categorical node plot
 
 Replacing the *parameter* value with "diameter" or "roughness" will generate categorical plots for link diameters and link roughness coefficients respectively. Below is an example of a catgorical diameter plot.
@@ -172,7 +172,7 @@ Here, we create a **categorical** data plot for **link pipe diameter**. In this 
 
 .. _basic8:
 .. figure:: figures/eg_plot_8.png
-   :width: 400
+   :width: 600
    :alt: Categorical link plot
 
 Example 9 - Importing and Plotting Categorical Data from an Excel File
@@ -188,7 +188,7 @@ Here, we import data from an excel file named "CTown_pipes_age.xlsx" that has tw
 
 .. _basic9:
 .. figure:: figures/eg_plot_9.png
-   :width: 400
+   :width: 600
    :alt: Unique link plot from Excel
 
 Example 10 - Plotting Custom Data Generated Within a Python Script
@@ -210,13 +210,42 @@ Here, we demonstrate how lists of data corresponding to nodes or links can be ea
 
 .. _basic10:
 .. figure:: figures/eg_plot_10.png
-   :width: 400
+   :width: 600
    :alt: Custom continuous node plot
 
+Example 11 - Creating GIFs 
+-----------------------------
+ 
+VisWaterNet offers a function that generates time-varying representation of network properties. Here, we demonstrate how to use the ``animate_plot`` function to generate a .GIF file showing link flow rate change in a continuous manner over the simulation duration. To generate an animation, we have to provide the following inputs:
+- *function*: the specify function we want to invoke on *model* for each frame, e.g., model.plot_discrete_nodes
+- *data_type*: the type of plot we wish to generate (*continuous, discrete,* or *unique*)
+- *parameter_type*: the elements we are plotting (*node* or *link*)
+- *parameter*: the node/link parameter data we intend to plot (e.g. *'flowrate', 'pressure'*, etc.)
+- *first_timestep*: the starting time step of the animation (optional)
+- *last_timestep*: the ending time step of the animation (optional)
+- *timestep_unit*: the time step units shown on the plot (*min, hr, day*, default *s*) (optional)
+- *fps*: the animation framerate as an integer value (optional)
 
+Additional parameters can be provided to customize the frames as shown in previous examples. 
+
+
+.. code:: python
+
+    model.animate_plot(ax, function = model.plot_continuous_links ,
+                   data_type = 'continuous', parameter_type = 'link',
+                   parameter = 'flowrate', unit = 'hr', fps = 7,
+                   first_timestep = 0, last_timestep = 40,
+                   cmap = 'coolwarm', pump_color = 'green',
+                   max_width = 5, min_width = 5, legend = False,
+                   color_bar_title = 'Flowrate [m3/s]')    
+
+.. _basic11:
+.. figure:: figures/eg_plot_11.gif
+   :width: 600
+   :alt: Flow rate gif
  
 
-Additional examples can be found in the `Examples`_ folder. The full range of inputs for each plotting function can be found in `this section`_. 
+More examples can be found in the `Examples`_ folder. The full range of inputs for each plotting function can be found in `this section`_. 
 
 .. _`Examples`: https://github.com/tylertrimble/viswaternet/tree/master/Examples
 .. _`this section`: https://viswaternet.readthedocs.io/en/latest/source/viswaternet.html#subpackages
