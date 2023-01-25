@@ -85,7 +85,7 @@ Here, we create a **continuous** data plot for **nodal pressure at hour 10**.
 Example 4 - Continuous Data Plot for Link Flow Rate
 -----------------------------
 
-Here, we create a **continuous** data plot for mean **link flow rate** over the simulation duration. We change the color map from the default 'autumn_r' to 'coolwarm' and vary the width of the links (between :code:`min_width` and :code:`max_width`) according to the link flow rate values.
+Here, we create a **continuous** data plot for mean **link flow rate** over the simulation duration. We change the color map from the default 'autumn_r' to 'coolwarm' and vary the width of the links (between *min_width* and *max_width*) according to the link flow rate values.
 
 .. code:: python
 
@@ -117,7 +117,7 @@ Here, we create a **discrete** data plot for **nodal demand at hour 10**. We spe
 Example 6 - Discrete Data Plot for Link Velocity
 -----------------------------
 
-Here, we create a **discrete** data plot for **maximum link velocity** over the simulation duration. We specify the intervals we would like to see (*0-2, 2-6, 6-10*) and VisWaterNet groups all parameter data into these intervals, and constructs extra intervals (here, *<0* or *>10*) if any data points fall outside of the specified intervals. We customize the legend by specifying that the legend labels should have zero digits after the decimal point (``legend_sig_figs=0``) and providing a legend title. We also convert the units of velocity to ft/s (from the default SI units of m/s). 
+Here, we create a **discrete** data plot for **maximum link velocity** over the simulation duration. We specify the intervals we would like to see (*0-2, 2-6, 6-10*) and VisWaterNet groups all parameter data into these intervals, and constructs extra intervals (here, *<0* or *>10*) if any data points fall outside of the specified intervals. We customize the legend by specifying that the legend labels should have zero digits after the decimal point (*legend_sig_figs=0*) and providing a legend title. We also convert the units of velocity to ft/s (from the default SI units of m/s). 
 
 .. code:: python
 
@@ -178,26 +178,23 @@ Here, we create a **categorical** data plot for **link pipe diameter**. In this 
 Example 9 - Importing and Plotting Categorical Data from an Excel File
 -----------------------------
  
-Here, we import data from an excel file named "CTown_pipes_age.xlsx" that has two columns: a column headed "Pipe Name" followed by a list of all pipe names in the CTown network, and a column headed "Year" followed by a list of strings desribing the range of years of construction of the corresponding pipe. 
+Here, we import data from an excel file named "CTown_pipes_age.xlsx" that has two columns: a column headed "Pipe Name" followed by a list of all pipe names in the CTown network, and a column headed "Year" followed by a list of strings desribing the range of years of construction of the corresponding pipe. We call on the ``plot_unique data`` function with *parameter* = the path name of the Excel file, choose our the element we are plotting (*parameter_type = 'node'* or *link*), and type of plot we would like to generate, *data_type = 'continuous'* (for a color scale plot of numerical data), *'discrete'* (for a grouped plot of numerical data) or *'unique* (for a plot inw which each node/link corresponds to a non-numerical label). The *excel_columns* input takes in a list of length 2 containing the indices of the columns in the file corresponding to (1) the list of node/link names, and (2) the corresponding data points. Note that the A column of the Excel file is represented by index 0. This dataset contains four unique categories of data, and we choose the colors corresponding to each interval instead of interpolating from a colormap.
 
 .. code:: python
 
-    import numpy as np
-    
-    model.plot_unique_data(ax,parameter = "demand_patterns", cmap = 'tab10', 
-                       legend_loc_2 = 'lower left', legend_title = 'Demand Patterns', 
-                       legend_title_font_size = 13, font_size = 12,
-                       interval_label_list = ['Pattern 1', 'Pattern 2', 'Pattern 3', 'Patten 4', 'Pattern 5', 'No Pattern'])
+    model.plot_unique_data(ax,parameter='Excel/CTown_pipe_ages.xlsx',
+                       parameter_type='link', data_type='unique', excel_columns=[0,1], 
+                       color_list = ["red","blue","green","yellow"], legend_loc_2 = 'lower left')
 
 .. _basic9:
 .. figure:: figures/eg_plot_9.png
    :width: 400
-   :alt: Categorical node plot
+   :alt: Unique link plot from Excel
 
 Example 10 - Plotting Custom Data Generated Within a Python Script
 -----------------------------
  
-Here, we demonstrate how lists of data corresponding to nodes or links can be easily visualized using VisWaterNet. This functionality is useful for plotting results of operations or analyses performed on the water network within Python scripts. We call on the ``plot_unique data`` function with *parameter = 'custom_data'*, choose our the element we are plotting (*parameter_type = 'node'* or *link*), and type of plot we would like to generate, *data_type = 'continuous'* or *'discrete'*. *element_list* is a list of the nodes or links in the model, and *data_list* is the list of corresponding data points we would like to plot. As an exmaple, we import the package ``random`` to generate a random set of values in *data_list*.
+Here, we demonstrate how lists of data corresponding to nodes or links can be easily visualized using VisWaterNet. This functionality is useful for plotting results of operations or analyses performed on the water network within Python scripts. We call on the ``plot_unique data`` function with *parameter = 'custom_data'*, choose our the element we are plotting (*parameter_type = 'node'* or *link*), and type of plot we would like to generate, *data_type = 'continuous', 'discrete'* or *'unique*. *element_list* is a list of the nodes or links in the model, and *data_list* is the list of corresponding data points we would like to plot. As an exmaple, we import the package ``random`` to generate a random set of values in *data_list*.
 
 .. code:: python
 
@@ -214,7 +211,7 @@ Here, we demonstrate how lists of data corresponding to nodes or links can be ea
 .. _basic10:
 .. figure:: figures/eg_plot_10.png
    :width: 400
-   :alt: Custom node plot
+   :alt: Custom continuous node plot
 
 
  
