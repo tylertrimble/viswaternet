@@ -16,21 +16,21 @@ def get_parameter(
     reservoirs=False,
 ):
     """Retrieves network data of a specified parameter. 
-    
+
     Arguments
     ---------
     parameter_type : string
         Type of parameter (nodal, link)
-        
+
     parameter : string
         Parameter that network data will be retrieved for.
-        
+
     value : int, string
         For time-varying parameters only. Specifies which timestep or data
         summary will be plotted.
-        
+
         .. rubric:: Possible Inputs
-        
+
         ======================= =========================================
             int                 lots element data for specified timestep
             min                 Plots minimum data point for each element
@@ -39,25 +39,25 @@ def get_parameter(
             stddev              Plots standard deviation for each element
             range               Plots range for each element
         ======================= =========================================
-        
+
     element_list : array-like
         List of network elements that data will be retrieved for.
-        
+
     tanks : boolean
         Determines if data for tanks are retrieved.
-        
+
     reservoirs : boolean
         Determines if data for reservoirs are retrieved.
-    
+
     Returns
     -------
     array-like
         Network data formatted for use in other functions
-        
+
     array-like
         Elements that have had their data retrieved
     """
-    model=self.model
+    model = self.model
     if parameter_type == "node":
         if element_list is None:
             element_list = list.copy(model["node_names"])
@@ -95,7 +95,7 @@ def get_parameter(
                     parameter_results = np.ptp(
                         model["results"].node[parameter].iloc[:, indices],
                         axis=0
-                        )
+                    )
                 elif isinstance(value, int):
 
                     parameter_results = (
@@ -157,7 +157,7 @@ def get_parameter(
             except KeyError:
 
                 pass
-            
+
     elif parameter_type == "link":
         if element_list is None:
             element_list = list.copy(model["G_pipe_name_list"])
@@ -196,7 +196,7 @@ def get_parameter(
                     parameter_results = np.ptp(
                         model["results"].link[parameter].iloc[:, indices],
                         axis=0
-                        )
+                    )
                 elif type(value) == int:
 
                     parameter_results = (
@@ -222,16 +222,16 @@ def get_parameter(
 
 def get_demand_patterns(self):
     """Retrieves the demand pattern for each network node.
-    
+
     Returns
     -------
     array-like
         Demand pattern for each node.
-        
+
     array-like
         Name of each pattern.
     """
-    model=self.model
+    model = self.model
     demandPatterns = []
 
     patterns = model["wn"].pattern_name_list
@@ -242,7 +242,8 @@ def get_demand_patterns(self):
         try:
 
             demandPattern = (
-                model["wn"].get_node(junction).demand_timeseries_list[0].pattern.name
+                model["wn"].get_node(
+                    junction).demand_timeseries_list[0].pattern.name
             )
 
             demandPatterns = np.append(demandPatterns, demandPattern)
@@ -265,10 +266,10 @@ def get_demand_patterns(self):
                 )
         counter += 1
 
-    if len(demand_pattern_nodes['None'])==0:
+    if len(demand_pattern_nodes['None']) == 0:
         patterns.remove("None")
         del demand_pattern_nodes['None']
-       
+
     return demand_pattern_nodes, patterns
 
 
@@ -282,42 +283,42 @@ def bin_parameter(
     legend_sig_figs=3,
 ):
     """Discretizes network data for use in disrete drawing functions.
-    
+
     An important feature of bin_parameter to know of is if the intervals created
     do not fully encapsulate the full range of network data, then a new interval
     will be created.
-    
+
     Arguments
     ---------
     parameter_results : array-like
         Network data to be discretized.
-    
+
     element_list : array-like
         Network elements to be discretized.
-    
+
     num_intervals : int
         The number of intervals to be created.
-    
+
     intervals : array-like, string
         If set to 'automatic' then intervals are created automatically on a 
         equal interval basis. Otherwise, it is the edges of the intervals to be
         created. intervals array length should be num_intervals + 1.
-    
+
     disable_interval_deleting : boolean
         If True, empty intervals will be automatically deleted. 
-        
+
     legend_sig_figs : int
         Number of decimal places that the resulting discretized data will display
         in the legend.
-    
+
     Returns
     -------
     dictionary
         Dictionary of discretized network data.
-    
+
     array-like
         Label names of each interval.
-        
+
     Example
     -------
     >>>from viswaternet.network.processing import bin_parameter
@@ -326,8 +327,8 @@ def bin_parameter(
     >>>intervals,interval_names = bin_parameter(self,fake_data,fake_elements,3,intervals=[0,5,10,15])
     [<dict>,['0.000-5.000','5.000-10.000','10.000-15.000','>15.000']]
     """
-    model=self.model
-    
+    model = self.model
+
     if intervals == "automatic":
 
         bins = num_intervals + 1
@@ -360,20 +361,24 @@ def bin_parameter(
 
             if np.min(parameter_results) < intervals[i]:
 
-                interval_names = np.append(interval_names, "< {0:1.{j}f}".format(intervals[i],j=legend_sig_figs))
+                interval_names = np.append(
+                    interval_names, "< {0:1.{j}f}".format(intervals[i], j=legend_sig_figs))
             interval_names = np.append(
-                interval_names, "{0:1.{j}f} - {1:1.{j}f}".format(intervals[i], intervals[i + 1],j=legend_sig_figs)
+                interval_names, "{0:1.{j}f} - {1:1.{j}f}".format(
+                    intervals[i], intervals[i + 1], j=legend_sig_figs)
             )
         elif i < len(intervals) - 1:
 
             interval_names = np.append(
-                interval_names, "{0:1.{j}f} - {1:1.{j}f}".format(intervals[i], intervals[i + 1],j=legend_sig_figs)
+                interval_names, "{0:1.{j}f} - {1:1.{j}f}".format(
+                    intervals[i], intervals[i + 1], j=legend_sig_figs)
             )
         elif i == len(intervals) - 1:
 
             if np.max(parameter_results) > intervals[i]:
 
-                interval_names = np.append(interval_names, "> {0:1.{j}f}".format(intervals[i],j=legend_sig_figs))
+                interval_names = np.append(
+                    interval_names, "> {0:1.{j}f}".format(intervals[i], j=legend_sig_figs))
     for binName in interval_names:
 
         interval_results[binName] = {}
@@ -388,13 +393,14 @@ def bin_parameter(
                 if parameter >= intervals[i] and parameter < intervals[i + 1]:
 
                     interval_results[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(intervals[i], intervals[i + 1],j=legend_sig_figs)
+                        "{0:1.{j}f} - {1:1.{j}f}".format(
+                            intervals[i], intervals[i + 1], j=legend_sig_figs)
                     ][elementsWithParameter[counter]] = element_list.index(
                         elementsWithParameter[counter]
                     )
                 if parameter < intervals[i]:
 
-                    interval_results["< {0:1.{j}f}".format(intervals[i],j=legend_sig_figs)][
+                    interval_results["< {0:1.{j}f}".format(intervals[i], j=legend_sig_figs)][
                         elementsWithParameter[counter]
                     ] = element_list.index(elementsWithParameter[counter],)
                 counter += 1
@@ -407,7 +413,8 @@ def bin_parameter(
                 if parameter >= intervals[i] and parameter <= intervals[i + 1]:
 
                     interval_results[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(intervals[i], intervals[i + 1],j=legend_sig_figs)
+                        "{0:1.{j}f} - {1:1.{j}f}".format(
+                            intervals[i], intervals[i + 1], j=legend_sig_figs)
                     ][elementsWithParameter[counter]] = element_list.index(
                         elementsWithParameter[counter]
                     )
@@ -421,7 +428,8 @@ def bin_parameter(
                 if parameter >= intervals[i] and parameter < intervals[i + 1]:
 
                     interval_results[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(intervals[i], intervals[i + 1],j=legend_sig_figs)
+                        "{0:1.{j}f} - {1:1.{j}f}".format(
+                            intervals[i], intervals[i + 1], j=legend_sig_figs)
                     ][elementsWithParameter[counter]] = element_list.index(
                         elementsWithParameter[counter]
                     )
@@ -434,7 +442,7 @@ def bin_parameter(
 
                 if parameter > intervals[i]:
 
-                    interval_results["> {0:1.{j}f}".format(intervals[i],j=legend_sig_figs)][
+                    interval_results["> {0:1.{j}f}".format(intervals[i], j=legend_sig_figs)][
                         elementsWithParameter[counter]
                     ] = element_list.index(elementsWithParameter[counter])
                 counter += 1
@@ -445,7 +453,8 @@ def bin_parameter(
 
             if len(interval_results[binName]) == 0:
 
-                interval_names = np.delete(interval_names, np.where(interval_names == binName))
+                interval_names = np.delete(
+                    interval_names, np.where(interval_names == binName))
 
                 del interval_results[binName]
     return interval_results, interval_names

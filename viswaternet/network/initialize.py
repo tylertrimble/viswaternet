@@ -5,26 +5,28 @@ The viswaternet.network.initialize module initializes a viswaternet model object
 import os
 import wntr
 
+
 class VisWNModel:
     """Viswaternet model class.
-    
+
     The resulting object created from VisWNModel is the basis for nearly all
     functionality that viswaternet has to offer.
-    
+
     Arguments
     ---------
     inp_file : string
         Input file to be used.
-        
+
     network_model : wntr.network.model.WaterNetworkModel
         WNTR WaterNetworkModel object.
     """
-    def __init__(self,inp_file,network_model=None):
+
+    def __init__(self, inp_file, network_model=None):
         model = {}
         dirname = os.getcwd()
-        
+
         if network_model is not None:
-            wn=network_model
+            wn = network_model
             inp_file = os.path.join(dirname, inp_file)
             model["inp_file"] = inp_file
         else:
@@ -33,14 +35,14 @@ class VisWNModel:
             wn = wntr.network.WaterNetworkModel(inp_file)
         image_path = os.getcwd()
         model["image_path"] = image_path
-        
+
         # Run hydraulic simulation and store results
         model["wn"] = wn
         sim = wntr.sim.EpanetSimulator(wn)
         model["sim"] = sim
         results = sim.run_sim()
         model["results"] = results
-        
+
         # =============================================================================
         #   Create name lists for easy reference
         #   junc_names excludes resevoirs and tanks
@@ -98,15 +100,13 @@ class VisWNModel:
         model["G_pipe_name_list"] = G_pipe_name_list
         model["G_list_pumps_only"] = G_list_pumps_only
         model["G_list_valves_only"] = G_list_valves_only
-        
-        self.model=model
-    
-    from viswaternet.network.processing import get_parameter,bin_parameter
-    from viswaternet.drawing.base import draw_nodes,draw_links,draw_base_elements,plot_basic_elements,draw_label
-    from viswaternet.drawing.discrete import draw_discrete_nodes,draw_discrete_links,plot_discrete_nodes,plot_discrete_links
-    from viswaternet.drawing.continuous import plot_continuous_links,plot_continuous_nodes
+
+        self.model = model
+
+    from viswaternet.network.processing import get_parameter, bin_parameter
+    from viswaternet.drawing.base import draw_nodes, draw_links, draw_base_elements, plot_basic_elements, draw_label
+    from viswaternet.drawing.discrete import draw_discrete_nodes, draw_discrete_links, plot_discrete_nodes, plot_discrete_links
+    from viswaternet.drawing.continuous import plot_continuous_links, plot_continuous_nodes
     from viswaternet.drawing.animate import animate_plot
     from viswaternet.drawing.unique import plot_unique_data
     from viswaternet.utils.convert_excel import convert_excel
-    
-    

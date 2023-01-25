@@ -26,45 +26,45 @@ def draw_discrete_nodes(
     color_list=None,
 ):
     """Draws discretized nodal data onto the figure.
-    
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-    
+
     nodes : string, array-like
         List of nodes to be drawn.
-        
+
     intervals : dict
         The dictionary containting the intervals and the nodes assocaited with
         each interval.
-        
+
     interval_node_size_list : integer, array-like
         List of node sizes for each interval.
-        
+
     interval_label_list : string, array-like
         List of labels for each interval.
-        
+
     interval_node_shape_list : string, array-like
         List of node shapes for each interval. Refer to matplotlib documentation
         for available marker types.
-        
+
     cmap : string
         The matplotlib color map to be used for plotting. Refer to matplotlib
         documentation for possible inputs.
-        
+
     interval_node_border_color_list : string, array-like
         The color of the node borders for each interval.
-        
+
     interval_node_border_width_list : integer, array-like
         The width of the node borders for each interval.
-        
+
     color_list : string, array-like
         The list of node colors for each interval. Both cmap and color_list can
         not be used at the same time to color nodes. If both are, then color_list
         takes priority.
     """
-    model=self.model
+    model = self.model
     if interval_node_size_list is None:
 
         if len(model["node_names"]) < 300:
@@ -72,7 +72,8 @@ def draw_discrete_nodes(
             interval_node_size_list = np.ones(len(intervals)) * 300
         elif len(model["node_names"]) >= 300 and len(model["node_names"]) < 1000:
 
-            interval_node_size_list = np.ones(len(intervals)) * (80000 / len(model["node_names"]))
+            interval_node_size_list = np.ones(
+                len(intervals)) * (80000 / len(model["node_names"]))
         else:
 
             interval_node_size_list = np.ones(len(intervals)) * 80
@@ -91,19 +92,22 @@ def draw_discrete_nodes(
 
         for i in range(len(intervals)):
 
-            interval_node_border_color_list = np.append(interval_node_border_color_list, "k")
+            interval_node_border_color_list = np.append(
+                interval_node_border_color_list, "k")
     if interval_node_border_width_list is None:
         interval_node_border_width_list = []
 
         for i in range(len(intervals)):
 
-            interval_node_border_width_list = np.append(interval_node_border_width_list, 0)
+            interval_node_border_width_list = np.append(
+                interval_node_border_width_list, 0)
     counter = 0
     empty_interval = False
 
     if (color_list is not None and cmap is not None) or color_list is not None:
         for interval_name in intervals:
-            node_list = [model["node_names"][i] for i in nodes.get(interval_name).values()]
+            node_list = [model["node_names"][i]
+                         for i in nodes.get(interval_name).values()]
 
             if len(node_list) == 0:
                 nxp.draw_networkx_nodes(
@@ -126,7 +130,8 @@ def draw_discrete_nodes(
                     model["pos_dict"],
                     ax=ax,
                     nodelist=(
-                        [model["node_names"][i] for i in nodes.get(interval_name).values()]
+                        [model["node_names"][i]
+                            for i in nodes.get(interval_name).values()]
                     ),
                     node_size=interval_node_size_list[counter],
                     node_color=color_list[counter],
@@ -161,7 +166,8 @@ def draw_discrete_nodes(
         cmapValue = 1 / len(intervals)
 
         for interval_name in intervals:
-            node_list = [model["node_names"][i] for i in nodes.get(interval_name).values()]
+            node_list = [model["node_names"][i]
+                         for i in nodes.get(interval_name).values()]
             if len(node_list) == 0:
                 nxp.draw_networkx_nodes(
                     model["G"],
@@ -232,50 +238,51 @@ def draw_discrete_links(
     link_arrows=False,
 ):
     """Draws discretized link data onto the figure.
-    
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-    
+
     links : string, array-like
         List of links to be drawn.
-        
+
     intervals : dict
         The dictionary containting the intervals and the links assocaited with
         each interval.
-        
+
     interval_link_width_list : integer, array-like
         List of link widths for each interval.
-        
+
     interval_label_list : string, array-like
         List of labels for each interval.
-        
+
     cmap : string
         The matplotlib color map to be used for plotting. Refer to matplotlib
         documentation for possible inputs.
-    
+
     color_list : string, array-like
         The list of node colors for each interval. Both cmap and color_list can
         not be used at the same time to color nodes. If both are, then color_list
         takes priority.
-        
+
     link_style : string
         The style (solid, dashed, dotted, etc.) of the links. Refer to 
         matplotlib documentation for available line styles.
-        
+
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     """
-    model=self.model
+    model = self.model
     if interval_link_width_list is None:
         interval_link_width_list = np.ones(len(intervals)) * 2
     if interval_label_list is None:
-        interval_label_list = intervals    
+        interval_label_list = intervals
     empty_interval = False
     if (color_list is not None and cmap is not None) or color_list is not None:
-        for counter,interval_name in enumerate(intervals):
-            edge_list = [model["pipe_list"][i] for i in links.get(interval_name).values()]
+        for counter, interval_name in enumerate(intervals):
+            edge_list = [model["pipe_list"][i]
+                         for i in links.get(interval_name).values()]
             if len(edge_list) == 0:
                 nxp.draw_networkx_edges(
                     model["G"],
@@ -304,8 +311,9 @@ def draw_discrete_links(
                 )
         if empty_interval:
 
-            for counter,interval_name in enumerate(intervals):
-                edge_list = [model["pipe_list"][i] for i in links.get(interval_name).values()]
+            for counter, interval_name in enumerate(intervals):
+                edge_list = [model["pipe_list"][i]
+                             for i in links.get(interval_name).values()]
                 nxp.draw_networkx_edges(
                     model["G"],
                     model["pos_dict"],
@@ -320,16 +328,12 @@ def draw_discrete_links(
     else:
         cmap = mpl.cm.get_cmap(cmap)
         cmapValue = 1 / len(intervals)
-        for counter,interval_name in enumerate(intervals):
-            
-            
-            
-            
-            
-            
-            edge_list = [model["pipe_list"][i] for i in links.get(interval_name).values()]
+        for counter, interval_name in enumerate(intervals):
+
+            edge_list = [model["pipe_list"][i]
+                         for i in links.get(interval_name).values()]
             if len(edge_list) == 0:
-                
+
                 nxp.draw_networkx_edges(
                     model["G"],
                     model["pos_dict"],
@@ -356,23 +360,14 @@ def draw_discrete_links(
                     label=interval_label_list[counter],
                 )
             cmapValue += 1 / len(intervals)
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
         if empty_interval:
             cmap2 = mpl.cm.get_cmap(cmap)
             cmapValue2 = 1 / len(intervals)
 
-            for counter,interval_name in enumerate(intervals):
-                edge_list = [model["pipe_list"][i] for i in links.get(interval_name).values()]
+            for counter, interval_name in enumerate(intervals):
+                edge_list = [model["pipe_list"][i]
+                             for i in links.get(interval_name).values()]
                 nxp.draw_networkx_edges(
                     model["G"],
                     model["pos_dict"],
@@ -453,15 +448,15 @@ def plot_discrete_nodes(
 ):
     """User-level function that draws discretized nodal data, base elements,
     legends, and saves the figure.
-    
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-    
+
     num_intervals : integer
         The number of intervals.
-        
+
     parameter : string
         The parameter to be plotted. The following is a list of parameters
         available to use:
@@ -470,7 +465,7 @@ def plot_discrete_nodes(
         - elevation
         - emitter_coefficient
         - initial_quality
-        
+
         **Time-Dependent Parameters**
         - head
         - demand
@@ -478,13 +473,13 @@ def plot_discrete_nodes(
         - leak_area
         - leak_discharg_coeff
         - quality
-    
+
     value : integer, string
         For time-varying parameters only. Specifies which timestep or data
         summary will be plotted.
-        
+
         .. rubric:: Possible Inputs
-        
+
         ======================= =========================================
             :attr:'int'         Plots element data for specified timestep
             :attr:'min'         Plots minimum data point for each element
@@ -493,46 +488,46 @@ def plot_discrete_nodes(
             :attr:'stddev'      Plots standard deviation for each element
             :attr:'range'       Plots range for each element
         ======================= =========================================
-    
+
     unit : string
         The unit that the network data is to be converted to.
-        
+
     element_list : array-like
         List of network elements that data will be retrieved for.
-    
+
     get_tanks : boolean
         Determines if data for tanks are retrieved.
-        
+
     get_reservoirs : boolean
         Determines if data for reservoirs are retrieved.
-        
+
     intervals : integer, string
         If set to 'automatic' then intervals are created automatically on a 
         equal interval basis. Otherwise, it is the edges of the intervals to be
         created. intervals array length should be num_intervals + 1.
-    
+
     interval_node_size_list : integer, array-like
         List of node sizes for each interval.
-        
+
     interval_label_list : string, array-like
         List of labels for each interval.
-        
+
     interval_node_shape_list : string, array-like
         List of node shapes for each interval. Refer to matplotlib documentation
         for available marker types.
-        
+
     interval_node_border_color_list : string, array-like
         The color of the node borders for each interval.
-        
+
     interval_node_border_width_list : integer, array-like
         The width of the node borders for each interval.
-        
+
     savefig : boolean
         Determines if the figure is saved. 
-        
+
     save_name : string
         The inputted string will be appended to the name of the network.
-         
+
         Example
         -------
         >>>import viswaternet as vis
@@ -540,149 +535,149 @@ def plot_discrete_nodes(
         ...
         >>>model.save_fig(save_name='_example')
         <Net3_example.png>
-     
+
     dpi : int, string
         The dpi that the figure will be saved with.
-         
+
     save_format : string
         The file format that the figure will be saved as.
-    
+
     reservoirs : boolean
         Determines if reservoirs with no data associated with them are drawn.
-    
+
     tanks : boolean
         Determines if reservoirs with no data associated with them are drawn.
-        
+
     pumps : boolean
         Determines if pumps with no data associated with them are drawn.
-        
+
     valves : boolean
         Determines if valves with no data associated with them are drawn.
-        
+
     legend : boolean
         Determines if the base elements legend will be drawn. 
-        
+
     legend_title : string
         Title of the intervals legend.
-        
+
     legend_loc_1 : string
         The location of the base elements legend on the figure. Refer to matplotlib
         documentation for possible inputs.
-    
+
     legend_loc_2 : string
         The location of the intervals legend on the figure.
-        
+
     cmap : string
         The matplotlib color map to be used for plotting. Refer to matplotlib
         documentation for possible inputs.
-    
+
     color_list : string, array-like
         The list of node colors for each interval. Both cmap and color_list can
         not be used at the same time to color nodes. If both are, then color_list
         takes priority.
-    
+
     disable_interval_deleting : boolean
         If True, empty intervals will be automatically deleted. 
-        
+
     font_size : integer
         The font size of the non-title text for legends. 
-        
+
     font_color : string
         The color of the legend text. Refer to matplotlib documentation for 
         available colors.
-        
+
     legend_title_font_size : integer
         The font size of the title text for legends.
-        
+
     draw_frame : boolean
         Determines if the frame around the legend is drawn.
-        
+
     legend_sig_figs : integer
         The number of significant figures, or decimal points, that numbers in the
         legend will be displayed with. 0 should be passed for whole numbers.
-        
+
     reservoir_size : integer
         The size of the reservoir marker on the plot in points^2. 
-        
+
     reservoir_color : string
         The color of the reservoir marker.
-        
+
     reservoir_shape : string
         The shape of the reservoir marker. Refer to matplotlib documentation for
         available marker types.
-        
+
     reservoir_border_color : string
         The color of the border around the reservoir marker.
-    
+
     reservoir_border_width : integer
         The width in points of the border around the reservoir marker.
-    
+
     tank_size : integer
         The size of the tank marker on the plot in points^2. 
-        
+
     tank_color : string
         The color of the tank marker.
-        
+
     tank_shape : string
         The shape of the tank marker.
-        
+
     tank_border_color : string
         The color of the border around the tank marker.
-    
+
     tank_border_width : integer
         The width in points of the border around the tank marker.
-    
+
     valve_size : integer
         The size of the valve marker on the plot in points^2. 
-        
+
     valve_color : string
         The color of the valve marker.
-        
+
     valve_shape : string
         The shape of the valve marker.
-        
+
     valve_border_color : string
         The color of the border around the valve marker.
-    
+
     valve_border_width : integer
         The width in points of the border around the valve marker.
-        
+
     pump_color : string
         The color of the pump line.
-        
+
     pump_width : integer
         The width of the pump line in points.
-        
+
     pump_line_style : string
         The style (solid, dashed, dotted, etc.) of the pump line. Refer to 
         matplotlib documentation for available line styles.
-        
+
     pump_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
-        
+
     base_node_color : string
         The color of the nodes without data associated with them.
-        
+
     base_node_size : integer
         The size of the nodes without data associated with them in points^2.
-        
+
     base_link_color : string
         The color of the links without data associated with them.
-        
+
     base_link_width : integer
         The width of the links without data associated with them in points.
-        
+
     base_link_line_style : string
         The style (solid, dashed, dotted, etc) of the links with no data associated
         with them.
-        
+
     base_link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the links
         with no data associated with them.
-        
+
     draw_base_legend : boolean
         Determine if the base elements legend is drawn.
-         
+
     draw_intervals_legend : boolean
         Determine if the intervals legend is drawn.
     """
@@ -699,7 +694,8 @@ def plot_discrete_nodes(
         )
 
         if unit is not None:
-            parameter_results = unit_conversion(parameter_results, parameter, unit)
+            parameter_results = unit_conversion(
+                parameter_results, parameter, unit)
         interval_results, interval_names = processing.bin_parameter(
             self,
             parameter_results,
@@ -778,7 +774,7 @@ def plot_discrete_nodes(
             )
     if savefig:
 
-        save_fig(self, save_name=save_name,dpi=dpi,save_format=save_format)
+        save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
 
 
 def plot_discrete_links(
@@ -841,19 +837,19 @@ def plot_discrete_links(
     base_link_arrows=False,
     draw_base_legend=True,
     draw_intervals_legend=True
-    
+
 ):
     """User-level function that draws discretized link data, base elements,
     legends, and saves the figure.
-    
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-    
+
     num_intervals : integer
         The number of intervals.
-        
+
     parameter : string
         The parameter to be plotted. The following is a list of parameters
         available to use:
@@ -862,7 +858,7 @@ def plot_discrete_links(
         - minor_loss
         - bulk_coeff
         - wall_coeff
-        
+
         **Time-Dependent Parameters**
         - flowrate
         - velocity
@@ -870,13 +866,13 @@ def plot_discrete_links(
         - friction_factor
         - reaction_rate
         - quality
-    
+
     value : integer, string
         For time-varying parameters only. Specifies which timestep or data
         summary will be plotted.
-        
+
         .. rubric:: Possible Inputs
-        
+
         ======================= =========================================
             :attr:'int'         Plots element data for specified timestep
             :attr:'min'         Plots minimum data point for each element
@@ -885,60 +881,60 @@ def plot_discrete_links(
             :attr:'stddev'      Plots standard deviation for each element
             :attr:'range'       Plots range for each element
         ======================= =========================================
-    
+
     unit : string
         The unit that the network data is to be converted to.
-        
+
     element_list : array-like
         List of network elements that data will be retrieved for.
-    
+
     get_tanks : boolean
         Determines if data for tanks are retrieved.
-        
+
     get_reservoirs : boolean
         Determines if data for reservoirs are retrieved.
-        
+
     intervals : integer, string
         If set to 'automatic' then intervals are created automatically on a 
         equal interval basis. Otherwise, it is the edges of the intervals to be
         created. intervals array length should be num_intervals + 1.
-    
+
     interval_link_width_list : integer, array-like
         List of link widths for each interval.
-        
+
     interval_label_list : string, array-like
         List of labels for each interval.
-    
+
     color_list : string, array-like
         The list of node colors for each interval. Both cmap and color_list can
         not be used at the same time to color nodes. If both are, then color_list
         takes priority.
-        
+
     link_style : string
         The style (solid, dashed, dotted, etc.) of the links. Refer to 
         matplotlib documentation for available line styles.
-        
+
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
-    
+
     reservoirs : boolean
         Determines if reservoirs with no data associated with them are drawn.
-    
+
     tanks : boolean
         Determines if reservoirs with no data associated with them are drawn.
-        
+
     pumps : boolean
         Determines if pumps with no data associated with them are drawn.
-        
+
     valves : boolean
         Determines if valves with no data associated with them are drawn.
-        
+
     savefig : boolean
         Determines if the figure is saved. 
-        
+
     save_name : string
         The inputted string will be appended to the name of the network.
-         
+
         Example
         -------
         >>>import viswaternet as vis
@@ -946,132 +942,132 @@ def plot_discrete_links(
         ...
         >>>model.save_fig(save_name='_example')
         <Net3_example.png>
-     
+
     dpi : int, string
         The dpi that the figure will be saved with.
-         
+
     save_format : string
         The file format that the figure will be saved as.
-    
+
     cmap : string
         The matplotlib color map to be used for plotting. Refer to matplotlib
         documentation for possible inputs.
-    
+
     legend : boolean
         Determines if the base elements legend will be drawn. 
-        
+
     legend_title : string
         Title of the intervals legend.
-        
+
     legend_loc_1 : string
         The location of the base elements legend on the figure. Refer to matplotlib
         documentation for possible inputs.
-    
+
     legend_loc_2 : string
         The location of the intervals legend on the figure.
-        
+
     disable_interval_deletingdisable_interval_deleting : boolean
         If True, empty intervals will be automatically deleted. 
-        
+
     font_size : integer
         The font size of the non-title text for legends. 
-        
+
     font_color : string
         The color of the legend text. Refer to matplotlib documentation for 
         available colors.
-        
+
     legend_title_font_size : integer
         The font size of the title text for legends.
-        
+
     draw_frame : boolean
         Determines if the frame around the legend is drawn.
-        
+
     legend_sig_figs : integer
         The number of significant figures, or decimal points, that numbers in the
         legend will be displayed with. 0 should be passed for whole numbers.
-        
+
     reservoir_size : integer
         The size of the reservoir marker on the plot in points^2. 
-        
+
     reservoir_color : string
         The color of the reservoir marker.
-        
+
     reservoir_shape : string
         The shape of the reservoir marker. Refer to matplotlib documentation for
         available marker types.
-        
+
     reservoir_border_color : string
         The color of the border around the reservoir marker.
-    
+
     reservoir_border_width : integer
         The width in points of the border around the reservoir marker.
-    
+
     tank_size : integer
         The size of the tank marker on the plot in points^2. 
-        
+
     tank_color : string
         The color of the tank marker.
-        
+
     tank_shape : string
         The shape of the tank marker.
-        
+
     tank_border_color : string
         The color of the border around the tank marker.
-    
+
     tank_border_width : integer
         The width in points of the border around the tank marker.
-    
+
     valve_size : integer
         The size of the valve marker on the plot in points^2. 
-        
+
     valve_color : string
         The color of the valve marker.
-        
+
     valve_shape : string
         The shape of the valve marker.
-        
+
     valve_border_color : string
         The color of the border around the valve marker.
-    
+
     valve_border_width : integer
         The width in points of the border around the valve marker.
-        
+
     pump_color : string
         The color of the pump line.
-        
+
     pump_width : integer
         The width of the pump line in points.
-        
+
     pump_line_style : string
         The style (solid, dashed, dotted, etc.) of the pump line. Refer to 
         matplotlib documentation for available line styles.
-        
+
     pump_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
-        
+
     base_node_color : string
         The color of the nodes without data associated with them.
-        
+
     base_node_size : integer
         The size of the nodes without data associated with them in points^2.
-        
+
     base_link_color : string
         The color of the links without data associated with them.
-        
+
     base_link_width : integer
         The width of the links without data associated with them in points.
-        
+
     base_link_line_style : string
         The style (solid, dashed, dotted, etc) of the links with no data associated
         with them.
-        
+
     base_link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the links
         with no data associated with them.
-        
+
     draw_base_legend : boolean
         Determine if the base elements legend is drawn.
-         
+
     draw_intervals_legend : boolean
         Determine if the intervals legend is drawn.
     """
@@ -1081,7 +1077,8 @@ def plot_discrete_links(
             self, "link", parameter, element_list=element_list, value=value
         )
         if unit is not None:
-            parameter_results = unit_conversion(parameter_results, parameter, unit)
+            parameter_results = unit_conversion(
+                parameter_results, parameter, unit)
         interval_results, interval_names = processing.bin_parameter(
             self,
             parameter_results,
@@ -1159,4 +1156,4 @@ def plot_discrete_links(
             )
     if savefig:
 
-        save_fig(self, save_name=save_name,dpi=dpi,save_format=save_format)
+        save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)

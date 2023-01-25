@@ -7,20 +7,20 @@ import numpy as np
 
 def normalize_parameter(parameter_results, min_value, max_value):
     """Normalizes input data between a min and max value.
-    
+
     Arguments
     ---------
     parameter_results : array-like
         Network data to be normalized.
-    
+
     min_value : float, int
         Lower bound value for normalization.
-        
+
     max_value : float, int
         Upper bound value for normalization
     """
-    minParameter = np.min(parameter_results,axis=0)
-    maxParameter = np.max(parameter_results,axis=0)
+    minParameter = np.min(parameter_results, axis=0)
+    maxParameter = np.max(parameter_results, axis=0)
 
     normalized_parameter = np.copy(parameter_results)
 

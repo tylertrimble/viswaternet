@@ -51,20 +51,22 @@ units from WNTR's base SI units.
 ====================  ====================================  ====================
 
 """
+
+
 def unit_conversion(parameter_results, parameter, new_unit):
     """Convert network datapoints from base SI WNTR units to some new unit.
-    
+
     Arguments
     ---------
-    
+
     parameter_results : array-like
         Network data to be converted.
-    
+
     parameter : string
         The parameter that the data represents.
-        
+
         .. rubric:: Nodal Parameters
-        
+
         ======================= =====
         base_demand             Nodal
         demand                  Nodal
@@ -78,15 +80,15 @@ def unit_conversion(parameter_results, parameter, new_unit):
         quality                 Link
         time                    N/A
         ======================= =====
-      
+
     new_unit : string
         The unit that the network data is to be converted to.
-        
+
     Returns
     -------
     float,array-like
         The network data converted into new units
-        
+
     """
     conversion_factors = {
         "base_demand": {
@@ -131,8 +133,9 @@ def unit_conversion(parameter_results, parameter, new_unit):
         "length": {"ft": 3.28084, "in": 39.37008, "cm": 100},
         "pressure": {"psi": 1.42197},
         "velocity": {"ft/s": 3.28084},
-        "quality": {"min":1/60, "hr":1/3600, "day":1/86400},
-        "time": {"s":1,"min":1/60, "hr":1/3600, "day":1/86400}
+        "quality": {"min": 1/60, "hr": 1/3600, "day": 1/86400},
+        "time": {"s": 1, "min": 1/60, "hr": 1/3600, "day": 1/86400}
     }
-    parameter_results = parameter_results * conversion_factors[parameter][new_unit]
+    parameter_results = parameter_results * \
+        conversion_factors[parameter][new_unit]
     return parameter_results
