@@ -1,4 +1,4 @@
-Modules
+API documentation
 =======
 
 .. toctree::
