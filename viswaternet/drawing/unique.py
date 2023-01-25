@@ -1073,7 +1073,7 @@ def plot_unique_data(
         if data_type == "unique":
 
             node_list, intervals = convert_excel(
-                self, parameter, data_type, excel_columns[0], excel_columns[1]
+                self, parameter, parameter_type, data_type, excel_columns[0], excel_columns[1]
             )
 
             if parameter_type == "link":
@@ -1199,7 +1199,7 @@ def plot_unique_data(
         if data_type == "discrete":
 
             data = convert_excel(
-                self, parameter, data_type, excel_columns[0], excel_columns[1]
+                self, parameter, parameter_type,data_type, excel_columns[0], excel_columns[1]
             )
 
             interval_results, interval_names = processing.bin_parameter(
@@ -1335,7 +1335,7 @@ def plot_unique_data(
         if data_type == "continuous":
 
             data = convert_excel(
-                self, parameter, data_type, excel_columns[0], excel_columns[1]
+                self, parameter, parameter_type,data_type, excel_columns[0], excel_columns[1]
             )
 
             if parameter_type == "link":
