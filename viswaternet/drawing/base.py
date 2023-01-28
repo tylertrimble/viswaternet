@@ -270,6 +270,7 @@ def draw_links(
                         style=link_style,
                         arrows=link_arrows,
                         width=widths,
+                        node_size=0
                     )
                 else:
                     g = nxp.draw_networkx_edges(
@@ -285,6 +286,7 @@ def draw_links(
                         style=link_style,
                         arrows=link_arrows,
                         width=widths,
+                        node_size=0
                     )
                 return g
         if negativeValues:
@@ -304,6 +306,7 @@ def draw_links(
                     style=link_style,
                     arrows=link_arrows,
                     width=widths,
+                    node_size=0
                 )
             else:
                 g = nxp.draw_networkx_edges(
@@ -318,7 +321,8 @@ def draw_links(
                     arrows=link_arrows,
                     width=widths,
                     edge_vmin=vmin,
-                    edge_vmax=vmax
+                    edge_vmax=vmax,
+                    node_size=0
                 )
             return g
     else:
@@ -333,6 +337,7 @@ def draw_links(
             style=link_style,
             arrows=link_arrows,
             width=widths,
+            node_size=0
         )
 
 
@@ -1066,7 +1071,7 @@ def draw_color_bar(ax, g, cmap, color_bar_title=None):
     fig = plt.gcf()
     ax.set_aspect('auto')
     cax = fig.add_axes([0.9, 0.2, 0.03, 0.6])
-    cbar = plt.colorbar(g, cax=cax)
+    cbar = fig.colorbar(g, cax=cax)
     cbar.set_label(color_bar_title, fontsize=10)
 
 
