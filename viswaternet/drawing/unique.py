@@ -1082,7 +1082,7 @@ def plot_unique_data(
 
         if data_type == "unique":
 
-            node_list, intervals = convert_excel(
+            element_list, intervals = convert_excel(
                 self, parameter, parameter_type, data_type, excel_columns[0], excel_columns[1]
             )
 
@@ -1091,8 +1091,8 @@ def plot_unique_data(
                 discrete.draw_discrete_links(
                     self,
                     ax,
-                    interval_results,
-                    interval_names,
+                    element_list,
+                    intervals,
                     interval_link_width_list=interval_link_width_list,
                     interval_label_list=interval_label_list,
                     cmap=cmap,
@@ -1141,7 +1141,7 @@ def plot_unique_data(
                 discrete.draw_discrete_nodes(
                     self,
                     ax,
-                    node_list,
+                    element_list,
                     intervals,
                     interval_node_size_list=interval_node_size_list,
                     interval_node_shape_list=interval_node_shape_list,
