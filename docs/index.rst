@@ -15,9 +15,12 @@ Welcome to VisWaterNet's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   readme
+   overview
+   installation
+   gettingstarted
    examples
    source/modules
+   contributing
    authors
    history
 
