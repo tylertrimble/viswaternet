@@ -6,7 +6,6 @@ animating data across timesteps.
 import numpy as np
 import matplotlib.pyplot as plt
 import imageio
-import os
 from viswaternet.network import processing
 from viswaternet.utils import unit_conversion
 
@@ -78,6 +77,7 @@ def animate_plot(
         can be passed into animate_plot.
     """
     model = self.model
+    frames=[]
     timesteps = int(
         model["wn"].options.time.duration /
         model["wn"].options.time.report_timestep
@@ -86,7 +86,6 @@ def animate_plot(
     if last_timestep is not None:
         values = values[first_timestep:last_timestep]
 
-    filenames = []
     if data_type == "continuous":
         if kwargs.get("vmin", None) is None or kwargs.get("vmax", None) is None:
             if parameter_type == "link":
@@ -134,10 +133,11 @@ def animate_plot(
                 np.max(np.max(parameter_results, axis=0), axis=0),
                 kwargs.get("num_intervals", 5),
             ).tolist()
-
     for value in values:
+        plt.ioff()
+        fig = plt.gcf()
 
-        function(ax, value=value, **kwargs)
+        function(ax, value=value, savefig=False,**kwargs)
 
         handles, labels = [], []
         time = value*model["wn"].options.time.report_timestep
@@ -149,27 +149,12 @@ def animate_plot(
             loc="lower left",
             frameon=False,
         )
-
-        plt.savefig(model["image_path"] + "/" + str(value) + ".png")
-
-        filenames = np.append(
-            filenames, model["image_path"] + "/" + str(value) + ".png"
-        )
-        ax.clear()
+        fig.canvas.draw()
+        mat = np.array(fig.canvas.renderer._renderer)
+        frames.append(mat)
         if (data_type == 'continuous'):
-            from viswaternet.drawing.base import cbar
-            cbar.remove()
-
+            fig.axes[1].remove()
+        ax.clear()
+        
     # builds gif
-    with imageio.get_writer(
-        model["image_path"] + "/" + gif_save_name + ".gif", mode="I", fps=fps
-    ) as writer:
-
-        for filename in filenames:
-
-            image = imageio.imread(filename)
-
-            writer.append_data(image)
-        for filename in set(filenames):
-
-            os.remove(filename)
+    imageio.mimsave(gif_save_name+".gif", frames, format='GIF',fps=fps)
