@@ -11,7 +11,7 @@
 
 
 
-A python package for easy generation and customization of water network graphs.
+A Python package for easy generation and customization of water distribution network visualizations.
 
 
 * Free software: MIT license
