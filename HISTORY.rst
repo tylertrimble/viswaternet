@@ -1,6 +1,12 @@
 =======
 History
 =======
+1.0.0 (2023-02-07)
+------------------
+* Greatly improved animate_plot() function speed
+* Fixed numerous bugs related to excel data plotting
+* Added ability to use directional arrows with continuous plots
+
 0.1.5 (2023-01-22)
 ------------------
 * Complete documentation
