@@ -184,7 +184,8 @@ Here, we import data from an excel file named "CTown_pipes_age.xlsx" that has tw
 
     model.plot_unique_data(ax,parameter='Excel/CTown_pipe_ages.xlsx',
                        parameter_type='link', data_type='unique', excel_columns=[0,1], 
-                       color_list = ["red","blue","green","yellow"], legend_loc_2 = 'lower left')
+                       color_list = ["red","blue","green","yellow"], legend_loc_2 = 'lower left',
+                       pump_color = 'grey', reservoir_color = 'navy', tank_color = 'k)
 
 .. _basic9:
 .. figure:: figures/eg_plot_9.png
