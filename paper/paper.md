@@ -56,6 +56,6 @@ Additional features of `VisWaterNet` functions include:
 
 # Acknowledgements
 
-This work was supported by the National Science Foundation under grants 1943428 and 1953206. We would like to thank Matthew Frankel, ‪Gerardo Riaño-Briceño‬, and Erik Vosburgh for testing the package and providing valuable feedback.
+This work was supported by the National Science Foundation under grants 1943428 and 1953206. We would like to thank Matthew Frankel, Gregory Hendrickson, ‪Gerardo Riaño-Briceño‬, and Erik Vosburgh for testing the package and providing valuable feedback.
 
 # References
