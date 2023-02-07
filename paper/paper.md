@@ -15,9 +15,9 @@ authors:
     orcid: 0000-0002-5834-8451
     affiliation: 1
 affiliations:
- - name: The University of Texas at Austin, USA
+ - name: Department of Civil, Architectural and Environmental Engineering, The University of Texas at Austin
    index: 1
-date: 09 January 2023
+date: 07 February 2023
 bibliography: paper.bib
 
 ---
