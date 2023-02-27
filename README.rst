@@ -78,7 +78,20 @@ Finally, call on any of the plotting functions with the argument inputs of your 
 
 .. code:: python
 
-    model.plot_discrete_nodes(ax,parameter="quality",value='max',unit="hr")
+    model.plot_discrete_nodes(ax, parameter="quality", value='max', unit="hr")
+    
+If the plot does not show up after you run the script, it is possible that your IDE does not support interactive plotting (e.g., IDLE) or interactive mode is off. To see the plot, add the following line to display the figures: 
+
+.. code:: python
+
+    plt.show()
+
+Contributing
+-------
+We welcome contributions in the form of suggestions, feedback, reports of bugs, and additions to code functionality and documentation from all users! You can find instructions to raise issues, submit pull requests, and run tests in the `docs`_ or the `CONTRIBUTING page`_.
+
+.. _`CONTRIBUTING page`: https://github.com/tylertrimble/viswaternet/blob/master/CONTRIBUTING.rst
+.. _`docs`: https://viswaternet.readthedocs.io/en/latest/contributing.html
 
 Contact
 -------
