@@ -22,6 +22,12 @@ Finally, call on any of the plotting functions with the argument inputs of your 
 
     model.plot_discrete_nodes(ax, parameter="pressure", value='max', unit="psi")
 
+If the plot does not show up after you run the script, it is possible that your IDE does not support interactive plotting (e.g., IDLE) or interactive mode is off. To see the plot, add the following line to display the figures: 
+
+.. code:: python
+
+    plt.show()
+
 A range of examples to understand the different VisWaterNet plotting functions can be found in the `Example Applications`_ section in the documentation and in the the `Examples`_ folder.
 
 .. _`Example Applications`: https://viswaternet.readthedocs.io/en/latest/examples.html
