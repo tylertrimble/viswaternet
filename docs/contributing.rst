@@ -39,7 +39,7 @@ Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
 visnet could always use more documentation, whether as part of the
-official visnet docs, in docstrings, or even on the web in blog posts,
+official VisWaterNet docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
 Submit Feedback
@@ -103,13 +103,15 @@ Before you submit a pull request, check that it meets these guidelines:
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
 
-Tips
+Testing
 ----
 
-To run a subset of tests::
+How to run the automated tests:
 
+1. Navigate into the directory containing your local copy of VisWaterNet.
+2. Run the following line:
 
-    $ python -m unittest tests.test_viswaternet
+    $ python -m unittest tests/test_viswaternet.py
 
 Deploying
 ---------
