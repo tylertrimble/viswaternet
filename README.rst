@@ -88,10 +88,12 @@ If the plot does not show up after you run the script, it is possible that your 
 
 Contributing
 -------
-We welcome contributions in the form of suggestions, feedback, reports of bugs, and additions to code functionality and documentation from all users! You can find instructions to raise issues, submit pull requests, and run tests in the `docs`_ or the `CONTRIBUTING page`_.
+We welcome contributions in the form of suggestions, feedback, reports of bugs, and additions to code functionality and documentation from all users! You can find instructions to raise issues, submit pull requests, and `run automated tests`_ in the `docs`_ or the `CONTRIBUTING page`_.
 
 .. _`CONTRIBUTING page`: https://github.com/tylertrimble/viswaternet/blob/master/CONTRIBUTING.rst
 .. _`docs`: https://viswaternet.readthedocs.io/en/latest/contributing.html
+.. _`run automated tests`: https://viswaternet.readthedocs.io/en/latest/contributing.html#testing
+
 
 Contact
 -------
