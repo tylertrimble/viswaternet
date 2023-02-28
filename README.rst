@@ -8,31 +8,26 @@
         :target: https://viswaternet.readthedocs.io/en/latest/
         :alt: Documentation Status
 
+.. image:: https://img.shields.io/pypi/l/ansicolortags.svg
+        :target: https://pypi.python.org/pypi/ansicolortags/
 
 
+An open-source Python package for easy generation and customization of water distribution network visualizations. Find the `documentation here`_.
 
-A Python package for easy generation and customization of water distribution network visualizations.
+.. _`documentation here`: https://viswaternet.readthedocs.io
 
-
-* Free software: MIT license
-* Documentation: https://viswaternet.readthedocs.io.
 
 Dependencies
 ------------
-* Python 3.7+
-* Numpy
-* Pandas
-* Matplotlib 3.3.0+
-* NetworkX
-* imageio
+◉ Python 3.7+ ◉ WNTR ◉ NetworkX ◉ Matplotlib 3.3.0+ ◉ Pandas ◉ NumPy ◉ imageio ◉
 
 Features
 --------
-Viswaternet is designed to plot simulation data onto a network graph, with a large variety of customization options available. The package includes the capabilities to:
+VisWaterNet is designed to plot simulation data onto a network graph, with a large variety of customization options available. The package includes the capabilities to:
 
 * Discretize network or simulation data.
 * Visualize discretized or continuous data on network graphs.
-* Import data from excel files or data generated with python.
+* Import data from excel files or data generated with Python.
 * Create GIFs of data across simulation timesteps.
 * Customize style of virtually every element of the network graph, including: reservoirs, tanks, valves, pumps, links, and nodes.
 * Draw labels relative to nodes or based on an absolute position on the figure.
@@ -60,19 +55,19 @@ Once you have a copy of the source, you can install it with:
 
 Getting Started
 ---------------
-To get started, import both viswaternet and matplotlib.pyplot:
+To get started, import both VisWaterNet and matplotlib.pyplot:
 
 .. code:: python
 
     import viswaternet as vis
     import matplotlib.pyplot as plt
 
-Next, initialize a matplotlib figure and viswaternet model. For example purposes we use the CTown network included in the Examples folder:
+Next, initialize a matplotlib figure and VisWaterNet model. For example purposes, we use the CTown network included in the Examples folder:
 
 .. code:: python
 
     fig, ax = plt.subplots(figsize=(12, 12))
-    model = vis.VisWNModel(r'Networks/CTown.inp')
+    model = vis.VisWNModel('Networks/CTown.inp')
     
 Finally, call on any of the plotting functions with the argument inputs of your choice. For example:
 
@@ -93,7 +88,6 @@ We welcome contributions in the form of suggestions, feedback, reports of bugs, 
 .. _`CONTRIBUTING page`: https://github.com/tylertrimble/viswaternet/blob/master/CONTRIBUTING.rst
 .. _`docs`: https://viswaternet.readthedocs.io/en/latest/contributing.html
 .. _`run automated tests`: https://viswaternet.readthedocs.io/en/latest/contributing.html#testing
-
 
 Contact
 -------
