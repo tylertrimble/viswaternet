@@ -76,6 +76,8 @@ def plot_continuous_nodes(
     base_link_line_style='-',
     base_link_arrows=False,
     draw_color_bar=True,
+    color_bar_width=0.03,
+    color_bar_height=0.8
 ):
     """User-level function that draws continuous nodal data, base elements,
     legends, and saves the figure.
@@ -316,7 +318,12 @@ def plot_continuous_nodes(
             base_link_arrows=base_link_arrows
         )
         if draw_color_bar == True:
-            base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
+            base.draw_color_bar(ax, 
+                                g, 
+                                cmap, 
+                                color_bar_title=color_bar_title,
+                                color_bar_width=color_bar_width,
+                                color_bar_height=color_bar_height)
     if legend:
 
         base.draw_legend(ax,
@@ -404,6 +411,8 @@ def plot_continuous_links(
     base_link_line_style='-',
     base_link_arrows=False,
     draw_color_bar=True,
+    color_bar_width=0.03,
+    color_bar_height=0.8
 ):
     """User-level function that draws continuous link data, base elements,
     legends, and saves the figure.
@@ -646,7 +655,12 @@ def plot_continuous_links(
                 g, cmap, vmin, vmax, parameter_results)
 
         if draw_color_bar == True:
-            base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title)
+            base.draw_color_bar(ax, 
+                                g, 
+                                cmap, 
+                                color_bar_title=color_bar_title,
+                                color_bar_width=color_bar_width,
+                                color_bar_height=color_bar_height)
 
     if legend:
 

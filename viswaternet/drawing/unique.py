@@ -96,6 +96,8 @@ def plot_unique_data(
     base_link_arrows=False,
     disable_interval_deleting=True,
     draw_color_bar=True,
+    color_bar_width=0.03,
+    color_bar_height=0.8
 ):
     """A complex function that accomplishes tasks relating to categorical data,
     or 'unique' as used in viswaternet, as well as data not retrieved from WNTR.
@@ -1049,8 +1051,12 @@ def plot_unique_data(
                     base_link_arrows=base_link_arrows
                 )
             if draw_color_bar == True:
-                base.draw_color_bar(
-                    ax, g, cmap, color_bar_title=color_bar_title)
+                base.draw_color_bar(ax, 
+                                    g, 
+                                    cmap, 
+                                    color_bar_title=color_bar_title,
+                                    color_bar_width=color_bar_width,
+                                    color_bar_height=color_bar_height)
 
             if legend:
 
@@ -1464,8 +1470,12 @@ def plot_unique_data(
                 )
 
             if draw_color_bar == True:
-                base.draw_color_bar(
-                    ax, g, cmap, color_bar_title=color_bar_title)
+                base.draw_color_bar(ax, 
+                                    g, 
+                                    cmap, 
+                                    color_bar_title=color_bar_title,
+                                    color_bar_width=color_bar_width,
+                                    color_bar_height=color_bar_height)
             if legend:
 
                 base.draw_legend(ax,

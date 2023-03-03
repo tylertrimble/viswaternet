@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import matplotlib as mpl
 from matplotlib.lines import Line2D
-
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from viswaternet.utils import save_fig
 
@@ -924,7 +924,7 @@ def draw_legend(
             ax.add_artist(legend3)
 
 
-def draw_color_bar(ax, g, cmap, color_bar_title=None):
+def draw_color_bar(ax, g, cmap, color_bar_title=None,color_bar_width=0.03,color_bar_height=0.8):
     """Draws the color bar for all continuous plotting functions.
     Like draw_legends, under normal use, draw_color_bar is not normally called 
     by the user directly, even with more advanced applications. However, some 
@@ -942,9 +942,11 @@ def draw_color_bar(ax, g, cmap, color_bar_title=None):
         The title of the color bar.
     """
     global cbar
+    divider = make_axes_locatable(ax)
     fig = plt.gcf()
-    ax.set_aspect('auto')
-    cax = fig.add_axes([0.9, 0.2, 0.03, 0.6])
+    cax = fig.add_axes([divider.get_position()[0]+divider.get_position()[2]+0.02, \
+                        (divider.get_position()[1])+((divider.get_position()[3]*(1-color_bar_height)))/2, color_bar_width, \
+                        divider.get_position()[3]*color_bar_height])
     cbar = fig.colorbar(g, cax=cax)
     cbar.set_label(color_bar_title, fontsize=10)
 
