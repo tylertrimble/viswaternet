@@ -728,7 +728,12 @@ def plot_basic_elements(
                     legend_title_font_size=legend_title_font_size,
                     draw_frame=draw_frame,
                     pump_color=pump_color,
-                    base_link_color=base_link_color)
+                    base_link_color=base_link_color,
+                    pump_line_style=pump_line_style,
+                    base_link_line_style=base_link_line_style,
+                    base_link_arrows=base_link_arrows,
+                    pump_arrows=pump_arrows,
+                    draw_base_links=True)
     if savefig:
 
         save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
