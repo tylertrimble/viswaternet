@@ -2,14 +2,14 @@
 Getting Started 
 =======
 
-To get started, import both viswaternet and matplotlib.pyplot:
+To get started, import both VisWaterNet and matplotlib.pyplot:
 
 .. code:: python
 
     import viswaternet as vis
     import matplotlib.pyplot as plt
 
-Next, initialize a matplotlib figure and viswaternet model. For example purposes we use the CTown network included in the Examples folder:
+Next, initialize a Matplotlib figure and VisWaterNet model. For example purposes, we use the CTown network included in the Examples folder:
 
 .. code:: python
 
