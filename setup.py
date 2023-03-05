@@ -13,16 +13,16 @@ with open('HISTORY.rst') as history_file:
 requirements = ['pandas',
                'numpy',
                'matplotlib>=3.3.0',
-               'wntr',
+               'wntr>=0.2.2',
                'imageio',
-               'networkx>=2.7.0']
+               'networkx>=2.7']
 
 test_requirements = [ ]
 
 setup(
     author="Tyler Trimble",
     author_email='TylerL.Trimble@gmail.com',
-    python_requires='>=3.7',
+    python_requires='3.8, 3.9, 3.10',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
