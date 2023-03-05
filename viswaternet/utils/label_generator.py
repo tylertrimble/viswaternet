@@ -20,6 +20,7 @@ def label_generator(parameter, unit=None):
         'headloss': 'Headloss',
         'friction_factor': 'Friction Factor',
         'reaction_rate': 'Reaction Rate',
+        'pressure': 'Pressure'
     }
     if parameter == 'base_demand' or parameter == 'demand' or parameter == 'flowrate':
         if unit is None:
