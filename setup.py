@@ -15,7 +15,7 @@ requirements = ['pandas',
                'matplotlib>=3.3.0',
                'wntr',
                'imageio',
-               'networkx']
+               'networkx>=2.7.0']
 
 test_requirements = [ ]
 
