@@ -10,15 +10,8 @@ import matplotlib.pyplot as plt
 # Initialize VisWaterNet model
 model = vis.VisWNModel(r"Networks/CTown.inp")  
 
-# Initialize plot
-fig, ax = plt.subplots(figsize=(12, 12))  
-
-# Hide frame on plot
-ax.set_frame_on(False)
-
 # Plot maximum water age in hours
 model.plot_discrete_nodes(
-    ax,
     parameter="quality",value='max',unit="hr", # The "value" parameter can take in a time step multiplier or one of the following: mean, min, max, range
     num_intervals=4,intervals=[0,6,12,24,48],
     interval_node_size_list=[100,150,250,350,450], # Node sizes corresponding to each interval
@@ -29,4 +22,5 @@ model.plot_discrete_nodes(
     legend_title_font_size="16",
     legend_sig_figs=0) # No decimal places
 
+#Called in the case that interactive plotting isn't enabled
 plt.show()

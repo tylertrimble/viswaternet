@@ -11,12 +11,6 @@ import matplotlib.pyplot as plt
 # Initialize VisWaterNet model
 model = vis.VisWNModel(r"Networks/CTown.inp")  
 
-# Initialize plot
-fig, ax = plt.subplots(figsize=(12, 12))
-
-# Hide frame on plot 
-ax.set_frame_on(False)
-
 # Obtain mean and standard deviation measures corresponding to each node
 #Get mean pressure at each node
 mean, elmnt_list = model.get_parameter("node",parameter="pressure",value="mean")
@@ -34,7 +28,7 @@ for interval_name, size in zip(interval_names, interval_sizes):
         
 # Plot continuous mean data and pass custom node_sizes to correspong to standard deviation
 model.plot_unique_data(
-    ax,parameter="custom_data",
+    parameter="custom_data",
     parameter_type="node",data_type="continuous",
     custom_data_values=[elmnt_list,mean],
     color_bar_title="Mean Pressure (m)",cmap="gist_heat_r",
@@ -44,4 +38,5 @@ model.plot_unique_data(
     element_size_legend_loc="lower left",
     element_size_legend_labels=interval_names)
 
+#Called in the case that interactive plotting isn't enabled
 plt.show()

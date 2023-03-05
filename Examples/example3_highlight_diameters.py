@@ -10,15 +10,8 @@ import matplotlib.pyplot as plt
 # Initialize VisWaterNet model
 model = vis.VisWNModel(r"Networks/CTown.inp")  
 
-# Initialize plot
-fig, ax = plt.subplots(figsize=(12, 12))  
-
-# Hide frame on plot
-ax.set_frame_on(False)
-
 # Plot links with diameters < 12 and >= 12 inches
 model.plot_discrete_links(
-    ax, 
     parameter="diameter", 
     unit="in", 
     num_intervals=1,
@@ -33,4 +26,5 @@ model.plot_discrete_links(
     pump_color="mediumseagreen", 
     pump_width=5) # In pixels
 
+#Called in the case that interactive plotting isn't enabled
 plt.show()
