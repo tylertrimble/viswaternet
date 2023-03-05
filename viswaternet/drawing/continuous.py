@@ -4,7 +4,7 @@ The viswaternet.drawing.continuous module handles everything related to continuo
 """
 import matplotlib as mpl
 from viswaternet.network import processing
-from viswaternet.utils import save_fig, normalize_parameter, unit_conversion, fancyarrowpatch_to_linecollection
+from viswaternet.utils import save_fig, normalize_parameter, unit_conversion, fancyarrowpatch_to_linecollection, label_generator
 from viswaternet.drawing import base
 
 
@@ -318,6 +318,9 @@ def plot_continuous_nodes(
             base_link_arrows=base_link_arrows
         )
         if draw_color_bar == True:
+            if color_bar_title is None:
+                color_bar_title = label_generator(parameter,unit)
+                
             base.draw_color_bar(ax, 
                                 g, 
                                 cmap, 
@@ -655,6 +658,9 @@ def plot_continuous_links(
                 g, cmap, vmin, vmax, parameter_results)
 
         if draw_color_bar == True:
+            if color_bar_title is None:
+                color_bar_title = label_generator(parameter,unit)
+                
             base.draw_color_bar(ax, 
                                 g, 
                                 cmap, 

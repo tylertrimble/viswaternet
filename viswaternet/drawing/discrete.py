@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib as mpl
 import networkx.drawing.nx_pylab as nxp
 from viswaternet.network import processing
-from viswaternet.utils import save_fig, unit_conversion
+from viswaternet.utils import save_fig, unit_conversion, label_generator
 from viswaternet.drawing import base
 
 default_cmap = mpl.cm.get_cmap("autumn_r")
@@ -756,6 +756,9 @@ def plot_discrete_nodes(
         )
 
         if legend:
+            if legend_title is None:
+                legend_title = label_generator(parameter,unit)
+                
             base.draw_legend(
                 ax,
                 intervals=interval_names,
@@ -1137,7 +1140,10 @@ def plot_discrete_links(
         )
 
         if legend:
-
+            
+            if legend_title is None:
+                legend_title = label_generator(parameter,unit)
+                
             base.draw_legend(
                 ax,
                 intervals=interval_names,
