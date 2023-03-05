@@ -19,7 +19,7 @@ An open-source Python package for easy generation and customization of water dis
 
 Dependencies
 ------------
-◉ Python 3.7+ ◉ WNTR ◉ NetworkX ◉ Matplotlib 3.3.0+ ◉ Pandas ◉ NumPy ◉ imageio ◉
+◉ Python 3.8-3.10 ◉ WNTR 0.2.2+ ◉ NetworkX 2.7+ ◉ Matplotlib 3.3.0+ ◉ Pandas ◉ NumPy ◉ imageio ◉
 
 Features
 --------
