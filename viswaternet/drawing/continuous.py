@@ -322,7 +322,7 @@ def plot_continuous_nodes(
         )
         if draw_color_bar == True:
             if color_bar_title is None:
-                color_bar_title = label_generator(parameter,unit)
+                color_bar_title = label_generator(parameter,value,unit)
                 
             base.draw_color_bar(ax, 
                                 g, 
@@ -671,7 +671,7 @@ def plot_continuous_links(
 
         if draw_color_bar == True:
             if color_bar_title is None:
-                color_bar_title = label_generator(parameter,unit)
+                color_bar_title = label_generator(parameter,value,unit)
                 
             base.draw_color_bar(ax, 
                                 g, 

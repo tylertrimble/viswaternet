@@ -1,4 +1,4 @@
-def label_generator(parameter, unit=None):
+def label_generator(parameter, value, unit=None):
 
 
     parameter_titles = {
@@ -67,6 +67,22 @@ def label_generator(parameter, unit=None):
                        'min': '[min]',
                        'hr': '[hr]',
                        'day': '[day]'}
-
-    title_label = parameter_titles[parameter] + " " + unit_titles[unit]
+    
+    if isinstance(value, int):
+        title_label = parameter_titles[parameter] + " " + unit_titles[unit] + " at timestep " + str(value)
+        
+    if value=='min':
+        title_label = 'Minimum ' + parameter_titles[parameter] + " " + unit_titles[unit]
+        
+    if value=='max':
+        title_label = 'Maximum ' + parameter_titles[parameter] + " " + unit_titles[unit]
+        
+    if value=='mean':
+        title_label = 'Mean ' + parameter_titles[parameter] + " " + unit_titles[unit]
+    
+    if value=='stddev':
+        title_label = 'Standard Deviation of ' + parameter_titles[parameter] + " " + unit_titles[unit]
+        
+    if value=='range':
+        title_label = 'Range of ' + parameter_titles[parameter] + " " + unit_titles[unit]
     return title_label

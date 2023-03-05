@@ -762,7 +762,7 @@ def plot_discrete_nodes(
 
         if legend:
             if legend_title is None:
-                legend_title = label_generator(parameter,unit)
+                legend_title = label_generator(parameter,value,unit)
                 
             base.draw_legend(
                 ax,
@@ -1156,7 +1156,7 @@ def plot_discrete_links(
         if legend:
             
             if legend_title is None:
-                legend_title = label_generator(parameter,unit)
+                legend_title = label_generator(parameter,value,unit)
                 
             base.draw_legend(
                 ax,
