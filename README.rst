@@ -61,19 +61,12 @@ To get started, import both VisWaterNet and matplotlib.pyplot:
 
     import viswaternet as vis
     import matplotlib.pyplot as plt
-
-Next, initialize a matplotlib figure and VisWaterNet model. For example purposes, we use the CTown network included in the Examples folder:
-
-.. code:: python
-
-    fig, ax = plt.subplots(figsize=(12, 12))
-    model = vis.VisWNModel('Networks/CTown.inp')
     
-Finally, call on any of the plotting functions with the argument inputs of your choice. For example:
+Then, call on any of the plotting functions with the argument inputs of your choice. For example:
 
 .. code:: python
 
-    model.plot_discrete_nodes(ax, parameter="quality", value='max', unit="hr")
+    model.plot_discrete_nodes(parameter="quality", value='max', unit="hr")
     
 If the plot does not show up after you run the script, it is possible that your IDE does not support interactive plotting (e.g., IDLE) or interactive mode is off. To see the plot, add the following line to display the figures: 
 
