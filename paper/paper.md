@@ -47,8 +47,8 @@ Existing open-source tools for analyzing WDSs, such as `EPANET` [@rossman2020] a
 Additionally, `VisWaterNet` can perform the following functions:
 
 1.	Import and visualize custom data generated either in Python scripts or in Excel files.
-2.	Add a second dimension of information to a plot by customizing node markers and sizes and link styles and widths.
-3.	Convert units (e.g., a user can choose to represent length data in units of *m*, *cm*, *ft*, or *in*.
+2.	Add a second dimension of information to a plot by customizing node markers/sizes and link styles/widths.
+3.	Convert units (e.g., a user can choose to represent length data in units of *m*, *cm*, *ft*, or *in*).
 4.	Represent simulation results at a specified time step or summarized throughout the duration (e.g., a user can choose to visualize minimum, maximum, or mean pressure, or pressure at a particular time step).
 5.	Customize the number of intervals or width of intervals for discrete data plots, and hide intervals with no data points.
 6.	Customize the appearance of specific nodes and links.
