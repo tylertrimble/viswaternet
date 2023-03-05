@@ -85,4 +85,7 @@ def label_generator(parameter, value, unit=None):
         
     if value=='range':
         title_label = 'Range of ' + parameter_titles[parameter] + " " + unit_titles[unit]
+        
+    if value is None:
+        title_label = parameter_titles[parameter] + " " + unit_titles[unit]
     return title_label
