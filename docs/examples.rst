@@ -221,13 +221,14 @@ Example 11 - Creating GIFs
 -----------------------------
  
 VisWaterNet offers a function that generates time-varying representations of network properties. Here, we demonstrate how to use the ``animate_plot`` function to generate a .GIF file showing link flow rate change in a continuous manner over the simulation duration. To generate an animation, we have to provide the following inputs:
-- *function*: the specific function we want to invoke on *model* for each frame, e.g., model.plot_discrete_nodes
-- *data_type*: the type of plot we wish to generate (*continuous, discrete,* or *unique*)
-- *parameter_type*: the elements we are plotting (*node* or *link*)
+
+- *function*: the specific function we want to invoke on *model* for each frame, e.g., *model.plot_discrete_nodes*
+- *data_type*: the type of plot we wish to generate (*'continuous', 'discrete',* or *'unique'*)
+- *parameter_type*: the elements we are plotting (*'node'* or *'link'*)
 - *parameter*: the node/link parameter data we intend to plot (e.g. *'flowrate', 'pressure'*, etc.)
 - *first_timestep*: the starting time step of the animation (optional)
 - *last_timestep*: the ending time step of the animation (optional)
-- *timestep_unit*: the time step units shown on the plot (*min, hr, day*, default *s*) (optional)
+- *timestep_unit*: the time step units shown on the plot (*'min', 'hr', 'day'*, default *'s'*) (optional)
 - *fps*: the animation framerate as an integer value (optional)
 
 Additional parameters can be provided to customize the frames as shown in previous examples. 
@@ -236,12 +237,12 @@ Additional parameters can be provided to customize the frames as shown in previo
 .. code:: python
 
     model.animate_plot(ax, function = model.plot_continuous_links ,
-                   data_type = 'continuous', parameter_type = 'link',
-                   parameter = 'flowrate', unit = 'hr', fps = 7,
-                   first_timestep = 0, last_timestep = 40,
-                   cmap = 'coolwarm', pump_color = 'green',
-                   max_width = 5, min_width = 5, legend = False,
-                   color_bar_title = 'Flowrate [m3/s]')    
+                       data_type = 'continuous', parameter_type = 'link',
+                       parameter = 'flowrate', unit = 'hr', fps = 7,
+                       first_timestep = 0, last_timestep = 40,
+                       cmap = 'coolwarm', pump_color = 'green',
+                       max_width = 5, min_width = 5, legend = False,
+                       color_bar_title = 'Flowrate [m3/s]')    
 
 .. _basic11:
 .. figure:: figures/eg_plot_11.gif
