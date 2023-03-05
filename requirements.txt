@@ -3,4 +3,4 @@ numpy
 matplotlib>=3.5.0
 wntr
 imageio
-networkx
+networkx>=2.7
