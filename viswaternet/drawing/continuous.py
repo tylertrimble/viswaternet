@@ -8,7 +8,7 @@ from viswaternet.utils import save_fig, normalize_parameter, unit_conversion, fa
 from viswaternet.drawing import base
 
 
-default_cmap = mpl.colormaps["autumn_r"]
+default_cmap = 'autumn_r'
 
 
 def plot_continuous_nodes(

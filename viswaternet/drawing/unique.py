@@ -10,7 +10,7 @@ from viswaternet.utils import convert_excel, save_fig, normalize_parameter, unit
 from viswaternet.drawing import base
 from viswaternet.drawing import discrete
 
-default_cmap = mpl.colormaps["autumn_r"]
+default_cmap = 'autumn_r'
 
 
 def plot_unique_data(
