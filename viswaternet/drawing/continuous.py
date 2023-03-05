@@ -247,8 +247,9 @@ def plot_continuous_nodes(
     draw_color_bar : boolean
         Determines if color bar is drawn.
     """
+    if len(self.model['G_list_pumps_only'])==0:
+        pumps = False
     if parameter is not None:
-
         parameter_results, node_list = processing.get_parameter(
             self,
             "node",
@@ -328,7 +329,7 @@ def plot_continuous_nodes(
                                 color_bar_width=color_bar_width,
                                 color_bar_height=color_bar_height)
     if legend:
-
+        
         base.draw_legend(ax,
                          pumps=pumps,
                          loc=legend_loc,
@@ -346,6 +347,11 @@ def plot_continuous_nodes(
                          draw_base_legend=draw_base_legend,
                          linewidths=line_widths,
                          edge_colors=edge_colors,
+                         pump_line_style=pump_line_style,
+                         base_link_line_style=base_link_line_style,
+                         base_link_arrows=base_link_arrows,
+                         pump_arrows=pump_arrows,
+                         draw_base_links=True,
                          )
     if savefig:
 
@@ -590,6 +596,8 @@ def plot_continuous_links(
     draw_color_bar : boolean
         Determines if color bar is drawn.
     """
+    if len(self.model['G_list_pumps_only'])==0:
+        pumps = False
     if parameter is not None:
 
         parameter_results, link_list = processing.get_parameter(
@@ -685,6 +693,11 @@ def plot_continuous_links(
                          element_size_legend_loc=element_size_legend_loc,
                          element_size_legend_labels=element_size_legend_labels,
                          draw_base_legend=draw_base_legend,
+                         pump_line_style=pump_line_style,
+                         base_link_line_style=base_link_line_style,
+                         base_link_arrows=base_link_arrows,
+                         pump_arrows=pump_arrows,
+                         draw_base_links=False,
                          )
     if savefig:
 

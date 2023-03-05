@@ -229,11 +229,6 @@ system changes over time.
  330             	60              	601             	1           	30          	140         	0           	Closed	;
  333             	601             	61              	1           	30          	140         	0           	Open  	;
 
-[PUMPS]
-;ID              	Node1           	Node2           	Parameters
- 10              	Lake            	10              	HEAD 1	;
- 335             	60              	61              	HEAD 2	;
-
 [VALVES]
 ;ID              	Node1           	Node2           	Diameter    	Type	Setting     	MinorLoss   
 

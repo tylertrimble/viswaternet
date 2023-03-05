@@ -681,6 +681,8 @@ def plot_discrete_nodes(
     draw_intervals_legend : boolean
         Determine if the intervals legend is drawn.
     """
+    if len(self.model['G_list_pumps_only'])==0:
+        pumps = False
     if parameter is not None:
 
         parameter_results, node_list = processing.get_parameter(
@@ -773,7 +775,12 @@ def plot_discrete_nodes(
                 pump_color=pump_color,
                 base_link_color=base_link_color,
                 draw_base_legend=draw_base_legend,
-                draw_intervals_legend=draw_interval_legend
+                draw_intervals_legend=draw_interval_legend,
+                pump_line_style=pump_line_style,
+                base_link_line_style=base_link_line_style,
+                base_link_arrows=base_link_arrows,
+                pump_arrows=pump_arrows,
+                draw_base_links=True,
             )
     if savefig:
 
@@ -1074,6 +1081,8 @@ def plot_discrete_links(
     draw_intervals_legend : boolean
         Determine if the intervals legend is drawn.
     """
+    if len(self.model['G_list_pumps_only'])==0:
+        pumps = False
     if parameter is not None:
 
         parameter_results, link_list = processing.get_parameter(
@@ -1158,7 +1167,12 @@ def plot_discrete_links(
                 pump_color=pump_color,
                 base_link_color=base_link_color,
                 draw_base_legend=draw_base_legend,
-                draw_intervals_legend=draw_intervals_legend
+                draw_intervals_legend=draw_intervals_legend,
+                pump_line_style=pump_line_style,
+                base_link_line_style=base_link_line_style,
+                base_link_arrows=base_link_arrows,
+                pump_arrows=pump_arrows,
+                draw_base_links=False,
             )
     if savefig:
 

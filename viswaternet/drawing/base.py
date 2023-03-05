@@ -756,7 +756,12 @@ def draw_legend(
     draw_base_legend=True,
     draw_intervals_legend=True,
     edge_colors='k',
-    linewidths=1
+    linewidths=1,
+    pump_line_style='-',
+    base_link_line_style='-',
+    base_link_arrows=False,
+    pump_arrows=False,
+    draw_base_links=True,
 ):
     """Draws the legends for all other plotting functions. There are two legends
     that might be drawn. One is the base elements legend with displays what markers
@@ -819,17 +824,24 @@ def draw_legend(
     if intervals is None:
         intervals = []
     handles, labels = ax.get_legend_handles_labels()
-
+    
+    extensions = []
+    
     if pumps:
+        if pump_arrows:
+            #extensions.append(plt.arrow(0, 0, 1, 1, color=pump_color, linestyle=pump_line_style,lw=4, label='Pumps'))
+            extensions.append(Line2D([0], [0], color=pump_color, linestyle=pump_line_style,lw=4, label='Pumps'))
+        else:
+            extensions.append(Line2D([0], [0], color=pump_color, linestyle=pump_line_style,lw=4, label='Pumps'))
 
-        patch1 = mpatches.Patch(color=pump_color, label="Pumps")
-        patch2 = mpatches.Patch(color=base_link_color, label="Pipes")
-
-        handles.extend([patch1, patch2])
-    else:
-        patch = mpatches.Patch(color=base_link_color, label="Pipes")
-
-        handles.extend([patch])
+    if draw_base_links:
+        if base_link_arrows:
+            #extensions.append(plt.arrow(0, 0, 1, 1, color=base_link_color, linestyle=base_link_line_style,lw=4, label='Pipes'))
+            extensions.append(Line2D([0], [0], color=base_link_color, linestyle=base_link_line_style,lw=4, label='Pipes'))
+        else:
+            extensions.append(Line2D([0], [0], color=base_link_color, linestyle=base_link_line_style,lw=4, label='Pipes'))
+    
+    handles.extend(extensions)
 
     if len(intervals) != 0:
         if draw_base_legend == True:
