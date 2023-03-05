@@ -4,7 +4,7 @@ The viswaternet.network.initialize module initializes a viswaternet model object
 """
 import os
 import wntr
-
+import matplotlib.pyplot as plt
 
 class VisWNModel:
     """Viswaternet model class.
@@ -21,7 +21,7 @@ class VisWNModel:
         WNTR WaterNetworkModel object.
     """
 
-    def __init__(self, inp_file, network_model=None):
+    def __init__(self, inp_file, network_model=None,figsize=(12,12),axis_frame=False):
         model = {}
         dirname = os.getcwd()
 
@@ -102,7 +102,11 @@ class VisWNModel:
         model["G_list_valves_only"] = G_list_valves_only
 
         self.model = model
-
+        fig, ax = plt.subplots(figsize=figsize)  
+        self.fig = fig
+        self.ax = ax
+        self.ax.set_frame_on(axis_frame)
+        
     from viswaternet.network.processing import get_parameter, bin_parameter
     from viswaternet.drawing.base import draw_nodes, draw_links, draw_base_elements, plot_basic_elements, draw_label
     from viswaternet.drawing.discrete import draw_discrete_nodes, draw_discrete_links, plot_discrete_nodes, plot_discrete_links

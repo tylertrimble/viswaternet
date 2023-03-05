@@ -384,7 +384,7 @@ def draw_discrete_links(
 
 def plot_discrete_nodes(
     self,
-    ax,
+    ax=None,
     num_intervals=5,
     parameter=None,
     value=None,
@@ -683,6 +683,9 @@ def plot_discrete_nodes(
     """
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
+    
+    if ax is None:
+        ax = self.ax
     if parameter is not None:
 
         parameter_results, node_list = processing.get_parameter(
@@ -789,7 +792,7 @@ def plot_discrete_nodes(
 
 def plot_discrete_links(
     self,
-    ax,
+    ax=None,
     num_intervals=5,
     parameter=None,
     element_list=None,
@@ -1083,6 +1086,8 @@ def plot_discrete_links(
     """
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
+    if ax is None:
+        ax = self.ax
     if parameter is not None:
 
         parameter_results, link_list = processing.get_parameter(

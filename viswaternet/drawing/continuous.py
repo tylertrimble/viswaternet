@@ -13,7 +13,7 @@ default_cmap = mpl.cm.get_cmap("autumn_r")
 
 def plot_continuous_nodes(
     self,
-    ax,
+    ax=None,
     parameter=None,
     element_list=None,
     value=None,
@@ -249,6 +249,8 @@ def plot_continuous_nodes(
     """
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
+    if ax is None:
+        ax = self.ax
     if parameter is not None:
         parameter_results, node_list = processing.get_parameter(
             self,
@@ -360,7 +362,7 @@ def plot_continuous_nodes(
 
 def plot_continuous_links(
     self,
-    ax,
+    ax=None,
     parameter=None,
     element_list=None,
     value=None,
@@ -598,6 +600,8 @@ def plot_continuous_links(
     """
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
+    if ax is None:
+        ax = self.ax
     if parameter is not None:
 
         parameter_results, link_list = processing.get_parameter(

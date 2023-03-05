@@ -15,7 +15,7 @@ default_cmap = mpl.cm.get_cmap("autumn_r")
 
 def plot_unique_data(
     self,
-    ax,
+    ax=None,
     parameter=None,
     parameter_type=None,
     data_type=None,
@@ -401,6 +401,8 @@ def plot_unique_data(
     
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
+    if ax is None:
+        ax = self.ax
     if parameter == "demand_patterns":
 
         demand_pattern_nodes, patterns = processing.get_demand_patterns(self)

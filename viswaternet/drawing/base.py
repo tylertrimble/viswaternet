@@ -530,7 +530,7 @@ def draw_base_elements(
 
 def plot_basic_elements(
     self,
-    ax,
+    ax=None,
     nodes=True,
     links=True,
     reservoirs=True,
@@ -681,7 +681,10 @@ def plot_basic_elements(
         Determines if an arrow is drawn in the direction of flow of the links
         with no data associated with them.
     """
-
+    if len(self.model['G_list_pumps_only'])==0:
+        pumps = False
+    if ax is None:
+        ax = self.ax
     draw_base_elements(
         self,
         ax,
@@ -968,7 +971,7 @@ def draw_color_bar(ax, g, cmap, color_bar_title=None,color_bar_width=0.03,color_
     cbar.set_label(color_bar_title, fontsize=10)
 
 
-def draw_label(self, ax, labels, x_coords, y_coords, nodes=None, draw_arrow=True, label_font_size=11):
+def draw_label(self, labels, x_coords, y_coords, ax=None,nodes=None, draw_arrow=True, label_font_size=11):
     """Draws customizable labels on the figure.
     There are two modes of coordinate input:
     If the 'nodes' argument is not specified, then the label coordinates are 
@@ -997,6 +1000,8 @@ def draw_label(self, ax, labels, x_coords, y_coords, nodes=None, draw_arrow=True
         The font size of the labels.
     """
     model = self.model
+    if ax is None:
+        ax = self.ax
     if nodes is not None:
 
         for label, node, xCoord, yCoord in zip(labels, nodes, x_coords, y_coords):
