@@ -4,8 +4,7 @@
 Contributing
 ============
 
-Contributions are welcome, and they are greatly appreciated! Every little bit
-helps, and credit will always be given.
+Contributions are welcome, and they are greatly appreciated! Every little bit helps, and credit will always be given.
 
 You can contribute in many ways:
 
@@ -38,7 +37,7 @@ and "help wanted" is open to whoever wants to implement it.
 Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
-visnet could always use more documentation, whether as part of the
+VisWaterNet could always use more documentation, whether as part of the
 official VisWaterNet docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
