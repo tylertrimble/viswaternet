@@ -9,7 +9,7 @@ from viswaternet.network import processing
 from viswaternet.utils import save_fig, unit_conversion, label_generator
 from viswaternet.drawing import base
 
-default_cmap = mpl.cm.get_cmap("autumn_r")
+default_cmap = mpl.colormaps["autumn_r"]
 
 
 def draw_discrete_nodes(
@@ -162,7 +162,7 @@ def draw_discrete_nodes(
 
                 counter2 += 1
     else:
-        cmap = mpl.cm.get_cmap(cmap)
+        cmap = mpl.colormaps[cmap]
         cmapValue = 1 / len(intervals)
 
         for interval_name in intervals:
@@ -202,7 +202,7 @@ def draw_discrete_nodes(
         if empty_interval:
             counter2 = 0
 
-            cmap2 = mpl.cm.get_cmap(cmap)
+            cmap2 = mpl.colormaps[cmap]
             cmapValue2 = 1 / len(intervals)
 
             for interval_name in intervals:
@@ -326,7 +326,7 @@ def draw_discrete_links(
                 )
 
     else:
-        cmap = mpl.cm.get_cmap(cmap)
+        cmap = mpl.colormaps[cmap]
         cmapValue = 1 / len(intervals)
         for counter, interval_name in enumerate(intervals):
 
@@ -362,7 +362,7 @@ def draw_discrete_links(
             cmapValue += 1 / len(intervals)
 
         if empty_interval:
-            cmap2 = mpl.cm.get_cmap(cmap)
+            cmap2 = mpl.colormaps[cmap]
             cmapValue2 = 1 / len(intervals)
 
             for counter, interval_name in enumerate(intervals):

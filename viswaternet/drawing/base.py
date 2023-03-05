@@ -10,7 +10,6 @@ import matplotlib.patches as mpatches
 import matplotlib as mpl
 from matplotlib.lines import Line2D
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-
 from viswaternet.utils import save_fig
 
 
@@ -79,7 +78,7 @@ def draw_nodes(
 
                 negativeValues = True
 
-                cmap = mpl.cm.get_cmap(cmap)
+                cmap = mpl.colormaps[cmap]
 
                 if vmin is None and vmax is None:
                     g = nxp.draw_networkx_nodes(
@@ -117,7 +116,7 @@ def draw_nodes(
         if negativeValues:
             pass
         else:
-            cmap = mpl.cm.get_cmap(cmap)
+            cmap = mpl.colormaps[cmap]
 
             if vmin is None and vmax is None:
                 g = nxp.draw_networkx_nodes(
@@ -232,7 +231,7 @@ def draw_links(
 
                 negativeValues = True
 
-                cmap = mpl.cm.get_cmap(cmap)
+                cmap = mpl.colormaps[cmap]
 
                 if vmin is None and vmax is None:
                     g = nxp.draw_networkx_edges(
@@ -270,7 +269,7 @@ def draw_links(
         if negativeValues:
             pass
         else:
-            cmap = mpl.cm.get_cmap(cmap)
+            cmap = mpl.colormaps[cmap]
 
             if vmin is None and vmax is None:
                 g = nxp.draw_networkx_edges(
@@ -894,7 +893,6 @@ def draw_legend(
             max_size = np.max(node_sizes)
             marker_sizes = np.linspace(
                 min_size, max_size, element_size_intervals)
-            print(marker_sizes)
             for size, label in zip(marker_sizes, element_size_legend_labels):
                 handles_2.append(Line2D([],
                                         [],
@@ -923,7 +921,6 @@ def draw_legend(
             max_size = np.max(link_sizes)
             marker_sizes = np.linspace(
                 min_size, max_size, element_size_intervals)
-            print(marker_sizes)
             for size, label in zip(marker_sizes, element_size_legend_labels):
                 handles_2.append(Line2D([],
                                         [],
