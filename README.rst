@@ -62,11 +62,18 @@ To get started, import both VisWaterNet and matplotlib.pyplot:
     import viswaternet as vis
     import matplotlib.pyplot as plt
     
-Then, call on any of the plotting functions with the argument inputs of your choice. For example:
+Next, initialize a VisWaterNet model. For example purposes, we use the CTown network from `Ostfeld (2016)`_ included in the Examples folder:
+
+.. _`Ostfeld (2016)`: https://uknowledge.uky.edu/wdst_models/2/ 
+
+.. code:: python
+    model = vis.VisWNModel('Networks/CTown.inp')
+    
+Then, call on any of the plotting functions with the argument inputs of your choice. For example, the following line of code displays the network layout of CTown with each node colored according its mean pressure (in *psi*) and a legend depicting the different data intervals:
 
 .. code:: python
 
-    model.plot_discrete_nodes(parameter="quality", value='max', unit="hr")
+    model.plot_discrete_nodes(parameter="pressure", value='mean', unit="psi")
     
 If the plot does not show up after you run the script, it is possible that your IDE does not support interactive plotting (e.g., IDLE) or interactive mode is off. To see the plot, add the following line to display the figures: 
 
