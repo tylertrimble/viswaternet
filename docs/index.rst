@@ -20,7 +20,6 @@ Welcome to VisWaterNet's documentation!
    gettingstarted
    examples
    source/modules
-   warnings
    contributing
    authors
    history
