@@ -5,17 +5,17 @@ units from WNTR's base SI units.
 .. rubric:: Base Demand, Demand, and Flowrate Units
 
 ====================  ====================================  ====================
-    Default           :math:`m^3\,/\,s`                     Metric
-    LPS               :math:`L\,/\,s`                       Metric
-    LPM               :math:`L\,/\,min`                     Metric
-    MLD               :math:`ML\,/\,day`                    Metric
-    CMH               :math:`m^3\,\,hr`                     Metric
-    CMD               :math:`m^3\,/\,day`                   Metric
-    CFS               :math:`ft^3\,/\,s`                    USC
-    GPM               :math:`gal\,/\,min`                   USC
-    MGD               :math:`10^6\,gal\,/\,day`             USC
-    IMGD              :math:`10^6\,Imp.\,gal\,/\,day`       USC
-    AFD               :math:`acre\cdot\,ft\,/\,day`         USC
+    Default           :math:`m^3\\,/\\,s`                     Metric
+    LPS               :math:`L\\,/\\,s`                       Metric
+    LPM               :math:`L\\,/\\,min`                     Metric
+    MLD               :math:`ML\\,/\\,day`                    Metric
+    CMH               :math:`m^3\\,\\,hr`                     Metric
+    CMD               :math:`m^3\\,/\\,day`                   Metric
+    CFS               :math:`ft^3\\,/\\,s`                    USC
+    GPM               :math:`gal\\,/\\,min`                   USC
+    MGD               :math:`10^6\\,gal\\,/\\,day`             USC
+    IMGD              :math:`10^6\\,Imp.\\,gal\\,/\\,day`       USC
+    AFD               :math:`acre\\cdot\\,ft\\,/\\,day`         USC
 ====================  ====================================  ====================
 
 .. rubric:: Diameter, Elevation, Head, and Length Units
