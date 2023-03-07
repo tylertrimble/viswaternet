@@ -4,7 +4,7 @@
 Contributing
 ============
 
-Contributions are welcome, and they are greatly appreciated! Every little bit helps, and credit will always be given.
+Contributions are welcome, and they are greatly appreciated! Every little bit helps, and credit will always be given. 
 
 You can contribute in many ways:
 
@@ -21,12 +21,13 @@ If you are reporting a bug, please include:
 * Your operating system name and version.
 * Any details about your local setup that might be helpful in troubleshooting.
 * Detailed steps to reproduce the bug.
+* Note that we provide a list of common warning messages at the bottom of this page. If your bug is related to unexpected warning messages, please check there first!
 
 Fix Bugs
 ~~~~~~~~
 
 Look through the GitHub issues for bugs. Anything tagged with "bug" and "help
-wanted" is open to whoever wants to implement it.
+wanted" is open to whoever wants to implement it. 
 
 Implement Features
 ~~~~~~~~~~~~~~~~~~
@@ -56,7 +57,7 @@ If you are proposing a feature:
 Get Started!
 ------------
 
-Ready to contribute? Here's how to set up `visnet` for local development.
+Ready to contribute? Here's how to set up VisWaterNet for local development.
 
 1. Fork the `viswaternet` repo on GitHub.
 2. Clone your fork locally::
@@ -78,7 +79,7 @@ Ready to contribute? Here's how to set up `visnet` for local development.
 5. When you're done making changes, check that your changes pass flake8 and the
    tests, including testing other Python versions with tox::
 
-    $ flake8 visnwateret tests
+    $ flake8 viswaternet tests
     $ python setup.py test or pytest
     $ tox
 
@@ -122,3 +123,15 @@ Then run::
 $ bump2version patch # possible: major / minor / patch
 $ git push
 $ git push --tags
+
+Warning Messages
+---------
+
+Since VisWaterNet relies on several other packages, and these packages display warnings regarding changes in future package versions, missing data in the input file, etc., we decided not to suppress warning messages. Here, we have compiled a number of common warning messages we run into when using VisWaterNet. 
+
+.. code:: python
+
+    UserWarning: Not all curves were used in "/viswaternet/CTown.inp"; added with type None, units conversion left to user warnings.warn('Not all curves were used in "{}"; added with type None, units conversion left to user'.format(self.wn.name))
+    
+WNTR displays this warning when the .INP input file contains curves (e.g., to model pump behavior) or patterns (e.g., describing the time-varying demand at junctions) that are not assigned to pumps or junctions.
+
