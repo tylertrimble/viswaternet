@@ -19,7 +19,7 @@ An open-source Python package for easy generation and customization of water dis
 
 Dependencies
 ------------
-◉ Python 3.7+ ◉ WNTR ◉ NetworkX ◉ Matplotlib 3.3.0+ ◉ Pandas ◉ NumPy ◉ imageio ◉
+◉ Python 3.8-3.10 ◉ WNTR 0.5.0+ ◉ NetworkX 2.7+ ◉ Matplotlib 3.5.0+ ◉ Pandas ◉ NumPy ◉ imageio ◉
 
 Features
 --------
@@ -61,19 +61,19 @@ To get started, import both VisWaterNet and matplotlib.pyplot:
 
     import viswaternet as vis
     import matplotlib.pyplot as plt
+    
+Next, initialize a VisWaterNet model. For example purposes, we use the CTown network from `Ostfeld (2016)`_ included in the Examples folder:
 
-Next, initialize a matplotlib figure and VisWaterNet model. For example purposes, we use the CTown network included in the Examples folder:
+.. _`Ostfeld (2016)`: https://uknowledge.uky.edu/wdst_models/2/ 
 
 .. code:: python
-
-    fig, ax = plt.subplots(figsize=(12, 12))
     model = vis.VisWNModel('Networks/CTown.inp')
     
-Finally, call on any of the plotting functions with the argument inputs of your choice. For example:
+Then, call on any of the plotting functions with the argument inputs of your choice. For example, the following line of code displays the network layout of CTown with each node colored according its mean pressure (in *psi*) and a legend depicting the different data intervals:
 
 .. code:: python
 
-    model.plot_discrete_nodes(ax, parameter="quality", value='max', unit="hr")
+    model.plot_discrete_nodes(parameter="pressure", value='mean', unit="psi")
     
 If the plot does not show up after you run the script, it is possible that your IDE does not support interactive plotting (e.g., IDLE) or interactive mode is off. To see the plot, add the following line to display the figures: 
 

@@ -6,7 +6,7 @@ Water distribution systems (WDSs) are typically represented in a network format 
 
 .. _`EPANET`: https://www.epa.gov/water-research/epanet
 
-Here we introduce VisWaterNet, an accessible, open-srouce Python package that presents a graphical representation of WDS characteristics and simulation results. VisWaterNet builds upon functions offered by `NetworkX`_ and `WNTR`_ to visualize WDS network attributes in `Matplotlib`_ figures.  
+Here we introduce VisWaterNet, an accessible, open-source Python package that presents a graphical representation of WDS characteristics and simulation results. VisWaterNet builds upon functions offered by `NetworkX`_ and `WNTR`_ to visualize WDS network attributes in `Matplotlib`_ figures.  
 
 .. _`NetworkX`: https://networkx.org/documentation/stable/index.html
 .. _`WNTR`: https://wntr.readthedocs.io/en/stable/index.html
@@ -17,7 +17,7 @@ Users must provide an EPANET-compatible .INP file of the WDS network model throu
 1. varying node or link colors in a **continuous** manner, i.e., by varying node/link color according to a color gradient scale based on numerical data attributes 
 2. varying node or link colors in a **discrete** manner, i.e., by grouping numerical data into specified intervals and varying node/link color based on the color assigned to the corresponding interval
 3. varying node or link colors in a **categorical** manner, i.e., for attributes that can only belong to a fixed set of categories, each node/link color is assigned according to the corresponding category
-4. varying node sizes and markers and link widths and linestyles to reinforce difference in color or represent a second dimension of data 
+4. varying node sizes/markers and link widths/line styles to reinforce difference in color or represent a second dimension of data 
 
 VisWaterNet also allows easy customization of WDS-specific network plots by offering the following features:
 
