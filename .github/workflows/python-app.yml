@@ -12,6 +12,10 @@ on:
 permissions:
   contents: read
 
+runs:
+  using: 'node16'
+  main: 'main.js'
+
 jobs:
   build:
 
