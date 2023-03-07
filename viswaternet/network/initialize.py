@@ -66,7 +66,7 @@ class VisWNModel:
         model["pipe_list"] = pipe_list
 
         # Creates wntr graph
-        G = wn.get_graph()
+        G = wn.to_graph()
         model["G"] = G
 
         # Gets node coordiantes
