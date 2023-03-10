@@ -437,7 +437,7 @@ def draw_base_elements(
     if nodes:
 
         nxp.draw_networkx_nodes(
-            model["G"], model["pos_dict"], node_size=base_node_size, node_color=base_node_color
+            model["G"], model["pos_dict"], node_size=base_node_size, node_color=base_node_color, ax=ax
         )
     if reservoirs:
 
