@@ -20,22 +20,23 @@ def label_generator(parameter, value, unit=None):
         'headloss': 'Headloss',
         'friction_factor': 'Friction Factor',
         'reaction_rate': 'Reaction Rate',
-        'pressure': 'Pressure'
+        'pressure': 'Pressure',
+        'velocity': 'Velocity'
     }
     if parameter == 'base_demand' or parameter == 'demand' or parameter == 'flowrate':
         if unit is None:
             unit = 'CMS'
-        unit_titles = {"LPS": "[L/s]",
-                       "LPM": "[L/min]",
-                       "MLD": "[million L/s]",
-                       "CMS": "[m^3/s]",
-                       "CMH": "[m^3/hr]",
-                       "CMD": "[m^3/day]",
-                       "CFS": "[ft^3/s]",
-                       "GPM": "[gal/min]",
-                       "MGD": "[million gal/min]",
-                       "IMGD": "[million imperial gal/min]",
-                       "AFD": "[acre-ft/day]"}
+        unit_titles = {"LPS": "[LPS]",
+                       "LPM": "[LPM]",
+                       "MLD": "[MLD]",
+                       "CMS": "[$m^3$/s]",
+                       "CMH": "[$m^3$/hr]",
+                       "CMD": "[$m^3$/day]",
+                       "CFS": "[CFS]",
+                       "GPM": "[GPM]",
+                       "MGD": "MGD]",
+                       "IMGD": "[IMGD]",
+                       "AFD": "[AFD]"}
 
     if parameter == 'diameter' or parameter == 'elevation' or parameter == 'head' or parameter == 'length':
         if unit is None:
