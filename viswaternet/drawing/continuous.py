@@ -105,12 +105,12 @@ def plot_continuous_nodes(
         summary will be plotted.
         .. rubric:: Possible Inputs
         ======================= =========================================
-            :attr:'int'         Plots element data for specified timestep
-            :attr:'min'         Plots minimum data point for each element
-            :attr:'max'         Plots maximum data point for each element
-            :attr:'mean'        Plots mean for each element
-            :attr:'stddev'      Plots standard deviation for each element
-            :attr:'range'       Plots range for each element
+            int                 Plots element data for specified timestep
+            'min'               Plots minimum data point for each element
+            'max'               Plots maximum data point for each element
+            'mean'              Plots mean for each element
+            'stddev'            Plots standard deviation for each element
+            'range'             Plots range for each element
         ======================= =========================================
     unit : string
         The unit that the network data is to be converted to.
@@ -443,12 +443,12 @@ def plot_continuous_links(
         summary will be plotted.
         .. rubric:: Possible Inputs
         ======================= =========================================
-            :attr:'int'         Plots element data for specified timestep
-            :attr:'min'         Plots minimum data point for each element
-            :attr:'max'         Plots maximum data point for each element
-            :attr:'mean'        Plots mean for each element
-            :attr:'stddev'      Plots standard deviation for each element
-            :attr:'range'       Plots range for each element
+            int                 Plots element data for specified timestep
+            'min'               Plots minimum data point for each element
+            'max'               Plots maximum data point for each element
+            'mean'              Plots mean for each element
+            'stddev'            Plots standard deviation for each element
+            'range'             Plots range for each element
         ======================= =========================================
     unit : string
         The unit that the network data is to be converted to.
