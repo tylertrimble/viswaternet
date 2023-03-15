@@ -20,7 +20,8 @@ An open-source Python package for easy generation and customization of water dis
 Dependencies
 ------------
 ◉ WNTR <0.5.0 ◉ NetworkX 2.7+ ◉ Matplotlib 3.5.0+ ◉ Pandas ◉ NumPy ◉ imageio ◉
-Tested on Python 3.8 and 3.9
+
+VisWaterNet has been tested on Python **3.8** and **3.9**.
 
 Features
 --------
@@ -56,12 +57,11 @@ Once you have a copy of the source, you can install it with:
 
 Getting Started
 ---------------
-To get started, import both VisWaterNet and matplotlib.pyplot:
+To get started, import the VisWaterNet package:
 
 .. code:: python
 
     import viswaternet as vis
-    import matplotlib.pyplot as plt
     
 Next, initialize a VisWaterNet model. For example purposes, we use the CTown network from `Ostfeld (2016)`_ included in the Examples folder:
 
@@ -70,17 +70,35 @@ Next, initialize a VisWaterNet model. For example purposes, we use the CTown net
 .. code:: python
     model = vis.VisWNModel('Networks/CTown.inp')
     
-Then, call on any of the plotting functions with the argument inputs of your choice. For example, the following line of code displays the network layout of CTown with each node colored according its mean pressure (in *psi*) and a legend depicting the different data intervals:
+Then, call on any of the plotting functions with the argument inputs of your choice. For example, the following line of code displays the network layout of CTown with each node colored according its mean pressure (in *psi*). This is a **continuous** node plot, where the nodal colors are assigned based a gradient scale:
 
 .. code:: python
 
-    model.plot_discrete_nodes(parameter="pressure", value='mean', unit="psi")
+    model.plot_continuous_nodes(parameter="pressure", value='mean', unit="psi")
     
+.. image:: https://github.com/tylertrimble/viswaternet/blob/master/logo/readme1.png
+		:target: https://github.com/tylertrimble/viswaternet/blob/master/logo/readme1.png
+
+We can represent the same data in a different way by generating a **discrete** node plot in which mean pressure data is grouped into 4 discrete intervals and node colors are assigned based on the corresponding value shown on a legend:
+
+.. code:: python
+
+    model.plot_discrete_nodes(parameter="pressure", value='mean', unit="psi",
+                              legend_loc_2 = 'lower left', intervals = [0,40,80,120],
+                              legend_sig_figs =0)
+
+.. image:: https://github.com/tylertrimble/viswaternet/blob/master/logo/readme2.png
+		:target: https://github.com/tylertrimble/viswaternet/blob/master/logo/readme2.png
+
 If the plot does not show up after you run the script, it is possible that your IDE does not support interactive plotting (e.g., IDLE) or interactive mode is off. To see the plot, add the following line to display the figures: 
 
 .. code:: python
 
     plt.show()
+
+More examples that demonstrate the range of VisWaterNet's plotting abilities can be found in the `Example Applications`_ section of the docs.
+
+.. _`Example Applications`: https://viswaternet.readthedocs.io/en/latest/examples.html
 
 Contributing
 -------
