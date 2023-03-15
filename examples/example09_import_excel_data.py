@@ -18,5 +18,5 @@ model.plot_unique_data(parameter='Excel/CTown_pipe_ages.xlsx',
                        color_list = ["red","blue","green", "orange"],
                        pump_color = 'grey', legend_title = 'Pipe Installation Year',
                        reservoir_color = 'navy', tank_color = 'k',
-                       draw_color_bar=True, save_name = 'figures/example9', dpi = 400)
+                       save_name = 'figures/example9', dpi = 400)
 plt.show()
