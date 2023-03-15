@@ -56,12 +56,12 @@ Dependencies
 
 VisWaterNet relies on the following dependencies:
 
-* WNTR 0.2.2+
+* WNTR <0.5.0
 * Numpy
 * Pandas
 * Matplotlib 3.5.0+
 * NetworkX 2.7+
 * imageio
 
-and has been tested on Python 3.8, 3.9, and 3.10.
+and has been tested on Python 3.8 and 3.9.
 
