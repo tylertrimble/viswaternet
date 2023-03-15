@@ -2,14 +2,13 @@
 Example Applications
 ====================
 
-All VisWaterNet scripts should begin with the following three steps:
+All VisWaterNet scripts should begin with the following steps:
 
-1.  Import the VisWaterNet and matplotlib.pyplot packages.
+1. Import the VisWaterNet package.
 
 .. code:: python
 
     import viswaternet as vis
-    import matplotlib.pyplot as plt
     
 2. Initialize a VisWaterNet model object for the .INP file of the water distribution network. For these examples, we use the CTown network model introduced by `Ostfeld (2016)`_.
 
@@ -17,20 +16,22 @@ All VisWaterNet scripts should begin with the following three steps:
 
 .. code:: python
 
-    model = vis.VisWNModel("CTown.inp")
+    model = vis.VisWNModel('Networks/CTown.inp')
     
 Alternatively, we can initialize a VisWaterNet model corresponding to a `WNTR`_ water network model object.
 
 .. _`WNTR`: https://www.osti.gov/biblio/1376816
 
-3. Initialize and customize a Matplotlib figure and axis.
+3. If you would like to draw the plot into a figure you want to customize yourself (e.g., by drawing into a subplot axis, or by choosing the height and width), import the Matplotlib package and initialize a Matplotlib figure and axis. This is optional; by default, if not provided an empty axis or figure, VisWaterNet will create a figure on behalf of the user.
 
 .. code:: python
 
-    fig, ax = plt.subplots(figsize=(11,11))  
-    ax.set_frame_on(False) # remove frame from figure
+    import matplotlib.pyplot as plt
     
-After we have initialized our VisWaterNet model object and empty matplotlib figure, we can proceed to call on different functions offered by the VisWaterNet library to generate a variety of figures. Below, we provide a series of examples to highlight the different VisWaterNet plotting functions and their wide range of inputs.
+    fig, ax = plt.subplots(figsize=(11,11))  
+    ax.set_frame_on(False)
+    
+After we have initialized our VisWaterNet model object, we can proceed to call on different functions offered by the VisWaterNet library to generate a variety of figures. Below, we provide a series of examples to highlight the different VisWaterNet plotting functions and their wide range of inputs.
 
 Example 1 - Basic Network Layout Plot
 -----------------------------
@@ -39,25 +40,27 @@ This example demonstrates the basic plotting functionality provided by VisWaterN
 
 .. code:: python
 
-    model.plot_basic_elements(ax)
+    model.plot_basic_elements()
 
 .. _basic1:
-.. figure:: figures/eg_plot_1.png
+.. figure:: figures/example1.png
    :width: 600
    :alt: Basic network layout
 
 Example 2 - Customizing a Basic Network Layout Plot
 -----------------------------
 
-Here, we customize the **basic** network plot by changing the location of the legend, color of the tank marker, and pump line style.
+Here, we customize the **basic** network plot by changing the location of the legend, color of the tank marker, and pump line style, and draw the figure into axis *ax*.
 
 .. code:: python
 
-    model.plot_basic_elements(ax, legend_loc = 'upper left', 
-                              tank_color = 'g', pump_line_style = ':')
+    model.plot_basic_elements(ax, 
+                              legend_loc = 'lower left', 
+                              tank_color = 'g', 
+                              pump_line_style = ':')
 
 .. _basic2:
-.. figure:: figures/eg_plot_2.png
+.. figure:: figures/example2.png
    :width: 600
    :alt: Basic network layout modified
 
@@ -71,14 +74,16 @@ Next, Examples 3 and 4 demonstrate how to visualize data in a continuous manner,
 Example 3 - Continuous Node Data Plot for Nodal Pressure
 -----------------------------
  
-Here, we create a **continuous** data plot for **nodal pressure at hour 10**.
+Here, we create a **continuous** data plot for **nodal pressure at hour 10**. We increase the size of all nodes to 200 and save the figure as a .PNG file titled 'example3' (with resolution 400 dpi) into the *figures* folder.
 
 .. code:: python
 
-    model.plot_continuous_nodes(ax, parameter = "pressure", value = 10)
+    model.plot_continuous_nodes(parameter = "pressure", value = 10, 
+                                min_size = 200, max_size = 200, 
+                                save_name = 'figures/example3', dpi=400)
     
 .. _basic3:
-.. figure:: figures/eg_plot_3.png
+.. figure:: figures/example3.png
    :width: 600
    :alt: Continuous node plot
 
@@ -89,10 +94,11 @@ Here, we create a **continuous** data plot for mean **link flow rate** over the 
 
 .. code:: python
 
-    model.plot_continuous_links(ax, parameter = "flowrate", value = 'mean', cmap = 'coolwarm', min_width = 2, max_width = 6)
+    model.plot_continuous_links(parameter = "flowrate", value = 'mean', 
+                                cmap = 'coolwarm', min_width = 2, max_width = 6)
 
 .. _basic4:
-.. figure:: figures/eg_plot_4.png
+.. figure:: figures/example4.png
    :width: 600
    :alt: Continuous link plot
 
@@ -107,11 +113,12 @@ Here, we create a **discrete** data plot for **nodal demand at hour 10**. We spe
 
 .. code:: python
 
-    model.plot_discrete_nodes(ax, parameter = "demand", value = 10, num_intervals = 3, 
+    model.plot_discrete_nodes(parameter = "demand", value = 10, 
+                              num_intervals = 3, 
                               legend_loc_2 = 'upper left', unit = 'CMH')
     
 .. _basic5:
-.. figure:: figures/eg_plot_5.png
+.. figure:: figures/example5.png
    :width: 600
    :alt: Discrete node plot
 
@@ -122,12 +129,12 @@ Here, we create a **discrete** data plot for **maximum link velocity** over the 
 
 .. code:: python
 
-    model.plot_discrete_links(ax,parameter = "velocity", value = 'max', intervals = [0,2,6,10], 
-                              legend_title = 'Link velocity [ft/s]', legend_sig_figs = 0, 
+    model.plot_discrete_links(ax,parameter = "velocity", value = 'max', 
+                              intervals = [0,2,6,10], legend_sig_figs = 0, 
                               legend_loc_2 = 'lower left', unit = 'ft/s')
 
 .. _basic6:
-.. figure:: figures/eg_plot_6.png
+.. figure:: figures/example6.png
    :width: 600
    :alt: Continuous link plot
    
@@ -144,14 +151,14 @@ Here, we create a **categorical** data plot for **nodal demand pattern**. We mod
 
 .. code:: python
 
-    model.plot_unique_data(ax,parameter = "demand_patterns", cmap = 'tab10', 
+    model.plot_unique_data(parameter = "demand_patterns", cmap = 'tab10', 
                           legend_loc_2 = 'lower left', legend_title = 'Demand Patterns', 
                           legend_title_font_size = 13, font_size = 12,
                           interval_label_list = ['Pattern 1', 'Pattern 2', 'Pattern 3', 
                           'Patten 4', 'Pattern 5', 'No Pattern'])
 
 .. _basic7:
-.. figure:: figures/eg_plot_7.png
+.. figure:: figures/example7.png
    :width: 600
    :alt: Categorical node plot
 
@@ -160,21 +167,20 @@ Replacing the *parameter* value with "diameter" or "roughness" will generate cat
 Example 8 - Categorical Data Plot for Link Diameter
 -----------------------------
  
-Here, we create a **categorical** data plot for **link pipe diameter**. In this example we provide several inputs to the function to generate a striking plot highlight different diameter options present in the pipe. First, we import the package NumPy so we can present a linearly spaced list of link widths corresponding to the 10 different unique diameters present in the network to the *interval_width_link_list* parameter. We then change the color scheme to "Blues" and choose to represent diameters in units of inches (to conform to typical US pipe sizing conventions). Finally, we customize the location and appearance of the legend as well as the appearance of the reservoir, tanks, and pumps.
+Here, we create a **categorical** data plot for **link pipe diameter**. In this example we provide several inputs to the function to generate a striking plot highlight different diameter options present in the pipe. First, we import the package NumPy so we can present a linearly spaced list of link widths corresponding to the 10 different unique diameters present in the network to the *interval_width_link_list* parameter. We then change the color scheme to "Blues" and choose to represent diameters in units of inches (to conform to typical US pipe sizing conventions). Finally, we customize the location and appearance of the legend as well as the appearance of the pumps.
 
 .. code:: python
 
-    model.plot_unique_data(ax, parameter = "diameter", 
+    model.plot_unique_data(parameter = "diameter", 
                            interval_link_width_list = np.linspace(1,7,10),
                            cmap = 'Blues', unit = 'in', 
                            legend_loc_2 = 'upper left', 
                            legend_title = 'Pipe Diameter (in)', 
                            legend_sig_figs = 0, font_size = 12,
-                           pump_color = 'red', pump_width = 3, 
-                           tank_color = 'green', reservoir_color = 'k')
+                           pump_color = 'red', pump_width = 2)
 
 .. _basic8:
-.. figure:: figures/eg_plot_8.png
+.. figure:: figures/example8.png
    :width: 600
    :alt: Categorical link plot
 
@@ -185,20 +191,23 @@ Here, we import data from an excel file named "CTown_pipes_age.xlsx" that has tw
 
 .. code:: python
 
-    model.plot_unique_data(ax, parameter='Excel/CTown_pipe_ages.xlsx',
-                           parameter_type='link', data_type='unique', excel_columns=[0,1], 
-                           color_list = ["red","blue","green","yellow"], legend_loc_2 = 'lower left',
-                           pump_color = 'grey', reservoir_color = 'navy', tank_color = 'k)
+    model.plot_unique_data(parameter='Excel/CTown_pipe_ages.xlsx',
+                           parameter_type='link', data_type='unique', 
+                           excel_columns=[0,1], 
+                           color_list = ["red", "blue", "green","orange"], 
+                           legend_loc_2 = 'lower left', , tank_color = 'k',
+                           pump_color = 'gray', reservoir_color = 'navy',
+                           legend_title = 'Pipe Installation Year')
 
 .. _basic9:
-.. figure:: figures/eg_plot_9.png
+.. figure:: figures/example9.png
    :width: 600
    :alt: Unique link plot from Excel
 
 Example 10 - Plotting Custom Data Generated Within a Python Script
 -----------------------------
  
-Here, we demonstrate how lists of data corresponding to nodes or links can be easily visualized using VisWaterNet. This functionality is useful for plotting results of analyses performed on the water network within Python scripts. We call on the ``plot_unique data`` function with *parameter = 'custom_data'*, choose the element we are plotting (*parameter_type = 'node'* or *'link'*), and type of plot we would like to generate: *data_type = 'continuous', 'discrete'* or *'unique'*. *element_list* is a list of the nodes or links in the model, and *data_list* is the list of corresponding data points we would like to plot. In this example, we generate a random set of values in *data_list* to serve as our data points.
+Here, we demonstrate how lists of data corresponding to nodes or links can be easily visualized using VisWaterNet. This functionality is useful for plotting results of analyses performed on the water network within Python scripts. We call on the ``plot_unique data`` function with *parameter = 'custom_data'*, choose the element we are plotting (*parameter_type = 'node'* or *'link'*), and type of plot we would like to generate: *data_type = 'continuous', 'discrete'* or *'unique'*. *element_list* is a list of the nodes or links in the model, and *data_list* is the list of corresponding data points we would like to plot. In this example, we generate a random set of values in *data_list* to serve as our data points, and plot them in a continuous manner.
 
 .. code:: python
 
@@ -207,13 +216,14 @@ Here, we demonstrate how lists of data corresponding to nodes or links can be ea
     element_list = wn.junction_name_list
     data_list = [random.randrange(1, 50, 1) for i in range(wn.num_junctions)]
     
-    model.plot_unique_data(ax, parameter = 'custom_data',
+    model.plot_unique_data(parameter = 'custom_data', node_size = 200,
                            parameter_type = 'node', data_type = 'continuous', 
-                           custom_data_values = [element_list, data_list], cmap = 'viridis_r',
-                           node_size = 200)
+                           line_widths = 1, edge_colors = "k",
+                           custom_data_values = [element_list, data_list], 
+                           color_bar_title = "Error (%)", cmap = "bwr")
 
 .. _basic10:
-.. figure:: figures/eg_plot_10.png
+.. figure:: figures/example10.png
    :width: 600
    :alt: Custom continuous node plot
 
@@ -222,13 +232,14 @@ Example 11 - Creating GIFs
  
 VisWaterNet offers a function that generates time-varying representations of network properties. Here, we demonstrate how to use the ``animate_plot`` function to generate a .GIF file showing link flow rate change in a continuous manner over the simulation duration. To generate an animation, we have to provide the following inputs:
 
+- *ax*: a Matplotlib axis that can hold the frames
 - *function*: the specific function we want to invoke on *model* for each frame, e.g., *model.plot_discrete_nodes*
 - *data_type*: the type of plot we wish to generate (*'continuous', 'discrete',* or *'unique'*)
 - *parameter_type*: the elements we are plotting (*'node'* or *'link'*)
 - *parameter*: the node/link parameter data we intend to plot (e.g. *'flowrate', 'pressure'*, etc.)
 - *first_timestep*: the starting time step of the animation (optional)
 - *last_timestep*: the ending time step of the animation (optional)
-- *timestep_unit*: the time step units shown on the plot (*'min', 'hr', 'day'*, default *'s'*) (optional)
+- *unit*: the time step units shown on the plot (*'min', 'hr', 'day'*, default *'s'*) (optional)
 - *fps*: the animation framerate as an integer value (optional)
 
 Additional parameters can be provided to customize the frames as shown in previous examples. 
@@ -238,14 +249,15 @@ Additional parameters can be provided to customize the frames as shown in previo
 
     model.animate_plot(ax, function = model.plot_continuous_links ,
                        data_type = 'continuous', parameter_type = 'link',
-                       parameter = 'flowrate', unit = 'hr', fps = 7,
+                       parameter = 'flowrate',  
                        first_timestep = 0, last_timestep = 40,
-                       cmap = 'coolwarm', pump_color = 'green',
+                       unit = 'hr',  fps = 7, 
                        max_width = 5, min_width = 5, legend = False,
-                       color_bar_title = 'Flowrate [m3/s]')    
+                       color_bar_title = 'Flowrate [m3/s]',
+                       pump_color = 'green', cmap = 'coolwarm')    
 
 .. _basic11:
-.. figure:: figures/eg_plot_11.gif
+.. figure:: figures/example11_gif.gif
    :width: 600
    :alt: Flow rate gif
  
