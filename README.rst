@@ -65,10 +65,11 @@ To get started, import the VisWaterNet package:
     
 Next, initialize a VisWaterNet model. For example purposes, we use the CTown network from `Ostfeld (2016)`_ included in the Examples folder:
 
-.. _`Ostfeld (2016)`: https://uknowledge.uky.edu/wdst_models/2/ 
-
 .. code:: python
+
     model = vis.VisWNModel('Networks/CTown.inp')
+
+.. _`Ostfeld (2016)`: https://uknowledge.uky.edu/wdst_models/2/
     
 Then, call on any of the plotting functions with the argument inputs of your choice. For example, the following line of code displays the network layout of CTown with each node colored according its mean pressure (in *psi*). This is a **continuous** node plot, where the nodal colors are assigned based a gradient scale:
 
@@ -76,8 +77,9 @@ Then, call on any of the plotting functions with the argument inputs of your cho
 
     model.plot_continuous_nodes(parameter="pressure", value='mean', unit="psi")
     
-.. image:: https://github.com/tylertrimble/viswaternet/blob/master/logo/readme1.png
-		:target: https://github.com/tylertrimble/viswaternet/blob/master/logo/readme1.png
+.. figure:: logo/readme1.png
+   :width: 600
+   :alt: Basic network layout
 
 We can represent the same data in a different way by generating a **discrete** node plot in which mean pressure data is grouped into 4 discrete intervals and node colors are assigned based on the corresponding value shown on a legend:
 
@@ -87,8 +89,9 @@ We can represent the same data in a different way by generating a **discrete** n
                               legend_loc_2 = 'lower left', intervals = [0,40,80,120],
                               legend_sig_figs =0)
 
-.. image:: https://github.com/tylertrimble/viswaternet/blob/master/logo/readme2.png
-		:target: https://github.com/tylertrimble/viswaternet/blob/master/logo/readme2.png
+.. figure:: logo/readme2.png
+   :width: 600
+   :alt: Basic network layout
 
 If the plot does not show up after you run the script, it is possible that your IDE does not support interactive plotting (e.g., IDLE) or interactive mode is off. To see the plot, add the following line to display the figures: 
 
