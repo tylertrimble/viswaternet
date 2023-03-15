@@ -2,6 +2,7 @@
 """
 The viswaternet.drawing.unique module handles custom data, excel data, and unique data drawing.
 """
+
 import numpy as np
 import pandas as pd
 import matplotlib as mpl
@@ -99,27 +100,18 @@ def plot_unique_data(
     color_bar_width=0.03,
     color_bar_height=0.8
 ):
-    """A complex function that accomplishes tasks relating to categorical data,
-    or 'unique' as used in viswaternet, as well as data not retrieved from WNTR.
+    """A complex function that accomplishes tasks relating to categorical data, or 'unique' as used in viswaternet, as well as data not retrieved from WNTR.
 
-    There are three distinct modes of operation, and which one is used is controlled
-    by the 'parameter' argument, which differs from previous use of the argument.
+    There are three distinct modes of operation, and which one is used is controlled by the 'parameter' argument, which differs from previous use of the argument.
 
-    Setting the parameter argument to 'demand_patterns', 'diameter', 
-    or 'roughness' simply plots that parameter. These parameters are treated 
-    differently from others because in usually they are categorical. For 
-    instance, pipe diameters are not randomly chosen, and instead are chosen from
-    a list of standard pipe sizes.
+    Setting the parameter argument to 'demand_patterns', 'diameter', or 'roughness' simply plots that parameter. These parameters are treated differently from others because in usually they are categorical. For 
+    instance, pipe diameters are not randomly chosen, and instead are chosen from a list of standard pipe sizes.
 
-    When the parameter argument is set to 'excel_data', the function deals
-    with excel data, or data imported from an .xlsx file. Two excel columns 
-    with elements and data pairs are provided by the user, which are then 
+    When the parameter argument is set to 'excel_data', the function deals with excel data, or data imported from an .xlsx file. Two excel columns with elements and data pairs are provided by the user, which are then 
     converted into a format usable by viswaternet for plotting. 
 
-    When the parameter argument is set to 'custom_data', the function deals with
-    data directly inside of python. The user should expect to format the data
-    themselves, although this shouldn't be difficult. An example of 'custom_data'
-    being used can be seen in example 5 located in the github repository. 
+    When the parameter argument is set to 'custom_data', the function deals with data directly inside of python. The user should expect to format the data themselves, although this shouldn't be difficult. An example of 'custom_data'
+    being used can be seen in example 10 located in the github repository. 
 
     Arguments
     ---------
@@ -145,24 +137,19 @@ def plot_unique_data(
         Column A in excel is considered the 0th column for use with viswaternet.
 
     custom_data_values : array-like
-        Similar to 'excel_columns' two values should be provided. The first value
-        should be an array with element names, and the second should be one with
-        the element data.
+        Similar to 'excel_columns' two values should be provided. The first value should be an array with element names, and the second should be one with the element data.
 
     unit : string
         The unit that the network data is to be converted to.
 
     intervals : integer, string
-        If set to 'automatic' then intervals are created automatically on a 
-        equal interval basis. Otherwise, it is the edges of the intervals to be
-        created. intervals array length should be num_intervals + 1.
+        If set to 'automatic' then intervals are created automatically on a equal interval basis. Otherwise, it is the edges of the intervals to be created. intervals array length should be num_intervals + 1.
 
     interval_node_size_list : integer, array-like
         List of node sizes for each interval.
 
     interval_node_shape_list : string, array-like
-        List of node shapes for each interval. Refer to matplotlib documentation
-        for available marker types.
+        List of node shapes for each interval. Refer to matplotlib documentation for available marker types.
 
     num_intervals : integer
         The number of intervals.
@@ -180,8 +167,7 @@ def plot_unique_data(
         The width of the node borders for each interval.
 
     color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can
-        not be used at the same time to color nodes. If both are, then color_list
+        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color nodes. If both are, then color_list
         takes priority.
 
     widths : integer, array-like
@@ -206,8 +192,7 @@ def plot_unique_data(
         The maximum value of the color bar.
 
     link_style : string
-        The style (solid, dashed, dotted, etc.) of the links. Refer to 
-        matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the links. Refer to matplotlib documentation for available line styles.
 
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
@@ -225,8 +210,7 @@ def plot_unique_data(
         Determines if valves with no data associated with them are drawn.
 
     cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib
-        documentation for possible inputs.
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
 
     legend : boolean
         Determines if the base elements legend will be drawn. 
@@ -248,8 +232,7 @@ def plot_unique_data(
         Color of the node borders.
 
     legend_loc_1 : string
-        The location of the base elements legend on the figure. Refer to matplotlib
-        documentation for possible inputs.
+        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
 
     legend_loc_2 : string
         The location of the intervals legend on the figure.
@@ -291,8 +274,7 @@ def plot_unique_data(
         Determines if the frame around the legend is drawn.
 
     legend_sig_figs : integer
-        The number of significant figures, or decimal points, that numbers in the
-        legend will be displayed with. 0 should be passed for whole numbers.
+        The number of significant figures, or decimal points, that numbers in the legend will be displayed with. 0 should be passed for whole numbers.
 
     element_size_intervals : integer
         The number of intervals to be used if an element size legend is used.
@@ -319,8 +301,7 @@ def plot_unique_data(
         The color of the reservoir marker.
 
     reservoir_shape : string
-        The shape of the reservoir marker. Refer to matplotlib documentation for
-        available marker types.
+        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
 
     reservoir_border_color : string
         The color of the border around the reservoir marker.
@@ -365,8 +346,7 @@ def plot_unique_data(
         The width of the pump line in points.
 
     pump_line_style : string
-        The style (solid, dashed, dotted, etc.) of the pump line. Refer to 
-        matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
 
     pump_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
@@ -384,9 +364,8 @@ def plot_unique_data(
         The width of the links without data associated with them in points.
 
     base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated
-        with them.
-
+        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
+        
     base_link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the links
         with no data associated with them.
@@ -397,6 +376,7 @@ def plot_unique_data(
     draw_color_bar : boolean
         Determines if color bar is drawn.
     """
+    
     model = self.model
     
     if len(self.model['G_list_pumps_only'])==0:
