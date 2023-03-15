@@ -112,7 +112,7 @@ More examples that demonstrate the range of VisWaterNet's plotting abilities can
 .. _`Example Applications`: https://viswaternet.readthedocs.io/en/latest/examples.html
 
 Contributing
--------
+------------
 We welcome contributions in the form of suggestions, feedback, reports of bugs, and additions to code functionality and documentation from all users! You can find instructions to raise issues, submit pull requests, and `run automated tests`_ in the `docs`_ or the `CONTRIBUTING page`_.
 
 .. _`CONTRIBUTING page`: https://github.com/tylertrimble/viswaternet/blob/master/CONTRIBUTING.rst
