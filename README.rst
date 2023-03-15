@@ -99,6 +99,14 @@ If the plot does not show up after you run the script, it is possible that your 
 
     plt.show()
 
+Since several VisWaterNet function arguments rely on Matplotlib visualization inputs, it is recommended to visit the `Matplotlib docs`_ to view customization options for `colors`_, `colorbars`_, `node markers`_, `line styles`_, etc.
+
+.. _`Matplotlib docs`: https://matplotlib.org/stable/index.html
+.. _`colors`: https://matplotlib.org/stable/gallery/color/named_colors.html
+.. _`colorbars`: https://matplotlib.org/stable/tutorials/colors/colormaps.html#sphx-glr-tutorials-colors-colormaps-py
+.. _`node markers`: https://matplotlib.org/stable/gallery/lines_bars_and_markers/marker_reference.html
+.. _`line styles`: https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html
+
 More examples that demonstrate the range of VisWaterNet's plotting abilities can be found in the `Example Applications`_ section of the docs.
 
 .. _`Example Applications`: https://viswaternet.readthedocs.io/en/latest/examples.html
