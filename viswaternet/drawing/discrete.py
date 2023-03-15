@@ -2,6 +2,7 @@
 """
 The viswaternet.drawing.discrete module handles everything related to discrete data drawing.
 """
+
 import numpy as np
 import matplotlib as mpl
 import networkx.drawing.nx_pylab as nxp
@@ -36,8 +37,7 @@ def draw_discrete_nodes(
         List of nodes to be drawn.
 
     intervals : dict
-        The dictionary containting the intervals and the nodes assocaited with
-        each interval.
+        The dictionary containting the intervals and the nodes assocaited with each interval.
 
     interval_node_size_list : integer, array-like
         List of node sizes for each interval.
@@ -46,12 +46,10 @@ def draw_discrete_nodes(
         List of labels for each interval.
 
     interval_node_shape_list : string, array-like
-        List of node shapes for each interval. Refer to matplotlib documentation
-        for available marker types.
+        List of node shapes for each interval. Refer to matplotlib documentation for available marker types.
 
     cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib
-        documentation for possible inputs.
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
 
     interval_node_border_color_list : string, array-like
         The color of the node borders for each interval.
@@ -60,10 +58,9 @@ def draw_discrete_nodes(
         The width of the node borders for each interval.
 
     color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can
-        not be used at the same time to color nodes. If both are, then color_list
-        takes priority.
+        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color nodes. If both are, then color_list takes priority.
     """
+    
     model = self.model
     if interval_node_size_list is None:
 
@@ -248,8 +245,7 @@ def draw_discrete_links(
         List of links to be drawn.
 
     intervals : dict
-        The dictionary containting the intervals and the links assocaited with
-        each interval.
+        The dictionary containting the intervals and the links associated with each interval.
 
     interval_link_width_list : integer, array-like
         List of link widths for each interval.
@@ -258,21 +254,18 @@ def draw_discrete_links(
         List of labels for each interval.
 
     cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib
-        documentation for possible inputs.
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
 
     color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can
-        not be used at the same time to color nodes. If both are, then color_list
-        takes priority.
+        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color nodes. If both are, then color_list takes priority.
 
     link_style : string
-        The style (solid, dashed, dotted, etc.) of the links. Refer to 
-        matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the links. Refer to matplotlib documentation for available line styles.
 
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     """
+    
     model = self.model
     if interval_link_width_list is None:
         interval_link_width_list = np.ones(len(intervals)) * 2
@@ -446,8 +439,7 @@ def plot_discrete_nodes(
     draw_base_legend=True,
     draw_interval_legend=True
 ):
-    """User-level function that draws discretized nodal data, base elements,
-    legends, and saves the figure.
+    """User-level function that draws discretized nodal data, base elements, legends, and saves the figure.
 
     Arguments
     ---------
@@ -481,12 +473,12 @@ def plot_discrete_nodes(
         .. rubric:: Possible Inputs
 
         ======================= =========================================
-            :attr:'int'         Plots element data for specified timestep
-            :attr:'min'         Plots minimum data point for each element
-            :attr:'max'         Plots maximum data point for each element
-            :attr:'mean'        Plots mean for each element
-            :attr:'stddev'      Plots standard deviation for each element
-            :attr:'range'       Plots range for each element
+            int                 Plots element data for specified timestep
+            'min'               Plots minimum data point for each element
+            'max'               Plots maximum data point for each element
+            'mean'              Plots mean for each element
+            'stddev'            Plots standard deviation for each element
+            'range'             Plots range for each element
         ======================= =========================================
 
     unit : string
@@ -502,9 +494,7 @@ def plot_discrete_nodes(
         Determines if data for reservoirs are retrieved.
 
     intervals : integer, string
-        If set to 'automatic' then intervals are created automatically on a 
-        equal interval basis. Otherwise, it is the edges of the intervals to be
-        created. intervals array length should be num_intervals + 1.
+        If set to 'automatic' then intervals are created automatically on a equal interval basis. Otherwise, it is the edges of the intervals to be created. intervals array length should be num_intervals + 1.
 
     interval_node_size_list : integer, array-like
         List of node sizes for each interval.
@@ -513,8 +503,7 @@ def plot_discrete_nodes(
         List of labels for each interval.
 
     interval_node_shape_list : string, array-like
-        List of node shapes for each interval. Refer to matplotlib documentation
-        for available marker types.
+        List of node shapes for each interval. Refer to matplotlib documentation for available marker types.
 
     interval_node_border_color_list : string, array-like
         The color of the node borders for each interval.
@@ -561,20 +550,16 @@ def plot_discrete_nodes(
         Title of the intervals legend.
 
     legend_loc_1 : string
-        The location of the base elements legend on the figure. Refer to matplotlib
-        documentation for possible inputs.
+        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
 
     legend_loc_2 : string
         The location of the intervals legend on the figure.
 
     cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib
-        documentation for possible inputs.
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
 
     color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can
-        not be used at the same time to color nodes. If both are, then color_list
-        takes priority.
+        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color nodes. If both are, then color_list takes priority.
 
     disable_interval_deleting : boolean
         If True, empty intervals will be automatically deleted. 
@@ -593,8 +578,7 @@ def plot_discrete_nodes(
         Determines if the frame around the legend is drawn.
 
     legend_sig_figs : integer
-        The number of significant figures, or decimal points, that numbers in the
-        legend will be displayed with. 0 should be passed for whole numbers.
+        The number of significant figures, or decimal points, that numbers in the legend will be displayed with. 0 should be passed for whole numbers.
 
     reservoir_size : integer
         The size of the reservoir marker on the plot in points^2. 
@@ -603,8 +587,7 @@ def plot_discrete_nodes(
         The color of the reservoir marker.
 
     reservoir_shape : string
-        The shape of the reservoir marker. Refer to matplotlib documentation for
-        available marker types.
+        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
 
     reservoir_border_color : string
         The color of the border around the reservoir marker.
@@ -649,8 +632,7 @@ def plot_discrete_nodes(
         The width of the pump line in points.
 
     pump_line_style : string
-        The style (solid, dashed, dotted, etc.) of the pump line. Refer to 
-        matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
 
     pump_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
@@ -668,12 +650,10 @@ def plot_discrete_nodes(
         The width of the links without data associated with them in points.
 
     base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated
-        with them.
+        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
 
     base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the links
-        with no data associated with them.
+        Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
 
     draw_base_legend : boolean
         Determine if the base elements legend is drawn.
@@ -681,6 +661,7 @@ def plot_discrete_nodes(
     draw_intervals_legend : boolean
         Determine if the intervals legend is drawn.
     """
+    
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
     
@@ -852,8 +833,7 @@ def plot_discrete_links(
     draw_intervals_legend=True
 
 ):
-    """User-level function that draws discretized link data, base elements,
-    legends, and saves the figure.
+    """User-level function that draws discretized link data, base elements, legends, and saves the figure.
 
     Arguments
     ---------
@@ -881,18 +861,17 @@ def plot_discrete_links(
         - quality
 
     value : integer, string
-        For time-varying parameters only. Specifies which timestep or data
-        summary will be plotted.
+        For time-varying parameters only. Specifies which timestep or data summary will be plotted.
 
         .. rubric:: Possible Inputs
 
         ======================= =========================================
-            :attr:'int'         Plots element data for specified timestep
-            :attr:'min'         Plots minimum data point for each element
-            :attr:'max'         Plots maximum data point for each element
-            :attr:'mean'        Plots mean for each element
-            :attr:'stddev'      Plots standard deviation for each element
-            :attr:'range'       Plots range for each element
+            int                 Plots element data for specified timestep
+            'min'               Plots minimum data point for each element
+            'max'               Plots maximum data point for each element
+            'mean'              Plots mean for each element
+            'stddev'            Plots standard deviation for each element
+            'range'             Plots range for each element
         ======================= =========================================
 
     unit : string
@@ -908,9 +887,7 @@ def plot_discrete_links(
         Determines if data for reservoirs are retrieved.
 
     intervals : integer, string
-        If set to 'automatic' then intervals are created automatically on a 
-        equal interval basis. Otherwise, it is the edges of the intervals to be
-        created. intervals array length should be num_intervals + 1.
+        If set to 'automatic' then intervals are created automatically on an equal interval basis. Otherwise, it is the edges of the intervals to be created. intervals array length should be num_intervals + 1.
 
     interval_link_width_list : integer, array-like
         List of link widths for each interval.
@@ -919,13 +896,11 @@ def plot_discrete_links(
         List of labels for each interval.
 
     color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can
-        not be used at the same time to color nodes. If both are, then color_list
+        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color nodes. If both are, then color_list
         takes priority.
 
     link_style : string
-        The style (solid, dashed, dotted, etc.) of the links. Refer to 
-        matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the links. Refer to matplotlib documentation for available line styles.
 
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
@@ -963,8 +938,7 @@ def plot_discrete_links(
         The file format that the figure will be saved as.
 
     cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib
-        documentation for possible inputs.
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
 
     legend : boolean
         Determines if the base elements legend will be drawn. 
@@ -973,8 +947,7 @@ def plot_discrete_links(
         Title of the intervals legend.
 
     legend_loc_1 : string
-        The location of the base elements legend on the figure. Refer to matplotlib
-        documentation for possible inputs.
+        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
 
     legend_loc_2 : string
         The location of the intervals legend on the figure.
@@ -986,8 +959,7 @@ def plot_discrete_links(
         The font size of the non-title text for legends. 
 
     font_color : string
-        The color of the legend text. Refer to matplotlib documentation for 
-        available colors.
+        The color of the legend text. Refer to matplotlib documentation for available colors.
 
     legend_title_font_size : integer
         The font size of the title text for legends.
@@ -996,8 +968,7 @@ def plot_discrete_links(
         Determines if the frame around the legend is drawn.
 
     legend_sig_figs : integer
-        The number of significant figures, or decimal points, that numbers in the
-        legend will be displayed with. 0 should be passed for whole numbers.
+        The number of significant figures, or decimal points, that numbers in the legend will be displayed with. 0 should be passed for whole numbers.
 
     reservoir_size : integer
         The size of the reservoir marker on the plot in points^2. 
@@ -1006,8 +977,7 @@ def plot_discrete_links(
         The color of the reservoir marker.
 
     reservoir_shape : string
-        The shape of the reservoir marker. Refer to matplotlib documentation for
-        available marker types.
+        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
 
     reservoir_border_color : string
         The color of the border around the reservoir marker.
@@ -1052,8 +1022,7 @@ def plot_discrete_links(
         The width of the pump line in points.
 
     pump_line_style : string
-        The style (solid, dashed, dotted, etc.) of the pump line. Refer to 
-        matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
 
     pump_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
@@ -1071,12 +1040,10 @@ def plot_discrete_links(
         The width of the links without data associated with them in points.
 
     base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated
-        with them.
+        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
 
     base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the links
-        with no data associated with them.
+        Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
 
     draw_base_legend : boolean
         Determine if the base elements legend is drawn.
@@ -1084,6 +1051,7 @@ def plot_discrete_links(
     draw_intervals_legend : boolean
         Determine if the intervals legend is drawn.
     """
+    
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
     if ax is None:

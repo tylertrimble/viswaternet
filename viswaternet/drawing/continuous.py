@@ -2,6 +2,7 @@
 """
 The viswaternet.drawing.continuous module handles everything related to continuous data drawing.
 """
+
 import matplotlib as mpl
 from viswaternet.network import processing
 from viswaternet.utils import save_fig, normalize_parameter, unit_conversion, fancyarrowpatch_to_linecollection, label_generator
@@ -9,7 +10,6 @@ from viswaternet.drawing import base
 
 
 default_cmap = 'autumn_r'
-
 
 def plot_continuous_nodes(
     self,
@@ -79,8 +79,8 @@ def plot_continuous_nodes(
     color_bar_width=0.03,
     color_bar_height=0.8
 ):
-    """User-level function that draws continuous nodal data, base elements,
-    legends, and saves the figure.
+    """User-level function that draws continuous nodal data, base elements, legends, and saves the figure.
+    
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
@@ -105,12 +105,12 @@ def plot_continuous_nodes(
         summary will be plotted.
         .. rubric:: Possible Inputs
         ======================= =========================================
-            :attr:'int'         Plots element data for specified timestep
-            :attr:'min'         Plots minimum data point for each element
-            :attr:'max'         Plots maximum data point for each element
-            :attr:'mean'        Plots mean for each element
-            :attr:'stddev'      Plots standard deviation for each element
-            :attr:'range'       Plots range for each element
+            int                 Plots element data for specified timestep
+            'min'               Plots minimum data point for each element
+            'max'               Plots maximum data point for each element
+            'mean'              Plots mean for each element
+            'stddev'            Plots standard deviation for each element
+            'range'             Plots range for each element
         ======================= =========================================
     unit : string
         The unit that the network data is to be converted to.
@@ -133,8 +133,7 @@ def plot_continuous_nodes(
     valves : boolean
         Determines if valves with no data associated with them are drawn.
     cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib
-        documentation for possible inputs.
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
     color_bar_title : string
         The title of the color bar.
     node_size : integer, array-like
@@ -144,8 +143,7 @@ def plot_continuous_nodes(
     max_size : integer
         Maximum size of nodes to be used with normalize_parameter.
     node_shape : string
-        Shape of the nodes. Refer to matplotlib documentation for available 
-        marker types.
+        Shape of the nodes. Refer to matplotlib documentation for available marker types.
     edge_colors : string
         Color of the node borders.
     line_widths : integer
@@ -168,20 +166,17 @@ def plot_continuous_nodes(
     legend : boolean
         Determines if the base elements legend will be drawn. 
     legend_loc : string
-        The location of the base elements legend on the figure. Refer to matplotlib
-        documentation for possible inputs.
+        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
     font_size : integer
         The font size of the non-title text for legends. 
     font_color : string
-        The color of the legend text. Refer to matplotlib documentation for 
-        available colors.
+        The color of the legend text. Refer to matplotlib documentation for available colors.
     legend_title_font_size : integer
         The font size of the title text for legends.
     draw_frame : boolean
         Determines if the frame around the legend is drawn.
     legend_sig_figs : integer
-        The number of significant figures, or decimal points, that numbers in the
-        legend will be displayed with. 0 should be passed for whole numbers.
+        The number of significant figures, or decimal points, that numbers in the legend will be displayed with. 0 should be passed for whole numbers.
     element_size_intervals : integer
         The number of intervals to be used if an element size legend is used.
     element_size_legend_title : string
@@ -195,8 +190,7 @@ def plot_continuous_nodes(
     reservoir_color : string
         The color of the reservoir marker.
     reservoir_shape : string
-        The shape of the reservoir marker. Refer to matplotlib documentation for
-        available marker types.
+        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
     reservoir_border_color : string
         The color of the border around the reservoir marker.
     reservoir_border_width : integer
@@ -226,8 +220,7 @@ def plot_continuous_nodes(
     pump_width : integer
         The width of the pump line in points.
     pump_line_style : string
-        The style (solid, dashed, dotted, etc.) of the pump line. Refer to 
-        matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
     pump_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     base_node_color : string
@@ -239,14 +232,13 @@ def plot_continuous_nodes(
     base_link_width : integer
         The width of the links without data associated with them in points.
     base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated
-        with them.
+        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
     base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the links
-        with no data associated with them.
+        Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
     draw_color_bar : boolean
         Determines if color bar is drawn.
     """
+    
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
     if ax is None:
@@ -425,8 +417,8 @@ def plot_continuous_links(
     color_bar_width=0.03,
     color_bar_height=0.8
 ):
-    """User-level function that draws continuous link data, base elements,
-    legends, and saves the figure.
+    """User-level function that draws continuous link data, base elements, legends, and saves the figure.
+    
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
@@ -451,12 +443,12 @@ def plot_continuous_links(
         summary will be plotted.
         .. rubric:: Possible Inputs
         ======================= =========================================
-            :attr:'int'         Plots element data for specified timestep
-            :attr:'min'         Plots minimum data point for each element
-            :attr:'max'         Plots maximum data point for each element
-            :attr:'mean'        Plots mean for each element
-            :attr:'stddev'      Plots standard deviation for each element
-            :attr:'range'       Plots range for each element
+            int                 Plots element data for specified timestep
+            'min'               Plots minimum data point for each element
+            'max'               Plots maximum data point for each element
+            'mean'              Plots mean for each element
+            'stddev'            Plots standard deviation for each element
+            'range'             Plots range for each element
         ======================= =========================================
     unit : string
         The unit that the network data is to be converted to.
@@ -471,8 +463,7 @@ def plot_continuous_links(
     vmax : integer
         The maximum value of the color bar.
     link_style : string
-        The style (solid, dashed, dotted, etc.) of the links. Refer to 
-        matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the links. Refer to matplotlib documentation for available line styles.
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     element_list : array-like
@@ -490,13 +481,11 @@ def plot_continuous_links(
     valves : boolean
         Determines if valves with no data associated with them are drawn.
     cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib
-        documentation for possible inputs.
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
     color_bar_title : string
         The title of the color bar.
     node_shape : string
-        Shape of the nodes. Refer to matplotlib documentation for available 
-        marker types.
+        Shape of the nodes. Refer to matplotlib documentation for available marker types.
     edge_colors : string
         Color of the node borders.
     line_widths : integer
@@ -519,20 +508,17 @@ def plot_continuous_links(
     legend : boolean
         Determines if the base elements legend will be drawn. 
     legend_loc : string
-        The location of the base elements legend on the figure. Refer to matplotlib
-        documentation for possible inputs.
+        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
     font_size : integer
         The font size of the non-title text for legends. 
     font_color : string
-        The color of the legend text. Refer to matplotlib documentation for 
-        available colors.
+        The color of the legend text. Refer to matplotlib documentation for available colors.
     legend_title_font_size : integer
         The font size of the title text for legends.
     draw_frame : boolean
         Determines if the frame around the legend is drawn.
     legend_sig_figs : integer
-        The number of significant figures, or decimal points, that numbers in the
-        legend will be displayed with. 0 should be passed for whole numbers.
+        The number of significant figures, or decimal points, that numbers in the legend will be displayed with. 0 should be passed for whole numbers.
     element_size_intervals : integer
         The number of intervals to be used if an element size legend is used.
     element_size_legend_title : string
@@ -546,8 +532,7 @@ def plot_continuous_links(
     reservoir_color : string
         The color of the reservoir marker.
     reservoir_shape : string
-        The shape of the reservoir marker. Refer to matplotlib documentation for
-        available marker types.
+        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
     reservoir_border_color : string
         The color of the border around the reservoir marker.
     reservoir_border_width : integer
@@ -577,8 +562,7 @@ def plot_continuous_links(
     pump_width : integer
         The width of the pump line in points.
     pump_line_style : string
-        The style (solid, dashed, dotted, etc.) of the pump line. Refer to 
-        matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
     pump_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     base_node_color : string
@@ -590,14 +574,13 @@ def plot_continuous_links(
     base_link_width : integer
         The width of the links without data associated with them in points.
     base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated
-        with them.
+        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
     base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the links
-        with no data associated with them.
+        Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
     draw_color_bar : boolean
         Determines if color bar is drawn.
     """
+    
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
     if ax is None:
