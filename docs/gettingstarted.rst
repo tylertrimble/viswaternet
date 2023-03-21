@@ -37,4 +37,4 @@ A range of examples to understand the different VisWaterNet plotting functions c
 .. _`node markers`: https://matplotlib.org/stable/gallery/lines_bars_and_markers/marker_reference.html
 .. _`line styles`: https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html
 .. _`Example Applications`: https://viswaternet.readthedocs.io/en/latest/examples.html
-.. _`Examples`: https://github.com/tylertrimble/viswaternet/tree/master/Examples
+.. _`Examples`: https://github.com/tylertrimble/viswaternet/tree/main/examples
