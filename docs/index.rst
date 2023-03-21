@@ -1,7 +1,7 @@
 Welcome to VisWaterNet's documentation!
 ======================================
-.. image:: https://github.com/tylertrimble/viswaternet/blob/master/logo/viswaternet_logo.png?raw=true
-		:target: https://github.com/tylertrimble/viswaternet/blob/master/logo/viswaternet_logo.png?raw=true
+.. image:: https://github.com/tylertrimble/viswaternet/blob/main/logo/viswaternet_logo.png?raw=true
+		:target: https://github.com/tylertrimble/viswaternet/blob/main/logo/viswaternet_logo.png?raw=true
 		:alt: ViswWaterNet
 		
 .. image:: https://img.shields.io/pypi/v/viswaternet.svg
