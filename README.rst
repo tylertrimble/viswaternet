@@ -1,5 +1,5 @@
-.. image:: https://github.com/tylertrimble/viswaternet/blob/master/logo/viswaternet_logo.png?raw=true
-		:target: https://github.com/tylertrimble/viswaternet/blob/master/logo/viswaternet_logo.png?raw=true
+.. image:: https://github.com/tylertrimble/viswaternet/blob/main/logo/viswaternet_logo.png?raw=true
+		:target: https://github.com/tylertrimble/viswaternet/blob/main/logo/viswaternet_logo.png?raw=true
 
 .. image:: https://img.shields.io/pypi/v/viswaternet.svg
         :target: https://pypi.python.org/pypi/viswaternet
@@ -115,7 +115,7 @@ Contributing
 ------------
 We welcome contributions in the form of suggestions, feedback, reports of bugs, and additions to code functionality and documentation from all users! You can find instructions to raise issues, submit pull requests, and `run automated tests`_ in the `docs`_ or the `CONTRIBUTING page`_.
 
-.. _`CONTRIBUTING page`: https://github.com/tylertrimble/viswaternet/blob/master/CONTRIBUTING.rst
+.. _`CONTRIBUTING page`: https://github.com/tylertrimble/viswaternet/blob/main/CONTRIBUTING.rst
 .. _`docs`: https://viswaternet.readthedocs.io/en/latest/contributing.html
 .. _`run automated tests`: https://viswaternet.readthedocs.io/en/latest/contributing.html#testing
 
