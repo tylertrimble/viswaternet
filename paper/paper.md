@@ -54,7 +54,7 @@ Additionally, `VisWaterNet` can perform the following functions:
 6.	Customize the appearance of specific nodes and links.
 7.	Add text labels to specific nodes and links.
 
-VisWaterNet is a practical tool to aid WDS analyses and visualization. Example applications include visualizing different demand areas and pressure zones, highlighting the critical locations in the system, tracking water quality, and visualizing multiple statistics including continuous and categorical values. VisWaterNet scripts are under continuous development and can be further extended and improved by users and developers for specific applications.
+`VisWaterNet` is a practical tool to aid WDS analyses and visualization. Example applications include visualizing different demand areas and pressure zones, highlighting the critical locations in the system, tracking water quality, and visualizing multiple statistics including continuous and categorical values. `VisWaterNet` scripts are under continuous development and can be further extended and improved by users and developers for specific applications.
 
 # Acknowledgements
 
