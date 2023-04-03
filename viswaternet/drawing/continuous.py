@@ -4,6 +4,7 @@ The viswaternet.drawing.continuous module handles everything related to continuo
 """
 
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 from viswaternet.network import processing
 from viswaternet.utils import save_fig, normalize_parameter, unit_conversion, fancyarrowpatch_to_linecollection, label_generator
 from viswaternet.drawing import base
@@ -242,7 +243,10 @@ def plot_continuous_nodes(
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
     if ax is None:
-        ax = self.ax
+        fig, ax = plt.subplots(figsize=self.figsize)  
+        self.fig = fig
+        self.ax = ax
+        ax.set_frame_on(self.axis_frame)
     if parameter is not None:
         parameter_results, node_list = processing.get_parameter(
             self,
@@ -584,7 +588,9 @@ def plot_continuous_links(
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
     if ax is None:
-        ax = self.ax
+        if ax is None:
+            fig, ax = plt.subplots(figsize=self.figsize)  
+            ax.set_frame_on(self.axis_frame)
     if parameter is not None:
 
         parameter_results, link_list = processing.get_parameter(

@@ -6,7 +6,6 @@ drawing, legend drawing, color map, and label drawing functions.
 import numpy as np
 import networkx.drawing.nx_pylab as nxp
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 import matplotlib as mpl
 from matplotlib.lines import Line2D
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -668,7 +667,9 @@ def plot_basic_elements(
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
     if ax is None:
-        ax = self.ax
+        if ax is None:
+            fig, ax = plt.subplots(figsize=self.figsize)  
+            ax.set_frame_on(self.axis_frame)
     draw_base_elements(
         self,
         ax,

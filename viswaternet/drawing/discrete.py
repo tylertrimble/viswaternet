@@ -5,6 +5,7 @@ The viswaternet.drawing.discrete module handles everything related to discrete d
 
 import numpy as np
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 import networkx.drawing.nx_pylab as nxp
 from viswaternet.network import processing
 from viswaternet.utils import save_fig, unit_conversion, label_generator
@@ -666,7 +667,9 @@ def plot_discrete_nodes(
         pumps = False
     
     if ax is None:
-        ax = self.ax
+       if ax is None:
+           fig, ax = plt.subplots(figsize=self.figsize)  
+           ax.set_frame_on(self.axis_frame)
     if parameter is not None:
 
         parameter_results, node_list = processing.get_parameter(
@@ -1055,7 +1058,9 @@ def plot_discrete_links(
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
     if ax is None:
-        ax = self.ax
+        if ax is None:
+            fig, ax = plt.subplots(figsize=self.figsize)  
+            ax.set_frame_on(self.axis_frame)
     if parameter is not None:
 
         parameter_results, link_list = processing.get_parameter(

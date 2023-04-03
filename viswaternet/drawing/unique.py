@@ -6,6 +6,7 @@ The viswaternet.drawing.unique module handles custom data, excel data, and uniqu
 import numpy as np
 import pandas as pd
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 from viswaternet.network import processing
 from viswaternet.utils import convert_excel, save_fig, normalize_parameter, unit_conversion
 from viswaternet.drawing import base
@@ -382,7 +383,9 @@ def plot_unique_data(
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
     if ax is None:
-        ax = self.ax
+        if ax is None:
+            fig, ax = plt.subplots(figsize=self.figsize)  
+            ax.set_frame_on(self.axis_frame)
     if parameter == "demand_patterns":
 
         demand_pattern_nodes, patterns = processing.get_demand_patterns(self)

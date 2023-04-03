@@ -102,10 +102,8 @@ class VisWNModel:
         model["G_list_valves_only"] = G_list_valves_only
 
         self.model = model
-        fig, ax = plt.subplots(figsize=figsize)  
-        self.fig = fig
-        self.ax = ax
-        self.ax.set_frame_on(axis_frame)
+        self.figsize=figsize
+        self.axis_frame=axis_frame
         
     from viswaternet.network.processing import get_parameter, bin_parameter
     from viswaternet.drawing.base import draw_nodes, draw_links, draw_base_elements, plot_basic_elements, draw_label
