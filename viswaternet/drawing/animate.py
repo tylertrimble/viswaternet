@@ -17,8 +17,9 @@ def animate_plot(
     fps=3,
     first_timestep=0,
     last_timestep=None,
-    gif_save_name="animation",
-    unit='s',
+    save_name="animation",
+    file_format="mp4",
+    time_unit='s',
     **kwargs
 ):
     """
@@ -157,11 +158,11 @@ def animate_plot(
 
         handles, labels = [], []
         time = value*model["wn"].options.time.report_timestep
-        time = unit_conversion(time, "time", unit)
+        time = unit_conversion(time, "time", time_unit)
         ax.legend(
             handles,
             labels,
-            title="Timestep "+str(time)+" "+unit,
+            title="Timestep "+str(time)+" "+time_unit,
             loc="lower left",
             frameon=False,
         )
@@ -179,7 +180,11 @@ def animate_plot(
         ax.clear()
         
     # builds gif
-    imageio.mimsave(gif_save_name+".mp4", frames, format='FFMPEG',fps=fps,quality=8,ffmpeg_log_level='quiet')
+    if file_format == "gif" or file_format == "GIF":
+        imageio.mimsave(save_name+"."+file_format, frames, format='GIF',fps=fps,quality=8,ffmpeg_log_level='quiet')
+    else:
+        imageio.mimsave(save_name+"."+file_format, frames, format='FFMPEG',fps=fps,quality=8,ffmpeg_log_level='quiet')
+            
     
 def make_vmin_vmax(parameter,kwargs):
     for value in np.min(parameter, axis=0):
