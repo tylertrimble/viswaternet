@@ -55,7 +55,7 @@ def plot_unique_data(
     edge_colors=None,
     legend_loc_1="upper right",
     legend_loc_2="lower right",
-    savefig=True,
+    savefig=False,
     save_name=None,
     dpi='figure',
     save_format='png',

@@ -528,7 +528,7 @@ def plot_basic_elements(
     tanks=True,
     pumps=True,
     valves=True,
-    savefig=True,
+    savefig=False,
     save_name=None,
     dpi='figure',
     save_format='png',
