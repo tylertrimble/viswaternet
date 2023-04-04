@@ -76,21 +76,6 @@ def animate_plot(
             ax.set_frame_on(self.axis_frame)
     frames = []
     if function == self.plot_unique_data:
-        timesteps = last_timestep
-        
-        values = range(timesteps)
-        if last_timestep is not None:
-            values = values[first_timestep:last_timestep]
-    else:
-        timesteps = int(
-            model["wn"].options.time.duration /
-            model["wn"].options.time.report_timestep
-        )
-        values = range(timesteps)
-        if last_timestep is not None:
-            values = values[first_timestep:last_timestep]
-    
-    if function == self.plot_unique_data:
         parameter_type = kwargs.get("parameter_type",None)
         data_type = kwargs.get("data_type",None)
         try:
@@ -106,6 +91,12 @@ def animate_plot(
                 )
                 data_values.append(data)
                 
+        timesteps = len(data_values)
+        
+        values = range(timesteps)
+        if last_timestep is not None:
+            values = values[first_timestep:last_timestep]
+            
         if data_type == "continuous":
             if kwargs.get("vmin", None) is None or kwargs.get("vmax", None) is None:
                 kwargs["vmin"],kwargs["vmax"] = make_vmin_vmax(data_values,kwargs)
@@ -115,6 +106,14 @@ def animate_plot(
             
             if kwargs.get("intervals", None) is None:
                 kwargs["intervals"] = make_intervals(data_values,kwargs)
+    else:
+        timesteps = int(
+            model["wn"].options.time.duration /
+            model["wn"].options.time.report_timestep
+        )
+        values = range(timesteps)
+        if last_timestep is not None:
+            values = values[first_timestep:last_timestep]
     
     if function == self.plot_continuous_nodes or function == self.plot_discrete_nodes:
         parameter_type = 'node'
@@ -181,7 +180,7 @@ def animate_plot(
         
     # builds gif
     if file_format == "gif" or file_format == "GIF":
-        imageio.mimsave(save_name+"."+file_format, frames, format='GIF',fps=fps,quality=8,ffmpeg_log_level='quiet')
+        imageio.mimsave(save_name+"."+file_format, frames, format='GIF',fps=fps)
     else:
         imageio.mimsave(save_name+"."+file_format, frames, format='FFMPEG',fps=fps,quality=8,ffmpeg_log_level='quiet')
             
