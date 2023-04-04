@@ -43,12 +43,6 @@ def animate_plot(
             plot_unique_data
         ================================= ==
 
-    data_type : string
-        The type of data that the excel data is (Unique, continuous, or discrete.)
-
-    parameter_type : string
-        Type of parameter (nodal, link)
-
     fps : integer
         Framerate that the .gif file will be generated with.
 
