@@ -1,6 +1,9 @@
 .. image:: https://github.com/tylertrimble/viswaternet/blob/main/logo/viswaternet_logo.png?raw=true
 		:target: https://github.com/tylertrimble/viswaternet/blob/main/logo/viswaternet_logo.png?raw=true
 
+.. image:: https://joss.theoj.org/papers/10.21105/joss.05139/status.svg
+        :target: https://doi.org/10.21105/joss.05139
+
 .. image:: https://img.shields.io/pypi/v/viswaternet.svg
         :target: https://pypi.python.org/pypi/viswaternet
 
@@ -10,7 +13,7 @@
 
 .. image:: https://img.shields.io/pypi/l/ansicolortags.svg
         :target: https://pypi.python.org/pypi/ansicolortags/
-
+    
 
 An open-source Python package for easy generation and customization of water distribution network visualizations. Find the `documentation here`_.
 
