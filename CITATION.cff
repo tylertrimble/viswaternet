@@ -1,0 +1,39 @@
+cff-version: "1.2.0"
+authors:
+- family-names: Thomas
+  given-names: Meghna
+- family-names: Trimble
+  given-names: Tyler
+- family-names: Sela
+  given-names: Lina
+  orcid: "https://orcid.org/0000-0002-5834-8451"
+contact:
+- family-names: Thomas
+  given-names: Meghna
+doi: 10.5281/zenodo.7799929
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Thomas
+    given-names: Meghna
+  - family-names: Trimble
+    given-names: Tyler
+  - family-names: Sela
+    given-names: Lina
+    orcid: "https://orcid.org/0000-0002-5834-8451"
+  date-published: 2023-04-11
+  doi: 10.21105/joss.05139
+  issn: 2475-9066
+  issue: 84
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 5139
+  title: "VisWaterNet: A Python package for visualization of water
+    distribution networks"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.05139"
+  volume: 8
+title: "VisWaterNet: A Python package for visualization of water
+  distribution networks"
