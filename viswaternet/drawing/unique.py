@@ -1179,7 +1179,7 @@ def plot_unique_data(
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
             return
-    if isinstance(parameter, str):
+    if parameter == 'excel_data':
 
         if data_type == "unique":
 
