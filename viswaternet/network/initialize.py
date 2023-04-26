@@ -5,6 +5,7 @@ The viswaternet.network.initialize module initializes a viswaternet model object
 import os
 import wntr
 import matplotlib.pyplot as plt
+from packaging.version import Version, parse
 
 class VisWNModel:
     """Viswaternet model class.
@@ -66,10 +67,13 @@ class VisWNModel:
         model["pipe_list"] = pipe_list
 
         # Creates wntr graph
-        G = wn.get_graph()
+        if parse(str(wntr.__version__)) < parse('0.5.0'):
+            G = wn.get_graph()
+        else:
+            G = wn.to_graph()
         model["G"] = G
 
-        # Gets node coordiantes
+        # Gets node coordinates
         pos_dict = {}
 
         for i in range(len(model["node_names"])):
