@@ -13,7 +13,7 @@ with open('HISTORY.rst') as history_file:
 requirements = ['pandas',
                'numpy',
                'matplotlib>=3.5.0',
-               'wntr< 0.5.0',
+               'wntr<=0.5.0',
                'imageio',
                'networkx>=2.7']
 
