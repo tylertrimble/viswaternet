@@ -22,7 +22,7 @@ An open-source Python package for easy generation and customization of water dis
 
 Dependencies
 ------------
-◉ WNTR <0.5.0 ◉ NetworkX 2.7+ ◉ Matplotlib 3.5.0+ ◉ Pandas ◉ NumPy ◉ imageio ◉
+◉ WNTR ◉ NetworkX 2.7+ ◉ Matplotlib 3.5.0+ ◉ Pandas ◉ NumPy ◉ imageio ◉
 
 VisWaterNet has been tested on Python **3.8** and **3.9**.
 
