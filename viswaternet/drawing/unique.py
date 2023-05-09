@@ -5,7 +5,6 @@ The viswaternet.drawing.unique module handles custom data, excel data, and uniqu
 
 import numpy as np
 import pandas as pd
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 from viswaternet.network import processing
 from viswaternet.utils import convert_excel, save_fig, normalize_parameter, unit_conversion
@@ -21,6 +20,7 @@ def plot_unique_data(
     parameter=None,
     parameter_type=None,
     data_type=None,
+    data_file=None,
     excel_columns=None,
     custom_data_values=None,
     unit=None,
@@ -386,27 +386,12 @@ def plot_unique_data(
         if ax is None:
             fig, ax = plt.subplots(figsize=self.figsize)  
             ax.set_frame_on(self.axis_frame)
-    if parameter == "demand_patterns":
-
-        demand_pattern_nodes, patterns = processing.get_demand_patterns(self)
-
-        discrete.draw_discrete_nodes(
-            self,
-            ax,
-            demand_pattern_nodes,
-            patterns,
-            interval_node_size_list=interval_node_size_list,
-            interval_node_shape_list=interval_node_shape_list,
-            interval_label_list=interval_label_list,
-            interval_node_border_color_list=interval_node_border_color_list,
-            interval_node_border_width_list=interval_node_border_width_list,
-            cmap=cmap,
-            color_list=color_list,
-        )
-
+    
+    def call_draw_base_elements(links=True):
         base.draw_base_elements(self,
                                 ax,
                                 nodes=False,
+                                links=links,
                                 reservoirs=reservoirs,
                                 tanks=tanks,
                                 valves=valves,
@@ -437,34 +422,92 @@ def plot_unique_data(
                                 base_link_line_style=base_link_line_style,
                                 base_link_arrows=base_link_arrows
                                 )
+    
+    def call_draw_legend(continuous=False,base_links=True,intervals=None):
+        if continuous == False:
+            base.draw_legend(
+                        ax,
+                        intervals=interval_names,
+                        title=legend_title,
+                        pumps=pumps,
+                        loc=legend_loc_1,
+                        loc2=legend_loc_2,
+                        font_size=font_size,
+                        font_color=font_color,
+                        legend_title_font_size=legend_title_font_size,
+                        draw_frame=draw_frame,
+                        pump_color=pump_color,
+                        base_link_color=base_link_color,
+                        pump_line_style=pump_line_style,
+                        base_link_line_style=base_link_line_style,
+                        base_link_arrows=base_link_arrows,
+                        pump_arrows=pump_arrows,
+                        draw_base_links=False
+                    )
+        else:
+            base.draw_legend(ax,
+                             intervals=None,
+                             title=legend_title,
+                             pumps=pumps,
+                             loc=legend_loc_1,
+                             font_size=font_size,
+                             font_color=font_color,
+                             legend_title_font_size=legend_title_font_size,
+                             draw_frame=draw_frame,
+                             pump_color=pump_color,
+                             base_link_color=base_link_color,
+                             node_sizes=node_size,
+                             link_sizes=widths,
+                             element_size_intervals=element_size_intervals,
+                             element_size_legend_title=element_size_legend_title,
+                             element_size_legend_loc=element_size_legend_loc,
+                             element_size_legend_labels=element_size_legend_labels,
+                             draw_base_legend=draw_base_legend,
+                             draw_intervals_legend=draw_intervals_legend,
+                             pump_line_style=pump_line_style,
+                             base_link_line_style=base_link_line_style,
+                             base_link_arrows=base_link_arrows,
+                             pump_arrows=pump_arrows,
+                             draw_base_links=base_links,
+                             )
+    
+    def call_draw_color_bar():
+        base.draw_color_bar(ax, 
+                            g, 
+                            cmap, 
+                            color_bar_title=color_bar_title,
+                            color_bar_width=color_bar_width,
+                            color_bar_height=color_bar_height)
+        
+    if parameter == "demand_patterns":
+
+        demand_pattern_nodes, patterns = processing.get_demand_patterns(self)
+
+        discrete.draw_discrete_nodes(
+            self,
+            ax,
+            demand_pattern_nodes,
+            patterns,
+            interval_node_size_list=interval_node_size_list,
+            interval_node_shape_list=interval_node_shape_list,
+            interval_label_list=interval_label_list,
+            interval_node_border_color_list=interval_node_border_color_list,
+            interval_node_border_width_list=interval_node_border_width_list,
+            cmap=cmap,
+            color_list=color_list,
+        )
+
+        call_draw_base_elements()
 
         if legend:
-
-            base.draw_legend(
-                ax,
-                patterns,
-                title=legend_title,
-                pumps=pumps,
-                loc=legend_loc_1,
-                loc2=legend_loc_2,
-                font_size=font_size,
-                font_color=font_color,
-                legend_title_font_size=legend_title_font_size,
-                draw_frame=draw_frame,
-                pump_color=pump_color,
-                base_link_color=base_link_color,
-                pump_line_style=pump_line_style,
-                base_link_line_style=base_link_line_style,
-                base_link_arrows=base_link_arrows,
-                pump_arrows=pump_arrows,
-                draw_base_links=True,
-            )
+            call_draw_legend(intervals=patterns)
+            
         if savefig:
 
             save_fig(self, save_name=save_name,
                      dpi=dpi, save_format=save_format)
         return
-    if parameter == "diameter" or parameter == "roughness":
+    elif parameter == "diameter" or parameter == "roughness":
 
         parameter_results, link_list = processing.get_parameter(
             self, "link", parameter
@@ -507,69 +550,18 @@ def plot_unique_data(
             link_arrows=link_arrows,
         )
 
-        base.draw_base_elements(
-            self,
-            ax,
-            nodes=False,
-            links=False,
-            reservoirs=reservoirs,
-            tanks=tanks,
-            valves=valves,
-            pumps=pumps,
-            reservoir_size=reservoir_size,
-            reservoir_color=reservoir_color,
-            reservoir_shape=reservoir_shape,
-            reservoir_border_color=reservoir_border_color,
-            reservoir_border_width=reservoir_border_width,
-            tank_size=tank_size,
-            tank_color=tank_color,
-            tank_shape=tank_shape,
-            tank_border_color=tank_border_color,
-            tank_border_width=tank_border_width,
-            valve_size=valve_size,
-            valve_color=valve_color,
-            valve_shape=valve_shape,
-            valve_border_color=valve_border_color,
-            valve_border_width=valve_border_width,
-            pump_color=pump_color,
-            pump_width=pump_width,
-            pump_line_style=pump_line_style,
-            pump_arrows=pump_arrows,
-            base_node_color=base_node_color,
-            base_node_size=base_node_size,
-            base_link_color=base_link_color,
-            base_link_width=base_link_width,
-            base_link_line_style=base_link_line_style,
-            base_link_arrows=base_link_arrows
-        )
+        call_draw_base_elements(links=False)
 
         if legend:
-
-            base.draw_legend(
-                ax,
-                interval_names,
-                title=legend_title,
-                pumps=pumps,
-                loc=legend_loc_1,
-                loc2=legend_loc_2,
-                font_size=font_size,
-                font_color=font_color,
-                legend_title_font_size=legend_title_font_size,
-                draw_frame=draw_frame,
-                pump_color=pump_color,
-                base_link_color=base_link_color,
-                pump_line_style=pump_line_style,
-                base_link_line_style=base_link_line_style,
-                base_link_arrows=base_link_arrows,
-                pump_arrows=pump_arrows,
-                draw_base_links=False,
-            )
+            call_draw_legend(base_links=False,intervals=interval_names)
+            
         if savefig:
 
             save_fig(self, save_name=save_name,
                      dpi=dpi, save_format=save_format)
         return
-    if parameter == "tag":
+    
+    elif parameter == "tag":
 
         parameter_results, node_list = processing.get_parameter(
             self, "node", parameter
@@ -621,68 +613,17 @@ def plot_unique_data(
             color_list=color_list,
         )
 
-        base.draw_base_elements(
-            self,
-            ax,
-            nodes=False,
-            reservoirs=reservoirs,
-            tanks=tanks,
-            valves=valves,
-            pumps=pumps,
-            reservoir_size=reservoir_size,
-            reservoir_color=reservoir_color,
-            reservoir_shape=reservoir_shape,
-            reservoir_border_color=reservoir_border_color,
-            reservoir_border_width=reservoir_border_width,
-            tank_size=tank_size,
-            tank_color=tank_color,
-            tank_shape=tank_shape,
-            tank_border_color=tank_border_color,
-            tank_border_width=tank_border_width,
-            valve_size=valve_size,
-            valve_color=valve_color,
-            valve_shape=valve_shape,
-            valve_border_color=valve_border_color,
-            valve_border_width=valve_border_width,
-            pump_color=pump_color,
-            pump_width=pump_width,
-            pump_line_style=pump_line_style,
-            pump_arrows=pump_arrows,
-            base_node_color=base_node_color,
-            base_node_size=base_node_size,
-            base_link_color=base_link_color,
-            base_link_width=base_link_width,
-            base_link_line_style=base_link_line_style,
-            base_link_arrows=base_link_arrows
-        )
+        call_draw_base_elements()
 
         if legend:
-
-            base.draw_legend(
-                ax,
-                interval_names,
-                title=legend_title,
-                pumps=pumps,
-                loc=legend_loc_1,
-                loc2=legend_loc_2,
-                font_size=font_size,
-                font_color=font_color,
-                legend_title_font_size=legend_title_font_size,
-                draw_frame=draw_frame,
-                pump_color=pump_color,
-                base_link_color=base_link_color,
-                pump_line_style=pump_line_style,
-                base_link_line_style=base_link_line_style,
-                base_link_arrows=base_link_arrows,
-                pump_arrows=pump_arrows,
-                draw_base_links=True,
-            )
+            call_draw_legend(intervals=interval_names)
+            
         if savefig:
 
             save_fig(self, save_name=save_name,
                      dpi=dpi, save_format=save_format)
         return
-    if parameter == "custom_data":
+    elif parameter == "custom_data":
 
         if data_type == "unique":
 
@@ -701,63 +642,10 @@ def plot_unique_data(
                     link_arrows=link_arrows,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    links=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                )
+                call_draw_base_elements(links=False)
                 
                 if legend:
-
-                    base.draw_legend(
-                        ax,
-                        custom_data_values[1],
-                        title=legend_title,
-                        pumps=pumps,
-                        loc=legend_loc_1,
-                        loc2=legend_loc_2,
-                        font_size=font_size,
-                        font_color=font_color,
-                        legend_title_font_size=legend_title_font_size,
-                        draw_frame=draw_frame,
-                        pump_color=pump_color,
-                        base_link_color=base_link_color,
-                        pump_line_style=pump_line_style,
-                        base_link_line_style=base_link_line_style,
-                        base_link_arrows=base_link_arrows,
-                        pump_arrows=pump_arrows,
-                        draw_base_links=False
-                    )
+                    call_draw_legend(base_links=False)
             elif parameter_type == "node":
 
                 discrete.draw_discrete_nodes(
@@ -774,64 +662,10 @@ def plot_unique_data(
                     color_list=color_list,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                
-                
-                )
+                call_draw_base_elements()
                 
                 if legend:
-
-                    base.draw_legend(
-                        ax,
-                        custom_data_values[1],
-                        title=legend_title,
-                        pumps=pumps,
-                        loc=legend_loc_1,
-                        loc2=legend_loc_2,
-                        font_size=font_size,
-                        font_color=font_color,
-                        legend_title_font_size=legend_title_font_size,
-                        draw_frame=draw_frame,
-                        pump_color=pump_color,
-                        base_link_color=base_link_color,
-                        pump_line_style=pump_line_style,
-                        base_link_line_style=base_link_line_style,
-                        base_link_arrows=base_link_arrows,
-                        pump_arrows=pump_arrows,
-                        draw_base_links=True
-                    )
+                    call_draw_legend()
                     
             if savefig:
 
@@ -864,63 +698,10 @@ def plot_unique_data(
                     link_arrows=link_arrows,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    links=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                )
+                call_draw_base_elements(links=False)
                 
                 if legend:
-
-                    base.draw_legend(
-                        ax,
-                        interval_names,
-                        title=legend_title,
-                        pumps=pumps,
-                        loc=legend_loc_1,
-                        loc2=legend_loc_2,
-                        font_size=font_size,
-                        font_color=font_color,
-                        legend_title_font_size=legend_title_font_size,
-                        draw_frame=draw_frame,
-                        pump_color=pump_color,
-                        base_link_color=base_link_color,
-                        pump_line_style=pump_line_style,
-                        base_link_line_style=base_link_line_style,
-                        base_link_arrows=base_link_arrows,
-                        pump_arrows=pump_arrows,
-                        draw_base_links=False
-                    )
+                    call_draw_legend(base_links=False,intervals=interval_names)
                     
             if parameter_type == "node":
 
@@ -938,65 +719,12 @@ def plot_unique_data(
                     color_list=color_list,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                )
+                call_draw_base_elements()
                 
                 if legend:
-
-                    base.draw_legend(
-                        ax,
-                        interval_names,
-                        title=legend_title,
-                        pumps=pumps,
-                        loc=legend_loc_1,
-                        loc2=legend_loc_2,
-                        font_size=font_size,
-                        font_color=font_color,
-                        legend_title_font_size=legend_title_font_size,
-                        draw_frame=draw_frame,
-                        pump_color=pump_color,
-                        base_link_color=base_link_color,
-                        pump_line_style=pump_line_style,
-                        base_link_line_style=base_link_line_style,
-                        base_link_arrows=base_link_arrows,
-                        pump_arrows=pump_arrows,
-                        draw_base_links=True
-                    )
+                    call_draw_legend(intervals=interval_names)
 
             if savefig:
-
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
 
@@ -1024,68 +752,10 @@ def plot_unique_data(
                     link_arrows=link_arrows,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    links=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                )
+                call_draw_base_elements(links=False)
                 
                 if legend:
-
-                    base.draw_legend(ax,
-                                     title=legend_title,
-                                     pumps=pumps,
-                                     loc=legend_loc_1,
-                                     font_size=font_size,
-                                     font_color=font_color,
-                                     legend_title_font_size=legend_title_font_size,
-                                     draw_frame=draw_frame,
-                                     pump_color=pump_color,
-                                     base_link_color=base_link_color,
-                                     node_sizes=node_size,
-                                     link_sizes=widths,
-                                     element_size_intervals=element_size_intervals,
-                                     element_size_legend_title=element_size_legend_title,
-                                     element_size_legend_loc=element_size_legend_loc,
-                                     element_size_legend_labels=element_size_legend_labels,
-                                     draw_base_legend=draw_base_legend,
-                                     draw_intervals_legend=draw_intervals_legend,
-                                     pump_line_style='-',
-                                     base_link_line_style='-',
-                                     base_link_arrows=False,
-                                     pump_arrows=False,
-                                     draw_base_links=False,
-                                     )
+                    call_draw_legend(continuous=True,base_links=False)
                     
             elif parameter_type == "node":
                 if min_size is not None and max_size is not None:
@@ -1108,86 +778,25 @@ def plot_unique_data(
                     edge_colors=edge_colors,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                )
+                call_draw_base_elements()
+                
                 if legend:
-
-                    base.draw_legend(ax,
-                                     title=legend_title,
-                                     pumps=pumps,
-                                     loc=legend_loc_1,
-                                     font_size=font_size,
-                                     font_color=font_color,
-                                     legend_title_font_size=legend_title_font_size,
-                                     draw_frame=draw_frame,
-                                     pump_color=pump_color,
-                                     base_link_color=base_link_color,
-                                     node_sizes=node_size,
-                                     link_sizes=widths,
-                                     element_size_intervals=element_size_intervals,
-                                     element_size_legend_title=element_size_legend_title,
-                                     element_size_legend_loc=element_size_legend_loc,
-                                     element_size_legend_labels=element_size_legend_labels,
-                                     draw_base_legend=draw_base_legend,
-                                     draw_intervals_legend=draw_intervals_legend,
-                                     pump_line_style='-',
-                                     base_link_line_style='-',
-                                     base_link_arrows=False,
-                                     pump_arrows=False,
-                                     draw_base_links=True,
-                                     )
+                    call_draw_legend(continuous=True)
                     
             if draw_color_bar == True:
-                base.draw_color_bar(ax, 
-                                    g, 
-                                    cmap, 
-                                    color_bar_title=color_bar_title,
-                                    color_bar_width=color_bar_width,
-                                    color_bar_height=color_bar_height)
+                call_draw_color_bar()
                 
             if savefig:
 
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
             return
-    if isinstance(parameter, str):
+    elif parameter == 'excel_data':
 
         if data_type == "unique":
 
             element_list, intervals = convert_excel(
-                self, parameter, parameter_type, data_type, excel_columns[0], excel_columns[1]
+                self, data_file, parameter_type, data_type, excel_columns[0], excel_columns[1]
             )
 
             if parameter_type == "link":
@@ -1205,63 +814,10 @@ def plot_unique_data(
                     link_arrows=link_arrows,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    links=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                )
+                call_draw_base_elements(links=False)
                 
                 if legend:
-
-                    base.draw_legend(
-                        ax,
-                        intervals,
-                        title=legend_title,
-                        pumps=pumps,
-                        loc=legend_loc_1,
-                        loc2=legend_loc_2,
-                        font_size=font_size,
-                        font_color=font_color,
-                        legend_title_font_size=legend_title_font_size,
-                        draw_frame=draw_frame,
-                        pump_color=pump_color,
-                        base_link_color=base_link_color,
-                        pump_line_style='-',
-                        base_link_line_style='-',
-                        base_link_arrows=False,
-                        pump_arrows=False,
-                        draw_base_links=False,
-                    )
+                    call_draw_legend(base_links=False)
                     
             elif parameter_type == "node":
 
@@ -1279,62 +835,10 @@ def plot_unique_data(
                     color_list=color_list,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                )
+                call_draw_base_elements()
                 
                 if legend:
-
-                    base.draw_legend(
-                        ax,
-                        intervals,
-                        title=legend_title,
-                        pumps=pumps,
-                        loc=legend_loc_1,
-                        loc2=legend_loc_2,
-                        font_size=font_size,
-                        font_color=font_color,
-                        legend_title_font_size=legend_title_font_size,
-                        draw_frame=draw_frame,
-                        pump_color=pump_color,
-                        base_link_color=base_link_color,
-                        pump_line_style='-',
-                        base_link_line_style='-',
-                        base_link_arrows=False,
-                        pump_arrows=False,
-                        draw_base_links=True,
-                    )
+                    call_draw_legend()
 
             if savefig:
 
@@ -1344,7 +848,7 @@ def plot_unique_data(
         if data_type == "discrete":
 
             data = convert_excel(
-                self, parameter, parameter_type, data_type, excel_columns[0], excel_columns[1]
+                self, data_file, parameter_type, data_type, excel_columns[0], excel_columns[1]
             )
 
             interval_results, interval_names = processing.bin_parameter(
@@ -1372,63 +876,11 @@ def plot_unique_data(
                     link_arrows=link_arrows,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    links=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                )
+                call_draw_base_elements(links=False)
                 
                 if legend:
-
-                    base.draw_legend(
-                        ax,
-                        interval_names,
-                        title=legend_title,
-                        pumps=pumps,
-                        loc=legend_loc_1,
-                        loc2=legend_loc_2,
-                        font_size=font_size,
-                        font_color=font_color,
-                        legend_title_font_size=legend_title_font_size,
-                        draw_frame=draw_frame,
-                        pump_color=pump_color,
-                        base_link_color=base_link_color,
-                        pump_line_style='-',
-                        base_link_line_style='-',
-                        base_link_arrows=False,
-                        pump_arrows=False,
-                        draw_base_links=False,     
-                    )
+                    call_draw_legend(base_links=False,intervals=interval_names)
+                    
             if parameter_type == "node":
 
                 discrete.draw_discrete_nodes(
@@ -1445,62 +897,10 @@ def plot_unique_data(
                     color_list=color_list,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                )
+                call_draw_base_elements()
                 
                 if legend:
-
-                    base.draw_legend(
-                        ax,
-                        interval_names,
-                        title=legend_title,
-                        pumps=pumps,
-                        loc=legend_loc_1,
-                        loc2=legend_loc_2,
-                        font_size=font_size,
-                        font_color=font_color,
-                        legend_title_font_size=legend_title_font_size,
-                        draw_frame=draw_frame,
-                        pump_color=pump_color,
-                        base_link_color=base_link_color,
-                        pump_line_style='-',
-                        base_link_line_style='-',
-                        base_link_arrows=False,
-                        pump_arrows=False,
-                        draw_base_links=True,     
-                    )
+                    call_draw_legend(intervals=interval_names)
            
             if savefig:
 
@@ -1510,7 +910,7 @@ def plot_unique_data(
         if data_type == "continuous":
 
             data = convert_excel(
-                self, parameter, parameter_type, data_type, excel_columns[0], excel_columns[1]
+                self, data_file, parameter_type, data_type, excel_columns[0], excel_columns[1]
             )
 
             if parameter_type == "link":
@@ -1535,68 +935,10 @@ def plot_unique_data(
                     link_arrows=link_arrows,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    links=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                )
+                call_draw_base_elements(links=False)
                 
                 if legend:
-
-                    base.draw_legend(ax,
-                                     title=legend_title,
-                                     pumps=pumps,
-                                     loc=legend_loc_1,
-                                     font_size=font_size,
-                                     font_color=font_color,
-                                     legend_title_font_size=legend_title_font_size,
-                                     draw_frame=draw_frame,
-                                     pump_color=pump_color,
-                                     base_link_color=base_link_color,
-                                     node_sizes=node_size,
-                                     link_sizes=widths,
-                                     element_size_intervals=element_size_intervals,
-                                     element_size_legend_title=element_size_legend_title,
-                                     element_size_legend_loc=element_size_legend_loc,
-                                     element_size_legend_labels=element_size_legend_labels,
-                                     draw_base_legend=draw_base_legend,
-                                     draw_intervals_legend=draw_intervals_legend,
-                                     pump_line_style='-',
-                                     base_link_line_style='-',
-                                     base_link_arrows=False,
-                                     pump_arrows=False,
-                                     draw_base_links=False,
-                                     )
+                    call_draw_legend(continuous=True,base_links=False)
                     
             elif parameter_type == "node":
                 if min_size is not None and max_size is not None:
@@ -1619,75 +961,13 @@ def plot_unique_data(
                     edge_colors=edge_colors,
                 )
 
-                base.draw_base_elements(
-                    self,
-                    ax,
-                    nodes=False,
-                    reservoirs=reservoirs,
-                    tanks=tanks,
-                    valves=valves,
-                    pumps=pumps,
-                    reservoir_size=reservoir_size,
-                    reservoir_color=reservoir_color,
-                    reservoir_shape=reservoir_shape,
-                    reservoir_border_color=reservoir_border_color,
-                    reservoir_border_width=reservoir_border_width,
-                    tank_size=tank_size,
-                    tank_color=tank_color,
-                    tank_shape=tank_shape,
-                    tank_border_color=tank_border_color,
-                    tank_border_width=tank_border_width,
-                    valve_size=valve_size,
-                    valve_color=valve_color,
-                    valve_shape=valve_shape,
-                    valve_border_color=valve_border_color,
-                    valve_border_width=valve_border_width,
-                    pump_color=pump_color,
-                    pump_width=pump_width,
-                    pump_line_style=pump_line_style,
-                    pump_arrows=pump_arrows,
-                    base_node_color=base_node_color,
-                    base_node_size=base_node_size,
-                    base_link_color=base_link_color,
-                    base_link_width=base_link_width,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows
-                )
+                call_draw_base_elements()
                 
                 if legend:
-
-                    base.draw_legend(ax,
-                                     title=legend_title,
-                                     pumps=pumps,
-                                     loc=legend_loc_1,
-                                     font_size=font_size,
-                                     font_color=font_color,
-                                     legend_title_font_size=legend_title_font_size,
-                                     draw_frame=draw_frame,
-                                     pump_color=pump_color,
-                                     base_link_color=base_link_color,
-                                     node_sizes=node_size,
-                                     link_sizes=widths,
-                                     element_size_intervals=element_size_intervals,
-                                     element_size_legend_title=element_size_legend_title,
-                                     element_size_legend_loc=element_size_legend_loc,
-                                     element_size_legend_labels=element_size_legend_labels,
-                                     draw_base_legend=draw_base_legend,
-                                     draw_intervals_legend=draw_intervals_legend,
-                                     pump_line_style='-',
-                                     base_link_line_style='-',
-                                     base_link_arrows=False,
-                                     pump_arrows=False,
-                                     draw_base_links=True,   
-                                     )
+                    call_draw_legend(continuous=True)
                     
             if draw_color_bar == True:
-                base.draw_color_bar(ax, 
-                                    g, 
-                                    cmap, 
-                                    color_bar_title=color_bar_title,
-                                    color_bar_width=color_bar_width,
-                                    color_bar_height=color_bar_height)
+                call_draw_color_bar()
             
 
             if savefig:
@@ -1695,3 +975,8 @@ def plot_unique_data(
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
         return
+    elif isinstance(parameter,str):
+       pass 
+    else:
+        raise Exception("Invalid input, check docs for valid inputs.")
+        
