@@ -180,7 +180,7 @@ def animate_plot(
         
     # builds gif
     if file_format == "gif" or file_format == "GIF":
-        imageio.mimsave(save_name+"."+file_format, frames, format='GIF',fps=fps)
+        imageio.mimsave(save_name+"."+file_format, frames, format='GIF',duration=(1/fps))
     else:
         imageio.mimsave(save_name+"."+file_format, frames, format='FFMPEG',fps=fps,quality=8,ffmpeg_log_level='quiet')
             
