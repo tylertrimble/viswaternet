@@ -383,9 +383,8 @@ def plot_unique_data(
     if len(self.model['G_list_pumps_only'])==0:
         pumps = False
     if ax is None:
-        if ax is None:
-            fig, ax = plt.subplots(figsize=self.figsize)  
-            ax.set_frame_on(self.axis_frame)
+        fig, ax = plt.subplots(figsize=self.figsize)  
+        ax.set_frame_on(self.axis_frame)
     
     def call_draw_base_elements(links=True):
         base.draw_base_elements(self,
@@ -424,10 +423,10 @@ def plot_unique_data(
                                 )
     
     def call_draw_legend(continuous=False,base_links=True,intervals=None):
-        if continuous == False:
+        if continuous == True:
             base.draw_legend(
                         ax,
-                        intervals=interval_names,
+                        intervals=intervals,
                         title=legend_title,
                         pumps=pumps,
                         loc=legend_loc_1,
@@ -445,8 +444,9 @@ def plot_unique_data(
                         draw_base_links=False
                     )
         else:
+            print(draw_base_legend)
             base.draw_legend(ax,
-                             intervals=None,
+                             intervals=intervals,
                              title=legend_title,
                              pumps=pumps,
                              loc=legend_loc_1,
