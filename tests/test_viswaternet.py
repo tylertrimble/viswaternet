@@ -93,36 +93,36 @@ class TestPlottingFunctions(unittest.TestCase):
         
     def test_discrete_link_plotting(self):
         fig,ax=plt.subplots()
-        model.plot_discrete_links(ax,parameter='length',,savefig=True)
+        model.plot_discrete_links(ax,parameter='length',savefig=True)
         
         self.assertTrue(os.path.isfile('net1.png'),"plot_discrete_links() is not generating plot.")
         os.remove('net1.png')
         
     def test_continuous_nodes_plotting(self):
         fig,ax=plt.subplots()
-        model.plot_continuous_nodes(ax,parameter='elevation',,savefig=True)
+        model.plot_continuous_nodes(ax,parameter='elevation',savefig=True)
         
         self.assertTrue(os.path.isfile('net1.png'),"plot_continuous_nodes() is not generating plot.")
         os.remove('net1.png')
     
     def test_continuous_links_plotting(self):
         fig,ax=plt.subplots()
-        model.plot_continuous_links(ax,parameter='length',,savefig=True)
+        model.plot_continuous_links(ax,parameter='length',savefig=True)
         
         self.assertTrue(os.path.isfile('net1.png'),"plot_continuous_links() is not generating plot.")
         os.remove('net1.png')
     
     def test_unique_plotting(self):
         fig,ax=plt.subplots()
-        model.plot_unique_data(ax,parameter='demand_patterns',save_name='DemandPatterns_',,savefig=True)
+        model.plot_unique_data(ax,parameter='demand_patterns',save_name='DemandPatterns_',savefig=True)
         
         fig,ax=plt.subplots()
-        model.plot_unique_data(ax,parameter='diameter',save_name='Diameter_',,savefig=True)
+        model.plot_unique_data(ax,parameter='diameter',save_name='Diameter_',savefig=True)
         
         elements=['10','11','12']
         data=[10,6,15]
         fig,ax=plt.subplots()
-        model.plot_unique_data(ax,parameter='custom_data',data_type='continuous',parameter_type ='node',custom_data_values=[elements,data],save_name='Custom_',,savefig=True)
+        model.plot_unique_data(ax,parameter='custom_data',data_type='continuous',parameter_type ='node',custom_data_values=[elements,data],save_name='Custom_',savefig=True)
         
         self.assertTrue(os.path.isfile('DemandPatterns_net1.png'),"plot_unique_data() is not generating demand patterns plot.")
         self.assertTrue(os.path.isfile('Diameter_net1.png'),"plot_unique_data() is not generating diameter plot.")
