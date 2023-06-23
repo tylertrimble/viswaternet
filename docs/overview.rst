@@ -12,12 +12,14 @@ Here we introduce VisWaterNet, an accessible, open-source Python package that pr
 .. _`WNTR`: https://wntr.readthedocs.io/en/stable/index.html
 .. _`Matplotlib`: https://matplotlib.org/stable/index.html
 
-Users must provide an EPANET-compatible .INP file of the WDS network model through the Python interface. NetworkX is used to extract the network topology from the .INP file, and WNTR is used to derive hydraulic element characteristics and perform hydraulic simulations using the EPANET 2.2 engine. VisWaterNet offers the following options to visualize attribute data on the network plot :
+Users must provide an `EPANET-compatible .INP file`_ of the WDS network model through the Python interface. NetworkX is used to extract the network topology from the .INP file, and WNTR is used to derive hydraulic element characteristics and perform hydraulic simulations using the EPANET 2.2 engine. VisWaterNet offers the following options to visualize attribute data on the network plot :
 
 1. varying node or link colors in a **continuous** manner, i.e., by varying node/link color according to a color gradient scale based on numerical data attributes 
 2. varying node or link colors in a **discrete** manner, i.e., by grouping numerical data into specified intervals and varying node/link color based on the color assigned to the corresponding interval
 3. varying node or link colors in a **categorical** manner, i.e., for attributes that can only belong to a fixed set of categories, each node/link color is assigned according to the corresponding category
 4. varying node sizes/markers and link widths/line styles to reinforce difference in color or represent a second dimension of data 
+
+.. _`EPANET-compatible .INP file`: https://epanet22.readthedocs.io/en/latest/back_matter.html#input-file-format
 
 VisWaterNet also allows easy customization of WDS-specific network plots by offering the following features:
 

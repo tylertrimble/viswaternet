@@ -2,7 +2,7 @@
 
 __author__ = """Tyler Trimble, Meghna Sarah Thomas"""
 __email__ = 'TylerL.Trimble@utexas.edu,meghnathomas@utexas.edu'
-__version__ = '0.1.1'
+__version__ = '1.1.0'
 
 import warnings
 

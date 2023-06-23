@@ -1,5 +1,8 @@
-.. image:: https://github.com/tylertrimble/viswaternet/blob/master/logo/viswaternet_logo.png?raw=true
-		:target: https://github.com/tylertrimble/viswaternet/blob/master/logo/viswaternet_logo.png?raw=true
+.. image:: https://github.com/tylertrimble/viswaternet/blob/main/logo/viswaternet_logo.png?raw=true
+		:target: https://github.com/tylertrimble/viswaternet/blob/main/logo/viswaternet_logo.png?raw=true
+
+.. image:: https://joss.theoj.org/papers/10.21105/joss.05139/status.svg
+        :target: https://doi.org/10.21105/joss.05139
 
 .. image:: https://img.shields.io/pypi/v/viswaternet.svg
         :target: https://pypi.python.org/pypi/viswaternet
@@ -10,7 +13,7 @@
 
 .. image:: https://img.shields.io/pypi/l/ansicolortags.svg
         :target: https://pypi.python.org/pypi/ansicolortags/
-
+    
 
 An open-source Python package for easy generation and customization of water distribution network visualizations. Find the `documentation here`_.
 
@@ -19,7 +22,7 @@ An open-source Python package for easy generation and customization of water dis
 
 Dependencies
 ------------
-◉ WNTR <0.5.0 ◉ NetworkX 2.7+ ◉ Matplotlib 3.5.0+ ◉ Pandas ◉ NumPy ◉ imageio ◉
+◉ WNTR ◉ NetworkX 2.7+ ◉ Matplotlib 3.5.0+ ◉ Pandas ◉ NumPy ◉ imageio ◉
 
 VisWaterNet has been tested on Python **3.8** and **3.9**.
 
@@ -112,10 +115,10 @@ More examples that demonstrate the range of VisWaterNet's plotting abilities can
 .. _`Example Applications`: https://viswaternet.readthedocs.io/en/latest/examples.html
 
 Contributing
--------
+------------
 We welcome contributions in the form of suggestions, feedback, reports of bugs, and additions to code functionality and documentation from all users! You can find instructions to raise issues, submit pull requests, and `run automated tests`_ in the `docs`_ or the `CONTRIBUTING page`_.
 
-.. _`CONTRIBUTING page`: https://github.com/tylertrimble/viswaternet/blob/master/CONTRIBUTING.rst
+.. _`CONTRIBUTING page`: https://github.com/tylertrimble/viswaternet/blob/main/CONTRIBUTING.rst
 .. _`docs`: https://viswaternet.readthedocs.io/en/latest/contributing.html
 .. _`run automated tests`: https://viswaternet.readthedocs.io/en/latest/contributing.html#testing
 

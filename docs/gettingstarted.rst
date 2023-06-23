@@ -8,7 +8,7 @@ To get started, import VisWaterNet:
 
     import viswaternet as vis
 
-Next, initialize a VisWaterNet model. For example purposes, we use the CTown network included in the Examples folder:
+Next, initialize a VisWaterNet model by providing a .INP `input file of a water network model`_. For example purposes, we use the CTown network included in the Examples folder:
 
 .. code:: python
 
@@ -31,10 +31,11 @@ Since several VisWaterNet function arguments rely on Matplotlib visualization in
 
 A range of examples to understand the different VisWaterNet plotting functions can be found in the `Example Applications`_ section in the documentation and in the the `Examples`_ folder.
 
+.. _`input file of a water network model`: https://epanet22.readthedocs.io/en/latest/back_matter.html#input-file-format
 .. _`Matplotlib docs`: https://matplotlib.org/stable/index.html
 .. _`colors`: https://matplotlib.org/stable/gallery/color/named_colors.html
 .. _`colorbars`: https://matplotlib.org/stable/tutorials/colors/colormaps.html#sphx-glr-tutorials-colors-colormaps-py
 .. _`node markers`: https://matplotlib.org/stable/gallery/lines_bars_and_markers/marker_reference.html
 .. _`line styles`: https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html
 .. _`Example Applications`: https://viswaternet.readthedocs.io/en/latest/examples.html
-.. _`Examples`: https://github.com/tylertrimble/viswaternet/tree/master/Examples
+.. _`Examples`: https://github.com/tylertrimble/viswaternet/tree/main/examples

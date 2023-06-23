@@ -264,5 +264,5 @@ Additional parameters can be provided to customize the frames as shown in previo
 
 More examples can be found in the `Examples`_ folder. The full range of inputs for each plotting function can be found in `this section`_. 
 
-.. _`Examples`: https://github.com/tylertrimble/viswaternet/tree/master/Examples
+.. _`Examples`: https://github.com/tylertrimble/viswaternet/tree/main/examples
 .. _`this section`: https://viswaternet.readthedocs.io/en/latest/source/viswaternet.html#subpackages

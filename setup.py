@@ -12,8 +12,8 @@ with open('HISTORY.rst') as history_file:
 
 requirements = ['pandas',
                'numpy',
-               'matplotlib>=3.3.0',
-               'wntr>= 0.5.0',
+               'matplotlib>=3.5.0',
+               'wntr<=0.5.0',
                'imageio',
                'networkx>=2.7']
 
@@ -22,16 +22,15 @@ test_requirements = [ ]
 setup(
     author="Tyler Trimble",
     author_email='TylerL.Trimble@gmail.com',
-    python_requires='3.8, 3.9, 3.10',
+    python_requires='>=3.8, <=3.9.16',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10',
-    ],
+            ],
     description="A python package for easy generation and customization of water network graphs.",
     install_requires=requirements,
     license="MIT license",
@@ -43,6 +42,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/tylertrimble/viswaternet',
-    version='1.0.0',
+    version='1.1.0',
     zip_safe=False,
 )

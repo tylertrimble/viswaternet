@@ -101,10 +101,13 @@ def plot_continuous_nodes(
         - leak_area
         - leak_discharg_coeff
         - quality
+        
     value : integer, string
         For time-varying parameters only. Specifies which timestep or data
         summary will be plotted.
+        
         .. rubric:: Possible Inputs
+        
         ======================= =========================================
             int                 Plots element data for specified timestep
             'min'               Plots minimum data point for each element
@@ -113,6 +116,7 @@ def plot_continuous_nodes(
             'stddev'            Plots standard deviation for each element
             'range'             Plots range for each element
         ======================= =========================================
+        
     unit : string
         The unit that the network data is to be converted to.
     vmin : integer
@@ -442,10 +446,13 @@ def plot_continuous_links(
         - friction_factor
         - reaction_rate
         - quality
+        
     value : integer, string
         For time-varying parameters only. Specifies which timestep or data
         summary will be plotted.
+        
         .. rubric:: Possible Inputs
+        
         ======================= =========================================
             int                 Plots element data for specified timestep
             'min'               Plots minimum data point for each element
@@ -454,6 +461,7 @@ def plot_continuous_links(
             'stddev'            Plots standard deviation for each element
             'range'             Plots range for each element
         ======================= =========================================
+        
     unit : string
         The unit that the network data is to be converted to.
     widths : integer, array-like
