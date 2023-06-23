@@ -135,12 +135,12 @@ class TestPlottingFunctions(unittest.TestCase):
     def test_animate_plot(self):
         fig,ax=plt.subplots()
         
-        model.animate_plot(ax,function=model.plot_discrete_nodes,parameter='pressure',data_type='discrete',parameter_type='node',last_timestep=5,gif_save_name='discrete')
+        model.animate_plot(ax=ax,function=model.plot_discrete_nodes,parameter='pressure',data_type='discrete',parameter_type='node',last_timestep=5,gif_save_name='discrete')
         self.assertTrue(os.path.isfile('discrete.gif'),"animate_plot() is not generating discrete plot gif file.")
         
         fig,ax=plt.subplots(figsize=(15,15))
         
-        model.animate_plot(ax,function=model.plot_continuous_nodes,parameter='pressure',data_type='continuous',parameter_type='node',last_timestep=5,gif_save_name='continuous')
+        model.animate_plot(ax=ax,function=model.plot_continuous_nodes,parameter='pressure',data_type='continuous',parameter_type='node',last_timestep=5,gif_save_name='continuous')
         self.assertTrue(os.path.isfile('continuous.gif'),"animate_plot() is not generating continuous plot gif file.")
         
         os.remove('discrete.gif')
