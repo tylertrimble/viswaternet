@@ -136,15 +136,15 @@ class TestPlottingFunctions(unittest.TestCase):
         fig,ax=plt.subplots()
         
         model.animate_plot(ax=ax,function=model.plot_discrete_nodes,parameter='pressure',last_timestep=5,save_name='discrete')
-        self.assertTrue(os.path.isfile('discrete.gif'),"animate_plot() is not generating discrete plot gif file.")
+        self.assertTrue(os.path.isfile('discrete.mp4'),"animate_plot() is not generating discrete plot gif file.")
         
         fig,ax=plt.subplots(figsize=(15,15))
         
         model.animate_plot(ax=ax,function=model.plot_continuous_nodes,parameter='pressure',last_timestep=5,save_name='continuous')
-        self.assertTrue(os.path.isfile('continuous.gif'),"animate_plot() is not generating continuous plot gif file.")
+        self.assertTrue(os.path.isfile('continuous.mp4'),"animate_plot() is not generating continuous plot gif file.")
         
-        os.remove('discrete.gif')
-        os.remove('continuous.gif')
+        os.remove('discrete.mp4')
+        os.remove('continuous.mp4')
 
 class TestNormalizeParameter(unittest.TestCase):
     """Tests parameter normalizing function"""
