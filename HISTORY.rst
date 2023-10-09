@@ -1,8 +1,15 @@
 =======
 History
 =======
-1.1.0 (2023-03-15)
+1.1.0 (2023-08-01)
 ------------------
+* Overhauled animate_plot function to allow for plotting of custom data and use different file formats
+* Plotting custom data now uses new parameter data_file instead of parameter
+* Improved initilization time by switching to numpy
+* Fixed blank figure appearing before plotting occurs
+
+1.1.0a (2023-03-15)
+-------------------
 * Fixed colorbar functionality with subplots
 * Added ability to customize colorbar size
 * Legend/colorbar labels are automatically generated based on parameter/value type
