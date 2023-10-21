@@ -5,3 +5,4 @@ wntr
 imageio
 imageio-ffmpeg
 networkx>=2.7
+sphinx_rtd_theme
