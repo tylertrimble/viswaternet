@@ -1,7 +1,7 @@
 =======
 History
 =======
-1.1.0 (2023-08-01)
+1.2.0 (2023-08-01)
 ------------------
 * Overhauled animate_plot function to allow for plotting of custom data and use different file formats
 * Plotting custom data now uses new parameter data_file instead of parameter
