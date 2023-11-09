@@ -346,16 +346,18 @@ def bin_parameter(
             counter = 0
             for parameter in parameter_results:
                 if parameter >= intervals[i] and parameter < intervals[i + 1]:
+
                     interval_results[
                         "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_sig_figs)]
-                    [elementsWithParameter[counter]] = element_list.index(
-                        elementsWithParameter[counter])
+                            intervals[i], intervals[i + 1], j=legend_sig_figs)
+                    ][elementsWithParameter[counter]] = element_list.index(
+                        elementsWithParameter[counter]
+                    )
                 if parameter < intervals[i]:
-                    interval_results["< {0:1.{j}f}".format(intervals[i], 
-                                                           j=legend_sig_figs)]
-                    [elementsWithParameter[counter]] = element_list.index(
-                        elementsWithParameter[counter],)
+
+                    interval_results["< {0:1.{j}f}".format(intervals[i], j=legend_sig_figs)][
+                        elementsWithParameter[counter]
+                    ] = element_list.index(elementsWithParameter[counter],)
                 counter += 1
         elif i == len(intervals) - 2:
             counter = 0
