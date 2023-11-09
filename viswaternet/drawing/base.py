@@ -57,109 +57,72 @@ def draw_nodes(
         Matplotlib label of plotting instance.
     """
     
+    #Initalize parameters
     model = self.model
     if parameter_results is None:
         parameter_results = []
     if node_size is None:
         node_size = []
-    if len(parameter_results) != 0:
-
-        negativeValues = False
-    if isinstance(node_size, list) and len(node_size) == 0:
-
-        node_size = np.ones(len(node_list)) * 100
+    # Creates default list of node sizes
+    if isinstance(node_size, list) and not node_size:
+        node_size = (np.ones(len(node_list)) * 100).tolist()
+    # Creates uniform list of node sizes if integer is given
     if isinstance(node_size, int):
-        node_size = np.ones(len(node_list)) * node_size
-    if len(parameter_results) != 0:
-        for value in parameter_results:
-
-            if value < -1e-5:
-
-                negativeValues = True
-
-                cmap = mpl.colormaps[cmap]
-
-                if vmin is None and vmax is None:
-                    g = nxp.draw_networkx_nodes(
-                        model["G"],
-                        model["pos_dict"],
-                        ax=ax,
-                        nodelist=node_list,
-                        node_size=node_size,
-                        node_color=parameter_results,
-                        vmax=np.max(parameter_results),
-                        vmin=-np.max(parameter_results),
-                        cmap=cmap,
-                        node_shape=node_shape,
-                        linewidths=line_widths,
-                        edgecolors=edge_colors,
-                        label=label,
-                    )
-                else:
-                    g = nxp.draw_networkx_nodes(
-                        model["G"],
-                        model["pos_dict"],
-                        ax=ax,
-                        nodelist=node_list,
-                        node_size=node_size,
-                        node_color=parameter_results,
-                        vmax=vmax,
-                        vmin=vmin,
-                        cmap=cmap,
-                        node_shape=node_shape,
-                        linewidths=line_widths,
-                        edgecolors=edge_colors,
-                        label=label,
-                    )
-                return g
-        if negativeValues:
-            pass
-        else:
+        node_size = (np.ones(len(node_list)) * node_size).tolist()
+    # Checks if some data values are given
+    if not parameter_results.empty:
+        # If values is less than this value, we treat it as a negative.
+        if np.min(parameter_results) < -1e-5:
+            # Gets the cmap object from matplotlib
             cmap = mpl.colormaps[cmap]
-
+            # If both vmin and vmax are None, set vmax to the max data
+            # value and vmin to the negative of the max data value. This
+            # ensures that the colorbar is centered at 0.
             if vmin is None and vmax is None:
                 g = nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
-                    nodelist=node_list,
-                    node_size=node_size,
-                    node_color=parameter_results,
-                    cmap=cmap,
-                    node_shape=node_shape,
-                    linewidths=line_widths,
-                    edgecolors=edge_colors,
-                )
+                    model["G"], model["pos_dict"], ax=ax, nodelist=node_list, 
+                    node_size=node_size, node_color=parameter_results, 
+                    cmap=cmap, vmax=np.max(parameter_results),
+                    vmin=-np.max(parameter_results), node_shape=node_shape, 
+                    linewidths=line_widths, edgecolors=edge_colors, 
+                    label=label)
+            # Otherwise, just pass the user-given parameters
             else:
                 g = nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
-                    nodelist=node_list,
-                    node_size=node_size,
-                    node_color=parameter_results,
-                    cmap=cmap,
-                    node_shape=node_shape,
-                    linewidths=line_widths,
-                    edgecolors=edge_colors,
-                    vmin=vmin,
-                    vmax=vmax,
-                )
+                    model["G"], model["pos_dict"], ax=ax, nodelist=node_list,
+                    node_size=node_size, node_color=parameter_results, 
+                    vmax=vmax, vmin=vmin, cmap=cmap, node_shape=node_shape,
+                    linewidths=line_widths, edgecolors=edge_colors, 
+                    label=label)
+            # Return networkx object
             return g
+        else:
+            # Gets the cmap object from matplotlib
+            cmap = mpl.colormaps[cmap]
+            # If both vmin and vmax are None, don't pass vmin and vmax,
+            # as networkx will handle the limits of the colorbar 
+            # itself.
+            if vmin is None and vmax is None:
+                g = nxp.draw_networkx_nodes(
+                    model["G"], model["pos_dict"], ax=ax, nodelist=node_list,
+                    node_size=node_size, node_color=parameter_results,
+                    cmap=cmap, node_shape=node_shape, linewidths=line_widths,
+                    edgecolors=edge_colors)
+            # Otherwise, just pass the user-given parameters
+            else:
+                g = nxp.draw_networkx_nodes(
+                    model["G"], model["pos_dict"], ax=ax, nodelist=node_list,
+                    node_size=node_size, node_color=parameter_results,
+                    cmap=cmap, node_shape=node_shape, linewidths=line_widths,
+                    edgecolors=edge_colors, vmin=vmin, vmax=vmax)
+            # Return networkx object
+            return g
+    #Draw without any data associated with nodes
     else:
-
         nxp.draw_networkx_nodes(
-            model["G"],
-            model["pos_dict"],
-            ax=ax,
-            nodelist=node_list,
-            node_size=node_size,
-            node_color=node_color,
-            node_shape=node_shape,
-            edgecolors=edge_colors,
-            linewidths=line_widths,
-            label=label,
-        )
+            model["G"], model["pos_dict"], ax=ax, nodelist=node_list,
+            node_size=node_size, node_color=node_color, node_shape=node_shape,
+            edgecolors=edge_colors, linewidths=line_widths, label=label)
 
 
 def draw_links(
@@ -200,120 +163,83 @@ def draw_links(
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     """
+    
+    #Initalize parameters
     model = self.model
     if parameter_results is None:
         parameter_results = []
     if widths is None:
         widths = []
-
-    if isinstance(widths, list) and len(widths) == 0:
-
-        widths = np.ones(len(widths)) * 100
-
+    # Creates default list of link widths
+    if isinstance(widths, list) and not widths:
+        widths = (np.ones(len(widths)) * 100).tolist()
+    # Creates uniform list of link widths if integer is given
     if isinstance(widths, int):
-        widths = np.ones(len(link_list)) * widths
-
-    edgeList = {}
-
-    if len(widths) == 0:
-
+        widths = (np.ones(len(link_list)) * widths).tolist()
+    if not widths.any():
         widths = np.ones(len(link_list)) * 1
-    negativeValues = False
-
-    if len(parameter_results) != 0:
-        for i in link_list:
-            edgeList[i] = model["G_pipe_name_list"].index(i)
-        for value in parameter_results:
-
-            if value < -1e-5:
-
-                negativeValues = True
-
-                cmap = mpl.colormaps[cmap]
-
-                if vmin is None and vmax is None:
-                    g = nxp.draw_networkx_edges(
-                        model["G"],
-                        model["pos_dict"],
-                        ax=ax,
-                        edgelist=([model["pipe_list"][i]
-                                  for i in edgeList.values()]),
-                        edge_color=parameter_results,
-                        edge_vmax=np.max(parameter_results),
-                        edge_vmin=-np.max(parameter_results),
-                        edge_cmap=cmap,
-                        style=link_style,
-                        arrows=link_arrows,
-                        width=widths,
-                        node_size=0
-                    )
-                else:
-                    g = nxp.draw_networkx_edges(
-                        model["G"],
-                        model["pos_dict"],
-                        ax=ax,
-                        edgelist=([model["pipe_list"][i]
-                                  for i in edgeList.values()]),
-                        edge_color=parameter_results,
-                        edge_vmax=vmax,
-                        edge_vmin=vmin,
-                        edge_cmap=cmap,
-                        style=link_style,
-                        arrows=link_arrows,
-                        width=widths,
-                        node_size=0
-                    )
-                return g
-        if negativeValues:
-            pass
-        else:
+    # Checks if some data values are given
+    if not parameter_results.empty:
+        if np.min(parameter_results) < -1e-5:
+            # Gets the cmap object from matplotlib
             cmap = mpl.colormaps[cmap]
-
+            # If both vmin and vmax are None, set vmax to the max data
+            # value and vmin to the negative of the max data value. This
+            # ensures that the colorbar is centered at 0.
             if vmin is None and vmax is None:
                 g = nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     edgelist=([model["pipe_list"][i]
-                              for i in edgeList.values()]),
+                              for i, name in enumerate(link_list)]),
                     edge_color=parameter_results,
-                    edge_cmap=cmap,
-                    style=link_style,
-                    arrows=link_arrows,
-                    width=widths,
-                    node_size=0
-                )
+                    edge_vmax=np.max(parameter_results),
+                    edge_vmin=-np.max(parameter_results), edge_cmap=cmap,
+                    style=link_style, arrows=link_arrows, width=widths,
+                    node_size=0)
+            # Otherwise, just pass the user-given parameters
             else:
                 g = nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     edgelist=([model["pipe_list"][i]
-                              for i in edgeList.values()]),
-                    edge_color=parameter_results,
-                    edge_cmap=cmap,
-                    style=link_style,
-                    arrows=link_arrows,
-                    width=widths,
-                    edge_vmin=vmin,
-                    edge_vmax=vmax,
-                    node_size=0
-                )
+                              for i, name in enumerate(link_list)]),
+                    edge_color=parameter_results, edge_vmax=vmax,
+                    edge_vmin=vmin, edge_cmap=cmap, style=link_style,
+                    arrows=link_arrows, width=widths, node_size=0)
+            # Return networkx object
             return g
+        else:
+            # Gets the cmap object from matplotlib
+            cmap = mpl.colormaps[cmap]
+            # If both vmin and vmax are None, don't pass vmin and vmax,
+            # as networkx will handle the limits of the colorbar 
+            # itself.
+            if vmin is None and vmax is None:
+                g = nxp.draw_networkx_edges(
+                    model["G"], model["pos_dict"], ax=ax,
+                    edgelist=([model["pipe_list"][i]
+                              for i, name in enumerate(link_list)]),
+                    edge_color=parameter_results, edge_cmap=cmap,
+                    style=link_style, arrows=link_arrows, width=widths,
+                    node_size=0)
+            # Otherwise, just pass the user-given parameters
+            else:
+                g = nxp.draw_networkx_edges(
+                    model["G"], model["pos_dict"], ax=ax,
+                    edgelist=([model["pipe_list"][i]
+                              for i, name in enumerate(link_list)]),
+                    edge_color=parameter_results, edge_cmap=cmap,
+                    style=link_style, arrows=link_arrows, width=widths,
+                    edge_vmin=vmin, edge_vmax=vmax, node_size=0)
+            # Return networkx object
+            return g
+    #Draw without any data associated with links
     else:
-        for i in link_list:
-            edgeList[i] = model["G_pipe_name_list"].index(i)
         nxp.draw_networkx_edges(
-            model["G"],
-            model["pos_dict"],
-            ax=ax,
-            edgelist=([model["pipe_list"][i] for i in edgeList.values()]),
-            edge_color=edge_color,
-            style=link_style,
-            arrows=link_arrows,
-            width=widths,
-            node_size=0
-        )
+            model["G"], model["pos_dict"], ax=ax,
+            edgelist=([model["pipe_list"][i]
+                      for i, name in enumerate(link_list)]),
+            edge_color=edge_color, style=link_style, arrows=link_arrows,
+            width=widths, node_size=0)
 
 
 def draw_base_elements(
@@ -426,97 +352,60 @@ def draw_base_elements(
         Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
     """
     model = self.model
+    # If nodes is True, then draw nodes
     if nodes:
-
         nxp.draw_networkx_nodes(
-            model["G"], model["pos_dict"], node_size=base_node_size, node_color=base_node_color, ax=ax
-        )
+            model["G"], model["pos_dict"], node_size=base_node_size, 
+            node_color=base_node_color, ax=ax)
+    # If reservoirs is True, then draw reservoirs
     if reservoirs:
-
         nxp.draw_networkx_nodes(
-            model["G"],
-            model["pos_dict"],
-            ax=ax,
-            nodelist=model["reservoir_names"],
-            node_size=reservoir_size,
-            node_color=reservoir_color,
-            edgecolors=reservoir_border_color,
-            linewidths=reservoir_border_width,
-            node_shape=reservoir_shape,
-            label="Reservoirs",
-        )
+            model["G"], model["pos_dict"], ax=ax,
+            nodelist=model["reservoir_names"], node_size=reservoir_size,
+            node_color=reservoir_color, edgecolors=reservoir_border_color,
+            linewidths=reservoir_border_width, node_shape=reservoir_shape,
+            label="Reservoirs")
+    # If tanks is True, then draw tanks
     if tanks:
-
         nxp.draw_networkx_nodes(
-            model["G"],
-            model["pos_dict"],
-            ax=ax,
-            nodelist=model["tank_names"],
-            node_size=tank_size,
-            node_color=tank_color,
-            edgecolors=tank_border_color,
-            linewidths=tank_border_width,
-            node_shape=tank_shape,
-            label="Tanks",
-        )
+            model["G"], model["pos_dict"], ax=ax, nodelist=model["tank_names"],
+            node_size=tank_size, node_color=tank_color,
+            edgecolors=tank_border_color, linewidths=tank_border_width,
+            node_shape=tank_shape, label="Tanks")
+    # If valves is True, then draw valves
     if valves:
-
         valve_coordinates = {}
-        valveCounter = 0
-
-        for point1, point2 in model["G_list_valves_only"]:
-
+        # For each valve, calculate midpoint along link it is located at then
+        # store the coordinates of where valve should be drawn
+        for i, (point1, point2) in enumerate(model["G_list_valves_only"]):
             midpoint = [
-                (
-                    model["wn"].get_node(point1).coordinates[0]
-                    + model["wn"].get_node(point2).coordinates[0]
-                )
-                / 2,
-                (
-                    model["wn"].get_node(point1).coordinates[1]
-                    + model["wn"].get_node(point2).coordinates[1]
-                )
-                / 2,
+                (model["wn"].get_node(point1).coordinates[0]
+                 + model["wn"].get_node(point2).coordinates[0])/2,
+                (model["wn"].get_node(point1).coordinates[1]
+                 + model["wn"].get_node(point2).coordinates[1])/2,
             ]
-
-            valve_coordinates[model["valve_names"][valveCounter]] = midpoint
-            valveCounter += 1
+            valve_coordinates[model["valve_names"][i]] = midpoint
+        #Draw valves after midpoint calculations
         nxp.draw_networkx_nodes(
-            model["G"],
-            valve_coordinates,
-            ax=ax,
-            nodelist=model["valve_names"],
-            node_size=valve_size,
-            node_color=valve_color,
-            edgecolors=valve_border_color,
-            linewidths=valve_border_width,
-            node_shape=valve_shape,
-            label="Valves",
-        )
+            model["G"], valve_coordinates, ax=ax,
+            nodelist=model["valve_names"], node_size=valve_size,
+            node_color=valve_color, edgecolors=valve_border_color,
+            linewidths=valve_border_width, node_shape=valve_shape,
+            label="Valves")
+    # If links is True, then draw links
     if links:
         nxp.draw_networkx_edges(
-            model["G"],
-            model["pos_dict"],
+            model["G"], model["pos_dict"],
             edgelist=[i for i in model["pipe_list"]
                       if i not in model["G_list_pumps_only"]],
-            ax=ax,
-            edge_color=base_link_color,
-            width=base_link_width,
-            style=base_link_line_style,
-            arrows=base_link_arrows,
-        )
+            ax=ax, edge_color=base_link_color, width=base_link_width,
+            style=base_link_line_style, arrows=base_link_arrows)
+    # If pumps is True, then draw pumps
     if pumps:
-
         nxp.draw_networkx_edges(
-            model["G"],
-            model["pos_dict"],
-            ax=ax,
-            edgelist=model["G_list_pumps_only"],
-            edge_color=pump_color,
-            width=pump_width,
-            style=pump_line_style,
-            arrows=pump_arrows
-        )
+            model["G"], model["pos_dict"], ax=ax,
+            edgelist=model["G_list_pumps_only"], edge_color=pump_color,
+            width=pump_width, style=pump_line_style, arrows=pump_arrows)
 
 
 def plot_basic_elements(
@@ -664,66 +553,47 @@ def plot_basic_elements(
     base_link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
     """
-    if len(self.model['G_list_pumps_only'])==0:
+    # Checks if there is no pumps
+    if self.model['G_list_pumps_only']:
         pumps = False
+    # Checks if an axis as been specified
     if ax is None:
         if ax is None:
             fig, ax = plt.subplots(figsize=self.figsize)  
             ax.set_frame_on(self.axis_frame)
+    # Draw all base elements w/o data associated with them
     draw_base_elements(
-        self,
-        ax,
-        nodes=nodes,
-        reservoirs=reservoirs,
-        tanks=tanks,
-        links=links,
-        valves=valves,
-        pumps=pumps,
-        reservoir_size=reservoir_size,
-        reservoir_color=reservoir_color,
-        reservoir_shape=reservoir_shape,
+        self, ax, nodes=nodes, reservoirs=reservoirs, tanks=tanks, links=links,
+        valves=valves, pumps=pumps, reservoir_size=reservoir_size,
+        reservoir_color=reservoir_color, reservoir_shape=reservoir_shape,
         reservoir_border_color=reservoir_border_color,
-        reservoir_border_width=reservoir_border_width,
-        tank_size=tank_size,
-        tank_color=tank_color,
-        tank_shape=tank_shape,
+        reservoir_border_width=reservoir_border_width, tank_size=tank_size,
+        tank_color=tank_color, tank_shape=tank_shape,
         tank_border_color=tank_border_color,
-        tank_border_width=tank_border_width,
-        valve_size=valve_size,
-        valve_color=valve_color,
-        valve_shape=valve_shape,
+        tank_border_width=tank_border_width, valve_size=valve_size,
+        valve_color=valve_color, valve_shape=valve_shape,
         valve_border_color=valve_border_color,
-        valve_border_width=valve_border_width,
-        pump_color=pump_color,
-        pump_width=pump_width,
-        pump_line_style=pump_line_style,
-        pump_arrows=pump_arrows,
-        base_node_color=base_node_color,
-        base_node_size=base_node_size,
-        base_link_color=base_link_color,
+        valve_border_width=valve_border_width, pump_color=pump_color,
+        pump_width=pump_width, pump_line_style=pump_line_style,
+        pump_arrows=pump_arrows, base_node_color=base_node_color,
+        base_node_size=base_node_size, base_link_color=base_link_color,
         base_link_width=base_link_width,
         base_link_line_style=base_link_line_style,
-        base_link_arrows=base_link_arrows
-    )
-
+        base_link_arrows=base_link_arrows)
+    # Draw legend if legend is True. Only draws base elements legend
     if legend:
-
         draw_legend(ax,
-                    pumps=pumps,
-                    loc=legend_loc,
-                    font_size=font_size,
+                    pumps=pumps, loc=legend_loc, font_size=font_size,
                     font_color=font_color,
                     legend_title_font_size=legend_title_font_size,
-                    draw_frame=draw_frame,
-                    pump_color=pump_color,
+                    draw_frame=draw_frame, pump_color=pump_color,
                     base_link_color=base_link_color,
                     pump_line_style=pump_line_style,
                     base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows,
-                    pump_arrows=pump_arrows,
+                    base_link_arrows=base_link_arrows, pump_arrows=pump_arrows,
                     draw_base_links=True)
+    # Save figure if savefig is set to True
     if savefig:
-
         save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
 
 
@@ -803,64 +673,80 @@ def draw_legend(
     linewidths: integer
         The width of the line of the legend nodes when plotting element size legend.
     """
+    # If no intervals for data legend are specified, then create empty list
     if intervals is None:
         intervals = []
+    # Get handles, labels
     handles, labels = ax.get_legend_handles_labels()
     
+    # Where new handles will be stored
     extensions = []
     
+    # If pumps is True, then add legend element. Note that right now
+    # pump_arrows does not affect legend entry, but that it may in the future,
+    # hence the if statement
     if pumps:
         if pump_arrows:
-            #extensions.append(plt.arrow(0, 0, 1, 1, color=pump_color, linestyle=pump_line_style,lw=4, label='Pumps'))
-            extensions.append(Line2D([0], [0], color=pump_color, linestyle=pump_line_style,lw=4, label='Pumps'))
+            extensions.append(Line2D([0], [0], color=pump_color, 
+                              linestyle=pump_line_style, lw=4, label='Pumps'))
         else:
-            extensions.append(Line2D([0], [0], color=pump_color, linestyle=pump_line_style,lw=4, label='Pumps'))
-
+            extensions.append(Line2D([0], [0], color=pump_color, 
+                              linestyle=pump_line_style, lw=4, label='Pumps'))
+    # If draw_base_links is True, then add legend element. Note that right now
+    # base_link_arrows does not affect legend entry, but that it may in the 
+    # future, hence the if statement     
     if draw_base_links:
         if base_link_arrows:
-            #extensions.append(plt.arrow(0, 0, 1, 1, color=base_link_color, linestyle=base_link_line_style,lw=4, label='Pipes'))
-            extensions.append(Line2D([0], [0], color=base_link_color, linestyle=base_link_line_style,lw=4, label='Pipes'))
+            extensions.append(Line2D([0], [0], color=base_link_color,
+                              linestyle=base_link_line_style, lw=4, 
+                              label='Pipes'))
         else:
-            extensions.append(Line2D([0], [0], color=base_link_color, linestyle=base_link_line_style,lw=4, label='Pipes'))
-    
+            extensions.append(Line2D([0], [0], color=base_link_color,
+                              linestyle=base_link_line_style, lw=4, 
+                              label='Pipes'))
+    # Extend handles list
     handles.extend(extensions)
-
-    if len(intervals) != 0:
-        if draw_base_legend == True:
-            legend = ax.legend(
-                handles=handles[len(intervals):],
-                loc=loc,
-                fontsize=font_size,
-                labelcolor=font_color,
-                frameon=draw_frame,
-            )
+    
+    # If discrete intervals are given
+    if intervals:
+        # Draws base legend, which includes the legend for reservoirs, tanks,
+        # and so on
+        if draw_base_legend is True:
+            legend = ax.legend(handles=handles[len(intervals):], loc=loc, 
+                               fontsize=font_size, labelcolor=font_color, 
+                               frameon=draw_frame)
+            # Align legend text to the left, add legend to ax
             legend._legend_box.align = "left"
             ax.add_artist(legend)
-        if draw_intervals_legend == True:
-            legend2 = ax.legend(
-                title=title,
-                handles=handles[: len(intervals)],
-                loc=loc2,
-                fontsize=font_size,
-                labelcolor=font_color,
-                title_fontsize=legend_title_font_size,
-                frameon=draw_frame,
-            )
+        # Draws intervals, or data, legend to the ax
+        if draw_intervals_legend is True:
+            legend2 = ax.legend(title=title, handles=handles[: len(intervals)],
+                                loc=loc2, fontsize=font_size, 
+                                labelcolor=font_color,
+                                title_fontsize=legend_title_font_size, 
+                                frameon=draw_frame)
+            # Align legend text to the left, adds title, and adds to ax
             legend2._legend_box.align = "left"
             plt.setp(legend2.get_title(), color=font_color)
             ax.add_artist(legend2)
+    # If there are no intervals, just darw base legend
     else:
-        if draw_base_legend == True:
-            legend = ax.legend(
-                handles=handles,
-                loc=loc,
-                fontsize=font_size,
-                labelcolor=font_color,
-                frameon=False,
-            )
+        # Draws base legend, which includes the legend for reservoirs, tanks,
+        # and so on
+        if draw_base_legend is True:
+            legend = ax.legend(handles=handles, loc=loc, fontsize=font_size,
+                               labelcolor=font_color, frameon=False)
+            # Align legend text to the left, add legend to ax
             legend._legend_box.align = "left"
             ax.add_artist(legend)
-
+            
+    # The following code is for a node/link legend. This adds a 2nd dimension
+    # to the data that can be plotted, by allowing for changes in size of
+    # a node/link to represent some parameter. For now it is limited to
+    # discrete node sizes, which works the same as discrete data for the color
+    # of nodes. To use it requires a much more involved process than all other
+    # functions that viswaternet performs, and improvements to ease of use
+    # will be made in the future.
     if node_sizes is not None:
         if isinstance(node_sizes, list):
             handles_2 = []
@@ -869,22 +755,15 @@ def draw_legend(
             marker_sizes = np.linspace(
                 min_size, max_size, element_size_intervals)
             for size, label in zip(marker_sizes, element_size_legend_labels):
-                handles_2.append(Line2D([],
-                                        [],
-                                        marker='.',
-                                        color='w',
+                handles_2.append(Line2D([], [], marker='.', color='w',
                                         markeredgecolor=edge_colors,
                                         markeredgewidth=linewidths,
-                                        label=label,
-                                        markerfacecolor='k',
+                                        label=label, markerfacecolor='k',
                                         markersize=np.sqrt(size)))
             legend3 = ax.legend(
-                handles=handles_2,
-                title=element_size_legend_title,
-                loc=element_size_legend_loc,
-                fontsize=font_size,
-                title_fontsize=legend_title_font_size,
-                labelcolor=font_color,
+                handles=handles_2, title=element_size_legend_title,
+                loc=element_size_legend_loc, fontsize=font_size,
+                title_fontsize=legend_title_font_size, labelcolor=font_color,
                 frameon=False,
             )
             legend3._legend_box.align = "left"
@@ -916,7 +795,13 @@ def draw_legend(
             ax.add_artist(legend3)
 
 
-def draw_color_bar(ax, g, cmap, color_bar_title=None,color_bar_width=0.03,color_bar_height=0.8):
+def draw_color_bar(ax,
+                   g,
+                   cmap,
+                   color_bar_title=None,
+                   color_bar_width=0.03,
+                   color_bar_height=0.8
+):
     """Draws the color bar for all continuous plotting functions.Like draw_legends, under normal use, draw_color_bar is not normally called by the user directly, even with more advanced applications. However, some specialized plots may require draw_color_bar to be called directly.
     
     Arguments
@@ -933,14 +818,24 @@ def draw_color_bar(ax, g, cmap, color_bar_title=None,color_bar_width=0.03,color_
     global cbar
     divider = make_axes_locatable(ax)
     fig = plt.gcf()
-    cax = fig.add_axes([divider.get_position()[0]+divider.get_position()[2]+0.02, \
-                        (divider.get_position()[1])+((divider.get_position()[3]*(1-color_bar_height)))/2, color_bar_width, \
+    cax = fig.add_axes([divider.get_position()[0]+divider.get_position()[2]
+                        + 0.02, (divider.get_position()[1])
+                        + ((divider.get_position()[3]
+                        * (1-color_bar_height)))/2, color_bar_width,
                         divider.get_position()[3]*color_bar_height])
     cbar = fig.colorbar(g, cax=cax)
     cbar.set_label(color_bar_title, fontsize=10)
 
 
-def draw_label(self, labels, x_coords, y_coords, ax=None,nodes=None, draw_arrow=True, label_font_size=11):
+def draw_label(self,
+               labels,
+               x_coords,
+               y_coords,
+               ax=None,
+               nodes=None,
+               draw_arrow=True,
+               label_font_size=11
+):
     """Draws customizable labels on the figure.
     There are two modes of coordinate input: If the 'nodes' argument is not specified, then the label coordinates are processed as absolute coordinates with possible values from 0 to 1. For instance, (0,0) would place the label in the bottom left of the figure, while (1,1) would place the label in the top right of the figure. If the 'nodes' argument IS specified, then the coordinates are processed as coordinates relative to it's associated node. The scale of the coordinates scaling differs between networks. For instance, (50,100) would place the label 50 units to the right, and 100 units above the associated node.
     
@@ -965,83 +860,55 @@ def draw_label(self, labels, x_coords, y_coords, ax=None,nodes=None, draw_arrow=
     if ax is None:
         ax = self.ax
     if nodes is not None:
-
         for label, node, xCoord, yCoord in zip(labels, nodes, x_coords, y_coords):
-
             if draw_arrow:
                 edge_list = []
                 if label == node:
                     pass
                 else:
                     model["G"].add_node(label, pos=(xCoord, yCoord))
-
                     model["pos_dict"][label] = (
                         model["wn"].get_node(node).coordinates[0] + xCoord,
-                        model["wn"].get_node(node).coordinates[1] + yCoord,
-                    )
-
+                        model["wn"].get_node(node).coordinates[1] + yCoord)
                     edge_list.append((node, label))
-
-                    nxp.draw_networkx_edges(
-                        model["G"],
-                        model["pos_dict"],
-                        edgelist=edge_list,
-                        edge_color="g",
-                        width=0.8,
-                        arrows=False,
-                    )
-
+                    nxp.draw_networkx_edges(model["G"], model["pos_dict"],
+                                            edgelist=edge_list, edge_color="g",
+                                            width=0.8, arrows=False)
+                    
                     model["G"].remove_node(label)
                     model["pos_dict"].pop(label, None)
                     edge_list.append((node, label))
             if draw_arrow == True:
                 if xCoord < 0:
-                    ax.text(
-                        model["wn"].get_node(node).coordinates[0] + xCoord,
-                        model["wn"].get_node(node).coordinates[1] + yCoord,
-                        s=label,
-                        bbox=dict(
-                            facecolor="mediumaquamarine", alpha=0.9, edgecolor="black"
-                        ),
-                        horizontalalignment="right",
-                        verticalalignment="center",
-                        fontsize=label_font_size,
-                    )
+                    ax.text(model["wn"].get_node(node).coordinates[0] + xCoord,
+                            model["wn"].get_node(node).coordinates[1] + yCoord,
+                            s=label,
+                            bbox=dict(facecolor="mediumaquamarine", 
+                                      alpha=0.9, edgecolor="black"),
+                            horizontalalignment="right",
+                            verticalalignment="center",
+                            fontsize=label_font_size)
                 if xCoord >= 0:
-                    ax.text(
-                        model["wn"].get_node(node).coordinates[0] + xCoord,
+                    ax.text(model["wn"].get_node(node).coordinates[0] + xCoord,
+                            model["wn"].get_node(node).coordinates[1] + yCoord,
+                            s=label,
+                            bbox=dict(facecolor="mediumaquamarine", 
+                                      alpha=0.9, edgecolor="black"),
+                            horizontalalignment="left",
+                            verticalalignment="center",
+                            fontsize=label_font_size)
+            else:
+                ax.text(model["wn"].get_node(node).coordinates[0] + xCoord,
                         model["wn"].get_node(node).coordinates[1] + yCoord,
                         s=label,
-                        bbox=dict(
-                            facecolor="mediumaquamarine", alpha=0.9, edgecolor="black"
-                        ),
-                        horizontalalignment="left",
-                        verticalalignment="center",
-                        fontsize=label_font_size,
-                    )
-            else:
-                ax.text(
-                    model["wn"].get_node(node).coordinates[0] + xCoord,
-                    model["wn"].get_node(node).coordinates[1] + yCoord,
-                    s=label,
-                    bbox=dict(
-                        facecolor="mediumaquamarine", alpha=0.9, edgecolor="black"
-                    ),
-                    horizontalalignment="center",
-                    verticalalignment="center",
-                    fontsize=label_font_size,
-                )
+                        bbox=dict(facecolor="mediumaquamarine", 
+                                  alpha=0.9, edgecolor="black"),
+                        horizontalalignment="center",
+                        verticalalignment="center", fontsize=label_font_size)
     elif nodes is None:
-
         for label, xCoord, yCoord in zip(labels, x_coords, y_coords):
-
-            ax.text(
-                xCoord,
-                yCoord,
-                s=label,
-                bbox=dict(facecolor="mediumaquamarine",
-                          alpha=0.9, edgecolor="black"),
-                horizontalalignment="center",
-                fontsize=label_font_size,
-                transform=ax.transAxes,
-            )
+            ax.text(xCoord, yCoord, s=label,
+                    bbox=dict(facecolor="mediumaquamarine",
+                              alpha=0.9, edgecolor="black"),
+                    horizontalalignment="center", fontsize=label_font_size,
+                    transform=ax.transAxes)
