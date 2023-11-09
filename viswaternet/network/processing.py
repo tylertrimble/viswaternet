@@ -242,7 +242,7 @@ def get_demand_patterns(self):
     if len(demand_pattern_nodes['None']) == 0:
         patterns.remove("None")
         del demand_pattern_nodes['None']
-
+    patterns = np.array(patterns)
     return demand_pattern_nodes, patterns
 
 

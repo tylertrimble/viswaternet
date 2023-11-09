@@ -444,7 +444,6 @@ def plot_unique_data(
                         draw_base_links=False
                     )
         else:
-            print(draw_base_legend)
             base.draw_legend(ax,
                              intervals=intervals,
                              title=legend_title,
