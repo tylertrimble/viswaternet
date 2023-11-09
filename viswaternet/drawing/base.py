@@ -673,9 +673,9 @@ def draw_legend(
     linewidths: integer
         The width of the line of the legend nodes when plotting element size legend.
     """
-    # If no intervals for data legend are specified, then create empty list
+    # If no intervals for data legend are specified, then create empty array
     if intervals is None:
-        intervals = []
+        intervals = np.empty(0)
     # Get handles, labels
     handles, labels = ax.get_legend_handles_labels()
     
