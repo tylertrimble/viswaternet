@@ -70,7 +70,8 @@ def draw_nodes(
     if isinstance(node_size, int):
         node_size = (np.ones(len(node_list)) * node_size).tolist()
     # Checks if some data values are given
-    if not parameter_results.empty:
+    # if not parameter_results.empty:
+    if len(parameter_results)!=0:
         # If values is less than this value, we treat it as a negative.
         if np.min(parameter_results) < -1e-5:
             # Gets the cmap object from matplotlib
@@ -179,7 +180,8 @@ def draw_links(
     if not widths.any():
         widths = np.ones(len(link_list)) * 1
     # Checks if some data values are given
-    if not parameter_results.empty:
+    # if not parameter_results.empty:
+    if len(parameter_results)!=0:
         if np.min(parameter_results) < -1e-5:
             # Gets the cmap object from matplotlib
             cmap = mpl.colormaps[cmap]
