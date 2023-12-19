@@ -423,7 +423,7 @@ def plot_unique_data(
                                 )
     
     def call_draw_legend(continuous=False,base_links=True,intervals=None):
-        if continuous == True:
+        if continuous == False:
             base.draw_legend(
                         ax,
                         intervals=intervals,
@@ -811,12 +811,13 @@ def plot_unique_data(
                     color_list=color_list,
                     link_style=link_style,
                     link_arrows=link_arrows,
+                    draw_base_legend=draw_base_legend,
                 )
 
                 call_draw_base_elements(links=False)
                 
                 if legend:
-                    call_draw_legend(base_links=False)
+                    call_draw_legend(continuous = False ,base_links=False, intervals = intervals)
                     
             elif parameter_type == "node":
 

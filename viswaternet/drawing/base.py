@@ -708,7 +708,7 @@ def draw_legend(
     handles.extend(extensions)
     
     # If discrete intervals are given
-    if intervals.tolist():
+    if list(intervals):
         # Draws base legend, which includes the legend for reservoirs, tanks,
         # and so on
         if draw_base_legend is True:
