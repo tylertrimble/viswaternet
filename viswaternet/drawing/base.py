@@ -70,7 +70,7 @@ def draw_nodes(
     if isinstance(node_size, int):
         node_size = (np.ones(len(node_list)) * node_size).tolist()
     # Checks if some data values are given
-    if not parameter_results.empty:
+    if parameter_results:
         # If values is less than this value, we treat it as a negative.
         if np.min(parameter_results) < -1e-5:
             # Gets the cmap object from matplotlib
@@ -153,7 +153,7 @@ def draw_links(
     cmap : string
         The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
     widths : integer, array-like
-        Integer representing all link widrths, or array of widths for each link.
+        Integer representing all link widths, or array of widths for each link.
     vmin : integer
         The minimum value of the color bar. 
     vmax : integer
@@ -166,20 +166,20 @@ def draw_links(
     
     #Initalize parameters
     model = self.model
+    if isinstance(link_list, np.ndarray):
+        link_list = link_list.tolist()
     if parameter_results is None:
         parameter_results = []
     if widths is None:
         widths = []
     # Creates default list of link widths
     if isinstance(widths, list) and not widths:
-        widths = (np.ones(len(widths)) * 100).tolist()
+        widths = (np.ones(len(link_list)) * 1).tolist()
     # Creates uniform list of link widths if integer is given
     if isinstance(widths, int):
         widths = (np.ones(len(link_list)) * widths).tolist()
-    if not widths.any():
-        widths = np.ones(len(link_list)) * 1
     # Checks if some data values are given
-    if not parameter_results.empty:
+    if parameter_results:
         if np.min(parameter_results) < -1e-5:
             # Gets the cmap object from matplotlib
             cmap = mpl.colormaps[cmap]
@@ -729,7 +729,7 @@ def draw_legend(
             legend2._legend_box.align = "left"
             plt.setp(legend2.get_title(), color=font_color)
             ax.add_artist(legend2)
-    # If there are no intervals, just darw base legend
+    # If there are no intervals, just draw base legend
     else:
         # Draws base legend, which includes the legend for reservoirs, tanks,
         # and so on
@@ -795,12 +795,13 @@ def draw_legend(
             ax.add_artist(legend3)
 
 
-def draw_color_bar(ax,
-                   g,
-                   cmap,
-                   color_bar_title=None,
-                   color_bar_width=0.03,
-                   color_bar_height=0.8
+def draw_color_bar(
+    ax,
+    g,
+    cmap,
+    color_bar_title=None,
+    color_bar_width=0.03,
+    color_bar_height=0.8
 ):
     """Draws the color bar for all continuous plotting functions.Like draw_legends, under normal use, draw_color_bar is not normally called by the user directly, even with more advanced applications. However, some specialized plots may require draw_color_bar to be called directly.
     
@@ -815,7 +816,6 @@ def draw_color_bar(ax,
     color_bar_title : string
         The title of the color bar.
     """
-    global cbar
     divider = make_axes_locatable(ax)
     fig = plt.gcf()
     cax = fig.add_axes([divider.get_position()[0]+divider.get_position()[2]

@@ -191,8 +191,7 @@ def get_parameter(
                     element_list.remove(element)
             indices = [elements_in_results.index(i) for i in element_list]
             parameter_results = parameter_results.iloc[indices]
-
-    return parameter_results, element_list
+    return parameter_results.values.tolist(), element_list
 
 
 def get_demand_patterns(self):

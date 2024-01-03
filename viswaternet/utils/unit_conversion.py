@@ -90,7 +90,7 @@ def unit_conversion(parameter_results, parameter, new_unit):
         The network data converted into new units
 
     """
-    conversion_factors = {
+    cf = {
         "base_demand": {
             "LPS": 1000,
             "LPM": 60000,
@@ -136,6 +136,8 @@ def unit_conversion(parameter_results, parameter, new_unit):
         "quality": {"min": 1/60, "hr": 1/3600, "day": 1/86400},
         "time": {"s": 1, "min": 1/60, "hr": 1/3600, "day": 1/86400}
     }
-    parameter_results = parameter_results * \
-        conversion_factors[parameter][new_unit]
+    if isinstance(parameter_results, int):
+        parameter_results = parameter_results * cf[parameter][new_unit]
+    else:
+        parameter_results = [i * cf[parameter][new_unit] for i in parameter_results]
     return parameter_results

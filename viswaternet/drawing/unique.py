@@ -471,12 +471,14 @@ def plot_unique_data(
                              )
     
     def call_draw_color_bar():
-        base.draw_color_bar(ax, 
-                            g, 
-                            cmap, 
-                            color_bar_title=color_bar_title,
-                            color_bar_width=color_bar_width,
-                            color_bar_height=color_bar_height)
+        base.draw_color_bar(
+            ax, 
+            g, 
+            cmap, 
+            color_bar_title=color_bar_title,
+            color_bar_width=color_bar_width,
+            color_bar_height=color_bar_height
+        )
         
     if parameter == "demand_patterns":
 
