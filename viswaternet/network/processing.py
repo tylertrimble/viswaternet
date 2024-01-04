@@ -207,13 +207,13 @@ def get_demand_patterns(self):
     """
     model = self.model
     demand_patterns = []
-    
+
     # Get list of patterns
     patterns = model["wn"].pattern_name_list
     patterns.append("None")
     patterns = sorted(patterns)
-    
-    #Loop through junctions only (no reservoirs, tanks)
+
+    # Loop through junctions only (no reservoirs, tanks)
     for junction in model["junc_names"]:
         # Attempt to extract pattern name for each junction. If an attribute
         # error occurs, then the junction has no demand pattern associated with
@@ -225,7 +225,7 @@ def get_demand_patterns(self):
             demand_patterns = np.append(demand_patterns, demand_pattern)
         except AttributeError:
             demand_patterns = np.append(demand_patterns, "None")
-    
+
     # Initialize pattern dictionary
     demand_pattern_nodes = {}
     for pattern in patterns:
@@ -236,7 +236,7 @@ def get_demand_patterns(self):
             if demand_patterns[i] == pattern:
                 demand_pattern_nodes[pattern][junc_name] = model["junc_names"].index(
                     junc_name)
-    
+
     # Remove None key if no junctions are in it
     if len(demand_pattern_nodes['None']) == 0:
         patterns.remove("None")
@@ -300,10 +300,16 @@ def bin_parameter(
     [<dict>,['0.000-5.000','5.000-10.000','10.000-15.000','>15.000']]
     """
     model = self.model
+    # Code that generates bins automatically based on number of intervals
+    # specified. The code does this by creating num_intervals + 1 linearlly
+    # spaced bins. There are currently no options to automatically create
+    # bins other than linearlly spaced ones, use custom bin intervals to do
+    # this
     if intervals == "automatic":
         bins = num_intervals + 1
         intervals = np.linspace(
             np.min(parameter_results), np.max(parameter_results), bins)
+        intervals = intervals.tolist()
     interval_results = {}
     interval_names = []
 
@@ -321,23 +327,21 @@ def bin_parameter(
     for i in range(len(intervals)):
         if i == 0:
             if np.min(parameter_results) < intervals[i]:
-                interval_names = np.append(
-                    interval_names, "< {0:1.{j}f}".format(intervals[i], 
-                                                          j=legend_sig_figs))
-            interval_names = np.append(
-                interval_names, "{0:1.{j}f} - {1:1.{j}f}".format(
-                    intervals[i], intervals[i + 1], j=legend_sig_figs)
-            )
+                interval_names.append("< {0:1.{j}f}".format(
+                    intervals[i],
+                    j=legend_sig_figs))
+            interval_names.append("{0:1.{j}f} - {1:1.{j}f}".format(
+                intervals[i], intervals[i + 1],
+                j=legend_sig_figs))
         elif i < len(intervals) - 1:
-            interval_names = np.append(
-                interval_names, "{0:1.{j}f} - {1:1.{j}f}".format(
-                    intervals[i], intervals[i + 1], j=legend_sig_figs)
-            )
+            interval_names.append("{0:1.{j}f} - {1:1.{j}f}".format(
+                intervals[i], intervals[i + 1],
+                j=legend_sig_figs))
         elif i == len(intervals) - 1:
             if np.max(parameter_results) > intervals[i]:
-                interval_names = np.append(
-                    interval_names, "> {0:1.{j}f}".format(intervals[i], 
-                                                          j=legend_sig_figs))
+                interval_names.append("> {0:1.{j}f}".format(
+                    intervals[i],
+                    j=legend_sig_figs))
     for bin_name in interval_names:
         interval_results[bin_name] = {}
     for i in range(len(intervals)):
@@ -348,10 +352,9 @@ def bin_parameter(
 
                     interval_results[
                         "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_sig_figs)
-                    ][elements_with_parameter[counter]] = element_list.index(
-                        elements_with_parameter[counter]
-                    )
+                            intervals[i], intervals[i + 1], j=legend_sig_figs)]
+                    [elements_with_parameter[counter]] = element_list.index(
+                        elements_with_parameter[counter])
                 if parameter < intervals[i]:
 
                     interval_results["< {0:1.{j}f}".format(intervals[i], j=legend_sig_figs)][
@@ -366,8 +369,7 @@ def bin_parameter(
                         "{0:1.{j}f} - {1:1.{j}f}".format(
                             intervals[i], intervals[i + 1], j=legend_sig_figs)
                     ][elements_with_parameter[counter]] = element_list.index(
-                        elements_with_parameter[counter]
-                    )
+                        elements_with_parameter[counter])
                 counter += 1
         elif i < len(intervals) - 2:
             counter = 0
@@ -377,8 +379,7 @@ def bin_parameter(
                         "{0:1.{j}f} - {1:1.{j}f}".format(
                             intervals[i], intervals[i + 1], j=legend_sig_figs)
                     ][elements_with_parameter[counter]] = element_list.index(
-                        elements_with_parameter[counter]
-                    )
+                        elements_with_parameter[counter])
                 counter += 1
         elif i == len(intervals) - 1:
             counter = 0

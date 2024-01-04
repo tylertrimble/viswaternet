@@ -107,7 +107,7 @@ def draw_discrete_nodes(
             node_list = [model["node_names"][i]
                          for i in nodes.get(interval_name).values()]
 
-            if len(node_list) == 0:
+            if node_list:
                 nxp.draw_networkx_nodes(
                     model["G"],
                     model["pos_dict"],
