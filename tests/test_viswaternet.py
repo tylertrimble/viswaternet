@@ -55,11 +55,11 @@ class TestParameterBinning(unittest.TestCase):
         dummy_data=[1,2,3,5,6,7]
         
         interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],3)
-        self.assertListEqual(interval_names.tolist(),['1.000 - 3.000', '3.000 - 5.000', '5.000 - 7.000'],"Intervals are not being named properly.")
+        self.assertListEqual(interval_names,['1.000 - 3.000', '3.000 - 5.000', '5.000 - 7.000'],"Intervals are not being named properly.")
         
         dummy_data=[1,2,3,5,6,10]
         interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],2,legend_sig_figs=0)
-        self.assertListEqual(interval_names.tolist(),['1 - 6','6 - 10'],"Interval names are not following sig-fig adjustments correctly.")
+        self.assertListEqual(interval_names,['1 - 6','6 - 10'],"Interval names are not following sig-fig adjustments correctly.")
         
     def test_interval_dict_structure(self):
         """Tests that the dictionary produced by bin_parameter() is correct using trival case."""
@@ -153,7 +153,7 @@ class TestNormalizeParameter(unittest.TestCase):
         dummy_data=[0.0,50.0,100.0]
         test_normalized=[0,0.5,1]
         normalized_parameter = viswaternet.utils.normalize_parameter(dummy_data,0,1)
-        self.assertListEqual(test_normalized,normalized_parameter.tolist(),"Data is not being normalized correctly.")
+        self.assertListEqual(test_normalized,normalized_parameter,"Data is not being normalized correctly.")
 
 class TestUnitConversion(unittest.TestCase):
     """Tests unit conversion function"""
@@ -163,15 +163,15 @@ class TestUnitConversion(unittest.TestCase):
         correct_output=dummy_data*3.28084
 
         output = viswaternet.utils.unit_conversion(dummy_data,'length','ft')   
-        self.assertListEqual(correct_output.tolist(),output.tolist(),"Data is not being converted to another unit correctly.")
+        self.assertListEqual(correct_output,output,"Data is not being converted to another unit correctly.")
         
 class TestGetParameter(unittest.TestCase):
     
     def test_reservoir_tank_fetching(self):
         results, elements = model.get_parameter('node','pressure',5,tanks=True,reservoirs=True)
-        self.assertAlmostEqual(results.iloc[0],91.91539,places=6,msg="Parameters are not in the correct order.")
-        self.assertAlmostEqual(results.iloc[9],0,msg="Parameters are not in the correct order when reservoir data is collected.")
-        self.assertAlmostEqual(results.iloc[10],40.014896,places=6,msg="Parameters are not in the correct order when tank data is collected.")
+        self.assertAlmostEqual(results[0],91.91539,places=6,msg="Parameters are not in the correct order.")
+        self.assertAlmostEqual(results[9],0,msg="Parameters are not in the correct order when reservoir data is collected.")
+        self.assertAlmostEqual(results[10],40.014896,places=6,msg="Parameters are not in the correct order when tank data is collected.")
         
 class TestInitalizeFunction(unittest.TestCase):
     
