@@ -582,16 +582,17 @@ def plot_basic_elements(
         base_link_arrows=base_link_arrows)
     # Draw legend if legend is True. Only draws base elements legend
     if legend:
-        draw_legend(ax,
-                    pumps=pumps, loc=legend_loc, font_size=font_size,
-                    font_color=font_color,
-                    legend_title_font_size=legend_title_font_size,
-                    draw_frame=draw_frame, pump_color=pump_color,
-                    base_link_color=base_link_color,
-                    pump_line_style=pump_line_style,
-                    base_link_line_style=base_link_line_style,
-                    base_link_arrows=base_link_arrows, pump_arrows=pump_arrows,
-                    draw_base_links=True)
+        draw_legend(
+            ax,
+            pumps=pumps, loc=legend_loc, font_size=font_size,
+            font_color=font_color,
+            legend_title_font_size=legend_title_font_size,
+            draw_frame=draw_frame, pump_color=pump_color,
+            base_link_color=base_link_color,
+            pump_line_style=pump_line_style,
+            base_link_line_style=base_link_line_style,
+            base_link_arrows=base_link_arrows, pump_arrows=pump_arrows,
+            draw_base_links=True)
     # Save figure if savefig is set to True
     if savefig:
         save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
@@ -712,19 +713,18 @@ def draw_legend(
         # Draws base legend, which includes the legend for reservoirs, tanks,
         # and so on
         if draw_base_legend is True:
-            legend = ax.legend(handles=handles[len(intervals):], loc=loc, 
-                               fontsize=font_size, labelcolor=font_color, 
-                               frameon=draw_frame)
+            legend = ax.legend(
+                handles=handles[len(intervals):], loc=loc, fontsize=font_size,
+                labelcolor=font_color, frameon=draw_frame)
             # Align legend text to the left, add legend to ax
             legend._legend_box.align = "left"
             ax.add_artist(legend)
         # Draws intervals, or data, legend to the ax
         if draw_intervals_legend is True:
-            legend2 = ax.legend(title=title, handles=handles[: len(intervals)],
-                                loc=loc2, fontsize=font_size, 
-                                labelcolor=font_color,
-                                title_fontsize=legend_title_font_size, 
-                                frameon=draw_frame)
+            legend2 = ax.legend(
+                title=title, handles=handles[: len(intervals)], loc=loc2, 
+                fontsize=font_size, labelcolor=font_color,
+                title_fontsize=legend_title_font_size, frameon=draw_frame)
             # Align legend text to the left, adds title, and adds to ax
             legend2._legend_box.align = "left"
             plt.setp(legend2.get_title(), color=font_color)
@@ -734,8 +734,9 @@ def draw_legend(
         # Draws base legend, which includes the legend for reservoirs, tanks,
         # and so on
         if draw_base_legend is True:
-            legend = ax.legend(handles=handles, loc=loc, fontsize=font_size,
-                               labelcolor=font_color, frameon=False)
+            legend = ax.legend(
+                handles=handles, loc=loc, fontsize=font_size,
+                labelcolor=font_color, frameon=False)
             # Align legend text to the left, add legend to ax
             legend._legend_box.align = "left"
             ax.add_artist(legend)
@@ -755,17 +756,16 @@ def draw_legend(
             marker_sizes = np.linspace(
                 min_size, max_size, element_size_intervals)
             for size, label in zip(marker_sizes, element_size_legend_labels):
-                handles_2.append(Line2D([], [], marker='.', color='w',
-                                        markeredgecolor=edge_colors,
-                                        markeredgewidth=linewidths,
-                                        label=label, markerfacecolor='k',
-                                        markersize=np.sqrt(size)))
+                handles_2.append(
+                    Line2D([], [], marker='.', color='w',
+                    markeredgecolor=edge_colors, markeredgewidth=linewidths,
+                    label=label, markerfacecolor='k',
+                    markersize=np.sqrt(size)))
             legend3 = ax.legend(
                 handles=handles_2, title=element_size_legend_title,
                 loc=element_size_legend_loc, fontsize=font_size,
                 title_fontsize=legend_title_font_size, labelcolor=font_color,
-                frameon=False,
-            )
+                frameon=False)
             legend3._legend_box.align = "left"
             ax.add_artist(legend3)
     if link_sizes is not None:
@@ -776,22 +776,13 @@ def draw_legend(
             marker_sizes = np.linspace(
                 min_size, max_size, element_size_intervals)
             for size, label in zip(marker_sizes, element_size_legend_labels):
-                handles_2.append(Line2D([],
-                                        [],
-                                        marker=None,
-                                        color='k',
-                                        linewidth=size,
-                                        label=label)
-            )
+                handles_2.append(Line2D([], [], marker=None, color='k',
+                                 linewidth=size, label=label))
             legend3 = ax.legend(
-                handles=handles_2,
-                title=element_size_legend_title,
-                loc=element_size_legend_loc,
-                fontsize=font_size,
-                title_fontsize=legend_title_font_size,
-                labelcolor=font_color,
-                frameon=False,
-            )
+                handles=handles_2, title=element_size_legend_title,
+                loc=element_size_legend_loc, fontsize=font_size,
+                title_fontsize=legend_title_font_size, labelcolor=font_color,
+                frameon=False)
             legend3._legend_box.align = "left"
             ax.add_artist(legend3)
 
@@ -872,50 +863,50 @@ def draw_label(self,
                     model["G"].add_node(label, pos=(xCoord, yCoord))
                     model["pos_dict"][label] = (
                         model["wn"].get_node(node).coordinates[0] + xCoord,
-                        model["wn"].get_node(node).coordinates[1] + yCoord
-                    )
+                        model["wn"].get_node(node).coordinates[1] + yCoord)
                     edge_list.append((node, label))
                     nxp.draw_networkx_edges(
-                        model["G"],
-                        model["pos_dict"],
-                        edgelist=edge_list, edge_color="g",
-                        width=0.8, arrows=False
-                    )
+                        model["G"], model["pos_dict"], edgelist=edge_list,
+                        edge_color="g", width=0.8, arrows=False)
                     
                     model["G"].remove_node(label)
                     model["pos_dict"].pop(label, None)
                     edge_list.append((node, label))
             if draw_arrow == True:
                 if xCoord < 0:
-                    ax.text(model["wn"].get_node(node).coordinates[0] + xCoord,
-                            model["wn"].get_node(node).coordinates[1] + yCoord,
-                            s=label,
-                            bbox=dict(facecolor="mediumaquamarine", 
-                                      alpha=0.9, edgecolor="black"),
-                            horizontalalignment="right",
-                            verticalalignment="center",
-                            fontsize=label_font_size)
-                if xCoord >= 0:
-                    ax.text(model["wn"].get_node(node).coordinates[0] + xCoord,
-                            model["wn"].get_node(node).coordinates[1] + yCoord,
-                            s=label,
-                            bbox=dict(facecolor="mediumaquamarine", 
-                                      alpha=0.9, edgecolor="black"),
-                            horizontalalignment="left",
-                            verticalalignment="center",
-                            fontsize=label_font_size)
-            else:
-                ax.text(model["wn"].get_node(node).coordinates[0] + xCoord,
+                    ax.text(
+                        model["wn"].get_node(node).coordinates[0] + xCoord,
                         model["wn"].get_node(node).coordinates[1] + yCoord,
                         s=label,
                         bbox=dict(facecolor="mediumaquamarine", 
                                   alpha=0.9, edgecolor="black"),
-                        horizontalalignment="center",
-                        verticalalignment="center", fontsize=label_font_size)
+                        horizontalalignment="right",
+                        verticalalignment="center",
+                        fontsize=label_font_size)
+                if xCoord >= 0:
+                    ax.text(
+                        model["wn"].get_node(node).coordinates[0] + xCoord,
+                        model["wn"].get_node(node).coordinates[1] + yCoord,
+                        s=label,
+                        bbox=dict(facecolor="mediumaquamarine", 
+                                  alpha=0.9, edgecolor="black"),
+                        horizontalalignment="left",
+                        verticalalignment="center",
+                        fontsize=label_font_size)
+            else:
+                ax.text(
+                    model["wn"].get_node(node).coordinates[0] + xCoord,
+                    model["wn"].get_node(node).coordinates[1] + yCoord,
+                    s=label,
+                    bbox=dict(facecolor="mediumaquamarine", 
+                              alpha=0.9, edgecolor="black"),
+                    horizontalalignment="center",
+                    verticalalignment="center", fontsize=label_font_size)
     elif nodes is None:
         for label, xCoord, yCoord in zip(labels, x_coords, y_coords):
-            ax.text(xCoord, yCoord, s=label,
-                    bbox=dict(facecolor="mediumaquamarine",
-                              alpha=0.9, edgecolor="black"),
-                    horizontalalignment="center", fontsize=label_font_size,
-                    transform=ax.transAxes)
+            ax.text(
+                xCoord, yCoord, s=label,
+                bbox=dict(facecolor="mediumaquamarine",
+                          alpha=0.9, edgecolor="black"),
+                horizontalalignment="center", fontsize=label_font_size,
+                transform=ax.transAxes)
