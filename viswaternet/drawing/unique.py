@@ -441,6 +441,7 @@ def plot_unique_data(
                         base_link_line_style=base_link_line_style,
                         base_link_arrows=base_link_arrows,
                         pump_arrows=pump_arrows,
+                        draw_base_legend=draw_base_legend,
                         draw_base_links=False
                     )
         else:
