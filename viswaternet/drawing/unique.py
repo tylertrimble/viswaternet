@@ -416,17 +416,23 @@ def plot_unique_data(
     def call_draw_legend(continuous=False,base_links=True,intervals=None):
         if continuous == True:
             base.draw_legend(ax, intervals=intervals, title=legend_title,
-                             pumps=pumps, loc=legend_loc_1,
-                             loc2=legend_loc_2, font_size=font_size,
-                             font_color=font_color,
+                             pumps=pumps, loc=legend_loc_1, loc2=legend_loc_2,
+                             font_size=font_size, font_color=font_color,
                              legend_title_font_size=legend_title_font_size,
                              draw_frame=draw_frame, pump_color=pump_color,
                              base_link_color=base_link_color,
+                             node_sizes=node_size, link_sizes=widths,
+                             element_size_intervals=element_size_intervals,
+                             element_size_legend_title=element_size_legend_title,
+                             element_size_legend_loc=element_size_legend_loc,
+                             element_size_legend_labels=element_size_legend_labels,
+                             edge_colors=edge_colors, linewidths=line_widths,
+                             draw_base_legend=draw_base_legend,
+                             draw_intervals_legend=draw_intervals_legend,
                              pump_line_style=pump_line_style,
                              base_link_line_style=base_link_line_style,
                              base_link_arrows=base_link_arrows,
                              pump_arrows=pump_arrows,
-                             draw_base_legend=draw_base_legend,
                              draw_base_links=False)
         else:
             base.draw_legend(ax, intervals=intervals, title=legend_title,
