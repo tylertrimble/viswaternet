@@ -396,4 +396,4 @@ def bin_parameter(
                 interval_names = np.delete(
                     interval_names, np.where(interval_names == binName))
                 del interval_results[binName]
-    return interval_results, interval_names
+    return interval_results, interval_names.tolist()

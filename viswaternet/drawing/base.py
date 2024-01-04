@@ -675,7 +675,7 @@ def draw_legend(
     """
     # If no intervals for data legend are specified, then create empty array
     if intervals is None:
-        intervals = np.empty(0)
+        intervals = []
     # Get handles, labels
     handles, labels = ax.get_legend_handles_labels()
     
@@ -708,7 +708,7 @@ def draw_legend(
     handles.extend(extensions)
     
     # If discrete intervals are given
-    if intervals.tolist():
+    if intervals:
         # Draws base legend, which includes the legend for reservoirs, tanks,
         # and so on
         if draw_base_legend is True:
