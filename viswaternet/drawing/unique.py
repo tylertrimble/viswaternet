@@ -499,21 +499,17 @@ def plot_unique_data(
                 parameter_results, parameter, unit)
         uniques = sorted(list(set(parameter_results)))
 
-        interval_names = []
+        interval_names = [("{:.{j}f}".format(i, j=legend_sig_figs)) for i in uniques]
 
-        for interval_name in uniques:
-
-            interval_names = np.append(
-                interval_names, ("{:.{j}f}".format(interval_name, j=legend_sig_figs)))
         interval_results = {}
 
         for interval_name in interval_names:
 
             interval_results[interval_name] = {}
 
-        for link in link_list:
+        for i, link in enumerate(link_list):
 
-            interval_results["{:.{j}f}".format(parameter_results[link], j=legend_sig_figs)][link] = model[
+            interval_results["{:.{j}f}".format(parameter_results[i], j=legend_sig_figs)][link] = model[
                 "G_pipe_name_list"
             ].index(link)
 
@@ -552,13 +548,9 @@ def plot_unique_data(
 
         if any(i is not None for i in (parameter_results)):
             uniques = list(set(parameter_results))
-        interval_names = []
+        interval_names = uniques
         if not uniques:
             pass
-        else:
-            for interval_name in uniques:
-
-                interval_names.append(interval_name)
 
         if None in interval_names:
             interval_names.remove(None)
@@ -569,7 +561,7 @@ def plot_unique_data(
         for interval_name in interval_names:
 
             interval_results[interval_name] = {}
-        for node in node_list:
+        for i, node in enumerate(node_list):
 
             if parameter_results[node] is None:
 
@@ -577,7 +569,7 @@ def plot_unique_data(
                     node)
 
                 continue
-            interval_results[parameter_results[node]][node] = model[
+            interval_results[parameter_results[i]][node] = model[
                 "node_names"
             ].index(node)
         discrete.draw_discrete_nodes(
