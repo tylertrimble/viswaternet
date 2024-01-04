@@ -554,7 +554,7 @@ def plot_basic_elements(
         Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
     """
     # Checks if there is no pumps
-    if self.model['G_list_pumps_only']:
+    if not self.model['G_list_pumps_only']:
         pumps = False
     # Checks if an axis as been specified
     if ax is None:
@@ -781,7 +781,8 @@ def draw_legend(
                                         marker=None,
                                         color='k',
                                         linewidth=size,
-                                        label=label))
+                                        label=label)
+            )
             legend3 = ax.legend(
                 handles=handles_2,
                 title=element_size_legend_title,
@@ -816,6 +817,8 @@ def draw_color_bar(
     color_bar_title : string
         The title of the color bar.
     """
+    # Unruly code to make colorbar location nice and symmetrical when dealing
+    # with subplots especially.
     divider = make_axes_locatable(ax)
     fig = plt.gcf()
     cax = fig.add_axes([divider.get_position()[0]+divider.get_position()[2]
@@ -869,11 +872,15 @@ def draw_label(self,
                     model["G"].add_node(label, pos=(xCoord, yCoord))
                     model["pos_dict"][label] = (
                         model["wn"].get_node(node).coordinates[0] + xCoord,
-                        model["wn"].get_node(node).coordinates[1] + yCoord)
+                        model["wn"].get_node(node).coordinates[1] + yCoord
+                    )
                     edge_list.append((node, label))
-                    nxp.draw_networkx_edges(model["G"], model["pos_dict"],
-                                            edgelist=edge_list, edge_color="g",
-                                            width=0.8, arrows=False)
+                    nxp.draw_networkx_edges(
+                        model["G"],
+                        model["pos_dict"],
+                        edgelist=edge_list, edge_color="g",
+                        width=0.8, arrows=False
+                    )
                     
                     model["G"].remove_node(label)
                     model["pos_dict"].pop(label, None)
