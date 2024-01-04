@@ -307,16 +307,16 @@ def bin_parameter(
     interval_results = {}
     interval_names = []
 
-    elementsWithParameter = element_list
-    elementType = None
-    for elementWithParameter in elementsWithParameter:
-        if (elementWithParameter in model["node_names"]) is True:
+    elements_with_parameter = element_list
+    element_type = None
+    for element_with_parameter in elements_with_parameter:
+        if (element_with_parameter in model["node_names"]) is True:
             continue
         else:
             element_list = model["G_pipe_name_list"]
-            elementType = "link"
+            element_type = "link"
             break
-    if elementType != "link":
+    if element_type != "link":
         element_list = model["node_names"]
     for i in range(len(intervals)):
         if i == 0:
@@ -338,8 +338,8 @@ def bin_parameter(
                 interval_names = np.append(
                     interval_names, "> {0:1.{j}f}".format(intervals[i], 
                                                           j=legend_sig_figs))
-    for binName in interval_names:
-        interval_results[binName] = {}
+    for bin_name in interval_names:
+        interval_results[bin_name] = {}
     for i in range(len(intervals)):
         if i == 0:
             counter = 0
@@ -349,14 +349,14 @@ def bin_parameter(
                     interval_results[
                         "{0:1.{j}f} - {1:1.{j}f}".format(
                             intervals[i], intervals[i + 1], j=legend_sig_figs)
-                    ][elementsWithParameter[counter]] = element_list.index(
-                        elementsWithParameter[counter]
+                    ][elements_with_parameter[counter]] = element_list.index(
+                        elements_with_parameter[counter]
                     )
                 if parameter < intervals[i]:
 
                     interval_results["< {0:1.{j}f}".format(intervals[i], j=legend_sig_figs)][
-                        elementsWithParameter[counter]
-                    ] = element_list.index(elementsWithParameter[counter],)
+                        elements_with_parameter[counter]
+                    ] = element_list.index(elements_with_parameter[counter],)
                 counter += 1
         elif i == len(intervals) - 2:
             counter = 0
@@ -365,8 +365,8 @@ def bin_parameter(
                     interval_results[
                         "{0:1.{j}f} - {1:1.{j}f}".format(
                             intervals[i], intervals[i + 1], j=legend_sig_figs)
-                    ][elementsWithParameter[counter]] = element_list.index(
-                        elementsWithParameter[counter]
+                    ][elements_with_parameter[counter]] = element_list.index(
+                        elements_with_parameter[counter]
                     )
                 counter += 1
         elif i < len(intervals) - 2:
@@ -376,8 +376,8 @@ def bin_parameter(
                     interval_results[
                         "{0:1.{j}f} - {1:1.{j}f}".format(
                             intervals[i], intervals[i + 1], j=legend_sig_figs)
-                    ][elementsWithParameter[counter]] = element_list.index(
-                        elementsWithParameter[counter]
+                    ][elements_with_parameter[counter]] = element_list.index(
+                        elements_with_parameter[counter]
                     )
                 counter += 1
         elif i == len(intervals) - 1:
@@ -385,15 +385,15 @@ def bin_parameter(
             for parameter in parameter_results:
                 if parameter > intervals[i]:
                     interval_results["> {0:1.{j}f}".format(intervals[i], j=legend_sig_figs)][
-                        elementsWithParameter[counter]
-                    ] = element_list.index(elementsWithParameter[counter])
+                        elements_with_parameter[counter]
+                    ] = element_list.index(elements_with_parameter[counter])
                 counter += 1
     if disable_interval_deleting:
         pass
     else:
-        for binName in interval_names:
-            if len(interval_results[binName]) == 0:
+        for bin_name in interval_names:
+            if len(interval_results[bin_name]) == 0:
                 interval_names = np.delete(
-                    interval_names, np.where(interval_names == binName))
-                del interval_results[binName]
+                    interval_names, np.where(interval_names == bin_name))
+                del interval_results[bin_name]
     return interval_results, interval_names.tolist()
