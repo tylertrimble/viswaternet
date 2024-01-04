@@ -497,7 +497,7 @@ def plot_unique_data(
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
-        uniques = sorted(pd.unique(parameter_results))
+        uniques = sorted(list(set(parameter_results)))
 
         interval_names = []
 
@@ -513,7 +513,7 @@ def plot_unique_data(
 
         for link in link_list:
 
-            interval_results["{:.{j}f}".format(parameter_results.loc[link], j=legend_sig_figs)][link] = model[
+            interval_results["{:.{j}f}".format(parameter_results[link], j=legend_sig_figs)][link] = model[
                 "G_pipe_name_list"
             ].index(link)
 
@@ -550,8 +550,8 @@ def plot_unique_data(
 
         uniques = []
 
-        if any(i is not None for i in (parameter_results.values.tolist())):
-            uniques = pd.unique(parameter_results).tolist()
+        if any(i is not None for i in (parameter_results)):
+            uniques = list(set(parameter_results))
         interval_names = []
         if not uniques:
             pass
@@ -571,13 +571,13 @@ def plot_unique_data(
             interval_results[interval_name] = {}
         for node in node_list:
 
-            if parameter_results.loc[node] is None:
+            if parameter_results[node] is None:
 
                 interval_results["No Tag"][node] = model["node_names"].index(
                     node)
 
                 continue
-            interval_results[parameter_results.loc[node]][node] = model[
+            interval_results[parameter_results[node]][node] = model[
                 "node_names"
             ].index(node)
         discrete.draw_discrete_nodes(

@@ -32,4 +32,4 @@ def normalize_parameter(parameter_results, min_value, max_value):
                 (max_value - min_value)
                 * ((parameter - minParameter) / (maxParameter - minParameter))
             ) + min_value
-    return normalized_parameter
+    return normalized_parameter.tolist()
