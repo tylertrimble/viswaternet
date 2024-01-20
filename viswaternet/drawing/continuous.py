@@ -12,6 +12,7 @@ from viswaternet.drawing import base
 
 default_cmap = 'autumn_r'
 
+
 def plot_continuous_nodes(
     self,
     ax=None,
@@ -46,6 +47,8 @@ def plot_continuous_nodes(
     legend_title_font_size=17,
     draw_frame=False,
     legend_sig_figs=3,
+    node_sizes=None,
+    link_sizes=None,
     element_size_intervals=None,
     element_size_legend_title=None,
     element_size_legend_loc=None,
@@ -81,7 +84,7 @@ def plot_continuous_nodes(
     color_bar_height=0.8
 ):
     """User-level function that draws continuous nodal data, base elements, legends, and saves the figure.
-    
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
@@ -101,13 +104,13 @@ def plot_continuous_nodes(
         - leak_area
         - leak_discharg_coeff
         - quality
-        
+
     value : integer, string
         For time-varying parameters only. Specifies which timestep or data
         summary will be plotted.
-        
+
         .. rubric:: Possible Inputs
-        
+
         ======================= =========================================
             int                 Plots element data for specified timestep
             'min'               Plots minimum data point for each element
@@ -116,7 +119,7 @@ def plot_continuous_nodes(
             'stddev'            Plots standard deviation for each element
             'range'             Plots range for each element
         ======================= =========================================
-        
+
     unit : string
         The unit that the network data is to be converted to.
     vmin : integer
@@ -243,11 +246,11 @@ def plot_continuous_nodes(
     draw_color_bar : boolean
         Determines if color bar is drawn.
     """
-    
-    if len(self.model['G_list_pumps_only'])==0:
+
+    if len(self.model['G_list_pumps_only']) == 0:
         pumps = False
     if ax is None:
-        fig, ax = plt.subplots(figsize=self.figsize)  
+        fig, ax = plt.subplots(figsize=self.figsize)
         self.fig = fig
         self.ax = ax
         ax.set_frame_on(self.axis_frame)
@@ -322,16 +325,16 @@ def plot_continuous_nodes(
         )
         if draw_color_bar == True:
             if color_bar_title is None:
-                color_bar_title = label_generator(parameter,value,unit)
-                
-            base.draw_color_bar(ax, 
-                                g, 
-                                cmap, 
+                color_bar_title = label_generator(parameter, value, unit)
+
+            base.draw_color_bar(ax,
+                                g,
+                                cmap,
                                 color_bar_title=color_bar_title,
                                 color_bar_width=color_bar_width,
                                 color_bar_height=color_bar_height)
     if legend:
-        
+
         base.draw_legend(ax,
                          pumps=pumps,
                          loc=legend_loc,
@@ -341,7 +344,8 @@ def plot_continuous_nodes(
                          draw_frame=draw_frame,
                          pump_color=pump_color,
                          base_link_color=base_link_color,
-                         node_sizes=node_size,
+                         node_sizes=node_sizes,
+                         link_sizes=link_sizes,
                          element_size_intervals=element_size_intervals,
                          element_size_legend_title=element_size_legend_title,
                          element_size_legend_loc=element_size_legend_loc,
@@ -391,6 +395,8 @@ def plot_continuous_links(
     legend_title_font_size=17,
     draw_frame=False,
     legend_sig_figs=3,
+    node_sizes=None,
+    link_sizes=None,
     element_size_intervals=None,
     element_size_legend_title=None,
     element_size_legend_loc=None,
@@ -426,7 +432,7 @@ def plot_continuous_links(
     color_bar_height=0.8
 ):
     """User-level function that draws continuous link data, base elements, legends, and saves the figure.
-    
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
@@ -446,13 +452,13 @@ def plot_continuous_links(
         - friction_factor
         - reaction_rate
         - quality
-        
+
     value : integer, string
         For time-varying parameters only. Specifies which timestep or data
         summary will be plotted.
-        
+
         .. rubric:: Possible Inputs
-        
+
         ======================= =========================================
             int                 Plots element data for specified timestep
             'min'               Plots minimum data point for each element
@@ -461,7 +467,7 @@ def plot_continuous_links(
             'stddev'            Plots standard deviation for each element
             'range'             Plots range for each element
         ======================= =========================================
-        
+
     unit : string
         The unit that the network data is to be converted to.
     widths : integer, array-like
@@ -592,12 +598,12 @@ def plot_continuous_links(
     draw_color_bar : boolean
         Determines if color bar is drawn.
     """
-    
-    if len(self.model['G_list_pumps_only'])==0:
+
+    if len(self.model['G_list_pumps_only']) == 0:
         pumps = False
     if ax is None:
         if ax is None:
-            fig, ax = plt.subplots(figsize=self.figsize)  
+            fig, ax = plt.subplots(figsize=self.figsize)
             ax.set_frame_on(self.axis_frame)
     if parameter is not None:
 
@@ -668,11 +674,11 @@ def plot_continuous_links(
 
         if draw_color_bar == True:
             if color_bar_title is None:
-                color_bar_title = label_generator(parameter,value,unit)
-                
-            base.draw_color_bar(ax, 
-                                g, 
-                                cmap, 
+                color_bar_title = label_generator(parameter, value, unit)
+
+            base.draw_color_bar(ax,
+                                g,
+                                cmap,
                                 color_bar_title=color_bar_title,
                                 color_bar_width=color_bar_width,
                                 color_bar_height=color_bar_height)
@@ -688,7 +694,8 @@ def plot_continuous_links(
                          draw_frame=draw_frame,
                          pump_color=pump_color,
                          base_link_color=base_link_color,
-                         link_sizes=widths,
+                         node_sizes=node_sizes,
+                         link_sizes=link_sizes,
                          element_size_intervals=element_size_intervals,
                          element_size_legend_title=element_size_legend_title,
                          element_size_legend_loc=element_size_legend_loc,

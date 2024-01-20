@@ -65,6 +65,8 @@ def plot_unique_data(
     legend_title_font_size=17,
     draw_frame=False,
     legend_sig_figs=3,
+    node_sizes=None,
+    link_sizes=None,
     element_size_intervals=None,
     element_size_legend_title=None,
     element_size_legend_loc=None,
@@ -366,7 +368,7 @@ def plot_unique_data(
 
     base_link_line_style : string
         The style (solid, dashed, dotted, etc) of the links with no data associated with them.
-        
+
     base_link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the links
         with no data associated with them.
@@ -377,15 +379,15 @@ def plot_unique_data(
     draw_color_bar : boolean
         Determines if color bar is drawn.
     """
-    
+
     model = self.model
-    
-    if len(self.model['G_list_pumps_only'])==0:
+
+    if len(self.model['G_list_pumps_only']) == 0:
         pumps = False
     if ax is None:
-        fig, ax = plt.subplots(figsize=self.figsize)  
+        fig, ax = plt.subplots(figsize=self.figsize)
         ax.set_frame_on(self.axis_frame)
-    
+
     def call_draw_base_elements(links=True):
         base.draw_base_elements(self, ax, nodes=False, links=links,
                                 reservoirs=reservoirs, tanks=tanks,
@@ -412,8 +414,8 @@ def plot_unique_data(
                                 base_link_width=base_link_width,
                                 base_link_line_style=base_link_line_style,
                                 base_link_arrows=base_link_arrows)
-    
-    def call_draw_legend(continuous=False,base_links=True,intervals=None):
+
+    def call_draw_legend(continuous=False, base_links=True, intervals=None):
         if continuous == True:
             base.draw_legend(ax, intervals=intervals, title=legend_title,
                              pumps=pumps, loc=legend_loc_1, loc2=legend_loc_2,
@@ -421,7 +423,7 @@ def plot_unique_data(
                              legend_title_font_size=legend_title_font_size,
                              draw_frame=draw_frame, pump_color=pump_color,
                              base_link_color=base_link_color,
-                             node_sizes=node_size, link_sizes=widths,
+                             node_sizes=node_sizes, link_sizes=link_sizes,
                              element_size_intervals=element_size_intervals,
                              element_size_legend_title=element_size_legend_title,
                              element_size_legend_loc=element_size_legend_loc,
@@ -441,7 +443,7 @@ def plot_unique_data(
                              legend_title_font_size=legend_title_font_size,
                              draw_frame=draw_frame, pump_color=pump_color,
                              base_link_color=base_link_color,
-                             node_sizes=node_size, link_sizes=widths,
+                             node_sizes=node_sizes, link_sizes=widths,
                              element_size_intervals=element_size_intervals,
                              element_size_legend_title=element_size_legend_title,
                              element_size_legend_loc=element_size_legend_loc,
@@ -454,12 +456,12 @@ def plot_unique_data(
                              base_link_arrows=base_link_arrows,
                              pump_arrows=pump_arrows,
                              draw_base_links=base_links)
-    
+
     def call_draw_color_bar():
         base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title,
                             color_bar_width=color_bar_width,
                             color_bar_height=color_bar_height)
-        
+
     if parameter == "demand_patterns":
 
         demand_pattern_nodes, patterns = processing.get_demand_patterns(self)
@@ -482,7 +484,7 @@ def plot_unique_data(
 
         if legend:
             call_draw_legend(intervals=patterns)
-            
+
         if savefig:
 
             save_fig(self, save_name=save_name,
@@ -499,7 +501,8 @@ def plot_unique_data(
                 parameter_results, parameter, unit)
         uniques = sorted(list(set(parameter_results)))
 
-        interval_names = [("{:.{j}f}".format(i, j=legend_sig_figs)) for i in uniques]
+        interval_names = [("{:.{j}f}".format(i, j=legend_sig_figs))
+                          for i in uniques]
 
         interval_results = {}
 
@@ -530,14 +533,14 @@ def plot_unique_data(
         call_draw_base_elements(links=False)
 
         if legend:
-            call_draw_legend(base_links=False,intervals=interval_names)
-            
+            call_draw_legend(base_links=False, intervals=interval_names)
+
         if savefig:
 
             save_fig(self, save_name=save_name,
                      dpi=dpi, save_format=save_format)
         return
-    
+
     elif parameter == "tag":
 
         parameter_results, node_list = processing.get_parameter(
@@ -590,7 +593,7 @@ def plot_unique_data(
 
         if legend:
             call_draw_legend(intervals=interval_names)
-            
+
         if savefig:
 
             save_fig(self, save_name=save_name,
@@ -616,7 +619,7 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements(links=False)
-                
+
                 if legend:
                     call_draw_legend(base_links=False,
                                      intervals=custom_data_values[1])
@@ -637,10 +640,10 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements()
-                
+
                 if legend:
                     call_draw_legend(intervals=custom_data_values[1])
-                    
+
             if savefig:
 
                 save_fig(self, save_name=save_name,
@@ -673,10 +676,11 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements(links=False)
-                
+
                 if legend:
-                    call_draw_legend(base_links=False,intervals=interval_names)
-                    
+                    call_draw_legend(base_links=False,
+                                     intervals=interval_names)
+
             if parameter_type == "node":
 
                 discrete.draw_discrete_nodes(
@@ -694,7 +698,7 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements()
-                
+
                 if legend:
                     call_draw_legend(intervals=interval_names)
 
@@ -727,10 +731,10 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements(links=False)
-                
+
                 if legend:
-                    call_draw_legend(continuous=True,base_links=False)
-                    
+                    call_draw_legend(continuous=True, base_links=False)
+
             elif parameter_type == "node":
                 if min_size is not None and max_size is not None:
                     normalized_parameter = normalize_parameter(
@@ -753,13 +757,13 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements()
-                
+
                 if legend:
                     call_draw_legend(continuous=True)
-                    
+
             if draw_color_bar == True:
                 call_draw_color_bar()
-                
+
             if savefig:
 
                 save_fig(self, save_name=save_name,
@@ -789,10 +793,10 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements(links=False)
-                
+
                 if legend:
                     call_draw_legend(base_links=False, intervals=intervals)
-                    
+
             elif parameter_type == "node":
 
                 discrete.draw_discrete_nodes(
@@ -810,7 +814,7 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements()
-                
+
                 if legend:
                     call_draw_legend(intervals=intervals)
 
@@ -851,10 +855,11 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements(links=False)
-                
+
                 if legend:
-                    call_draw_legend(base_links=False,intervals=interval_names)
-                    
+                    call_draw_legend(base_links=False,
+                                     intervals=interval_names)
+
             if parameter_type == "node":
 
                 discrete.draw_discrete_nodes(
@@ -872,10 +877,10 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements()
-                
+
                 if legend:
                     call_draw_legend(intervals=interval_names)
-           
+
             if savefig:
 
                 save_fig(self, save_name=save_name,
@@ -910,10 +915,10 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements(links=False)
-                
+
                 if legend:
-                    call_draw_legend(continuous=True,base_links=False)
-                    
+                    call_draw_legend(continuous=True, base_links=False)
+
             elif parameter_type == "node":
                 if min_size is not None and max_size is not None:
                     normalized_parameter = normalize_parameter(
@@ -936,21 +941,19 @@ def plot_unique_data(
                 )
 
                 call_draw_base_elements()
-                
+
                 if legend:
                     call_draw_legend(continuous=True)
-                    
+
             if draw_color_bar == True:
                 call_draw_color_bar()
-            
 
             if savefig:
 
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
         return
-    elif isinstance(parameter,str):
-       pass 
+    elif isinstance(parameter, str):
+        pass
     else:
         raise Exception("Invalid input, check docs for valid inputs.")
-        
