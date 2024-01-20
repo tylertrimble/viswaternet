@@ -736,7 +736,7 @@ def draw_legend(
         if draw_base_legend is True:
             legend = ax.legend(
                 handles=handles, loc=loc, fontsize=font_size,
-                labelcolor=font_color, frameon=False)
+                labelcolor=font_color, frameon=draw_frame)
             # Align legend text to the left, add legend to ax
             legend._legend_box.align = "left"
             ax.add_artist(legend)
@@ -765,7 +765,7 @@ def draw_legend(
                 handles=handles_2, title=element_size_legend_title,
                 loc=element_size_legend_loc, fontsize=font_size,
                 title_fontsize=legend_title_font_size, labelcolor=font_color,
-                frameon=False)
+                frameon=draw_frame)
             legend3._legend_box.align = "left"
             ax.add_artist(legend3)
     if link_sizes is not None:
@@ -782,7 +782,7 @@ def draw_legend(
                 handles=handles_2, title=element_size_legend_title,
                 loc=element_size_legend_loc, fontsize=font_size,
                 title_fontsize=legend_title_font_size, labelcolor=font_color,
-                frameon=False)
+                frameon=draw_frame)
             legend3._legend_box.align = "left"
             ax.add_artist(legend3)
 
