@@ -21,7 +21,9 @@ def label_generator(parameter, value, unit=None):
         'friction_factor': 'Friction Factor',
         'reaction_rate': 'Reaction Rate',
         'pressure': 'Pressure',
-        'velocity': 'Velocity'
+        'velocity': 'Velocity',
+        'roughness': 'Roughness',
+        'diameter': "Diameter",
     }
     if parameter == 'base_demand' or parameter == 'demand' or parameter == 'flowrate':
         if unit is None:
@@ -38,7 +40,7 @@ def label_generator(parameter, value, unit=None):
                        "IMGD": "[IMGD]",
                        "AFD": "[AFD]"}
 
-    if parameter == 'diameter' or parameter == 'elevation' or parameter == 'head' or parameter == 'length':
+    if parameter == 'diameter' or parameter == 'elevation' or parameter == 'head' or parameter == 'length' or parameter == 'diameter':
         if unit is None:
             unit = 'm'
         unit_titles = {"ft": '[ft]',
@@ -62,13 +64,14 @@ def label_generator(parameter, value, unit=None):
 
     if parameter == 'quality' or parameter == 'time':
         if unit is None:
-            unit = 's'
+            unit = None
 
         unit_titles = {'s': '[s]',
                        'min': '[min]',
                        'hr': '[hr]',
                        'day': '[day]'}
-    
+    if parameter == 'roughness':
+        unit_titles = {None: ''}
     if isinstance(value, int):
         title_label = parameter_titles[parameter] + " " + unit_titles[unit] + " at timestep " + str(value)
         
