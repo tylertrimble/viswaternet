@@ -159,8 +159,8 @@ class TestUnitConversion(unittest.TestCase):
     """Tests unit conversion function"""
 
     def test_unit_conversion(self):
-        dummy_data=np.array((10.0,15.0,25.0)) #in meters
-        correct_output=dummy_data*3.28084
+        dummy_data=np.array([10.0,15.0,25.0]) #in meters
+        correct_output=(dummy_data*3.28084).tolist()
 
         output = viswaternet.utils.unit_conversion(dummy_data,'length','ft')   
         self.assertListEqual(correct_output,output,"Data is not being converted to another unit correctly.")
