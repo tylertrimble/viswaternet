@@ -352,8 +352,8 @@ def bin_parameter(
 
                     interval_results[
                         "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_sig_figs)]
-                    [elements_with_parameter[counter]] = element_list.index(
+                            intervals[i], intervals[i + 1], j=legend_sig_figs)
+                    ][elements_with_parameter[counter]] = element_list.index(
                         elements_with_parameter[counter])
                 if parameter < intervals[i]:
 
@@ -397,4 +397,4 @@ def bin_parameter(
                 interval_names = np.delete(
                     interval_names, np.where(interval_names == bin_name))
                 del interval_results[bin_name]
-    return interval_results, interval_names.tolist()
+    return interval_results, interval_names
