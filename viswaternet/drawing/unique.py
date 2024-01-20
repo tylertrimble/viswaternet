@@ -566,7 +566,7 @@ def plot_unique_data(
             interval_results[interval_name] = {}
         for i, node in enumerate(node_list):
 
-            if parameter_results[node] is None:
+            if parameter_results[i] is None:
 
                 interval_results["No Tag"][node] = model["node_names"].index(
                     node)
