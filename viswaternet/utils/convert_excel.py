@@ -63,11 +63,9 @@ def convert_excel(self, file, parameter_type, data_type, element_index, value_in
         dataFile = os.path.join(dirname, file)
 
         df = pd.read_excel(dataFile)
-        element_list = pd.Series(
-            data=df.iloc[:, value_index].values, index=df.iloc[:,
-                                                               element_index].values
-        )
+        element_list = df.iloc[:, element_index]
+        results = df.iloc[:, value_index]
         data = {}
-        data["element_list"] = element_list
-        data["index"] = list(str(i) for i in list(element_list.index))
+        data["element_list"] = element_list.tolist()
+        data["results"] = results.tolist()
         return data

@@ -831,8 +831,8 @@ def plot_unique_data(
 
             interval_results, interval_names = processing.bin_parameter(
                 self,
+                data["results"],
                 data["element_list"],
-                data["index"],
                 intervals=intervals,
                 num_intervals=num_intervals,
                 legend_sig_figs=legend_sig_figs,
@@ -904,8 +904,8 @@ def plot_unique_data(
                 g = base.draw_links(
                     self,
                     ax,
-                    data["index"],
-                    parameter_results=data["element_list"],
+                    data["element_list"],
+                    parameter_results=data["results"],
                     cmap=cmap,
                     widths=widths,
                     vmin=vmin,
@@ -929,8 +929,8 @@ def plot_unique_data(
                 g = base.draw_nodes(
                     self,
                     ax,
-                    data["index"],
-                    parameter_results=data["element_list"],
+                    data["element_list"],
+                    parameter_results=data["results"],
                     node_size=node_size,
                     cmap=cmap,
                     vmin=vmin,

@@ -82,14 +82,14 @@ def animate_plot(
             custom_data_values = kwargs.get("custom_data_values")
             data_values = custom_data_values[1]
             
-        except KeyError:
+        except TypeError:
             excel_columns = kwargs.get("excel_columns",None)
             data_values = []
             for i in excel_columns[1]:
                 data = convert_excel(
-                    self, kwargs.get("parameter",None), parameter_type, data_type, excel_columns[0], excel_columns[1]
+                    self, kwargs.get("data_file",None), parameter_type, data_type, excel_columns[0], i
                 )
-                data_values.append(data)
+                data_values.append(data['results'])
                 
         timesteps = len(data_values)
         
@@ -150,8 +150,8 @@ def animate_plot(
                 kwargs["custom_data_values"] = [custom_data_values[0],custom_data_values[1][value]]
                 function(ax=ax, savefig=False,**kwargs)
             except Exception:
-                kwargs["excel_columns"] = [excel_columns[0],excel_columns[0][value]]
-                function(ax=ax,excel_columns=[excel_columns[0],excel_columns[0][value]],savefig=False,**kwargs)
+                kwargs["excel_columns"] = [excel_columns[0],excel_columns[1][value]]
+                function(ax=ax,savefig=False,**kwargs)
         else:
             function(ax=ax, value=value, savefig=False,**kwargs)
 
