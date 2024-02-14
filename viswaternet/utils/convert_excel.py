@@ -28,16 +28,16 @@ def convert_excel(self, file, parameter_type, data_type, element_index, value_in
     """
     model = self.model
     if data_type == "unique":
-        element_list = {}
+        interval_results = {}
         dirname = os.getcwd()
         dataFile = os.path.join(dirname, file)
 
         df = pd.read_excel(dataFile, dtype=str)
-        bins = sorted(pd.unique(df.iloc[:, value_index]))
+        interval_names = sorted(pd.unique(df.iloc[:, value_index]))
 
-        for binName in bins:
+        for interval in interval_names:
 
-            element_list[binName] = {}
+            interval_results[interval] = {}
 
         if parameter_type == 'node':
             for element, data in zip(
@@ -45,7 +45,7 @@ def convert_excel(self, file, parameter_type, data_type, element_index, value_in
                 ), df.iloc[:, value_index].dropna()
             ):
 
-                element_list[data][element] = model["node_names"].index(
+                interval_results[data][element] = model["node_names"].index(
                     element)
 
         if parameter_type == 'link':
@@ -54,10 +54,10 @@ def convert_excel(self, file, parameter_type, data_type, element_index, value_in
                 ), df.iloc[:, value_index].dropna()
             ):
 
-                element_list[data][element] = model["G_pipe_name_list"].index(
+                interval_results[data][element] = model["G_pipe_name_list"].index(
                     element)
 
-        return element_list, bins
+        return interval_results, interval_names
     if data_type == "continuous" or "discrete":
         dirname = os.getcwd()
         dataFile = os.path.join(dirname, file)

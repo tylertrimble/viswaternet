@@ -602,14 +602,36 @@ def plot_unique_data(
     elif parameter == "custom_data":
 
         if data_type == "unique":
+            interval_names = list(sorted(set(custom_data_values[1])))
+            interval_results = {}
+            for interval in interval_names:
 
+                interval_results[interval] = {}
+
+            if parameter_type == 'node':
+                for element, data in zip(
+                    custom_data_values[0],
+                    custom_data_values[1]
+                ):
+
+                    interval_results[data][element] = model["node_names"].index(
+                        element)
+
+            if parameter_type == 'link':
+                for element, data in zip(
+                    custom_data_values[0],
+                    custom_data_values[1]
+                ):
+
+                    interval_results[data][element] = model["G_pipe_name_list"].index(
+                        element)
             if parameter_type == "link":
 
                 discrete.draw_discrete_links(
                     self,
                     ax,
-                    custom_data_values[0],
-                    custom_data_values[1],
+                    interval_results,
+                    interval_names,
                     interval_link_width_list=interval_link_width_list,
                     interval_label_list=interval_label_list,
                     cmap=cmap,
@@ -628,8 +650,8 @@ def plot_unique_data(
                 discrete.draw_discrete_nodes(
                     self,
                     ax,
-                    custom_data_values[0],
-                    custom_data_values[1],
+                    interval_results,
+                    interval_names,
                     interval_node_size_list=interval_node_size_list,
                     interval_node_shape_list=interval_node_shape_list,
                     interval_label_list=interval_label_list,
