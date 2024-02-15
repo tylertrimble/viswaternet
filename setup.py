@@ -23,7 +23,7 @@ test_requirements = [ ]
 setup(
     author="Tyler Trimble",
     author_email='TylerL.Trimble@gmail.com',
-    python_requires='>=3.8, <=3.9.16',
+    python_requires='>=3.8, <3.10',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
