@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Jan 28 00:36:59 2023
-
-@author: tyler
-"""
 from matplotlib.collections import LineCollection
 import numpy as np
 

@@ -1,27 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-The viswaternet.network.initialize module initializes a viswaternet model object.
-"""
 import os
 import wntr
 import numpy as np
 from packaging.version import Version, parse
 
 class VisWNModel:
-    """Viswaternet model class.
-
-    The resulting object created from VisWNModel is the basis for nearly all
-    functionality that viswaternet has to offer.
-
-    Arguments
-    ---------
-    inp_file : string
-        Input file to be used.
-
-    network_model : wntr.network.model.WaterNetworkModel
-        WNTR WaterNetworkModel object.
-    """
-
     def __init__(self, inp_file, network_model=None,figsize=(12,12),axis_frame=False):
         model = {}
         dirname = os.getcwd()

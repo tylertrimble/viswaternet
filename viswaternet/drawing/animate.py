@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-The viswaternet.drawing.animate module facilitates the creation of .gif files
-animating data across timesteps.
-"""
 import numpy as np
 import matplotlib.pyplot as plt
 import imageio
@@ -22,53 +18,6 @@ def animate_plot(
     time_unit='s',
     **kwargs
 ):
-    """
-    Builds .gif file animating network data across timesteps.
-
-    Arguments
-    ---------
-    ax : axes._subplots.AxesSubplot
-        Matplotlib axes object.
-
-    function : viswaternet
-        One of the general viswaternet drawing functions.
-
-        .. rubric:: Usable Functions
-
-        ================================= ==
-            plot_basic_elements
-            plot_discrete_nodes
-            plot_discrete_links
-            plot_continuous_nodes
-            plot_continuous_links
-            plot_unique_data
-        ================================= ==
-
-    fps : integer
-        Framerate that the .gif file will be generated with.
-
-    first_timestep : integer
-        The starting timestep of the .gif file.
-
-    last_timestep : integer
-        The last timestep of the .gif file.
-
-    unit : string
-        The time unit that will be reported for each frame of the .gif file.
-
-        .. rubric:: Time Units
-
-        ====================  ====================================
-        Default               :math:`s`
-        min                   :math:`min`
-        hr                    :math:`hr`
-        day                   :math:`day`
-        ====================  ====================================
-
-    kwargs : Any
-        Any arguments for the plotting function passed into the function argument
-        can be passed into animate_plot.
-    """
     model = self.model
     if ax is None:
         if ax is None:
