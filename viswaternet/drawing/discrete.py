@@ -61,7 +61,7 @@ def draw_discrete_nodes(
     color_list : string, array-like
         The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color nodes. If both are, then color_list takes priority.
     """
-    
+
     model = self.model
     if interval_node_size_list is None:
         if len(model["node_names"]) < 300:
@@ -219,113 +219,88 @@ def draw_discrete_links(
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     """
-    
+
     model = self.model
     if interval_link_width_list is None:
         interval_link_width_list = np.ones(len(intervals)) * 2
     if interval_label_list is None:
         interval_label_list = intervals
     empty_interval = False
+
     if (color_list is not None and cmap is not None) or color_list is not None:
-        for counter, interval_name in enumerate(intervals):
+        for j, interval_name in enumerate(intervals):
             edge_list = [model["pipe_list"][i]
                          for i in links.get(interval_name).values()]
-            if len(edge_list) == 0:
+            if not edge_list:
                 nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     edgelist=[model["pipe_list"][0]],
-                    edge_color=color_list[counter],
-                    width=interval_link_width_list[counter],
+                    edge_color=color_list[j],
+                    width=interval_link_width_list[j],
                     arrows=link_arrows,
                     style=link_style,
-                    label=interval_label_list[counter],
-                )
+                    label=interval_label_list[j])
 
                 empty_interval = True
             else:
                 nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     edgelist=edge_list,
-                    edge_color=color_list[counter],
-                    width=interval_link_width_list[counter],
+                    edge_color=color_list[j],
+                    width=interval_link_width_list[j],
                     arrows=link_arrows,
                     style=link_style,
-                    label=interval_label_list[counter],
-                )
+                    label=interval_label_list[j])
         if empty_interval:
-
-            for counter, interval_name in enumerate(intervals):
+            for k, interval_name in enumerate(intervals):
                 edge_list = [model["pipe_list"][i]
                              for i in links.get(interval_name).values()]
                 nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     edgelist=edge_list,
-                    edge_color=color_list[counter],
-                    width=interval_link_width_list[counter],
+                    edge_color=color_list[k],
+                    width=interval_link_width_list[k],
                     arrows=link_arrows,
-                    style=link_style,
-                )
-
+                    style=link_style)
     else:
         cmap = mpl.colormaps[cmap]
         cmapValue = 1 / len(intervals)
-        for counter, interval_name in enumerate(intervals):
-
+        for j, interval_name in enumerate(intervals):
             edge_list = [model["pipe_list"][i]
                          for i in links.get(interval_name).values()]
-            if len(edge_list) == 0:
-
+            if not edge_list:
                 nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     edgelist=[model["pipe_list"][0]],
                     edge_color=[cmap(float(cmapValue))],
-                    width=interval_link_width_list[counter],
+                    width=interval_link_width_list[j],
                     arrows=link_arrows,
                     style=link_style,
-                    label=interval_label_list[counter],
-                )
-
+                    label=interval_label_list[j])
                 empty_interval = True
             else:
                 nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
+                    model["G"], model["pos_dict"], ax=ax,
                     edgelist=edge_list,
-                    ax=ax,
                     edge_color=[cmap(float(cmapValue))],
-                    width=interval_link_width_list[counter],
+                    width=interval_link_width_list[j],
                     arrows=link_arrows,
                     style=link_style,
-                    label=interval_label_list[counter],
-                )
+                    label=interval_label_list[j])
             cmapValue += 1 / len(intervals)
-
         if empty_interval:
             cmap2 = cmap
             cmapValue2 = 1 / len(intervals)
-
-            for counter, interval_name in enumerate(intervals):
+            for k, interval_name in enumerate(intervals):
                 edge_list = [model["pipe_list"][i]
                              for i in links.get(interval_name).values()]
                 nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     edgelist=edge_list,
                     edge_color=[cmap2(float(cmapValue2))],
-                    width=interval_link_width_list[counter],
+                    width=interval_link_width_list[k],
                     arrows=link_arrows,
-                    style=link_style,
-                )
-
+                    style=link_style)
                 cmapValue2 += 1 / len(intervals)
 
 
@@ -615,115 +590,71 @@ def plot_discrete_nodes(
     draw_intervals_legend : boolean
         Determine if the intervals legend is drawn.
     """
-    
-    if len(self.model['G_list_pumps_only'])==0:
+
+    if len(self.model['G_list_pumps_only']) == 0:
         pumps = False
-    
     if ax is None:
-       if ax is None:
-           fig, ax = plt.subplots(figsize=self.figsize)  
-           ax.set_frame_on(self.axis_frame)
+        if ax is None:
+            fig, ax = plt.subplots(figsize=self.figsize)
+            ax.set_frame_on(self.axis_frame)
     if parameter is not None:
-
         parameter_results, node_list = processing.get_parameter(
-            self,
-            "node",
-            parameter,
-            element_list=element_list,
-            value=value,
-            tanks=get_tanks,
-            reservoirs=get_reservoirs,
-        )
-
+            self, "node", parameter, element_list=element_list,
+            value=value, tanks=get_tanks, reservoirs=get_reservoirs)
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
         interval_results, interval_names = processing.bin_parameter(
-            self,
-            parameter_results,
-            node_list,
-            intervals=intervals,
+            self, parameter_results, node_list, intervals=intervals,
             num_intervals=num_intervals,
             disable_interval_deleting=disable_interval_deleting,
-            legend_sig_figs=legend_sig_figs
-        )
-
+            legend_sig_figs=legend_sig_figs)
         draw_discrete_nodes(
             self,
-            ax,
-            interval_results,
-            interval_names,
+            ax, interval_results, interval_names,
             interval_node_size_list=interval_node_size_list,
             interval_node_shape_list=interval_node_shape_list,
             interval_label_list=interval_label_list,
             interval_node_border_color_list=interval_node_border_color_list,
             interval_node_border_width_list=interval_node_border_width_list,
-            cmap=cmap,
-            color_list=color_list,
-        )
-
+            cmap=cmap, color_list=color_list)
         base.draw_base_elements(
-            self,
-            ax,
-            nodes=False,
-            reservoirs=reservoirs,
-            tanks=tanks,
-            valves=valves,
-            pumps=pumps,
-            reservoir_size=reservoir_size,
-            reservoir_color=reservoir_color,
-            reservoir_shape=reservoir_shape,
+            self, ax, nodes=False, reservoirs=reservoirs, tanks=tanks,
+            valves=valves, pumps=pumps, reservoir_size=reservoir_size,
+            reservoir_color=reservoir_color, reservoir_shape=reservoir_shape,
             reservoir_border_color=reservoir_border_color,
             reservoir_border_width=reservoir_border_width,
-            tank_size=tank_size,
-            tank_color=tank_color,
-            tank_shape=tank_shape,
+            tank_size=tank_size, tank_color=tank_color, tank_shape=tank_shape,
             tank_border_color=tank_border_color,
-            tank_border_width=tank_border_width,
-            valve_size=valve_size,
-            valve_color=valve_color,
-            valve_shape=valve_shape,
+            tank_border_width=tank_border_width, valve_size=valve_size,
+            valve_color=valve_color, valve_shape=valve_shape,
             valve_border_color=valve_border_color,
-            valve_border_width=valve_border_width,
-            pump_color=pump_color,
-            pump_width=pump_width,
-            pump_line_style=pump_line_style,
-            pump_arrows=pump_arrows,
-            base_node_color=base_node_color,
-            base_node_size=base_node_size,
-            base_link_color=base_link_color,
+            valve_border_width=valve_border_width, pump_color=pump_color,
+            pump_width=pump_width, pump_line_style=pump_line_style,
+            pump_arrows=pump_arrows, base_node_color=base_node_color,
+            base_node_size=base_node_size, base_link_color=base_link_color,
             base_link_width=base_link_width,
             base_link_line_style=base_link_line_style,
-            base_link_arrows=base_link_arrows
-        )
-
+            base_link_arrows=base_link_arrows)
         if legend:
             if legend_title is None:
-                legend_title = label_generator(parameter,value,unit)
-                
+                legend_title = label_generator(parameter, value, unit)
+
             base.draw_legend(
-                ax,
-                intervals=interval_names,
-                title=legend_title,
-                pumps=pumps,
-                base_legend_loc=base_legend_loc,
-                discrete_legend_loc=discrete_legend_loc,
-                font_size=font_size,
+                ax, intervals=interval_names, title=legend_title,
+                pumps=pumps, base_legend_loc=base_legend_loc,
+                discrete_legend_loc=discrete_legend_loc, font_size=font_size,
                 font_color=font_color,
                 legend_title_font_size=legend_title_font_size,
-                draw_frame=draw_frame,
-                pump_color=pump_color,
+                draw_frame=draw_frame, pump_color=pump_color,
                 base_link_color=base_link_color,
                 draw_base_legend=draw_base_legend,
                 draw_intervals_legend=draw_interval_legend,
                 pump_line_style=pump_line_style,
                 base_link_line_style=base_link_line_style,
-                base_link_arrows=base_link_arrows,
-                pump_arrows=pump_arrows,
-                draw_base_links=True,
-            )
+                base_link_arrows=base_link_arrows, pump_arrows=pump_arrows,
+                draw_base_links=True)
     if savefig:
-
         save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
 
 
@@ -1007,104 +938,66 @@ def plot_discrete_links(
     draw_intervals_legend : boolean
         Determine if the intervals legend is drawn.
     """
-    
-    if len(self.model['G_list_pumps_only'])==0:
+
+    if len(self.model['G_list_pumps_only']) == 0:
         pumps = False
     if ax is None:
         if ax is None:
-            fig, ax = plt.subplots(figsize=self.figsize)  
+            fig, ax = plt.subplots(figsize=self.figsize)
             ax.set_frame_on(self.axis_frame)
     if parameter is not None:
-
         parameter_results, link_list = processing.get_parameter(
-            self, "link", parameter, element_list=element_list, value=value
-        )
+            self, "link", parameter, element_list=element_list, value=value)
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
         interval_results, interval_names = processing.bin_parameter(
-            self,
-            parameter_results,
-            link_list,
-            intervals=intervals,
-            num_intervals=num_intervals,
+            self, parameter_results, link_list,
+            intervals=intervals, num_intervals=num_intervals,
             disable_interval_deleting=disable_interval_deleting,
-            legend_sig_figs=legend_sig_figs
-        )
+            legend_sig_figs=legend_sig_figs)
         draw_discrete_links(
-            self,
-            ax,
-            interval_results,
-            interval_names,
+            self, ax, interval_results, interval_names,
             interval_link_width_list=interval_link_width_list,
-            interval_label_list=interval_label_list,
-            cmap=cmap,
-            color_list=color_list,
-            link_style=link_style,
-            link_arrows=link_arrows,
-        )
+            interval_label_list=interval_label_list, cmap=cmap,
+            color_list=color_list, link_style=link_style,
+            link_arrows=link_arrows)
         base.draw_base_elements(
-            self,
-            ax,
-            nodes=False,
-            links=False,
-            reservoirs=reservoirs,
-            tanks=tanks,
-            valves=valves,
-            pumps=pumps,
-            reservoir_size=reservoir_size,
-            reservoir_color=reservoir_color,
-            reservoir_shape=reservoir_shape,
+            self, ax, nodes=False, links=False, reservoirs=reservoirs,
+            tanks=tanks, valves=valves, pumps=pumps, reservoir_size=reservoir_size,
+            reservoir_color=reservoir_color, reservoir_shape=reservoir_shape,
             reservoir_border_color=reservoir_border_color,
             reservoir_border_width=reservoir_border_width,
-            tank_size=tank_size,
-            tank_color=tank_color,
-            tank_shape=tank_shape,
+            tank_size=tank_size, tank_color=tank_color, tank_shape=tank_shape,
             tank_border_color=tank_border_color,
-            tank_border_width=tank_border_width,
-            valve_size=valve_size,
-            valve_color=valve_color,
-            valve_shape=valve_shape,
+            tank_border_width=tank_border_width, valve_size=valve_size,
+            valve_color=valve_color, valve_shape=valve_shape,
             valve_border_color=valve_border_color,
-            valve_border_width=valve_border_width,
-            pump_color=pump_color,
-            pump_width=pump_width,
-            pump_line_style=pump_line_style,
-            pump_arrows=pump_arrows,
-            base_node_color=base_node_color,
-            base_node_size=base_node_size,
-            base_link_color=base_link_color,
+            valve_border_width=valve_border_width, pump_color=pump_color,
+            pump_width=pump_width, pump_line_style=pump_line_style,
+            pump_arrows=pump_arrows, base_node_color=base_node_color,
+            base_node_size=base_node_size, base_link_color=base_link_color,
             base_link_width=base_link_width,
             base_link_line_style=base_link_line_style,
-            base_link_arrows=base_link_arrows
-        )
-
+            base_link_arrows=base_link_arrows)
         if legend:
-            
+
             if legend_title is None:
-                legend_title = label_generator(parameter,value,unit)
-                
+                legend_title = label_generator(parameter, value, unit)
+
             base.draw_legend(
-                ax,
-                intervals=interval_names,
-                title=legend_title,
-                pumps=pumps,
+                ax, intervals=interval_names, title=legend_title, pumps=pumps,
                 base_legend_loc=base_legend_loc,
                 discrete_legend_loc=discrete_legend_loc,
-                font_size=font_size,
-                font_color=font_color,
+                font_size=font_size, font_color=font_color,
                 legend_title_font_size=legend_title_font_size,
-                draw_frame=draw_frame,
-                pump_color=pump_color,
+                draw_frame=draw_frame, pump_color=pump_color,
                 base_link_color=base_link_color,
                 draw_base_legend=draw_base_legend,
                 draw_intervals_legend=draw_intervals_legend,
                 pump_line_style=pump_line_style,
                 base_link_line_style=base_link_line_style,
                 base_link_arrows=base_link_arrows,
-                pump_arrows=pump_arrows,
-                draw_base_links=False,
-            )
+                pump_arrows=pump_arrows, draw_base_links=False)
     if savefig:
-
         save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
