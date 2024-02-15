@@ -64,163 +64,116 @@ def draw_discrete_nodes(
     
     model = self.model
     if interval_node_size_list is None:
-
         if len(model["node_names"]) < 300:
-
             interval_node_size_list = np.ones(len(intervals)) * 300
         elif len(model["node_names"]) >= 300 and len(model["node_names"]) < 1000:
-
             interval_node_size_list = np.ones(
                 len(intervals)) * (80000 / len(model["node_names"]))
         else:
-
             interval_node_size_list = np.ones(len(intervals)) * 80
     if interval_label_list is None:
-
         interval_label_list = intervals
     if interval_node_shape_list is None:
-
         interval_node_shape_list = []
-
         for i in range(len(intervals)):
-
             interval_node_shape_list = np.append(interval_node_shape_list, ".")
     if interval_node_border_color_list is None:
         interval_node_border_color_list = []
-
         for i in range(len(intervals)):
-
             interval_node_border_color_list = np.append(
                 interval_node_border_color_list, "k")
     if interval_node_border_width_list is None:
         interval_node_border_width_list = []
-
         for i in range(len(intervals)):
-
             interval_node_border_width_list = np.append(
                 interval_node_border_width_list, 0)
-    counter = 0
     empty_interval = False
 
     if (color_list is not None and cmap is not None) or color_list is not None:
-        for interval_name in intervals:
+        for j, interval_name in enumerate(intervals):
             node_list = [model["node_names"][i]
                          for i in nodes.get(interval_name).values()]
 
-            if node_list:
+            if not node_list:
                 nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     nodelist=[model["node_names"][0]],
-                    node_size=interval_node_size_list[counter],
-                    node_color=color_list[counter],
-                    node_shape=interval_node_shape_list[counter],
-                    label=interval_label_list[counter],
-                    edgecolors=interval_node_border_color_list[counter],
-                    linewidths=interval_node_border_width_list[counter],
-                )
-
+                    node_size=interval_node_size_list[j],
+                    node_color=color_list[j],
+                    node_shape=interval_node_shape_list[j],
+                    label=interval_label_list[j],
+                    edgecolors=interval_node_border_color_list[j],
+                    linewidths=interval_node_border_width_list[j])
                 empty_interval == True
             else:
                 nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     nodelist=(
                         [model["node_names"][i]
-                            for i in nodes.get(interval_name).values()]
-                    ),
-                    node_size=interval_node_size_list[counter],
-                    node_color=color_list[counter],
-                    node_shape=interval_node_shape_list[counter],
-                    label=interval_label_list[counter],
-                    edgecolors=interval_node_border_color_list[counter],
-                    linewidths=interval_node_border_width_list[counter],
-                )
-            counter += 1
+                            for i in nodes.get(interval_name).values()]),
+                    node_size=interval_node_size_list[j],
+                    node_color=color_list[j],
+                    node_shape=interval_node_shape_list[j],
+                    label=interval_label_list[j],
+                    edgecolors=interval_node_border_color_list[j],
+                    linewidths=interval_node_border_width_list[j])
         if empty_interval:
-            counter2 = 0
-
-            for interval_name in intervals:
+            for k, interval_name in enumerate(intervals):
                 node_list = [
                     model["node_names"][i] for i in nodes.get(interval_name).values()
                 ]
                 nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     nodelist=node_list,
-                    node_size=interval_node_size_list[counter2],
-                    node_color=color_list[counter2],
-                    node_shape=interval_node_shape_list[counter2],
-                    edgecolors=interval_node_border_color_list[counter2],
-                    linewidths=interval_node_border_width_list[counter2],
-                )
-
-                counter2 += 1
+                    node_size=interval_node_size_list[k],
+                    node_color=color_list[k],
+                    node_shape=interval_node_shape_list[k],
+                    edgecolors=interval_node_border_color_list[k],
+                    linewidths=interval_node_border_width_list[k])
     else:
         cmap = mpl.colormaps[cmap]
         cmapValue = 1 / len(intervals)
-
-        for interval_name in intervals:
+        for j, interval_name in enumerate(intervals):
             node_list = [model["node_names"][i]
                          for i in nodes.get(interval_name).values()]
-            if len(node_list) == 0:
+            if not node_list:
                 nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     nodelist=[model["node_names"][0]],
-                    node_size=interval_node_size_list[counter],
+                    node_size=interval_node_size_list[j],
                     node_color=[cmap(float(cmapValue))],
-                    node_shape=interval_node_shape_list[counter],
-                    label=interval_label_list[counter],
-                    edgecolors=interval_node_border_color_list[counter],
-                    linewidths=interval_node_border_width_list[counter],
-                )
-
+                    node_shape=interval_node_shape_list[j],
+                    label=interval_label_list[j],
+                    edgecolors=interval_node_border_color_list[j],
+                    linewidths=interval_node_border_width_list[j])
                 empty_interval = True
             else:
                 nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     nodelist=node_list,
-                    node_size=interval_node_size_list[counter],
+                    node_size=interval_node_size_list[j],
                     node_color=[cmap(float(cmapValue))],
-                    node_shape=interval_node_shape_list[counter],
-                    label=interval_label_list[counter],
-                    edgecolors=interval_node_border_color_list[counter],
-                    linewidths=interval_node_border_width_list[counter],
-                )
+                    node_shape=interval_node_shape_list[j],
+                    label=interval_label_list[j],
+                    edgecolors=interval_node_border_color_list[j],
+                    linewidths=interval_node_border_width_list[j])
             cmapValue += 1 / len(intervals)
-
-            counter += 1
         if empty_interval:
-            counter2 = 0
-
             cmap2 = cmap
             cmapValue2 = 1 / len(intervals)
-
-            for interval_name in intervals:
+            for k, interval_name in enumerate(intervals):
                 node_list = [
                     model["node_names"][i] for i in nodes.get(interval_name).values()
                 ]
                 nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
+                    model["G"], model["pos_dict"], ax=ax,
                     nodelist=node_list,
-                    node_size=interval_node_size_list[counter2],
+                    node_size=interval_node_size_list[k],
                     node_color=[cmap2(float(cmapValue2))],
-                    node_shape=interval_node_shape_list[counter2],
-                    edgecolors=interval_node_border_color_list[counter2],
-                    linewidths=interval_node_border_width_list[counter2],
-                )
-
+                    node_shape=interval_node_shape_list[k],
+                    edgecolors=interval_node_border_color_list[k],
+                    linewidths=interval_node_border_width_list[k])
                 cmapValue2 += 1 / len(intervals)
-                counter2 += 1
 
 
 def draw_discrete_links(
@@ -402,8 +355,8 @@ def plot_discrete_nodes(
     valves=True,
     legend=True,
     legend_title=None,
-    legend_loc_1="upper right",
-    legend_loc_2="lower right",
+    base_legend_loc="upper right",
+    discrete_legend_loc="lower right",
     cmap=default_cmap,
     color_list=None,
     disable_interval_deleting=True,
@@ -753,8 +706,8 @@ def plot_discrete_nodes(
                 intervals=interval_names,
                 title=legend_title,
                 pumps=pumps,
-                loc=legend_loc_1,
-                loc2=legend_loc_2,
+                base_legend_loc=base_legend_loc,
+                discrete_legend_loc=discrete_legend_loc,
                 font_size=font_size,
                 font_color=font_color,
                 legend_title_font_size=legend_title_font_size,
@@ -795,8 +748,8 @@ def plot_discrete_links(
     cmap=default_cmap,
     legend=True,
     legend_title=None,
-    legend_loc_1="upper right",
-    legend_loc_2="lower right",
+    base_legend_loc="upper right",
+    discrete_legend_loc="lower right",
     savefig=False,
     save_name=None,
     dpi='figure',
@@ -1136,8 +1089,8 @@ def plot_discrete_links(
                 intervals=interval_names,
                 title=legend_title,
                 pumps=pumps,
-                loc=legend_loc_1,
-                loc2=legend_loc_2,
+                base_legend_loc=base_legend_loc,
+                discrete_legend_loc=discrete_legend_loc,
                 font_size=font_size,
                 font_color=font_color,
                 legend_title_font_size=legend_title_font_size,

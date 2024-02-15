@@ -14,7 +14,7 @@ model = vis.VisWNModel('Networks/CTown.inp')
 #Plot custom data generated in nodalerror_generation.py
 model.plot_unique_data(parameter='excel_data', data_file = 'Excel/CTown_pipe_ages.xlsx',
                        parameter_type='link',
-                       data_type='unique',excel_columns=[0,1], legend_loc_2 = 'lower left',
+                       data_type='unique',excel_columns=[0,1], discrete_legend_loc = 'lower left',
                        color_list = ["red","blue","green", "orange"],
                        pump_color = 'grey', legend_title = 'Pipe Installation Year',
                        reservoir_color = 'navy', tank_color = 'k',

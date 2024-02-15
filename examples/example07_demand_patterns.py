@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 model = vis.VisWNModel('Networks/CTown.inp')
 
 model.plot_unique_data(parameter = "demand_patterns", cmap = 'tab10',
-                      legend_loc_2 = 'lower left', legend_title = 'Demand Patterns',
+                      discrete_legend_loc = 'lower left', legend_title = 'Demand Patterns',
                       legend_title_font_size = 13, font_size = 12,
                       interval_label_list = ['Pattern 1', 'Pattern 2', 'Pattern 3',
                       'Patten 4', 'Pattern 5', 'No Pattern'],

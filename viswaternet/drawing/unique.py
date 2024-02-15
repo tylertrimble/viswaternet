@@ -53,8 +53,8 @@ def plot_unique_data(
     node_shape=".",
     line_widths=None,
     edge_colors=None,
-    legend_loc_1="upper right",
-    legend_loc_2="lower right",
+    base_legend_loc="upper right",
+    discrete_legend_loc="lower right",
     savefig=False,
     save_name=None,
     dpi='figure',
@@ -418,7 +418,8 @@ def plot_unique_data(
     def call_draw_legend(continuous=False, base_links=True, intervals=None):
         if continuous == True:
             base.draw_legend(ax, intervals=intervals, title=legend_title,
-                             pumps=pumps, loc=legend_loc_1, loc2=legend_loc_2,
+                             pumps=pumps, base_legend_loc=base_legend_loc, 
+                             discrete_legend_loc=discrete_legend_loc,
                              font_size=font_size, font_color=font_color,
                              legend_title_font_size=legend_title_font_size,
                              draw_frame=draw_frame, pump_color=pump_color,
@@ -438,7 +439,8 @@ def plot_unique_data(
                              draw_base_links=False)
         else:
             base.draw_legend(ax, intervals=intervals, title=legend_title,
-                             pumps=pumps, loc=legend_loc_1, loc2=legend_loc_2,
+                             pumps=pumps, base_legend_loc=base_legend_loc, 
+                             discrete_legend_loc=discrete_legend_loc,
                              font_size=font_size, font_color=font_color,
                              legend_title_font_size=legend_title_font_size,
                              draw_frame=draw_frame, pump_color=pump_color,

@@ -14,7 +14,7 @@ model.plot_discrete_nodes(parameter = "quality", value = 'max', unit = "hr",
                           interval_node_size_list = [100,150,250,350,450], 
                           interval_node_border_color_list = ['k','k','k','k','k'],
                           interval_node_border_width_list = [1,1,1,1,1],    
-                          cmap = 'Greens', legend_loc_2 = "lower left",    
+                          cmap = 'Greens', discrete_legend_loc = "lower left",    
                           legend_title_font_size="16",
                           legend_sig_figs=0, 
                           save_name = 'figures/example12', dpi=400)

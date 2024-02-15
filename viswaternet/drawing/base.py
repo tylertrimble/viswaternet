@@ -422,7 +422,7 @@ def plot_basic_elements(
     dpi='figure',
     save_format='png',
     legend=True,
-    legend_loc="upper right",
+    base_legend_loc="upper right",
     font_size=15,
     font_color='k',
     legend_title_font_size=17,
@@ -584,7 +584,7 @@ def plot_basic_elements(
     if legend:
         draw_legend(
             ax,
-            pumps=pumps, loc=legend_loc, font_size=font_size,
+            pumps=pumps, base_legendloc=base_legend_loc, font_size=font_size,
             font_color=font_color,
             legend_title_font_size=legend_title_font_size,
             draw_frame=draw_frame, pump_color=pump_color,
@@ -603,8 +603,8 @@ def draw_legend(
     intervals=None,
     title=None,
     pumps=True,
-    loc="upper right",
-    loc2="lower right",
+    base_legend_loc="upper right",
+    discrete_legend_loc="lower right",
     font_size=15,
     font_color="k",
     legend_title_font_size=17,
@@ -714,7 +714,7 @@ def draw_legend(
         # and so on
         if draw_base_legend is True:
             legend = ax.legend(
-                handles=handles[len(intervals):], loc=loc, fontsize=font_size,
+                handles=handles[len(intervals):], loc=base_legend_loc, fontsize=font_size,
                 labelcolor=font_color, frameon=draw_frame)
             # Align legend text to the left, add legend to ax
             legend._legend_box.align = "left"
@@ -722,7 +722,7 @@ def draw_legend(
         # Draws intervals, or data, legend to the ax
         if draw_intervals_legend is True:
             legend2 = ax.legend(
-                title=title, handles=handles[: len(intervals)], loc=loc2,
+                title=title, handles=handles[: len(intervals)], loc=discrete_legend_loc,
                 fontsize=font_size, labelcolor=font_color,
                 title_fontsize=legend_title_font_size, frameon=draw_frame)
             # Align legend text to the left, adds title, and adds to ax
@@ -735,7 +735,7 @@ def draw_legend(
         # and so on
         if draw_base_legend is True:
             legend = ax.legend(
-                handles=handles, loc=loc, fontsize=font_size,
+                handles=handles, loc=base_legend_loc, fontsize=font_size,
                 labelcolor=font_color, frameon=draw_frame)
             # Align legend text to the left, add legend to ax
             legend._legend_box.align = "left"
