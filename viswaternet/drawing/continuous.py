@@ -24,15 +24,13 @@ def plot_continuous_nodes(
     vmax=None,
     get_tanks=False,
     get_reservoirs=False,
-    tanks=True,
-    reservoirs=True,
-    pumps=True,
-    valves=True,
+    draw_tanks=True,
+    draw_reservoirs=True,
+    draw_pumps=True,
+    draw_valves=True,
     cmap=default_cmap,
     color_bar_title=None,
     node_size=100,
-    min_size=100,
-    max_size=100,
     node_shape=".",
     edge_colors=None,
     line_widths=None,
@@ -129,17 +127,17 @@ def plot_continuous_nodes(
     element_list : array-like
         List of network elements that data will be retrieved for.
     get_tanks : boolean
-        Determines if data for tanks are retrieved.
+        Determines if data for draw_tanks are retrieved.
     get_reservoirs : boolean
-        Determines if data for reservoirs are retrieved.
-    reservoirs : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    tanks : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    pumps : boolean
-        Determines if pumps with no data associated with them are drawn.
-    valves : boolean
-        Determines if valves with no data associated with them are drawn.
+        Determines if data for draw_reservoirs are retrieved.
+    draw_reservoirs : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    draw_tanks : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
     cmap : string
         The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
     color_bar_title : string
@@ -147,11 +145,11 @@ def plot_continuous_nodes(
     node_size : integer, array-like
         Integer representing all node sizes, or array of sizes for each node.
     min_size : integer
-        Minimum size of nodes to be used with normalize_parameter.
+        Minimum size of draw_nodes to be used with normalize_parameter.
     max_size : integer
-        Maximum size of nodes to be used with normalize_parameter.
+        Maximum size of draw_nodes to be used with normalize_parameter.
     node_shape : string
-        Shape of the nodes. Refer to matplotlib documentation for available marker types.
+        Shape of the draw_nodes. Refer to matplotlib documentation for available marker types.
     edge_colors : string
         Color of the node borders.
     line_widths : integer
@@ -232,23 +230,23 @@ def plot_continuous_nodes(
     pump_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     base_node_color : string
-        The color of the nodes without data associated with them.
+        The color of the draw_nodes without data associated with them.
     base_node_size : integer
-        The size of the nodes without data associated with them in points^2.
+        The size of the draw_nodes without data associated with them in points^2.
     base_link_color : string
-        The color of the links without data associated with them.
+        The color of the draw_links without data associated with them.
     base_link_width : integer
-        The width of the links without data associated with them in points.
+        The width of the draw_links without data associated with them in points.
     base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
+        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
     base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
+        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
     draw_color_bar : boolean
         Determines if color bar is drawn.
     """
 
     if len(self.model['G_list_pumps_only']) == 0:
-        pumps = False
+        draw_pumps = False
     if ax is None:
         fig, ax = plt.subplots(figsize=self.figsize)
         self.fig = fig
@@ -261,20 +259,11 @@ def plot_continuous_nodes(
             parameter,
             value=value,
             element_list=element_list,
-            tanks=get_tanks,
-            reservoirs=get_reservoirs,
-        )
-
+            draw_tanks=get_tanks,
+            draw_reservoirs=get_reservoirs)
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
-        if min_size is not None and max_size is not None:
-            normalized_parameter = normalize_parameter(
-                parameter_results, min_size, max_size
-            )
-
-            node_size = normalized_parameter
-
         g = base.draw_nodes(
             self,
             ax,
@@ -292,11 +281,11 @@ def plot_continuous_nodes(
         base.draw_base_elements(
             self,
             ax,
-            nodes=False,
-            reservoirs=reservoirs,
-            tanks=tanks,
-            valves=valves,
-            pumps=pumps,
+            draw_nodes=False,
+            draw_reservoirs=draw_reservoirs,
+            draw_tanks=draw_tanks,
+            draw_valves=draw_valves,
+            draw_pumps=draw_pumps,
             reservoir_size=reservoir_size,
             reservoir_color=reservoir_color,
             reservoir_shape=reservoir_shape,
@@ -336,7 +325,7 @@ def plot_continuous_nodes(
     if legend:
 
         base.draw_legend(ax,
-                         pumps=pumps,
+                         draw_pumps=draw_pumps,
                          base_legend_loc=base_legend_loc,
                          font_size=font_size,
                          font_color=font_color,
@@ -378,10 +367,10 @@ def plot_continuous_links(
     vmax=None,
     link_style='-',
     link_arrows=False,
-    tanks=True,
-    reservoirs=True,
-    pumps=True,
-    valves=True,
+    draw_tanks=True,
+    draw_reservoirs=True,
+    draw_pumps=True,
+    draw_valves=True,
     cmap=default_cmap,
     color_bar_title=None,
     legend=True,
@@ -473,37 +462,37 @@ def plot_continuous_links(
     widths : integer, array-like
         Integer representing all link widrths, or array of widths for each link.
     min_width : integer
-        Minimum size of links to be used with normalize_parameter.
+        Minimum size of draw_links to be used with normalize_parameter.
     max_width : integer
-        Maximum size of links to be used with normalize_parameter.
+        Maximum size of draw_links to be used with normalize_parameter.
     vmin : integer
         The minimum value of the color bar. 
     vmax : integer
         The maximum value of the color bar.
     link_style : string
-        The style (solid, dashed, dotted, etc.) of the links. Refer to matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the draw_links. Refer to matplotlib documentation for available line styles.
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     element_list : array-like
         List of network elements that data will be retrieved for.
     get_tanks : boolean
-        Determines if data for tanks are retrieved.
+        Determines if data for draw_tanks are retrieved.
     get_reservoirs : boolean
-        Determines if data for reservoirs are retrieved.
-    reservoirs : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    tanks : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    pumps : boolean
-        Determines if pumps with no data associated with them are drawn.
-    valves : boolean
-        Determines if valves with no data associated with them are drawn.
+        Determines if data for draw_reservoirs are retrieved.
+    draw_reservoirs : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    draw_tanks : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
     cmap : string
         The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
     color_bar_title : string
         The title of the color bar.
     node_shape : string
-        Shape of the nodes. Refer to matplotlib documentation for available marker types.
+        Shape of the draw_nodes. Refer to matplotlib documentation for available marker types.
     edge_colors : string
         Color of the node borders.
     line_widths : integer
@@ -584,23 +573,23 @@ def plot_continuous_links(
     pump_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     base_node_color : string
-        The color of the nodes without data associated with them.
+        The color of the draw_nodes without data associated with them.
     base_node_size : integer
-        The size of the nodes without data associated with them in points^2.
+        The size of the draw_nodes without data associated with them in points^2.
     base_link_color : string
-        The color of the links without data associated with them.
+        The color of the draw_links without data associated with them.
     base_link_width : integer
-        The width of the links without data associated with them in points.
+        The width of the draw_links without data associated with them in points.
     base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
+        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
     base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
+        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
     draw_color_bar : boolean
         Determines if color bar is drawn.
     """
 
     if len(self.model['G_list_pumps_only']) == 0:
-        pumps = False
+        draw_pumps = False
     if ax is None:
         if ax is None:
             fig, ax = plt.subplots(figsize=self.figsize)
@@ -636,12 +625,12 @@ def plot_continuous_links(
         base.draw_base_elements(
             self,
             ax,
-            nodes=False,
-            links=False,
-            reservoirs=reservoirs,
-            tanks=tanks,
-            valves=valves,
-            pumps=pumps,
+            draw_nodes=False,
+            draw_links=False,
+            draw_reservoirs=draw_reservoirs,
+            draw_tanks=draw_tanks,
+            draw_valves=draw_valves,
+            draw_pumps=draw_pumps,
             reservoir_size=reservoir_size,
             reservoir_color=reservoir_color,
             reservoir_shape=reservoir_shape,
@@ -686,7 +675,7 @@ def plot_continuous_links(
     if legend:
 
         base.draw_legend(ax,
-                         pumps=pumps,
+                         draw_pumps=draw_pumps,
                          base_legend_loc=base_legend_loc,
                          font_size=font_size,
                          font_color=font_color,

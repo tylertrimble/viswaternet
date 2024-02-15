@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.lines import Line2D
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from viswaternet.utils import save_fig
+from viswaternet.utils import save_fig, normalize_parameter
 
 
 def draw_nodes(
@@ -23,8 +23,8 @@ def draw_nodes(
     node_color="k",
     cmap="tab10",
     node_shape=".",
-    edge_colors="k",
-    line_widths=0,
+    node_border_color="k",
+    node_border_width=0,
     label=None,
 ):
     """Draws continuous nodal data onto the figure.
@@ -34,7 +34,7 @@ def draw_nodes(
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
     node_list : string, array-like
-        List of nodes to be drawn.
+        List of draw_nodes to be drawn.
     parameter_results : array-like
         The data associated with each node.
     vmin : integer
@@ -44,14 +44,14 @@ def draw_nodes(
     node_size : integer, array-like
         Integer representing all node sizes, or array of sizes for each node.
     node_color : string
-        Color of the nodes.
+        Color of the draw_nodes.
     cmap : string
         The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
     node_shape : string
-        Shape of the nodes. Refer to matplotlib documentation for available marker types.
-    edge_colors : string
+        Shape of the draw_nodes. Refer to matplotlib documentation for available marker types.
+    node_border_color : string
         Color of the node borders.
-    line_widths : integer
+    node_border_width : integer
         Width of the node borders.
     label : string
         Matplotlib label of plotting instance.
@@ -61,14 +61,15 @@ def draw_nodes(
     model = self.model
     if parameter_results is None:
         parameter_results = []
-    if node_size is None:
-        node_size = []
     # Creates default list of node sizes
-    if isinstance(node_size, list) and not node_size:
+    if node_size is None:
         node_size = (np.ones(len(node_list)) * 100).tolist()
-    # Creates uniform list of node sizes if integer is given
-    if isinstance(node_size, int):
-        node_size = (np.ones(len(node_list)) * node_size).tolist()
+    if isinstance(node_size, tuple):
+        min_size = node_size[0]
+        max_size = node_size[1]
+        if min_size is not None and max_size is not None:
+            node_size = normalize_parameter(
+                parameter_results, min_size, max_size)
     # Checks if some data values are given
     if parameter_results:
         # If values is less than this value, we treat it as a negative.
@@ -84,7 +85,7 @@ def draw_nodes(
                     node_size=node_size, node_color=parameter_results,
                     cmap=cmap, vmax=np.max(parameter_results),
                     vmin=-np.max(parameter_results), node_shape=node_shape,
-                    linewidths=line_widths, edgecolors=edge_colors,
+                    linewidths=node_border_width, edgecolors=node_border_color,
                     label=label)
             # Otherwise, just pass the user-given parameters
             else:
@@ -92,7 +93,7 @@ def draw_nodes(
                     model["G"], model["pos_dict"], ax=ax, nodelist=node_list,
                     node_size=node_size, node_color=parameter_results,
                     vmax=vmax, vmin=vmin, cmap=cmap, node_shape=node_shape,
-                    linewidths=line_widths, edgecolors=edge_colors,
+                    linewidths=node_border_width, edgecolors=node_border_color,
                     label=label)
             # Return networkx object
             return g
@@ -106,23 +107,23 @@ def draw_nodes(
                 g = nxp.draw_networkx_nodes(
                     model["G"], model["pos_dict"], ax=ax, nodelist=node_list,
                     node_size=node_size, node_color=parameter_results,
-                    cmap=cmap, node_shape=node_shape, linewidths=line_widths,
-                    edgecolors=edge_colors)
+                    cmap=cmap, node_shape=node_shape, linewidths=node_border_width,
+                    edgecolors=node_border_color)
             # Otherwise, just pass the user-given parameters
             else:
                 g = nxp.draw_networkx_nodes(
                     model["G"], model["pos_dict"], ax=ax, nodelist=node_list,
                     node_size=node_size, node_color=parameter_results,
-                    cmap=cmap, node_shape=node_shape, linewidths=line_widths,
-                    edgecolors=edge_colors, vmin=vmin, vmax=vmax)
+                    cmap=cmap, node_shape=node_shape, linewidths=node_border_width,
+                    edgecolors=node_border_color, vmin=vmin, vmax=vmax)
             # Return networkx object
             return g
-    # Draw without any data associated with nodes
+    # Draw without any data associated with draw_nodes
     else:
         nxp.draw_networkx_nodes(
             model["G"], model["pos_dict"], ax=ax, nodelist=node_list,
             node_size=node_size, node_color=node_color, node_shape=node_shape,
-            edgecolors=edge_colors, linewidths=line_widths, label=label)
+            edgecolors=node_border_color, linewidths=node_border_width, label=label)
 
 
 def draw_links(
@@ -132,7 +133,7 @@ def draw_links(
     parameter_results=None,
     edge_color="k",
     cmap="tab10",
-    widths=None,
+    link_width=None,
     vmin=None,
     vmax=None,
     link_style='-',
@@ -145,11 +146,11 @@ def draw_links(
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
     link_list : string, array-like
-        List of links to be drawn.
+        List of draw_links to be drawn.
     parameter_results : array-like
         The data associated with each node.
-    edge_colors : string
-        Color of links.
+    node_border_color : string
+        Color of draw_links.
     cmap : string
         The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
     widths : integer, array-like
@@ -159,7 +160,7 @@ def draw_links(
     vmax : integer
         The maximum value of the color bar.
     link_style : string
-        The style (solid, dashed, dotted, etc.) of the links. Refer to matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the draw_links. Refer to matplotlib documentation for available line styles.
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     """
@@ -170,14 +171,9 @@ def draw_links(
         link_list = link_list.tolist()
     if parameter_results is None:
         parameter_results = []
-    if widths is None:
-        widths = []
     # Creates default list of link widths
-    if isinstance(widths, list) and not widths:
-        widths = (np.ones(len(link_list)) * 1).tolist()
-    # Creates uniform list of link widths if integer is given
-    if isinstance(widths, int):
-        widths = (np.ones(len(link_list)) * widths).tolist()
+    if link_width is None:
+        link_width = (np.ones(len(link_list)) * 1).tolist()
     # Checks if some data values are given
     if parameter_results:
         if np.min(parameter_results) < -1e-5:
@@ -194,7 +190,7 @@ def draw_links(
                     edge_color=parameter_results,
                     edge_vmax=np.max(parameter_results),
                     edge_vmin=-np.max(parameter_results), edge_cmap=cmap,
-                    style=link_style, arrows=link_arrows, width=widths,
+                    style=link_style, arrows=link_arrows, width=link_width,
                     node_size=0)
             # Otherwise, just pass the user-given parameters
             else:
@@ -204,7 +200,7 @@ def draw_links(
                               for i, name in enumerate(link_list)]),
                     edge_color=parameter_results, edge_vmax=vmax,
                     edge_vmin=vmin, edge_cmap=cmap, style=link_style,
-                    arrows=link_arrows, width=widths, node_size=0)
+                    arrows=link_arrows, width=link_width, node_size=0)
             # Return networkx object
             return g
         else:
@@ -219,7 +215,7 @@ def draw_links(
                     edgelist=([model["pipe_list"][i]
                               for i, name in enumerate(link_list)]),
                     edge_color=parameter_results, edge_cmap=cmap,
-                    style=link_style, arrows=link_arrows, width=widths,
+                    style=link_style, arrows=link_arrows, width=link_width,
                     node_size=0)
             # Otherwise, just pass the user-given parameters
             else:
@@ -228,29 +224,29 @@ def draw_links(
                     edgelist=([model["pipe_list"][i]
                               for i, name in enumerate(link_list)]),
                     edge_color=parameter_results, edge_cmap=cmap,
-                    style=link_style, arrows=link_arrows, width=widths,
+                    style=link_style, arrows=link_arrows, width=link_width,
                     edge_vmin=vmin, edge_vmax=vmax, node_size=0)
             # Return networkx object
             return g
-    # Draw without any data associated with links
+    # Draw without any data associated with draw_links
     else:
         nxp.draw_networkx_edges(
             model["G"], model["pos_dict"], ax=ax,
             edgelist=([model["pipe_list"][i]
                       for i, name in enumerate(link_list)]),
             edge_color=edge_color, style=link_style, arrows=link_arrows,
-            width=widths, node_size=0)
+            width=link_width, node_size=0)
 
 
 def draw_base_elements(
     self,
     ax,
-    nodes=True,
-    links=True,
-    reservoirs=True,
-    tanks=True,
-    pumps=True,
-    valves=True,
+    draw_nodes=True,
+    draw_links=True,
+    draw_reservoirs=True,
+    draw_tanks=True,
+    draw_pumps=True,
+    draw_valves=True,
     legend=True,
     reservoir_size=150,
     reservoir_color='b',
@@ -279,25 +275,25 @@ def draw_base_elements(
     base_link_arrows=False,
 ):
     """
-    Draws base elements (nodes, links, reservoirs, tanks, pumps, and valves)
+    Draws base elements (draw_nodes, draw_links, draw_reservoirs, draw_tanks, draw_pumps, and draw_valves)
     without any data associated with the elements.
 
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-    nodes : boolean
-        Determines if base nodes with no data associated with them are drawn. Set to False for all functions excep plot_basic_elements by default.
-    links : boolean
-        Determines if base links with no data associated with them are drawn. Set to False for all functions that deal with link data plotting.
-    reservoirs : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    tanks : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    pumps : boolean
-        Determines if pumps with no data associated with them are drawn.
-    valves : boolean
-        Determines if valves with no data associated with them are drawn.
+    draw_nodes : boolean
+        Determines if base draw_nodes with no data associated with them are drawn. Set to False for all functions excep plot_basic_elements by default.
+    draw_links : boolean
+        Determines if base draw_links with no data associated with them are drawn. Set to False for all functions that deal with link data plotting.
+    draw_reservoirs : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    draw_tanks : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
     legend : boolean
         Determines if the base elements legend will be drawn. 
     reservoir_size : integer
@@ -339,41 +335,41 @@ def draw_base_elements(
     pump_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     base_node_color : string
-        The color of the nodes without data associated with them.
+        The color of the draw_nodes without data associated with them.
     base_node_size : integer
-        The size of the nodes without data associated with them in points^2.
+        The size of the draw_nodes without data associated with them in points^2.
     base_link_color : string
-        The color of the links without data associated with them.
+        The color of the draw_links without data associated with them.
     base_link_width : integer
-        The width of the links without data associated with them in points.
+        The width of the draw_links without data associated with them in points.
     base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
+        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
     base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
+        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
     """
     model = self.model
-    # If nodes is True, then draw nodes
-    if nodes:
+    # If draw_nodes is True, then draw draw_nodes
+    if draw_nodes:
         nxp.draw_networkx_nodes(
             model["G"], model["pos_dict"], node_size=base_node_size,
             node_color=base_node_color, ax=ax)
-    # If reservoirs is True, then draw reservoirs
-    if reservoirs:
+    # If draw_reservoirs is True, then draw draw_reservoirs
+    if draw_reservoirs:
         nxp.draw_networkx_nodes(
             model["G"], model["pos_dict"], ax=ax,
             nodelist=model["reservoir_names"], node_size=reservoir_size,
             node_color=reservoir_color, edgecolors=reservoir_border_color,
             linewidths=reservoir_border_width, node_shape=reservoir_shape,
-            label="Reservoirs")
-    # If tanks is True, then draw tanks
-    if tanks:
+            label="draw_reservoirs")
+    # If draw_tanks is True, then draw draw_tanks
+    if draw_tanks:
         nxp.draw_networkx_nodes(
             model["G"], model["pos_dict"], ax=ax, nodelist=model["tank_names"],
             node_size=tank_size, node_color=tank_color,
             edgecolors=tank_border_color, linewidths=tank_border_width,
-            node_shape=tank_shape, label="Tanks")
-    # If valves is True, then draw valves
-    if valves:
+            node_shape=tank_shape, label="draw_tanks")
+    # If draw_valves is True, then draw draw_valves
+    if draw_valves:
         valve_coordinates = {}
         # For each valve, calculate midpoint along link it is located at then
         # store the coordinates of where valve should be drawn
@@ -385,23 +381,23 @@ def draw_base_elements(
                  + model["wn"].get_node(point2).coordinates[1])/2,
             ]
             valve_coordinates[model["valve_names"][i]] = midpoint
-        # Draw valves after midpoint calculations
+        # Draw draw_valves after midpoint calculations
         nxp.draw_networkx_nodes(
             model["G"], valve_coordinates, ax=ax,
             nodelist=model["valve_names"], node_size=valve_size,
             node_color=valve_color, edgecolors=valve_border_color,
             linewidths=valve_border_width, node_shape=valve_shape,
-            label="Valves")
-    # If links is True, then draw links
-    if links:
+            label="draw_valves")
+    # If draw_links is True, then draw draw_links
+    if draw_links:
         nxp.draw_networkx_edges(
             model["G"], model["pos_dict"],
             edgelist=[i for i in model["pipe_list"]
                       if i not in model["G_list_pumps_only"]],
             ax=ax, edge_color=base_link_color, width=base_link_width,
             style=base_link_line_style, arrows=base_link_arrows)
-    # If pumps is True, then draw pumps
-    if pumps:
+    # If draw_pumps is True, then draw draw_pumps
+    if draw_pumps:
         nxp.draw_networkx_edges(
             model["G"], model["pos_dict"], ax=ax,
             edgelist=model["G_list_pumps_only"], edge_color=pump_color,
@@ -411,12 +407,12 @@ def draw_base_elements(
 def plot_basic_elements(
     self,
     ax=None,
-    nodes=True,
-    links=True,
-    reservoirs=True,
-    tanks=True,
-    pumps=True,
-    valves=True,
+    draw_nodes=True,
+    draw_links=True,
+    draw_reservoirs=True,
+    draw_tanks=True,
+    draw_pumps=True,
+    draw_valves=True,
     savefig=False,
     save_name=None,
     dpi='figure',
@@ -461,18 +457,18 @@ def plot_basic_elements(
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-    nodes : boolean
-        Determines if base nodes with no data associated with them are drawn. Set to False for all functions excep plot_basic_elements by default.
-    links : boolean
-        Determines if base links with no data associated with them are drawn. Set to False for all functions that deal with link data plotting.
-    reservoirs : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    tanks : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    pumps : boolean
-        Determines if pumps with no data associated with them are drawn.
-    valves : boolean
-        Determines if valves with no data associated with them are drawn.
+    draw_nodes : boolean
+        Determines if base draw_nodes with no data associated with them are drawn. Set to False for all functions excep plot_basic_elements by default.
+    draw_links : boolean
+        Determines if base draw_links with no data associated with them are drawn. Set to False for all functions that deal with link data plotting.
+    draw_reservoirs : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    draw_tanks : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
     savefig : boolean
         Determines if the figure is saved. 
     save_name : string
@@ -541,21 +537,21 @@ def plot_basic_elements(
     pump_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
     base_node_color : string
-        The color of the nodes without data associated with them.
+        The color of the draw_nodes without data associated with them.
     base_node_size : integer
-        The size of the nodes without data associated with them in points^2.
+        The size of the draw_nodes without data associated with them in points^2.
     base_link_color : string
-        The color of the links without data associated with them.
+        The color of the draw_links without data associated with them.
     base_link_width : integer
-        The width of the links without data associated with them in points.
+        The width of the draw_links without data associated with them in points.
     base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
+        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
     base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
+        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
     """
-    # Checks if there is no pumps
+    # Checks if there is no draw_pumps
     if not self.model['G_list_pumps_only']:
-        pumps = False
+        draw_pumps = False
     # Checks if an axis as been specified
     if ax is None:
         if ax is None:
@@ -563,8 +559,8 @@ def plot_basic_elements(
             ax.set_frame_on(self.axis_frame)
     # Draw all base elements w/o data associated with them
     draw_base_elements(
-        self, ax, nodes=nodes, reservoirs=reservoirs, tanks=tanks, links=links,
-        valves=valves, pumps=pumps, reservoir_size=reservoir_size,
+        self, ax, draw_nodes=draw_nodes, draw_reservoirs=drareservoirs, draw_tanks=draw_tanks, draw_links=draw_links,
+        draw_valves=draw_valves, draw_pumps=draw_pumps, reservoir_size=reservoir_size,
         reservoir_color=reservoir_color, reservoir_shape=reservoir_shape,
         reservoir_border_color=reservoir_border_color,
         reservoir_border_width=reservoir_border_width, tank_size=tank_size,
@@ -584,7 +580,7 @@ def plot_basic_elements(
     if legend:
         draw_legend(
             ax,
-            pumps=pumps, base_legendloc=base_legend_loc, font_size=font_size,
+            draw_pumps=draw_pumps, base_legendloc=base_legend_loc, font_size=font_size,
             font_color=font_color,
             legend_title_font_size=legend_title_font_size,
             draw_frame=draw_frame, pump_color=pump_color,
@@ -602,7 +598,7 @@ def draw_legend(
     ax,
     intervals=None,
     title=None,
-    pumps=True,
+    draw_pumps=True,
     base_legend_loc="upper right",
     discrete_legend_loc="lower right",
     font_size=15,
@@ -611,15 +607,15 @@ def draw_legend(
     draw_frame=False,
     pump_color='b',
     base_link_color='k',
-    node_sizes=None,
-    link_sizes=None,
+    node_size=None,
+    link_width=None,
     element_size_intervals=None,
     element_size_legend_title=None,
     element_size_legend_loc=None,
     element_size_legend_labels=None,
     draw_base_legend=True,
     draw_intervals_legend=True,
-    edge_colors='k',
+    node_border_color='k',
     linewidths=1,
     pump_line_style='-',
     base_link_line_style='-',
@@ -627,7 +623,7 @@ def draw_legend(
     pump_arrows=False,
     draw_base_links=True,
 ):
-    """Draws the legends for all other plotting functions. There are two legends that might be drawn. One is the base elements legend with displays what markers are associated with each element type (nodes, links, etc.) The other legend is the intervals legend which is the legend for discrete drawing. Under normal use, draw_legends is not normally called by the user directly, even with more advanced applications. However, some specialized plots may require draw_legend to be called directly.
+    """Draws the legends for all other plotting functions. There are two legends that might be drawn. One is the base elements legend with displays what markers are associated with each element type (draw_nodes, draw_links, etc.) The other legend is the intervals legend which is the legend for discrete drawing. Under normal use, draw_legends is not normally called by the user directly, even with more advanced applications. However, some specialized plots may require draw_legend to be called directly.
 
     Arguments
     ---------
@@ -652,7 +648,7 @@ def draw_legend(
     pump_color : string
         The color of the pump line.
     base_link_color : string
-        The color of the links without data associated with them.
+        The color of the draw_links without data associated with them.
     node_sizes : integer, array-like
         The size of the node elements. Can either be an integer if the node sizes are uniform, or an array-like if variable node sizes are present.
     link_sizes : integer, array-like
@@ -669,10 +665,10 @@ def draw_legend(
         Determine if the base elements legend is drawn.
     draw_intervals_legend : boolean
         Determine if the intervals legend is drawn.
-    edge_colors : string
-        The color of the legend nodes edges when plotting element size legend.
+    node_border_color : string
+        The color of the legend draw_nodes edges when plotting element size legend.
     linewidths: integer
-        The width of the line of the legend nodes when plotting element size legend.
+        The width of the line of the legend draw_nodes when plotting element size legend.
     """
     # If no intervals for data legend are specified, then create empty array
     if intervals is None:
@@ -683,16 +679,16 @@ def draw_legend(
     # Where new handles will be stored
     extensions = []
 
-    # If pumps is True, then add legend element. Note that right now
+    # If draw_pumps is True, then add legend element. Note that right now
     # pump_arrows does not affect legend entry, but that it may in the future,
     # hence the if statement
-    if pumps:
+    if draw_pumps:
         if pump_arrows:
             extensions.append(Line2D([0], [0], color=pump_color,
-                              linestyle=pump_line_style, lw=4, label='Pumps'))
+                              linestyle=pump_line_style, lw=4, label='draw_pumps'))
         else:
             extensions.append(Line2D([0], [0], color=pump_color,
-                              linestyle=pump_line_style, lw=4, label='Pumps'))
+                              linestyle=pump_line_style, lw=4, label='draw_pumps'))
     # If draw_base_links is True, then add legend element. Note that right now
     # base_link_arrows does not affect legend entry, but that it may in the
     # future, hence the if statement
@@ -710,7 +706,7 @@ def draw_legend(
 
     # If discrete intervals are given
     if intervals:
-        # Draws base legend, which includes the legend for reservoirs, tanks,
+        # Draws base legend, which includes the legend for draw_reservoirs, draw_tanks,
         # and so on
         if draw_base_legend is True:
             legend = ax.legend(
@@ -731,7 +727,7 @@ def draw_legend(
             ax.add_artist(legend2)
     # If there are no intervals, just draw base legend
     else:
-        # Draws base legend, which includes the legend for reservoirs, tanks,
+        # Draws base legend, which includes the legend for draw_reservoirs, draw_tanks,
         # and so on
         if draw_base_legend is True:
             legend = ax.legend(
@@ -745,20 +741,20 @@ def draw_legend(
     # to the data that can be plotted, by allowing for changes in size of
     # a node/link to represent some parameter. For now it is limited to
     # discrete node sizes, which works the same as discrete data for the color
-    # of nodes. To use it requires a much more involved process than all other
+    # of draw_nodes. To use it requires a much more involved process than all other
     # functions that viswaternet performs, and improvements to ease of use
     # will be made in the future.
-    if node_sizes is not None:
-        if isinstance(node_sizes, list):
+    if node_size is not None:
+        if isinstance(node_size, list):
             handles_2 = []
-            min_size = np.min(node_sizes)
-            max_size = np.max(node_sizes)
+            min_size = np.min(node_size)
+            max_size = np.max(node_size)
             marker_sizes = np.linspace(
                 min_size, max_size, element_size_intervals)
             for size, label in zip(marker_sizes, element_size_legend_labels):
                 handles_2.append(
                     Line2D([], [], marker='.', color='w',
-                           markeredgecolor=edge_colors, markeredgewidth=linewidths,
+                           markeredgecolor=node_border_color, markeredgewidth=linewidths,
                            label=label, markerfacecolor='k',
                            markersize=np.sqrt(size)))
             legend3 = ax.legend(
@@ -768,11 +764,11 @@ def draw_legend(
                 frameon=draw_frame)
             legend3._legend_box.align = "left"
             ax.add_artist(legend3)
-    if link_sizes is not None:
-        if isinstance(link_sizes, list):
+    if link_width is not None:
+        if isinstance(link_width, list):
             handles_2 = []
-            min_size = np.min(link_sizes)
-            max_size = np.max(link_sizes)
+            min_size = np.min(link_width)
+            max_size = np.max(link_width)
             marker_sizes = np.linspace(
                 min_size, max_size, element_size_intervals)
             for size, label in zip(marker_sizes, element_size_legend_labels):
@@ -826,12 +822,12 @@ def draw_label(self,
                x_coords,
                y_coords,
                ax=None,
-               nodes=None,
+               draw_nodes=None,
                draw_arrow=True,
                label_font_size=11
                ):
     """Draws customizable labels on the figure.
-    There are two modes of coordinate input: If the 'nodes' argument is not specified, then the label coordinates are processed as absolute coordinates with possible values from 0 to 1. For instance, (0,0) would place the label in the bottom left of the figure, while (1,1) would place the label in the top right of the figure. If the 'nodes' argument IS specified, then the coordinates are processed as coordinates relative to it's associated node. The scale of the coordinates scaling differs between networks. For instance, (50,100) would place the label 50 units to the right, and 100 units above the associated node.
+    There are two modes of coordinate input: If the 'draw_nodes' argument is not specified, then the label coordinates are processed as absolute coordinates with possible values from 0 to 1. For instance, (0,0) would place the label in the bottom left of the figure, while (1,1) would place the label in the top right of the figure. If the 'draw_nodes' argument IS specified, then the coordinates are processed as coordinates relative to it's associated node. The scale of the coordinates scaling differs between networks. For instance, (50,100) would place the label 50 units to the right, and 100 units above the associated node.
 
     Arguments
     ---------
@@ -843,18 +839,18 @@ def draw_label(self,
         The x coordinate(s) of the labels.
     y_coords : integer, array-like
         The y coordinate(s) of the labels.
-    nodes : string, array-like
-        A list of the nodes the labels are to be associated with.
+    draw_nodes : string, array-like
+        A list of the draw_nodes the labels are to be associated with.
     draw_arrow : boolean
-        Determine if an arrow is drawn from the associated nodes to labels.
+        Determine if an arrow is drawn from the associated draw_nodes to labels.
     label_font_size : integer
         The font size of the labels.
     """
     model = self.model
     if ax is None:
         ax = self.ax
-    if nodes is not None:
-        for label, node, xCoord, yCoord in zip(labels, nodes, x_coords, y_coords):
+    if draw_nodes is not None:
+        for label, node, xCoord, yCoord in zip(labels, draw_nodes, x_coords, y_coords):
             if draw_arrow:
                 edge_list = []
                 if label == node:
@@ -902,7 +898,7 @@ def draw_label(self,
                               alpha=0.9, edgecolor="black"),
                     horizontalalignment="center",
                     verticalalignment="center", fontsize=label_font_size)
-    elif nodes is None:
+    elif draw_nodes is None:
         for label, xCoord, yCoord in zip(labels, x_coords, y_coords):
             ax.text(
                 xCoord, yCoord, s=label,

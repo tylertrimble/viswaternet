@@ -3,11 +3,9 @@
 The viswaternet.drawing.unique module handles custom data, excel data, and unique data drawing.
 """
 
-import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 from viswaternet.network import processing
-from viswaternet.utils import convert_excel, save_fig, normalize_parameter, unit_conversion
+from viswaternet.utils import convert_excel, save_fig, unit_conversion
 from viswaternet.drawing import base
 from viswaternet.drawing import discrete
 
@@ -25,34 +23,25 @@ def plot_unique_data(
     custom_data_values=None,
     unit=None,
     intervals="automatic",
-    interval_node_size_list=None,
-    interval_node_shape_list=None,
+    node_size=100,
+    node_shape='.',
     num_intervals=5,
-    interval_link_width_list=None,
-    interval_label_list=None,
-    interval_node_border_color_list=None,
-    interval_node_border_width_list=None,
+    label_list=None,
+    node_border_color=None,
+    node_border_width =None,
     color_list=None,
-    widths=1,
-    min_width=None,
-    max_width=None,
-    min_size=None,
-    max_size=None,
+    link_width=1,
     vmin=None,
     vmax=None,
     link_style='-',
     link_arrows=False,
-    tanks=True,
-    reservoirs=True,
-    pumps=True,
-    valves=True,
+    draw_tanks=True,
+    draw_reservoirs=True,
+    draw_pumps=True,
+    draw_valves=True,
     cmap=default_cmap,
     legend=True,
     legend_title=None,
-    node_size=100,
-    node_shape=".",
-    line_widths=None,
-    edge_colors=None,
     base_legend_loc="upper right",
     discrete_legend_loc="lower right",
     savefig=False,
@@ -65,8 +54,6 @@ def plot_unique_data(
     legend_title_font_size=17,
     draw_frame=False,
     legend_sig_figs=3,
-    node_sizes=None,
-    link_sizes=None,
     element_size_intervals=None,
     element_size_legend_title=None,
     element_size_legend_loc=None,
@@ -148,45 +135,45 @@ def plot_unique_data(
     intervals : integer, string
         If set to 'automatic' then intervals are created automatically on a equal interval basis. Otherwise, it is the edges of the intervals to be created. intervals array length should be num_intervals + 1.
 
-    interval_node_size_list : integer, array-like
+    node_size : integer, array-like
         List of node sizes for each interval.
 
-    interval_node_shape_list : string, array-like
+    node_shape : string, array-like
         List of node shapes for each interval. Refer to matplotlib documentation for available marker types.
 
     num_intervals : integer
         The number of intervals.
 
-    interval_link_width_list : integer, array-like
+    link_width : integer, array-like
         List of link widths for each interval.
 
-    interval_label_list : string, array-like
+    label_list : string, array-like
         List of labels for each interval.
 
-    interval_node_border_color_list : string, array-like
+    node_border_color : string, array-like
         The color of the node borders for each interval.
 
-    interval_node_border_width_list : integer, array-like
+    node_border_width  : integer, array-like
         The width of the node borders for each interval.
 
     color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color nodes. If both are, then color_list
+        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list
         takes priority.
 
     widths : integer, array-like
         Integer representing all link widrths, or array of widths for each link.
 
     min_width : integer
-        Minimum size of links to be used with normalize_parameter.
+        Minimum size of draw_links to be used with normalize_parameter.
 
     max_width : integer
-        Maximum size of links to be used with normalize_parameter.
+        Maximum size of draw_links to be used with normalize_parameter.
 
     min_size : integer
-        Minimum size of nodes to be used with normalize_parameter.
+        Minimum size of draw_nodes to be used with normalize_parameter.
 
     max_size : integer
-        Maximum size of nodes to be used with normalize_parameter.
+        Maximum size of draw_nodes to be used with normalize_parameter.
 
     vmin : integer
         The minimum value of the color bar. 
@@ -195,22 +182,22 @@ def plot_unique_data(
         The maximum value of the color bar.
 
     link_style : string
-        The style (solid, dashed, dotted, etc.) of the links. Refer to matplotlib documentation for available line styles.
+        The style (solid, dashed, dotted, etc.) of the draw_links. Refer to matplotlib documentation for available line styles.
 
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
 
-    reservoirs : boolean
-        Determines if reservoirs with no data associated with them are drawn.
+    draw_reservoirs : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
 
-    tanks : boolean
-        Determines if reservoirs with no data associated with them are drawn.
+    draw_tanks : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
 
-    pumps : boolean
-        Determines if pumps with no data associated with them are drawn.
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
 
-    valves : boolean
-        Determines if valves with no data associated with them are drawn.
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
 
     cmap : string
         The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
@@ -225,13 +212,13 @@ def plot_unique_data(
         Integer representing all node sizes, or array of sizes for each node.
 
     node_shape : string
-        Shape of the nodes. Refer to matplotlib documentation for available 
+        Shape of the draw_nodes. Refer to matplotlib documentation for available 
         marker types.
 
-    line_widths : integer
+    node_border_width : integer
         Width of the node borders.
 
-    edge_colors : string
+    node_border_color : string
         Color of the node borders.
 
     legend_loc_1 : string
@@ -355,22 +342,22 @@ def plot_unique_data(
         Determines if an arrow is drawn in the direction of flow of the pump.
 
     base_node_color : string
-        The color of the nodes without data associated with them.
+        The color of the draw_nodes without data associated with them.
 
     base_node_size : integer
-        The size of the nodes without data associated with them in points^2.
+        The size of the draw_nodes without data associated with them in points^2.
 
     base_link_color : string
-        The color of the links without data associated with them.
+        The color of the draw_links without data associated with them.
 
     base_link_width : integer
-        The width of the links without data associated with them in points.
+        The width of the draw_links without data associated with them in points.
 
     base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
+        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
 
     base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the links
+        Determines if an arrow is drawn in the direction of flow of the draw_links
         with no data associated with them.
 
     disable_interval_deleting : boolean
@@ -383,15 +370,15 @@ def plot_unique_data(
     model = self.model
 
     if len(self.model['G_list_pumps_only']) == 0:
-        pumps = False
+        draw_pumps = False
     if ax is None:
         fig, ax = plt.subplots(figsize=self.figsize)
         ax.set_frame_on(self.axis_frame)
 
-    def call_draw_base_elements(links=True):
-        base.draw_base_elements(self, ax, nodes=False, links=links,
-                                reservoirs=reservoirs, tanks=tanks,
-                                valves=valves, pumps=pumps,
+    def call_draw_base_elements(draw_links=True):
+        base.draw_base_elements(self, ax, draw_nodes=False, draw_links=draw_links,
+                                draw_reservoirs=draw_reservoirs, draw_tanks=draw_tanks,
+                                draw_valves=draw_valves, draw_pumps=draw_pumps,
                                 reservoir_size=reservoir_size,
                                 reservoir_color=reservoir_color,
                                 reservoir_shape=reservoir_shape,
@@ -418,18 +405,18 @@ def plot_unique_data(
     def call_draw_legend(continuous=False, base_links=True, intervals=None):
         if continuous == True:
             base.draw_legend(ax, intervals=intervals, title=legend_title,
-                             pumps=pumps, base_legend_loc=base_legend_loc, 
+                             draw_pumps=draw_pumps, base_legend_loc=base_legend_loc, 
                              discrete_legend_loc=discrete_legend_loc,
                              font_size=font_size, font_color=font_color,
                              legend_title_font_size=legend_title_font_size,
                              draw_frame=draw_frame, pump_color=pump_color,
                              base_link_color=base_link_color,
-                             node_sizes=node_sizes, link_sizes=link_sizes,
+                             node_size=node_size, link_width=link_width,
                              element_size_intervals=element_size_intervals,
                              element_size_legend_title=element_size_legend_title,
                              element_size_legend_loc=element_size_legend_loc,
                              element_size_legend_labels=element_size_legend_labels,
-                             edge_colors=edge_colors, linewidths=line_widths,
+                             node_border_color=node_border_color, linewidths=node_border_width,
                              draw_base_legend=draw_base_legend,
                              draw_intervals_legend=draw_intervals_legend,
                              pump_line_style=pump_line_style,
@@ -439,18 +426,18 @@ def plot_unique_data(
                              draw_base_links=False)
         else:
             base.draw_legend(ax, intervals=intervals, title=legend_title,
-                             pumps=pumps, base_legend_loc=base_legend_loc, 
+                             draw_pumps=draw_pumps, base_legend_loc=base_legend_loc, 
                              discrete_legend_loc=discrete_legend_loc,
                              font_size=font_size, font_color=font_color,
                              legend_title_font_size=legend_title_font_size,
                              draw_frame=draw_frame, pump_color=pump_color,
                              base_link_color=base_link_color,
-                             node_sizes=node_sizes, link_sizes=widths,
+                             node_sizs=node_size, link_width=link_width,
                              element_size_intervals=element_size_intervals,
                              element_size_legend_title=element_size_legend_title,
                              element_size_legend_loc=element_size_legend_loc,
                              element_size_legend_labels=element_size_legend_labels,
-                             edge_colors=edge_colors, linewidths=line_widths,
+                             node_border_color=node_border_color, linewidths=node_border_width,
                              draw_base_legend=draw_base_legend,
                              draw_intervals_legend=draw_intervals_legend,
                              pump_line_style=pump_line_style,
@@ -473,11 +460,11 @@ def plot_unique_data(
             ax,
             demand_pattern_nodes,
             patterns,
-            interval_node_size_list=interval_node_size_list,
-            interval_node_shape_list=interval_node_shape_list,
-            interval_label_list=interval_label_list,
-            interval_node_border_color_list=interval_node_border_color_list,
-            interval_node_border_width_list=interval_node_border_width_list,
+            node_size=node_size,
+            node_shape=node_shape,
+            label_list=label_list,
+            node_border_color=node_border_color,
+            node_border_width =node_border_width ,
             cmap=cmap,
             color_list=color_list,
         )
@@ -524,15 +511,15 @@ def plot_unique_data(
             ax,
             interval_results,
             interval_names,
-            interval_link_width_list=interval_link_width_list,
-            interval_label_list=interval_label_list,
+            link_width=link_width,
+            label_list=label_list,
             cmap=cmap,
             color_list=color_list,
             link_style=link_style,
             link_arrows=link_arrows,
         )
 
-        call_draw_base_elements(links=False)
+        call_draw_base_elements(draw_links=False)
 
         if legend:
             call_draw_legend(base_links=False, intervals=interval_names)
@@ -582,11 +569,11 @@ def plot_unique_data(
             ax,
             interval_results,
             interval_names,
-            interval_node_size_list=interval_node_size_list,
-            interval_node_shape_list=interval_node_shape_list,
-            interval_label_list=interval_label_list,
-            interval_node_border_color_list=interval_node_border_color_list,
-            interval_node_border_width_list=interval_node_border_width_list,
+            node_size=node_size,
+            node_shape=node_shape,
+            label_list=label_list,
+            node_border_color=node_border_color,
+            node_border_width =node_border_width ,
             cmap=cmap,
             color_list=color_list,
         )
@@ -634,15 +621,15 @@ def plot_unique_data(
                     ax,
                     interval_results,
                     interval_names,
-                    interval_link_width_list=interval_link_width_list,
-                    interval_label_list=interval_label_list,
+                    link_width=link_width,
+                    label_list=label_list,
                     cmap=cmap,
                     color_list=color_list,
                     link_style=link_style,
                     link_arrows=link_arrows,
                 )
 
-                call_draw_base_elements(links=False)
+                call_draw_base_elements(draw_links=False)
 
                 if legend:
                     call_draw_legend(base_links=False,
@@ -654,11 +641,11 @@ def plot_unique_data(
                     ax,
                     interval_results,
                     interval_names,
-                    interval_node_size_list=interval_node_size_list,
-                    interval_node_shape_list=interval_node_shape_list,
-                    interval_label_list=interval_label_list,
-                    interval_node_border_color_list=interval_node_border_color_list,
-                    interval_node_border_width_list=interval_node_border_width_list,
+                    node_size=node_size,
+                    node_shape=node_shape,
+                    label_list=label_list,
+                    node_border_color=node_border_color,
+                    node_border_width =node_border_width ,
                     cmap=cmap,
                     color_list=color_list,
                 )
@@ -691,15 +678,15 @@ def plot_unique_data(
                     ax,
                     interval_results,
                     interval_names,
-                    interval_link_width_list=interval_link_width_list,
-                    interval_label_list=interval_label_list,
+                    link_width=link_width,
+                    label_list=label_list,
                     cmap=cmap,
                     color_list=color_list,
                     link_style=link_style,
                     link_arrows=link_arrows,
                 )
 
-                call_draw_base_elements(links=False)
+                call_draw_base_elements(draw_links=False)
 
                 if legend:
                     call_draw_legend(base_links=False,
@@ -712,11 +699,11 @@ def plot_unique_data(
                     ax,
                     interval_results,
                     interval_names,
-                    interval_node_size_list=interval_node_size_list,
-                    interval_node_shape_list=interval_node_shape_list,
-                    interval_label_list=interval_label_list,
-                    interval_node_border_color_list=interval_node_border_color_list,
-                    interval_node_border_width_list=interval_node_border_width_list,
+                    node_size=node_size,
+                    node_shape=node_shape,
+                    label_list=label_list,
+                    node_border_color=node_border_color,
+                    node_border_width =node_border_width ,
                     cmap=cmap,
                     color_list=color_list,
                 )
@@ -734,38 +721,25 @@ def plot_unique_data(
         if data_type == "continuous":
 
             if parameter_type == "link":
-                if min_width is not None and max_width is not None:
-                    normalized_parameter = normalize_parameter(
-                        custom_data_values[1], min_width, max_width
-                    )
-
-                    widths = normalized_parameter
-
                 g = base.draw_links(
                     self,
                     ax,
                     custom_data_values[0],
                     parameter_results=custom_data_values[1],
                     cmap=cmap,
-                    widths=widths,
+                    widths=link_width,
                     vmin=vmin,
                     vmax=vmax,
                     link_style=link_style,
                     link_arrows=link_arrows,
                 )
 
-                call_draw_base_elements(links=False)
+                call_draw_base_elements(draw_links=False)
 
                 if legend:
                     call_draw_legend(continuous=True, base_links=False)
 
             elif parameter_type == "node":
-                if min_size is not None and max_size is not None:
-                    normalized_parameter = normalize_parameter(
-                        custom_data_values[1], min_size, max_size
-                    )
-
-                    node_size = normalized_parameter
                 g = base.draw_nodes(
                     self,
                     ax,
@@ -776,8 +750,8 @@ def plot_unique_data(
                     vmin=vmin,
                     vmax=vmax,
                     node_shape=node_shape,
-                    line_widths=line_widths,
-                    edge_colors=edge_colors,
+                    node_border_width=node_border_width,
+                    node_border_color=node_border_color,
                 )
 
                 call_draw_base_elements()
@@ -808,15 +782,15 @@ def plot_unique_data(
                     ax,
                     element_list,
                     intervals,
-                    interval_link_width_list=interval_link_width_list,
-                    interval_label_list=interval_label_list,
+                    link_width=link_width,
+                    label_list=label_list,
                     cmap=cmap,
                     color_list=color_list,
                     link_style=link_style,
                     link_arrows=link_arrows,
                 )
 
-                call_draw_base_elements(links=False)
+                call_draw_base_elements(draw_links=False)
 
                 if legend:
                     call_draw_legend(base_links=False, intervals=intervals)
@@ -828,11 +802,11 @@ def plot_unique_data(
                     ax,
                     element_list,
                     intervals,
-                    interval_node_size_list=interval_node_size_list,
-                    interval_node_shape_list=interval_node_shape_list,
-                    interval_label_list=interval_label_list,
-                    interval_node_border_color_list=interval_node_border_color_list,
-                    interval_node_border_width_list=interval_node_border_width_list,
+                    node_size=node_size,
+                    node_shape=node_shape,
+                    label_list=label_list,
+                    node_border_color=node_border_color,
+                    node_border_width =node_border_width ,
                     cmap=cmap,
                     color_list=color_list,
                 )
@@ -870,15 +844,15 @@ def plot_unique_data(
                     ax,
                     interval_results,
                     interval_names,
-                    interval_link_width_list=interval_link_width_list,
-                    interval_label_list=interval_label_list,
+                    link_width=link_width,
+                    label_list=label_list,
                     cmap=cmap,
                     color_list=color_list,
                     link_style=link_style,
                     link_arrows=link_arrows,
                 )
 
-                call_draw_base_elements(links=False)
+                call_draw_base_elements(draw_links=False)
 
                 if legend:
                     call_draw_legend(base_links=False,
@@ -891,11 +865,11 @@ def plot_unique_data(
                     ax,
                     interval_results,
                     interval_names,
-                    interval_node_size_list=interval_node_size_list,
-                    interval_node_shape_list=interval_node_shape_list,
-                    interval_label_list=interval_label_list,
-                    interval_node_border_color_list=interval_node_border_color_list,
-                    interval_node_border_width_list=interval_node_border_width_list,
+                    node_size=node_size,
+                    node_shape=node_shape,
+                    label_list=label_list,
+                    node_border_color=node_border_color,
+                    node_border_width =node_border_width ,
                     cmap=cmap,
                     color_list=color_list,
                 )
@@ -917,39 +891,25 @@ def plot_unique_data(
             )
 
             if parameter_type == "link":
-
-                if min_width is not None and max_width is not None:
-                    normalized_parameter = normalize_parameter(
-                        custom_data_values[1], min_width, max_width
-                    )
-
-                    widths = normalized_parameter
-
                 g = base.draw_links(
                     self,
                     ax,
                     data["element_list"],
                     parameter_results=data["results"],
                     cmap=cmap,
-                    widths=widths,
+                    widths=link_width,
                     vmin=vmin,
                     vmax=vmax,
                     link_style=link_style,
                     link_arrows=link_arrows,
                 )
 
-                call_draw_base_elements(links=False)
+                call_draw_base_elements(draw_links=False)
 
                 if legend:
                     call_draw_legend(continuous=True, base_links=False)
 
             elif parameter_type == "node":
-                if min_size is not None and max_size is not None:
-                    normalized_parameter = normalize_parameter(
-                        custom_data_values[1], min_size, max_size
-                    )
-
-                    node_size = normalized_parameter
                 g = base.draw_nodes(
                     self,
                     ax,
@@ -960,8 +920,8 @@ def plot_unique_data(
                     vmin=vmin,
                     vmax=vmax,
                     node_shape=node_shape,
-                    line_widths=line_widths,
-                    edge_colors=edge_colors,
+                    node_border_width=node_border_width,
+                    node_border_color=node_border_color,
                 )
 
                 call_draw_base_elements()
