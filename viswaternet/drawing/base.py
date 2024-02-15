@@ -348,7 +348,7 @@ def plot_basic_elements(
     if legend:
         draw_legend(
             ax,
-            draw_pumps=draw_pumps, base_legendloc=base_legend_loc, font_size=font_size,
+            draw_pumps=draw_pumps, base_legend_loc=base_legend_loc, font_size=font_size,
             font_color=font_color,
             legend_title_font_size=legend_title_font_size,
             draw_frame=draw_frame, pump_color=pump_color,
