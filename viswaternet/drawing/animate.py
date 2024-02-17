@@ -14,7 +14,7 @@ def animate_plot(
     first_timestep=0,
     last_timestep=None,
     save_name="animation",
-    file_format="mp4",
+    save_format="mp4",
     time_unit='s',
     **kwargs
 ):
@@ -128,10 +128,10 @@ def animate_plot(
         ax.clear()
         
     # builds gif
-    if file_format == "gif" or file_format == "GIF":
-        imageio.mimsave(save_name+"."+file_format, frames, format='GIF',duration=(100/fps))
+    if save_format == "gif" or save_format == "GIF":
+        imageio.mimsave(save_name+"."+save_format, frames, format='GIF',duration=(100/fps))
     else:
-        imageio.mimsave(save_name+"."+file_format, frames, format='FFMPEG',fps=fps,quality=8,ffmpeg_log_level='quiet')
+        imageio.mimsave(save_name+"."+save_format, frames, format='FFMPEG',fps=fps,quality=8,ffmpeg_log_level='quiet')
             
     
 def make_vmin_vmax(parameter,kwargs):

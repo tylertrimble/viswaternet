@@ -36,7 +36,7 @@ def plot_unique_data(
     draw_pumps=True,
     draw_valves=True,
     cmap=default_cmap,
-    legend=True,
+    draw_base_legend=True,
     legend_title=None,
     base_legend_loc="upper right",
     discrete_legend_loc="lower right",
@@ -45,17 +45,19 @@ def plot_unique_data(
     dpi='figure',
     save_format='png',
     color_bar_title=None,
-    font_size=15,
-    font_color='k',
-    legend_title_font_size=17,
-    draw_frame=False,
-    legend_sig_figs=3,
+    base_legend_label_font_size=15,
+    base_legend_label_font_color="k",
+    discrete_legend_label_font_size=15,
+    discrete_legend_label_font_color="k",
+    discrete_legend_title_font_size=17,
+    discrete_legend_title_font_color='k',
+    draw_legend_frame=False,
+    legend_decimal_places=3,
     element_size_intervals=None,
     element_size_legend_title=None,
     element_size_legend_loc=None,
     element_size_legend_labels=None,
-    draw_base_legend=True,
-    draw_intervals_legend=True,
+    draw_discrete_legend=True,
     reservoir_size=150,
     reservoir_color='b',
     reservoir_shape='s',
@@ -126,9 +128,14 @@ def plot_unique_data(
             base.draw_legend(ax, intervals=intervals, title=legend_title,
                              draw_pumps=draw_pumps, base_legend_loc=base_legend_loc, 
                              discrete_legend_loc=discrete_legend_loc,
-                             font_size=font_size, font_color=font_color,
-                             legend_title_font_size=legend_title_font_size,
-                             draw_frame=draw_frame, pump_color=pump_color,
+                             base_legend_label_font_size=base_legend_label_font_size, 
+                             base_legend_label_font_color=base_legend_label_font_color,
+                             discrete_legend_label_font_size=discrete_legend_label_font_size, 
+                             discrete_legend_label_font_color=discrete_legend_label_font_color,
+                             discrete_legend_title_font_size=discrete_legend_title_font_size,
+                             discrete_legend_title_font_color=discrete_legend_title_font_color,
+                             cmap=cmap, color_list=color_list,
+                             draw_legend_frame=draw_legend_frame, pump_color=pump_color,
                              base_link_color=base_link_color,
                              node_size=node_size, link_width=link_width,
                              element_size_intervals=element_size_intervals,
@@ -137,7 +144,7 @@ def plot_unique_data(
                              element_size_legend_labels=element_size_legend_labels,
                              node_border_color=node_border_color, linewidths=node_border_width,
                              draw_base_legend=draw_base_legend,
-                             draw_intervals_legend=draw_intervals_legend,
+                             draw_discrete_legend=draw_discrete_legend,
                              pump_line_style=pump_line_style,
                              base_link_line_style=base_link_line_style,
                              base_link_arrows=base_link_arrows,
@@ -147,9 +154,14 @@ def plot_unique_data(
             base.draw_legend(ax, intervals=intervals, title=legend_title,
                              draw_pumps=draw_pumps, base_legend_loc=base_legend_loc, 
                              discrete_legend_loc=discrete_legend_loc,
-                             font_size=font_size, font_color=font_color,
-                             legend_title_font_size=legend_title_font_size,
-                             draw_frame=draw_frame, pump_color=pump_color,
+                             base_legend_label_font_size=base_legend_label_font_size, 
+                             base_legend_label_font_color=base_legend_label_font_color,
+                             discrete_legend_label_font_size=discrete_legend_label_font_size, 
+                             discrete_legend_label_font_color=discrete_legend_label_font_color,
+                             discrete_legend_title_font_size=discrete_legend_title_font_size,
+                             discrete_legend_title_font_color=discrete_legend_title_font_color,
+                             cmap=cmap, color_list=color_list,
+                             draw_legend_frame=draw_legend_frame, pump_color=pump_color,
                              base_link_color=base_link_color,
                              node_sizs=node_size, link_width=link_width,
                              element_size_intervals=element_size_intervals,
@@ -158,7 +170,7 @@ def plot_unique_data(
                              element_size_legend_labels=element_size_legend_labels,
                              node_border_color=node_border_color, linewidths=node_border_width,
                              draw_base_legend=draw_base_legend,
-                             draw_intervals_legend=draw_intervals_legend,
+                             draw_discrete_legend=draw_discrete_legend,
                              pump_line_style=pump_line_style,
                              base_link_line_style=base_link_line_style,
                              base_link_arrows=base_link_arrows,
@@ -190,8 +202,7 @@ def plot_unique_data(
 
         call_draw_base_elements()
 
-        if legend:
-            call_draw_legend(intervals=patterns)
+        call_draw_legend(intervals=patterns)
 
         if savefig:
 
@@ -209,7 +220,7 @@ def plot_unique_data(
                 parameter_results, parameter, unit)
         uniques = sorted(list(set(parameter_results)))
 
-        interval_names = [("{:.{j}f}".format(i, j=legend_sig_figs))
+        interval_names = [("{:.{j}f}".format(i, j=legend_decimal_places))
                           for i in uniques]
 
         interval_results = {}
@@ -220,7 +231,7 @@ def plot_unique_data(
 
         for i, link in enumerate(link_list):
 
-            interval_results["{:.{j}f}".format(parameter_results[i], j=legend_sig_figs)][link] = model[
+            interval_results["{:.{j}f}".format(parameter_results[i], j=legend_decimal_places)][link] = model[
                 "G_pipe_name_list"
             ].index(link)
 
@@ -240,8 +251,7 @@ def plot_unique_data(
 
         call_draw_base_elements(draw_links=False)
 
-        if legend:
-            call_draw_legend(base_links=False, intervals=interval_names)
+        call_draw_legend(base_links=False, intervals=interval_names)
 
         if savefig:
 
@@ -299,8 +309,7 @@ def plot_unique_data(
 
         call_draw_base_elements()
 
-        if legend:
-            call_draw_legend(intervals=interval_names)
+        call_draw_legend(intervals=interval_names)
 
         if savefig:
 
@@ -350,8 +359,7 @@ def plot_unique_data(
 
                 call_draw_base_elements(draw_links=False)
 
-                if legend:
-                    call_draw_legend(base_links=False,
+                call_draw_legend(base_links=False,
                                      intervals=custom_data_values[1])
             elif parameter_type == "node":
 
@@ -371,8 +379,7 @@ def plot_unique_data(
 
                 call_draw_base_elements()
 
-                if legend:
-                    call_draw_legend(intervals=custom_data_values[1])
+                call_draw_legend(intervals=custom_data_values[1])
 
             if savefig:
 
@@ -386,7 +393,7 @@ def plot_unique_data(
                 custom_data_values[0],
                 intervals=intervals,
                 num_intervals=num_intervals,
-                legend_sig_figs=legend_sig_figs,
+                legend_decimal_places=legend_decimal_places,
                 disable_interval_deleting=disable_interval_deleting,
             )
 
@@ -407,8 +414,7 @@ def plot_unique_data(
 
                 call_draw_base_elements(draw_links=False)
 
-                if legend:
-                    call_draw_legend(base_links=False,
+                call_draw_legend(base_links=False,
                                      intervals=interval_names)
 
             if parameter_type == "node":
@@ -429,8 +435,7 @@ def plot_unique_data(
 
                 call_draw_base_elements()
 
-                if legend:
-                    call_draw_legend(intervals=interval_names)
+                call_draw_legend(intervals=interval_names)
 
             if savefig:
                 save_fig(self, save_name=save_name,
@@ -455,8 +460,7 @@ def plot_unique_data(
 
                 call_draw_base_elements(draw_links=False)
 
-                if legend:
-                    call_draw_legend(continuous=True, base_links=False)
+                call_draw_legend(continuous=True, base_links=False)
 
             elif parameter_type == "node":
                 g = base.draw_nodes(
@@ -475,8 +479,7 @@ def plot_unique_data(
 
                 call_draw_base_elements()
 
-                if legend:
-                    call_draw_legend(continuous=True)
+                call_draw_legend(continuous=True)
 
             if draw_color_bar == True:
                 call_draw_color_bar()
@@ -511,8 +514,7 @@ def plot_unique_data(
 
                 call_draw_base_elements(draw_links=False)
 
-                if legend:
-                    call_draw_legend(base_links=False, intervals=intervals)
+                call_draw_legend(base_links=False, intervals=intervals)
 
             elif parameter_type == "node":
 
@@ -532,8 +534,7 @@ def plot_unique_data(
 
                 call_draw_base_elements()
 
-                if legend:
-                    call_draw_legend(intervals=intervals)
+                call_draw_legend(intervals=intervals)
 
             if savefig:
 
@@ -552,7 +553,7 @@ def plot_unique_data(
                 data["element_list"],
                 intervals=intervals,
                 num_intervals=num_intervals,
-                legend_sig_figs=legend_sig_figs,
+                legend_decimal_places=legend_decimal_places,
                 disable_interval_deleting=disable_interval_deleting,
             )
 
@@ -573,8 +574,7 @@ def plot_unique_data(
 
                 call_draw_base_elements(draw_links=False)
 
-                if legend:
-                    call_draw_legend(base_links=False,
+                call_draw_legend(base_links=False,
                                      intervals=interval_names)
 
             if parameter_type == "node":
@@ -595,8 +595,7 @@ def plot_unique_data(
 
                 call_draw_base_elements()
 
-                if legend:
-                    call_draw_legend(intervals=interval_names)
+                call_draw_legend(intervals=interval_names)
 
             if savefig:
 
@@ -625,8 +624,7 @@ def plot_unique_data(
 
                 call_draw_base_elements(draw_links=False)
 
-                if legend:
-                    call_draw_legend(continuous=True, base_links=False)
+                call_draw_legend(continuous=True, base_links=False)
 
             elif parameter_type == "node":
                 g = base.draw_nodes(
@@ -645,8 +643,7 @@ def plot_unique_data(
 
                 call_draw_base_elements()
 
-                if legend:
-                    call_draw_legend(continuous=True)
+                call_draw_legend(continuous=True)
 
             if draw_color_bar == True:
                 call_draw_color_bar()

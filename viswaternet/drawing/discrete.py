@@ -37,17 +37,17 @@ def draw_discrete_nodes(
     if label_list is None:
         label_list = intervals
     if node_shape is None:
-        node_shape = ['.' for i in len(intervals)]
+        node_shape = ['.' for i in range(len(intervals))]
     if isinstance(node_shape, str):
-        node_shape = [node_shape for i in len(intervals)]
+        node_shape = [node_shape for i in range(len(intervals))]
     if node_border_color is None:
-        node_border_color = ['k' for i in len(intervals)]
+        node_border_color = ['k' for i in range(len(intervals))]
     if isinstance(node_border_color, str):
-        node_border_color = [node_border_color for i in len(intervals)]
+        node_border_color = [node_border_color for i in range(len(intervals))]
     if node_border_width is None:
         node_border_width = [0 for i in len(intervals)]
     if isinstance(node_border_width, int) or isinstance(node_border_width, float):
-        node_border_width = [node_border_width for i in len(intervals)]
+        node_border_width = [node_border_width for i in range(len(intervals))]
     empty_interval = False
 
     if (color_list is not None and cmap is not None) or color_list is not None:
@@ -157,9 +157,9 @@ def draw_discrete_links(
     if label_list is None:
         label_list = intervals
     if isinstance(link_style, str):
-        link_style = [link_style for i in len(intervals)]
-    if isinstance(link_style, str):
-        link_arrows = [link_arrows for i in len(intervals)]
+        link_style = [link_style for i in range(len(intervals))]
+    if isinstance(link_arrows, bool):
+        link_arrows = [link_arrows for i in range(len(intervals))]
     empty_interval = False
     if (color_list is not None and cmap is not None) or color_list is not None:
         for j, interval_name in enumerate(intervals):
@@ -246,8 +246,8 @@ def plot_discrete_nodes(
     value=None,
     unit=None,
     element_list=None,
-    get_tanks=False,
-    get_reservoirs=False,
+    include_tanks=False,
+    include_reservoirs=False,
     intervals="automatic",
     node_size=None,
     node_shape=None,
@@ -262,18 +262,20 @@ def plot_discrete_nodes(
     draw_reservoirs=True,
     draw_pumps=True,
     draw_valves=True,
-    legend=True,
     legend_title=None,
     base_legend_loc="upper right",
     discrete_legend_loc="lower right",
     cmap=default_cmap,
     color_list=None,
     disable_interval_deleting=True,
-    font_size=15,
-    font_color='k',
-    legend_title_font_size=17,
-    draw_frame=False,
-    legend_sig_figs=3,
+    base_legend_label_font_size=15,
+    base_legend_label_font_color="k",
+    discrete_legend_label_font_size=15,
+    discrete_legend_label_font_color="k",
+    discrete_legend_title_font_size=17,
+    discrete_legend_title_font_color='k',
+    draw_legend_frame=False,
+    legend_decimal_places=3,
     reservoir_size=150,
     reservoir_color='b',
     reservoir_shape='s',
@@ -311,7 +313,7 @@ def plot_discrete_nodes(
     if parameter is not None:
         parameter_results, node_list = processing.get_parameter(
             self, "node", parameter, element_list=element_list,
-            value=value, draw_tanks=get_tanks, draw_reservoirs=get_reservoirs)
+            value=value, include_tanks=include_tanks, include_reservoirs=include_reservoirs)
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
@@ -319,7 +321,7 @@ def plot_discrete_nodes(
             self, parameter_results, node_list, intervals=intervals,
             num_intervals=num_intervals,
             disable_interval_deleting=disable_interval_deleting,
-            legend_sig_figs=legend_sig_figs)
+            legend_decimal_places=legend_decimal_places)
         draw_discrete_nodes(
             self,
             ax, interval_results, interval_names,
@@ -347,24 +349,28 @@ def plot_discrete_nodes(
             base_link_width=base_link_width,
             base_link_line_style=base_link_line_style,
             base_link_arrows=base_link_arrows)
-        if legend:
-            if legend_title is None:
-                legend_title = label_generator(parameter, value, unit)
 
-            base.draw_legend(
-                ax, intervals=interval_names, title=legend_title,
-                draw_pumps=draw_pumps, base_legend_loc=base_legend_loc,
-                discrete_legend_loc=discrete_legend_loc, font_size=font_size,
-                font_color=font_color,
-                legend_title_font_size=legend_title_font_size,
-                draw_frame=draw_frame, pump_color=pump_color,
-                base_link_color=base_link_color,
-                draw_base_legend=draw_base_legend,
-                draw_intervals_legend=draw_interval_legend,
-                pump_line_style=pump_line_style,
-                base_link_line_style=base_link_line_style,
-                base_link_arrows=base_link_arrows, pump_arrows=pump_arrows,
-                draw_base_links=True)
+        if legend_title is None:
+            legend_title = label_generator(parameter, value, unit)
+
+        base.draw_legend(
+            ax, intervals=interval_names, title=legend_title,
+            draw_pumps=draw_pumps, base_legend_loc=base_legend_loc,
+            base_legend_label_font_size=base_legend_label_font_size, 
+            base_legend_label_font_color=base_legend_label_font_color,
+            discrete_legend_label_font_size=discrete_legend_label_font_size, 
+            discrete_legend_label_font_color=discrete_legend_label_font_color,
+            discrete_legend_title_font_size=discrete_legend_title_font_size,
+            discrete_legend_title_font_color=discrete_legend_title_font_color,
+            cmap=cmap, color_list=color_list,
+            draw_legend_frame=draw_legend_frame, pump_color=pump_color,
+            base_link_color=base_link_color,
+            draw_base_legend=draw_base_legend,
+            draw_discrete_legend=draw_interval_legend,
+            pump_line_style=pump_line_style,
+            base_link_line_style=base_link_line_style,
+            base_link_arrows=base_link_arrows, pump_arrows=pump_arrows,
+            draw_base_links=True)
     if savefig:
         save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
 
@@ -388,7 +394,6 @@ def plot_discrete_links(
     draw_pumps=True,
     draw_valves=True,
     cmap=default_cmap,
-    legend=True,
     legend_title=None,
     base_legend_loc="upper right",
     discrete_legend_loc="lower right",
@@ -397,11 +402,14 @@ def plot_discrete_links(
     dpi='figure',
     save_format='png',
     disable_interval_deleting=True,
-    font_size=15,
-    font_color='k',
-    legend_title_font_size=17,
-    draw_frame=False,
-    legend_sig_figs=3,
+    base_legend_label_font_size=15,
+    base_legend_label_font_color="k",
+    discrete_legend_label_font_size=15,
+    discrete_legend_label_font_color="k",
+    discrete_legend_title_font_size=17,
+    discrete_legend_title_font_color='k',
+    draw_legend_frame=False,
+    legend_decimal_places=3,
     reservoir_size=150,
     reservoir_color='b',
     reservoir_shape='s',
@@ -428,7 +436,7 @@ def plot_discrete_links(
     base_link_line_style='-',
     base_link_arrows=False,
     draw_base_legend=True,
-    draw_intervals_legend=True
+    draw_discrete_legend=True
 
 ):
     if len(self.model['G_list_pumps_only']) == 0:
@@ -447,7 +455,7 @@ def plot_discrete_links(
             self, parameter_results, link_list,
             intervals=intervals, num_intervals=num_intervals,
             disable_interval_deleting=disable_interval_deleting,
-            legend_sig_figs=legend_sig_figs)
+            legend_decimal_places=legend_decimal_places)
         draw_discrete_links(
             self, ax, interval_results, interval_names,
             link_width=link_width,
@@ -472,22 +480,26 @@ def plot_discrete_links(
             base_link_width=base_link_width,
             base_link_line_style=base_link_line_style,
             base_link_arrows=base_link_arrows)
-        if legend:
-            if legend_title is None:
-                legend_title = label_generator(parameter, value, unit)
-            base.draw_legend(
-                ax, intervals=interval_names, title=legend_title, draw_pumps=draw_pumps,
-                base_legend_loc=base_legend_loc,
-                discrete_legend_loc=discrete_legend_loc,
-                font_size=font_size, font_color=font_color,
-                legend_title_font_size=legend_title_font_size,
-                draw_frame=draw_frame, pump_color=pump_color,
-                base_link_color=base_link_color,
-                draw_base_legend=draw_base_legend,
-                draw_intervals_legend=draw_intervals_legend,
-                pump_line_style=pump_line_style,
-                base_link_line_style=base_link_line_style,
-                base_link_arrows=base_link_arrows,
-                pump_arrows=pump_arrows, draw_base_links=False)
+        if legend_title is None:
+            legend_title = label_generator(parameter, value, unit)
+        base.draw_legend(
+            ax, intervals=interval_names, title=legend_title, draw_pumps=draw_pumps,
+            base_legend_loc=base_legend_loc,
+            discrete_legend_loc=discrete_legend_loc,
+            base_legend_label_font_size=base_legend_label_font_size, 
+            base_legend_label_font_color=base_legend_label_font_color,
+            discrete_legend_label_font_size=discrete_legend_label_font_size, 
+            discrete_legend_label_font_color=discrete_legend_label_font_color,
+            discrete_legend_title_font_size=discrete_legend_title_font_size,
+            discrete_legend_title_font_color=discrete_legend_title_font_color,
+            cmap=cmap, color_list=color_list,
+            draw_legend_frame=draw_legend_frame, pump_color=pump_color,
+            base_link_color=base_link_color,
+            draw_base_legend=draw_base_legend,
+            draw_discrete_legend=draw_discrete_legend,
+            pump_line_style=pump_line_style,
+            base_link_line_style=base_link_line_style,
+            base_link_arrows=base_link_arrows,
+            pump_arrows=pump_arrows, draw_base_links=False)
     if savefig:
         save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)

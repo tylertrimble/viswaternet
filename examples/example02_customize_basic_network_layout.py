@@ -16,5 +16,5 @@ ax.set_frame_on(False)
 
 # Customize and plot basic network layout 
 model.plot_basic_elements(ax, base_legend_loc = 'lower left', tank_color = 'g', 
-                          pump_line_style = ':')
+                          draw_pumps=False)
 plt.show()

@@ -227,14 +227,14 @@ def draw_base_elements(
             nodelist=model["reservoir_names"], node_size=reservoir_size,
             node_color=reservoir_color, edgecolors=reservoir_border_color,
             linewidths=reservoir_border_width, node_shape=reservoir_shape,
-            label="draw_reservoirs")
+            label="Reservoirs")
     # If draw_tanks is True, then draw draw_tanks
     if draw_tanks:
         nxp.draw_networkx_nodes(
             model["G"], model["pos_dict"], ax=ax, nodelist=model["tank_names"],
             node_size=tank_size, node_color=tank_color,
             edgecolors=tank_border_color, linewidths=tank_border_width,
-            node_shape=tank_shape, label="draw_tanks")
+            node_shape=tank_shape, label="Tanks")
     # If draw_valves is True, then draw draw_valves
     if draw_valves:
         valve_coordinates = {}
@@ -254,7 +254,7 @@ def draw_base_elements(
             nodelist=model["valve_names"], node_size=valve_size,
             node_color=valve_color, edgecolors=valve_border_color,
             linewidths=valve_border_width, node_shape=valve_shape,
-            label="draw_valves")
+            label="Valves")
     # If draw_links is True, then draw draw_links
     if draw_links:
         nxp.draw_networkx_edges(
@@ -286,11 +286,10 @@ def plot_basic_elements(
     save_format='png',
     legend=True,
     base_legend_loc="upper right",
-    font_size=15,
-    font_color='k',
+    legend_label_font_size=15,
+    legend_label_font_color='k',
     legend_title_font_size=17,
-    draw_frame=False,
-    legend_sig_figs=3,
+    draw_legend_frame=False,
     reservoir_size=150,
     reservoir_color='b',
     reservoir_shape='s',
@@ -348,10 +347,10 @@ def plot_basic_elements(
     if legend:
         draw_legend(
             ax,
-            draw_pumps=draw_pumps, base_legend_loc=base_legend_loc, font_size=font_size,
-            font_color=font_color,
+            draw_pumps=draw_pumps, base_legend_loc=base_legend_loc, legend_label_font_size=legend_label_font_size,
+            legend_label_font_color=legend_label_font_color,
             legend_title_font_size=legend_title_font_size,
-            draw_frame=draw_frame, pump_color=pump_color,
+            draw_legend_frame=draw_legend_frame, pump_color=pump_color,
             base_link_color=base_link_color,
             pump_line_style=pump_line_style,
             base_link_line_style=base_link_line_style,
@@ -369,10 +368,15 @@ def draw_legend(
     draw_pumps=True,
     base_legend_loc="upper right",
     discrete_legend_loc="lower right",
-    font_size=15,
-    font_color="k",
-    legend_title_font_size=17,
-    draw_frame=False,
+    base_legend_label_font_size=15,
+    base_legend_label_font_color="k",
+    discrete_legend_label_font_size=15,
+    discrete_legend_label_font_color="k",
+    discrete_legend_title_font_size=17,
+    discrete_legend_title_font_color='k',
+    cmap=None,
+    color_list=None,
+    draw_legend_frame=False,
     pump_color='b',
     base_link_color='k',
     node_size=None,
@@ -382,7 +386,7 @@ def draw_legend(
     element_size_legend_loc=None,
     element_size_legend_labels=None,
     draw_base_legend=True,
-    draw_intervals_legend=True,
+    draw_discrete_legend=True,
     node_border_color='k',
     linewidths=1,
     pump_line_style='-',
@@ -406,10 +410,10 @@ def draw_legend(
     if draw_pumps:
         if pump_arrows:
             extensions.append(Line2D([0], [0], color=pump_color,
-                              linestyle=pump_line_style, lw=4, label='draw_pumps'))
+                              linestyle=pump_line_style, lw=4, label='Pumps'))
         else:
             extensions.append(Line2D([0], [0], color=pump_color,
-                              linestyle=pump_line_style, lw=4, label='draw_pumps'))
+                              linestyle=pump_line_style, lw=4, label='Pumps'))
     # If draw_base_links is True, then add legend element. Note that right now
     # base_link_arrows does not affect legend entry, but that it may in the
     # future, hence the if statement
@@ -431,20 +435,46 @@ def draw_legend(
         # and so on
         if draw_base_legend is True:
             legend = ax.legend(
-                handles=handles[len(intervals):], loc=base_legend_loc, fontsize=font_size,
-                labelcolor=font_color, frameon=draw_frame)
+                handles=handles[len(intervals):], loc=base_legend_loc, fontsize=base_legend_label_font_size,
+                labelcolor=base_legend_label_font_color, frameon=draw_legend_frame)
             # Align legend text to the left, add legend to ax
             legend._legend_box.align = "left"
             ax.add_artist(legend)
         # Draws intervals, or data, legend to the ax
-        if draw_intervals_legend is True:
-            legend2 = ax.legend(
-                title=title, handles=handles[: len(intervals)], loc=discrete_legend_loc,
-                fontsize=font_size, labelcolor=font_color,
-                title_fontsize=legend_title_font_size, frameon=draw_frame)
-            # Align legend text to the left, adds title, and adds to ax
-            legend2._legend_box.align = "left"
-            plt.setp(legend2.get_title(), color=font_color)
+        if draw_discrete_legend is True:
+            if isinstance(discrete_legend_label_font_color, str) and discrete_legend_label_font_color != 'interval_color':
+                legend2 = ax.legend(
+                    title=title, handles=handles[: len(intervals)], loc=discrete_legend_loc,
+                    fontsize=discrete_legend_label_font_size, labelcolor=discrete_legend_label_font_color,
+                    title_fontsize=discrete_legend_title_font_size, frameon=draw_legend_frame)
+                # Align legend text to the left, adds title, and adds to ax
+                legend2._legend_box.align = "left"
+            if discrete_legend_label_font_color == 'interval_color':
+                legend2 = ax.legend(
+                    title=title, handles=handles[: len(intervals)], loc=discrete_legend_loc,
+                    fontsize=discrete_legend_label_font_size,
+                    title_fontsize=discrete_legend_title_font_size, frameon=draw_legend_frame)
+                # Align legend text to the left, adds title, and adds to ax
+                legend2._legend_box.align = "left"
+                if color_list:
+                    for i, text in enumerate(legend2.get_texts()):
+                        if i == 0:
+                            pass
+                        text.set_color(color_list[i-1])
+                elif cmap:
+                    cmap = mpl.colormaps[cmap]
+                    cmap_value = 1 / len(intervals)
+                    for i, text in enumerate(legend2.get_texts()):
+                        if i == 0:
+                            pass
+                        text.set_color(cmap(float(cmap_value)))
+                        cmap_value += 1 / len(intervals)
+            if isinstance(discrete_legend_label_font_color, list):
+                for i, text in enumerate(legend2.get_texts()):
+                    if i == 0:
+                        pass
+                    text.set_color(discrete_legend_label_font_color[i-1])
+            legend2.get_title().set_color(discrete_legend_title_font_color)
             ax.add_artist(legend2)
     # If there are no intervals, just draw base legend
     else:
@@ -452,8 +482,8 @@ def draw_legend(
         # and so on
         if draw_base_legend is True:
             legend = ax.legend(
-                handles=handles, loc=base_legend_loc, fontsize=font_size,
-                labelcolor=font_color, frameon=draw_frame)
+                handles=handles, loc=base_legend_loc, fontsize=base_legend_label_font_size,
+                labelcolor=base_legend_label_font_color, frameon=draw_legend_frame)
             # Align legend text to the left, add legend to ax
             legend._legend_box.align = "left"
             ax.add_artist(legend)
@@ -480,9 +510,9 @@ def draw_legend(
                            markersize=np.sqrt(size)))
             legend3 = ax.legend(
                 handles=handles_2, title=element_size_legend_title,
-                loc=element_size_legend_loc, fontsize=font_size,
-                title_fontsize=legend_title_font_size, labelcolor=font_color,
-                frameon=draw_frame)
+                loc=element_size_legend_loc, fontsize=discrete_legend_label_font_size, #Change later!
+                title_fontsize=discrete_legend_title_font_size, labelcolor=discrete_legend_label_font_color,
+                frameon=draw_legend_frame)
             legend3._legend_box.align = "left"
             ax.add_artist(legend3)
     if link_width is not None:
@@ -497,9 +527,9 @@ def draw_legend(
                                  linewidth=size, label=label))
             legend3 = ax.legend(
                 handles=handles_2, title=element_size_legend_title,
-                loc=element_size_legend_loc, fontsize=font_size,
-                title_fontsize=legend_title_font_size, labelcolor=font_color,
-                frameon=draw_frame)
+                loc=element_size_legend_loc, fontsize=discrete_legend_label_font_size,
+                title_fontsize=discrete_legend_title_font_size, labelcolor=discrete_legend_label_font_color,
+                frameon=draw_legend_frame)
             legend3._legend_box.align = "left"
             ax.add_artist(legend3)
 

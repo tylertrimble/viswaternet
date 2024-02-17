@@ -8,8 +8,8 @@ def get_parameter(
     parameter,
     value=None,
     element_list=None,
-    tanks=False,
-    reservoirs=False,
+    include_tanks=False,
+    include_reservoirs=False,
 ):
     model = self.model
     if parameter_type == "node":
@@ -70,7 +70,7 @@ def get_parameter(
                     element_list.remove(element)
             indices = [elements_in_results.index(i) for i in element_list]
             parameter_results = parameter_results.iloc[indices]
-        if tanks:
+        if include_tanks:
             pass
         else:
             for tank in model["tank_names"]:
@@ -81,7 +81,7 @@ def get_parameter(
                     element_list.remove(tank)
                 except KeyError:
                     pass
-        if reservoirs:
+        if include_reservoirs:
             pass
         else:
             for reservoir in model["reservoir_names"]:
@@ -195,7 +195,7 @@ def bin_parameter(
     num_intervals,
     intervals="automatic",
     disable_interval_deleting=False,
-    legend_sig_figs=3,
+    legend_decimal_places=3,
 ):
     model = self.model
     # Code that generates bins automatically based on number of intervals
@@ -227,19 +227,19 @@ def bin_parameter(
             if np.min(parameter_results) < intervals[i]:
                 interval_names.append("< {0:1.{j}f}".format(
                     intervals[i],
-                    j=legend_sig_figs))
+                    j=legend_decimal_places))
             interval_names.append("{0:1.{j}f} - {1:1.{j}f}".format(
                 intervals[i], intervals[i + 1],
-                j=legend_sig_figs))
+                j=legend_decimal_places))
         elif i < len(intervals) - 1:
             interval_names.append("{0:1.{j}f} - {1:1.{j}f}".format(
                 intervals[i], intervals[i + 1],
-                j=legend_sig_figs))
+                j=legend_decimal_places))
         elif i == len(intervals) - 1:
             if np.max(parameter_results) > intervals[i]:
                 interval_names.append("> {0:1.{j}f}".format(
                     intervals[i],
-                    j=legend_sig_figs))
+                    j=legend_decimal_places))
     for bin_name in interval_names:
         interval_results[bin_name] = {}
     for i in range(len(intervals)):
@@ -250,12 +250,12 @@ def bin_parameter(
 
                     interval_results[
                         "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_sig_figs)
+                            intervals[i], intervals[i + 1], j=legend_decimal_places)
                     ][elements_with_parameter[counter]] = element_list.index(
                         elements_with_parameter[counter])
                 if parameter < intervals[i]:
 
-                    interval_results["< {0:1.{j}f}".format(intervals[i], j=legend_sig_figs)][
+                    interval_results["< {0:1.{j}f}".format(intervals[i], j=legend_decimal_places)][
                         elements_with_parameter[counter]
                     ] = element_list.index(elements_with_parameter[counter],)
                 counter += 1
@@ -265,7 +265,7 @@ def bin_parameter(
                 if parameter >= intervals[i] and parameter <= intervals[i + 1]:
                     interval_results[
                         "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_sig_figs)
+                            intervals[i], intervals[i + 1], j=legend_decimal_places)
                     ][elements_with_parameter[counter]] = element_list.index(
                         elements_with_parameter[counter])
                 counter += 1
@@ -275,7 +275,7 @@ def bin_parameter(
                 if parameter >= intervals[i] and parameter < intervals[i + 1]:
                     interval_results[
                         "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_sig_figs)
+                            intervals[i], intervals[i + 1], j=legend_decimal_places)
                     ][elements_with_parameter[counter]] = element_list.index(
                         elements_with_parameter[counter])
                 counter += 1
@@ -283,7 +283,7 @@ def bin_parameter(
             counter = 0
             for parameter in parameter_results:
                 if parameter > intervals[i]:
-                    interval_results["> {0:1.{j}f}".format(intervals[i], j=legend_sig_figs)][
+                    interval_results["> {0:1.{j}f}".format(intervals[i], j=legend_decimal_places)][
                         elements_with_parameter[counter]
                     ] = element_list.index(elements_with_parameter[counter])
                 counter += 1

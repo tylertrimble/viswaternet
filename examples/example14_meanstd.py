@@ -38,6 +38,5 @@ model.plot_unique_data(ax = ax, parameter = "custom_data",
                        element_size_legend_loc="lower left",
                        element_size_legend_labels=interval_names,
                        save_name = 'figures/example14', dpi=400)
-model.draw_nodes(ax, elmnt_list[0:2],node_size=(900,100), node_color=["r","b"])
 #Called in the case that interactive plotting isn't enabled
 plt.show()
