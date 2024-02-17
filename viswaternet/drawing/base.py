@@ -447,15 +447,12 @@ def draw_legend(
                     title=title, handles=handles[: len(intervals)], loc=discrete_legend_loc,
                     fontsize=discrete_legend_label_font_size, labelcolor=discrete_legend_label_font_color,
                     title_fontsize=discrete_legend_title_font_size, frameon=draw_legend_frame)
-                # Align legend text to the left, adds title, and adds to ax
-                legend2._legend_box.align = "left"
+                
             if discrete_legend_label_font_color == 'interval_color':
                 legend2 = ax.legend(
                     title=title, handles=handles[: len(intervals)], loc=discrete_legend_loc,
                     fontsize=discrete_legend_label_font_size,
                     title_fontsize=discrete_legend_title_font_size, frameon=draw_legend_frame)
-                # Align legend text to the left, adds title, and adds to ax
-                legend2._legend_box.align = "left"
                 if color_list:
                     for i, text in enumerate(legend2.get_texts()):
                         if i == 0:
@@ -470,10 +467,16 @@ def draw_legend(
                         text.set_color(cmap(float(cmap_value)))
                         cmap_value += 1 / len(intervals)
             if isinstance(discrete_legend_label_font_color, list):
+                legend2 = ax.legend(
+                    title=title, handles=handles[: len(intervals)], loc=discrete_legend_loc,
+                    fontsize=discrete_legend_label_font_size,
+                    title_fontsize=discrete_legend_title_font_size, frameon=draw_legend_frame)
                 for i, text in enumerate(legend2.get_texts()):
                     if i == 0:
                         pass
                     text.set_color(discrete_legend_label_font_color[i-1])
+            # Align legend text to the left, adds title, and adds to ax
+            legend2._legend_box.align = "left"
             legend2.get_title().set_color(discrete_legend_title_font_color)
             ax.add_artist(legend2)
     # If there are no intervals, just draw base legend
