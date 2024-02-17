@@ -122,7 +122,6 @@ def draw_links(
             link_width = normalize_parameter(
                 parameter_results, min_size, max_size)
     # Checks if some data values are given
-    print(link_list)
     if parameter_results:
         edges = [model["pipe_list"][model['G_pipe_name_list'].index(name)] for name in link_list]
         if np.min(parameter_results) < -1e-5:
