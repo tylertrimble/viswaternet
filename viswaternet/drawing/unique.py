@@ -4,6 +4,7 @@ from viswaternet.network import processing
 from viswaternet.utils import convert_excel, save_fig, unit_conversion
 from viswaternet.drawing import base
 from viswaternet.drawing import discrete
+from viswaternet.utils.markers import *
 
 default_cmap = 'autumn_r'
 
@@ -70,7 +71,7 @@ def plot_unique_data(
     tank_border_width=2,
     valve_size=200,
     valve_color='orange',
-    valve_shape='P',
+    valve_shape=epa_valve,
     valve_border_color='k',
     valve_border_width=1,
     pump_color='b',

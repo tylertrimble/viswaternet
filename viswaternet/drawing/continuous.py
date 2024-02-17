@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from viswaternet.network import processing
 from viswaternet.utils import save_fig, normalize_parameter, unit_conversion, fancyarrowpatch_to_linecollection, label_generator
 from viswaternet.drawing import base
-
+from viswaternet.utils.markers import *
 
 default_cmap = 'autumn_r'
 
@@ -62,7 +62,7 @@ def plot_continuous_nodes(
     tank_border_width=2,
     valve_size=200,
     valve_color='orange',
-    valve_shape='P',
+    valve_shape=epa_valve,
     valve_border_color='k',
     valve_border_width=1,
     pump_color='b',
@@ -242,7 +242,7 @@ def plot_continuous_links(
     tank_border_width=2,
     valve_size=200,
     valve_color='orange',
-    valve_shape='P',
+    valve_shape=epa_valve,
     valve_border_color='k',
     valve_border_width=1,
     pump_color='b',

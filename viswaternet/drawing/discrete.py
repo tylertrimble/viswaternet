@@ -6,6 +6,7 @@ import networkx.drawing.nx_pylab as nxp
 from viswaternet.network import processing
 from viswaternet.utils import save_fig, unit_conversion, label_generator
 from viswaternet.drawing import base
+from viswaternet.utils.markers import *
 
 default_cmap = 'autumn_r'
 
@@ -288,7 +289,7 @@ def plot_discrete_nodes(
     tank_border_width=2,
     valve_size=200,
     valve_color='orange',
-    valve_shape='P',
+    valve_shape=epa_valve,
     valve_border_color='k',
     valve_border_width=1,
     pump_color='b',
@@ -422,7 +423,7 @@ def plot_discrete_links(
     tank_border_width=2,
     valve_size=200,
     valve_color='orange',
-    valve_shape='P',
+    valve_shape=epa_valve,
     valve_border_color='k',
     valve_border_width=1,
     pump_color='b',

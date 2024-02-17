@@ -6,6 +6,7 @@ import matplotlib as mpl
 from matplotlib.lines import Line2D
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from viswaternet.utils import save_fig, normalize_parameter
+from viswaternet.utils.markers import *
 
 
 def draw_nodes(
@@ -200,7 +201,7 @@ def draw_base_elements(
     tank_border_width=2,
     valve_size=200,
     valve_color='orange',
-    valve_shape='P',
+    valve_shape=epa_valve,
     valve_border_color='k',
     valve_border_width=1,
     pump_color='b',
@@ -286,9 +287,8 @@ def plot_basic_elements(
     save_format='png',
     legend=True,
     base_legend_loc="upper right",
-    legend_label_font_size=15,
-    legend_label_font_color='k',
-    legend_title_font_size=17,
+    base_legend_label_font_size=15,
+    base_legend_label_font_color='k',
     draw_legend_frame=False,
     reservoir_size=150,
     reservoir_color='b',
@@ -347,9 +347,9 @@ def plot_basic_elements(
     if legend:
         draw_legend(
             ax,
-            draw_pumps=draw_pumps, base_legend_loc=base_legend_loc, legend_label_font_size=legend_label_font_size,
-            legend_label_font_color=legend_label_font_color,
-            legend_title_font_size=legend_title_font_size,
+            draw_pumps=draw_pumps, base_legend_loc=base_legend_loc,
+            base_legend_label_font_color=base_legend_label_font_color,
+            base_legend_label_font_size=base_legend_label_font_size,
             draw_legend_frame=draw_legend_frame, pump_color=pump_color,
             base_link_color=base_link_color,
             pump_line_style=pump_line_style,
