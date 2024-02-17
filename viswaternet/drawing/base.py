@@ -455,15 +455,11 @@ def draw_legend(
                     title_fontsize=discrete_legend_title_font_size, frameon=draw_legend_frame)
                 if color_list:
                     for i, text in enumerate(legend2.get_texts()):
-                        if i == 0:
-                            pass
-                        text.set_color(color_list[i-1])
+                        text.set_color(color_list[i])
                 elif cmap:
                     cmap = mpl.colormaps[cmap]
                     cmap_value = 1 / len(intervals)
                     for i, text in enumerate(legend2.get_texts()):
-                        if i == 0:
-                            pass
                         text.set_color(cmap(float(cmap_value)))
                         cmap_value += 1 / len(intervals)
             if isinstance(discrete_legend_label_font_color, list):
@@ -472,9 +468,7 @@ def draw_legend(
                     fontsize=discrete_legend_label_font_size,
                     title_fontsize=discrete_legend_title_font_size, frameon=draw_legend_frame)
                 for i, text in enumerate(legend2.get_texts()):
-                    if i == 0:
-                        pass
-                    text.set_color(discrete_legend_label_font_color[i-1])
+                    text.set_color(discrete_legend_label_font_color[i])
             # Align legend text to the left, adds title, and adds to ax
             legend2._legend_box.align = "left"
             legend2.get_title().set_color(discrete_legend_title_font_color)
