@@ -10,6 +10,8 @@ def get_parameter(
     element_list=None,
     include_tanks=False,
     include_reservoirs=False,
+    include_pumps=True,
+    include_valves=True,
 ):
     model = self.model
     if parameter_type == "node":
@@ -145,6 +147,28 @@ def get_parameter(
                     element_list.remove(element)
             indices = [elements_in_results.index(i) for i in element_list]
             parameter_results = parameter_results.iloc[indices]
+        if include_pumps:
+            pass
+        else:
+            for pump in model["pump_names"]:
+                # Try block to catch KeyErrors in instance where pump does
+                # not exist in parameter_results
+                try:
+                    parameter_results.drop(pump, axis=0, inplace=True)
+                    element_list.remove(pump)
+                except KeyError:
+                    pass
+        if include_valves:
+            pass
+        else:
+            for valve in model["valve_names"]:
+                # Try block to catch KeyErrors in instance where valve
+                # does not exist in parameter_results
+                try:
+                    parameter_results.drop(valve, axis=0, inplace=True)
+                    element_list.remove(valve)
+                except KeyError:
+                    pass
     return parameter_results.values.tolist(), element_list
 
 

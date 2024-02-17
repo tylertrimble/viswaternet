@@ -28,8 +28,8 @@ def plot_continuous_nodes(
     color_bar_title=None,
     node_size=100,
     node_shape=".",
-    edge_colors=None,
-    line_widths=None,
+    node_border_color=None,
+    node_border_width=None,
     legend=True,
     base_legend_loc="upper right",
     savefig=False,
@@ -101,7 +101,7 @@ def plot_continuous_nodes(
             value=value,
             element_list=element_list,
             include_tanks=include_tanks,
-            include_reserovirs=include_reservoirs)
+            include_reservoirs=include_reservoirs)
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
@@ -115,8 +115,8 @@ def plot_continuous_nodes(
             node_size=node_size,
             cmap=cmap,
             node_shape=node_shape,
-            edge_colors=edge_colors,
-            line_widths=line_widths,
+            node_border_color=node_border_color,
+            node_border_width=node_border_width,
         )
 
         base.draw_base_elements(
@@ -191,8 +191,8 @@ def plot_continuous_nodes(
                          element_size_legend_loc=element_size_legend_loc,
                          element_size_legend_labels=element_size_legend_labels,
                          draw_base_legend=draw_base_legend,
-                         linewidths=line_widths,
-                         edge_colors=edge_colors,
+                         linewidths=node_border_width,
+                         node_border_color=node_border_color,
                          pump_line_style=pump_line_style,
                          base_link_line_style=base_link_line_style,
                          base_link_arrows=base_link_arrows,
@@ -214,6 +214,8 @@ def plot_continuous_links(
     ax=None,
     parameter=None,
     element_list=None,
+    include_pumps=True,
+    include_valves=True,
     value=None,
     unit=None,
     link_width=1,
@@ -292,8 +294,9 @@ def plot_continuous_links(
     if parameter is not None:
 
         parameter_results, link_list = processing.get_parameter(
-            self, "link", parameter, value=value, element_list=element_list
-        )
+            self, "link", parameter, value=value, element_list=element_list,
+            include_pumps=include_pumps,
+            include_valves=include_valves)
 
         if unit is not None:
             parameter_results = unit_conversion(

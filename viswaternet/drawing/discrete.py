@@ -408,6 +408,8 @@ def plot_discrete_links(
     num_intervals=5,
     parameter=None,
     element_list=None,
+    include_pumps=True,
+    include_valves=True,
     value=None,
     unit=None,
     intervals="automatic",
@@ -483,7 +485,9 @@ def plot_discrete_links(
             ax.set_frame_on(self.axis_frame)
     if parameter is not None:
         parameter_results, link_list = processing.get_parameter(
-            self, "link", parameter, element_list=element_list, value=value)
+            self, "link", parameter, element_list=element_list, value=value,
+            include_pumps=include_pumps,
+            include_valves=include_valves)
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)

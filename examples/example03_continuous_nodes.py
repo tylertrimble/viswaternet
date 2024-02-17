@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 model = vis.VisWNModel('Networks/CTown.inp')
 
 model.plot_continuous_nodes(parameter = "pressure", value = 10, 
-                            min_size = 200, max_size = 200, 
-                            save_name = 'figures/example3', dpi=400)
+                            node_size=200, 
+                            save_name = 'figures/example3', dpi=400,
+                            include_reservoirs=False)
 plt.show()

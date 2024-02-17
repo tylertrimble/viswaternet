@@ -115,8 +115,16 @@ def draw_links(
     # Creates default list of link widths
     if link_width is None:
         link_width = (np.ones(len(link_list)) * 1).tolist()
+    if isinstance(link_width, tuple):
+        min_size = link_width[0]
+        max_size = link_width[1]
+        if min_size is not None and max_size is not None:
+            link_width = normalize_parameter(
+                parameter_results, min_size, max_size)
     # Checks if some data values are given
+    print(link_list)
     if parameter_results:
+        edges = [model["pipe_list"][model['G_pipe_name_list'].index(name)] for name in link_list]
         if np.min(parameter_results) < -1e-5:
             # Gets the cmap object from matplotlib
             cmap = mpl.colormaps[cmap]
@@ -126,8 +134,7 @@ def draw_links(
             if vmin is None and vmax is None:
                 g = nxp.draw_networkx_edges(
                     model["G"], model["pos_dict"], ax=ax,
-                    edgelist=([model["pipe_list"][i]
-                              for i, name in enumerate(link_list)]),
+                    edgelist=edges,
                     edge_color=parameter_results,
                     edge_vmax=np.max(parameter_results),
                     edge_vmin=-np.max(parameter_results), edge_cmap=cmap,
@@ -137,8 +144,7 @@ def draw_links(
             else:
                 g = nxp.draw_networkx_edges(
                     model["G"], model["pos_dict"], ax=ax,
-                    edgelist=([model["pipe_list"][i]
-                              for i, name in enumerate(link_list)]),
+                    edgelist=edges,
                     edge_color=parameter_results, edge_vmax=vmax,
                     edge_vmin=vmin, edge_cmap=cmap, style=link_style,
                     arrows=link_arrows, width=link_width, node_size=0)
@@ -153,8 +159,7 @@ def draw_links(
             if vmin is None and vmax is None:
                 g = nxp.draw_networkx_edges(
                     model["G"], model["pos_dict"], ax=ax,
-                    edgelist=([model["pipe_list"][i]
-                              for i, name in enumerate(link_list)]),
+                    edgelist=edges,
                     edge_color=parameter_results, edge_cmap=cmap,
                     style=link_style, arrows=link_arrows, width=link_width,
                     node_size=0)
@@ -162,8 +167,7 @@ def draw_links(
             else:
                 g = nxp.draw_networkx_edges(
                     model["G"], model["pos_dict"], ax=ax,
-                    edgelist=([model["pipe_list"][i]
-                              for i, name in enumerate(link_list)]),
+                    edgelist=edges,
                     edge_color=parameter_results, edge_cmap=cmap,
                     style=link_style, arrows=link_arrows, width=link_width,
                     edge_vmin=vmin, edge_vmax=vmax, node_size=0)
@@ -250,7 +254,8 @@ def draw_base_elements(
         nxp.draw_networkx_edges(
             model["G"], model["pos_dict"],
             edgelist=[i for i in model["pipe_list"]
-                      if i not in model["G_list_pumps_only"]],
+                      if ((list(i) not in model["G_list_pumps_only"] or pump_element == 'node' or draw_pumps == False) \
+                      and (list(i) not in model["G_list_valves_only"] or valve_element == 'node' or draw_valves == False))],
             ax=ax, edge_color=base_link_color, width=base_link_width,
             style=base_link_line_style, arrows=base_link_arrows)
     # If draw_valves is True, then draw draw_valves
