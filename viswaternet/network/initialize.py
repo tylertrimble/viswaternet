@@ -35,6 +35,7 @@ class VisWNModel:
         pump_names = wn.pump_name_list
         model["junc_names"] = wn.junction_name_list
         model["valve_names"] = valve_names
+        model["pump_names"] = pump_names
         model["tank_names"] = wn.tank_name_list
         model["node_names"] = wn.node_name_list
         model["reservoir_names"] = wn.reservoir_name_list

@@ -15,6 +15,6 @@ fig, ax = plt.subplots(figsize=(11,11))
 ax.set_frame_on(False) 
 
 # Customize and plot basic network layout 
-model.plot_basic_elements(ax, base_legend_loc = 'lower left', tank_color = 'g', 
-                          draw_pumps=False)
+model.plot_basic_elements(ax, valve_element = 'link', base_legend_loc = 'lower left', tank_color = 'g', 
+                          draw_pumps=True)
 plt.show()

@@ -199,12 +199,21 @@ def draw_base_elements(
     tank_shape='h',
     tank_border_color='k',
     tank_border_width=2,
+    valve_element='node',
     valve_size=200,
     valve_color='orange',
     valve_shape=epa_valve,
     valve_border_color='k',
     valve_border_width=1,
+    valve_width=3,
+    valve_line_style='-',
+    valve_arrows=False,
+    pump_element='link',
+    pump_size=200,
     pump_color='b',
+    pump_shape=epa_pump,
+    pump_border_color='k',
+    pump_border_width=1,
     pump_width=3,
     pump_line_style='-',
     pump_arrows=False,
@@ -236,26 +245,6 @@ def draw_base_elements(
             node_size=tank_size, node_color=tank_color,
             edgecolors=tank_border_color, linewidths=tank_border_width,
             node_shape=tank_shape, label="Tanks")
-    # If draw_valves is True, then draw draw_valves
-    if draw_valves:
-        valve_coordinates = {}
-        # For each valve, calculate midpoint along link it is located at then
-        # store the coordinates of where valve should be drawn
-        for i, (point1, point2) in enumerate(model["G_list_valves_only"]):
-            midpoint = [
-                (model["wn"].get_node(point1).coordinates[0]
-                 + model["wn"].get_node(point2).coordinates[0])/2,
-                (model["wn"].get_node(point1).coordinates[1]
-                 + model["wn"].get_node(point2).coordinates[1])/2,
-            ]
-            valve_coordinates[model["valve_names"][i]] = midpoint
-        # Draw draw_valves after midpoint calculations
-        nxp.draw_networkx_nodes(
-            model["G"], valve_coordinates, ax=ax,
-            nodelist=model["valve_names"], node_size=valve_size,
-            node_color=valve_color, edgecolors=valve_border_color,
-            linewidths=valve_border_width, node_shape=valve_shape,
-            label="Valves")
     # If draw_links is True, then draw draw_links
     if draw_links:
         nxp.draw_networkx_edges(
@@ -264,12 +253,58 @@ def draw_base_elements(
                       if i not in model["G_list_pumps_only"]],
             ax=ax, edge_color=base_link_color, width=base_link_width,
             style=base_link_line_style, arrows=base_link_arrows)
+    # If draw_valves is True, then draw draw_valves
+    if draw_valves:
+        if valve_element == 'node':
+            valve_coordinates = {}
+            # For each valve, calculate midpoint along link it is located at then
+            # store the coordinates of where valve should be drawn
+            for i, (point1, point2) in enumerate(model["G_list_valves_only"]):
+                midpoint = [
+                    (model["wn"].get_node(point1).coordinates[0]
+                     + model["wn"].get_node(point2).coordinates[0])/2,
+                    (model["wn"].get_node(point1).coordinates[1]
+                     + model["wn"].get_node(point2).coordinates[1])/2,
+                ]
+                valve_coordinates[model["valve_names"][i]] = midpoint
+            # Draw draw_valves after midpoint calculations
+            nxp.draw_networkx_nodes(
+                model["G"], valve_coordinates, ax=ax,
+                nodelist=model["valve_names"], node_size=valve_size,
+                node_color=valve_color, edgecolors=valve_border_color,
+                linewidths=valve_border_width, node_shape=valve_shape,
+                label="Valves")
+        elif valve_element == 'link':
+           nxp.draw_networkx_edges(
+               model["G"], model["pos_dict"], ax=ax,
+               edgelist=model["G_list_valves_only"], edge_color=valve_color,
+               width=valve_width, style=valve_line_style, arrows=valve_arrows)
     # If draw_pumps is True, then draw draw_pumps
     if draw_pumps:
-        nxp.draw_networkx_edges(
-            model["G"], model["pos_dict"], ax=ax,
-            edgelist=model["G_list_pumps_only"], edge_color=pump_color,
-            width=pump_width, style=pump_line_style, arrows=pump_arrows)
+        if pump_element == 'node':
+            pump_coordinates = {}
+            # For each valve, calculate midpoint along link it is located at then
+            # store the coordinates of where valve should be drawn
+            for i, (point1, point2) in enumerate(model["G_list_pumps_only"]):
+                midpoint = [
+                    (model["wn"].get_node(point1).coordinates[0]
+                     + model["wn"].get_node(point2).coordinates[0])/2,
+                    (model["wn"].get_node(point1).coordinates[1]
+                     + model["wn"].get_node(point2).coordinates[1])/2,
+                ]
+                pump_coordinates[model["pump_names"][i]] = midpoint
+            # Draw draw_valves after midpoint calculations
+            nxp.draw_networkx_nodes(
+                model["G"], pump_coordinates, ax=ax,
+                nodelist=model["pump_names"], node_size=pump_size,
+                node_color=pump_color, edgecolors=pump_border_color,
+                linewidths=pump_border_width, node_shape=pump_shape,
+                label="Pumps")
+        elif pump_element == 'link':
+            nxp.draw_networkx_edges(
+                model["G"], model["pos_dict"], ax=ax,
+                edgelist=model["G_list_pumps_only"], edge_color=pump_color,
+                width=pump_width, style=pump_line_style, arrows=pump_arrows)
 
 
 def plot_basic_elements(
@@ -300,12 +335,21 @@ def plot_basic_elements(
     tank_shape='h',
     tank_border_color='k',
     tank_border_width=2,
+    valve_element='node',
     valve_size=200,
     valve_color='orange',
     valve_shape=epa_valve,
     valve_border_color='k',
     valve_border_width=1,
+    valve_width=3,
+    valve_line_style='-',
+    valve_arrows=False,
+    pump_element='link',
+    pump_size=200,
     pump_color='b',
+    pump_shape=epa_pump,
+    pump_border_color='k',
+    pump_border_width=1,
     pump_width=3,
     pump_line_style='-',
     pump_arrows=False,
@@ -333,11 +377,23 @@ def plot_basic_elements(
         reservoir_border_width=reservoir_border_width, tank_size=tank_size,
         tank_color=tank_color, tank_shape=tank_shape,
         tank_border_color=tank_border_color,
-        tank_border_width=tank_border_width, valve_size=valve_size,
-        valve_color=valve_color, valve_shape=valve_shape,
+        tank_border_width=tank_border_width, valve_element=valve_element,
+        valve_size=valve_size,
+        valve_color=valve_color,
+        valve_shape=valve_shape,
         valve_border_color=valve_border_color,
-        valve_border_width=valve_border_width, pump_color=pump_color,
-        pump_width=pump_width, pump_line_style=pump_line_style,
+        valve_border_width=valve_border_width,
+        valve_width=valve_width,
+        valve_line_style=valve_line_style,
+        valve_arrows=valve_arrows,
+        pump_element=pump_element,
+        pump_size=pump_size,
+        pump_color=pump_color,
+        pump_shape=pump_shape,
+        pump_border_color=pump_border_color,
+        pump_border_width=pump_border_width,
+        pump_width=pump_width,
+        pump_line_style=pump_line_style,
         pump_arrows=pump_arrows, base_node_color=base_node_color,
         base_node_size=base_node_size, base_link_color=base_link_color,
         base_link_width=base_link_width,
@@ -355,7 +411,12 @@ def plot_basic_elements(
             pump_line_style=pump_line_style,
             base_link_line_style=base_link_line_style,
             base_link_arrows=base_link_arrows, pump_arrows=pump_arrows,
-            draw_base_links=True)
+            draw_base_links=True, draw_valves=draw_valves,
+            valve_element=valve_element,
+            valve_line_style=valve_line_style,
+            valve_color=valve_color,
+            valve_arrows=valve_arrows,
+            pump_element=pump_element)
     # Save figure if savefig is set to True
     if savefig:
         save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
@@ -366,6 +427,9 @@ def draw_legend(
     intervals=None,
     title=None,
     draw_pumps=True,
+    pump_element='link',
+    draw_valves=True,
+    valve_element='link',
     base_legend_loc="upper right",
     discrete_legend_loc="lower right",
     base_legend_label_font_size=15,
@@ -378,6 +442,9 @@ def draw_legend(
     color_list=None,
     draw_legend_frame=False,
     pump_color='b',
+    valve_color='orange',
+    valve_line_style='-',
+    valve_arrows=False,
     base_link_color='k',
     node_size=None,
     link_width=None,
@@ -407,13 +474,20 @@ def draw_legend(
     # If draw_pumps is True, then add legend element. Note that right now
     # pump_arrows does not affect legend entry, but that it may in the future,
     # hence the if statement
-    if draw_pumps:
+    if draw_pumps and pump_element == 'link':
         if pump_arrows:
             extensions.append(Line2D([0], [0], color=pump_color,
                               linestyle=pump_line_style, lw=4, label='Pumps'))
         else:
             extensions.append(Line2D([0], [0], color=pump_color,
                               linestyle=pump_line_style, lw=4, label='Pumps'))
+    if draw_valves and valve_element == 'link':
+        if valve_arrows:
+            extensions.append(Line2D([0], [0], color=valve_color,
+                              linestyle=valve_line_style, lw=4, label='Valves'))
+        else:
+            extensions.append(Line2D([0], [0], color=valve_color,
+                              linestyle=valve_line_style, lw=4, label='Valves'))
     # If draw_base_links is True, then add legend element. Note that right now
     # base_link_arrows does not affect legend entry, but that it may in the
     # future, hence the if statement
