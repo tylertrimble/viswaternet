@@ -117,6 +117,8 @@ def plot_continuous_nodes(
             node_shape=node_shape,
             node_border_color=node_border_color,
             node_border_width=node_border_width,
+            draw_tanks=draw_tanks,
+            draw_reservoirs=draw_reservoirs
         )
 
         base.draw_base_elements(
@@ -312,6 +314,10 @@ def plot_continuous_links(
             vmax=vmax,
             link_style=link_style,
             link_arrows=link_arrows,
+            pump_element=pump_element,
+            draw_pumps=draw_pumps,
+            valve_element=valve_element,
+            draw_valves=draw_valves
         )
 
         base.draw_base_elements(

@@ -489,6 +489,10 @@ def plot_unique_data(
                     vmax=vmax,
                     link_style=link_style,
                     link_arrows=link_arrows,
+                    pump_element=pump_element,
+                    draw_pumps=draw_pumps,
+                    valve_element=valve_element,
+                    draw_valves=draw_valves
                 )
 
                 call_draw_base_elements(draw_links=False)
@@ -508,6 +512,8 @@ def plot_unique_data(
                     node_shape=node_shape,
                     node_border_width=node_border_width,
                     node_border_color=node_border_color,
+                    draw_tanks=draw_tanks,
+                    draw_reservoirs=draw_reservoirs
                 )
 
                 call_draw_base_elements()
@@ -653,6 +659,10 @@ def plot_unique_data(
                     vmax=vmax,
                     link_style=link_style,
                     link_arrows=link_arrows,
+                    pump_element=pump_element,
+                    draw_pumps=draw_pumps,
+                    valve_element=valve_element,
+                    draw_valves=draw_valves
                 )
 
                 call_draw_base_elements(draw_links=False)
@@ -672,6 +682,8 @@ def plot_unique_data(
                     node_shape=node_shape,
                     node_border_width=node_border_width,
                     node_border_color=node_border_color,
+                    draw_tanks=draw_tanks,
+                    draw_reservoirs=draw_reservoirs
                 )
 
                 call_draw_base_elements()

@@ -46,7 +46,7 @@ def draw_discrete_nodes(
     if isinstance(node_border_color, str):
         node_border_color = [node_border_color for i in range(len(intervals))]
     if node_border_width is None:
-        node_border_width = [0 for i in len(intervals)]
+        node_border_width = [0 for i in range(len(intervals))]
     if isinstance(node_border_width, int) or isinstance(node_border_width, float):
         node_border_width = [node_border_width for i in range(len(intervals))]
     empty_interval = False
@@ -376,8 +376,9 @@ def plot_discrete_nodes(
             legend_title = label_generator(parameter, value, unit)
 
         base.draw_legend(
-            ax, intervals=interval_names, title=legend_title,
-            draw_pumps=draw_pumps, base_legend_loc=base_legend_loc,
+            ax, intervals=interval_names, title=legend_title, draw_pumps=draw_pumps,
+            base_legend_loc=base_legend_loc,
+            discrete_legend_loc=discrete_legend_loc,
             base_legend_label_font_size=base_legend_label_font_size, 
             base_legend_label_font_color=base_legend_label_font_color,
             discrete_legend_label_font_size=discrete_legend_label_font_size, 

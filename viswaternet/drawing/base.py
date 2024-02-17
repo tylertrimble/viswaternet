@@ -23,6 +23,8 @@ def draw_nodes(
     node_border_color="k",
     node_border_width=0,
     label=None,
+    draw_tanks=True,
+    draw_reservoirs=True
 ):
     # Initalize parameters
     model = self.model
@@ -40,6 +42,13 @@ def draw_nodes(
     # Checks if some data values are given
     if parameter_results:
         # If values is less than this value, we treat it as a negative.
+        parameter_results = [parameter_results[node_list.index(name)] for name in node_list if \
+            ((name not in model["tank_names"] or draw_tanks == False) \
+            and (name not in model["reservoir_names"] or draw_reservoirs == False))]
+        node_list = [node_list[node_list.index(name)] for name in node_list if \
+            ((name not in model["tank_names"] or draw_tanks == False) \
+            and (name not in model["reservoir_names"] or draw_reservoirs == False))]
+        
         if np.min(parameter_results) < -1e-5:
             # Gets the cmap object from matplotlib
             cmap = mpl.colormaps[cmap]
@@ -104,7 +113,11 @@ def draw_links(
     vmin=None,
     vmax=None,
     link_style='-',
-    link_arrows=False
+    link_arrows=False,
+    pump_element='link',
+    draw_pumps=True,
+    valve_element='node',
+    draw_valves=True
 ):
     # Initalize parameters
     model = self.model
@@ -123,7 +136,12 @@ def draw_links(
                 parameter_results, min_size, max_size)
     # Checks if some data values are given
     if parameter_results:
-        edges = [model["pipe_list"][model['G_pipe_name_list'].index(name)] for name in link_list]
+        edges = [model["pipe_list"][model['G_pipe_name_list'].index(name)] for name in link_list if \
+            ((name not in model["pump_names"] or pump_element == 'node' or draw_pumps == False) \
+            and (name not in model["valve_names"] or valve_element == 'node' or draw_valves == False))]
+        parameter_results = [parameter_results[model['G_pipe_name_list'].index(name)] for name in link_list if \
+            ((name not in model["pump_names"] or pump_element == 'node' or draw_pumps == False) \
+            and (name not in model["valve_names"] or valve_element == 'node' or draw_valves == False))]
         if np.min(parameter_results) < -1e-5:
             # Gets the cmap object from matplotlib
             cmap = mpl.colormaps[cmap]
@@ -230,9 +248,14 @@ def draw_base_elements(
     model = self.model
     # If draw_nodes is True, then draw draw_nodes
     if draw_nodes:
+        node_list = model['node_names']
+        node_list = [node_list[node_list.index(name)] for name in node_list if \
+            ((name not in model["tank_names"] or draw_tanks == False) \
+            and (name not in model["reservoir_names"] or draw_reservoirs == False))]
+        print(node_list)
         nxp.draw_networkx_nodes(
             model["G"], model["pos_dict"], node_size=base_node_size,
-            node_color=base_node_color, ax=ax)
+            nodelist=node_list,node_color=base_node_color, ax=ax)
     # If draw_reservoirs is True, then draw draw_reservoirs
     if draw_reservoirs:
         nxp.draw_networkx_nodes(
