@@ -302,7 +302,7 @@ def plot_basic_elements(
     tank_border_width=2,
     valve_size=200,
     valve_color='orange',
-    valve_shape='P',
+    valve_shape=epa_valve,
     valve_border_color='k',
     valve_border_width=1,
     pump_color='b',
