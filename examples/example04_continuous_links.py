@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 model = vis.VisWNModel('Networks/CTown.inp')
 
 model.plot_continuous_links(parameter = "flowrate", value = 'mean', cmap = 'coolwarm', 
-                            min_width = 2, max_width = 6, save_name = 'figures/example4', dpi=400)
+                            link_width=(2,6), save_name = 'figures/example4', draw_pumps=False, dpi=400)
 
 plt.show()
 

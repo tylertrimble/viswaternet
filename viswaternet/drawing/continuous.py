@@ -43,8 +43,6 @@ def plot_continuous_nodes(
     discrete_legend_title_font_size=17,
     discrete_legend_title_font_color='k',
     draw_legend_frame=False,
-    node_sizes=None,
-    link_sizes=None,
     element_size_intervals=None,
     element_size_legend_title=None,
     element_size_legend_loc=None,
@@ -188,8 +186,6 @@ def plot_continuous_nodes(
                          draw_legend_frame=draw_legend_frame,
                          pump_color=pump_color,
                          base_link_color=base_link_color,
-                         node_sizes=node_sizes,
-                         link_sizes=link_sizes,
                          element_size_intervals=element_size_intervals,
                          element_size_legend_title=element_size_legend_title,
                          element_size_legend_loc=element_size_legend_loc,
@@ -220,9 +216,7 @@ def plot_continuous_links(
     element_list=None,
     value=None,
     unit=None,
-    widths=1,
-    min_width=1,
-    max_width=1,
+    link_width=1,
     vmin=None,
     vmax=None,
     link_style='-',
@@ -246,8 +240,6 @@ def plot_continuous_links(
     discrete_legend_title_font_size=17,
     discrete_legend_title_font_color='k',
     draw_legend_frame=False,
-    node_sizes=None,
-    link_sizes=None,
     element_size_intervals=None,
     element_size_legend_title=None,
     element_size_legend_loc=None,
@@ -306,19 +298,13 @@ def plot_continuous_links(
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
-        normalized_parameter = normalize_parameter(
-            parameter_results, min_width, max_width
-        )
-
-        widths = normalized_parameter
-
         g = base.draw_links(
             self,
             ax,
             link_list,
             parameter_results=parameter_results,
             cmap=cmap,
-            widths=widths,
+            link_width=link_width,
             vmin=vmin,
             vmax=vmax,
             link_style=link_style,
@@ -398,8 +384,6 @@ def plot_continuous_links(
                          draw_legend_frame=draw_legend_frame,
                          pump_color=pump_color,
                          base_link_color=base_link_color,
-                         node_sizes=node_sizes,
-                         link_sizes=link_sizes,
                          element_size_intervals=element_size_intervals,
                          element_size_legend_title=element_size_legend_title,
                          element_size_legend_loc=element_size_legend_loc,
