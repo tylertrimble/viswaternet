@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from matplotlib.path import Path
 import numpy as np
+import matplotlib as mpl
 
 verts_epa_valve = [
 (-1,-1),
@@ -150,6 +151,7 @@ lines_epa_res =  [ 1,  2,  2,  2,  2,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4,  4
         2,  2,  2,  2,  4,  4,  4,  4,  4,  4,  2,  2, 79]
 
 epa_valve = Path(verts_epa_valve,lines_epa_valve)
+epa_valve = epa_valve.transformed(mpl.transforms.Affine2D().rotate_deg(90))
 epa_pump = Path(verts_epa_pump,lines_epa_pump)
 epa_tank = Path(verts_epa_tank,lines_epa_tank)
 epa_res = Path(verts_epa_res,lines_epa_res)
