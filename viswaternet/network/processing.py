@@ -21,6 +21,7 @@ def get_parameter(
             element_list = list.copy(model["node_names"])
         # Get indices of nodes in model["node_names"]
         indices = [model["node_names"].index(i) for i in element_list]
+        results = model["results"]
         # WNTR differentiates between node attributes and simulation results.
         # To account for this all simulation result logic is put into a try
         # block and if a KeyError occurs, it goes into the except block to
@@ -29,33 +30,33 @@ def get_parameter(
             # If no value type is given (timestep, max, etc) then return
             # parameter at all timesteps
             if value is None:
-                parameter_results = model["results"].node[parameter].iloc[:, indices]
+                parameter_results = results.node[parameter].iloc[:, indices]
             else:
                 if value == "max":
                     parameter_results = np.max(
-                        model["results"].node[parameter].iloc[:, indices],
+                        results.node[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "min":
                     parameter_results = np.min(
-                        model["results"].node[parameter].iloc[:, indices],
+                        results.node[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "mean":
                     parameter_results = np.mean(
-                        model["results"].node[parameter].iloc[:, indices],
+                        results.node[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "stddev":
                     parameter_results = np.std(
-                        model["results"].node[parameter].iloc[:, indices],
+                        results.node[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "range":
                     parameter_results = np.ptp(
-                        model["results"].node[parameter].iloc[:, indices],
+                        results.node[parameter].iloc[:, indices],
                         axis=0)
                 # If an int is given, assume it is a timestep and get parameter
                 # at given timestep
                 elif isinstance(value, int):
                     parameter_results = (
-                        model["results"].node[parameter].iloc[value, indices])
+                        results.node[parameter].iloc[value, indices])
         # Node attribute fetching logic
         except KeyError:
             parameter_results = model["wn"].query_node_attribute(parameter)
@@ -106,31 +107,31 @@ def get_parameter(
         # get the link attribute instead.
         try:
             if value is None:
-                parameter_results = model["results"].link[parameter].iloc[:, indices]
+                parameter_results = results.link[parameter].iloc[:, indices]
             else:
                 if value == "max":
                     parameter_results = np.max(
-                        model["results"].link[parameter].iloc[:, indices],
+                        results.link[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "min":
                     parameter_results = np.min(
-                        model["results"].link[parameter].iloc[:, indices],
+                        results.link[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "mean":
                     parameter_results = np.mean(
-                        model["results"].link[parameter].iloc[:, indices],
+                        results.link[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "stddev":
                     parameter_results = np.std(
-                        model["results"].link[parameter].iloc[:, indices],
+                        results.link[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "range":
                     parameter_results = np.ptp(
-                        model["results"].link[parameter].iloc[:, indices],
+                        results.link[parameter].iloc[:, indices],
                         axis=0)
                 elif type(value) == int:
                     parameter_results = (
-                        model["results"].link[parameter].iloc[value, indices])
+                        results.link[parameter].iloc[value, indices])
         # Link attribute fetching logic
         except KeyError:
             parameter_results = model["wn"].query_link_attribute(parameter)
@@ -202,8 +203,8 @@ def get_demand_patterns(self):
     for i, junc_name in enumerate(model["junc_names"]):
         for pattern in patterns:
             if demand_patterns[i] == pattern:
-                demand_pattern_nodes[pattern][junc_name] = model["junc_names"].index(
-                    junc_name)
+                demand_pattern_nodes[pattern][junc_name] = \
+                    model["junc_names"].index(junc_name)
 
     # Remove None key if no junctions are in it
     if len(demand_pattern_nodes['None']) == 0:
@@ -234,7 +235,6 @@ def bin_parameter(
         intervals = intervals.tolist()
     interval_results = {}
     interval_names = []
-
     elements_with_parameter = element_list
     element_type = None
     for element_with_parameter in elements_with_parameter:
@@ -268,49 +268,42 @@ def bin_parameter(
         interval_results[bin_name] = {}
     for i in range(len(intervals)):
         if i == 0:
-            counter = 0
-            for parameter in parameter_results:
+            for j, parameter in enumerate(parameter_results):
                 if parameter >= intervals[i] and parameter < intervals[i + 1]:
 
-                    interval_results[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_decimal_places)
-                    ][elements_with_parameter[counter]] = element_list.index(
-                        elements_with_parameter[counter])
+                    interval_results["{0:1.{j}f} - {1:1.{j}f}".format(
+                        intervals[i],
+                        intervals[i + 1],
+                        j=legend_decimal_places)][elements_with_parameter[j]] \
+                        = element_list.index(elements_with_parameter[j])
                 if parameter < intervals[i]:
-
-                    interval_results["< {0:1.{j}f}".format(intervals[i], j=legend_decimal_places)][
-                        elements_with_parameter[counter]
-                    ] = element_list.index(elements_with_parameter[counter],)
-                counter += 1
+                    interval_results["< {0:1.{j}f}".format(
+                        intervals[i],
+                        j=legend_decimal_places)][elements_with_parameter[j]] \
+                        = element_list.index(elements_with_parameter[j])
         elif i == len(intervals) - 2:
-            counter = 0
-            for parameter in parameter_results:
+            for j, parameter in enumerate(parameter_results):
                 if parameter >= intervals[i] and parameter <= intervals[i + 1]:
-                    interval_results[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_decimal_places)
-                    ][elements_with_parameter[counter]] = element_list.index(
-                        elements_with_parameter[counter])
-                counter += 1
+                    interval_results["{0:1.{j}f} - {1:1.{j}f}".format(
+                        intervals[i],
+                        intervals[i + 1],
+                        j=legend_decimal_places)][elements_with_parameter[j]] \
+                        = element_list.index(elements_with_parameter[j])
         elif i < len(intervals) - 2:
-            counter = 0
-            for parameter in parameter_results:
+            for j, parameter in enumerate(parameter_results):
                 if parameter >= intervals[i] and parameter < intervals[i + 1]:
-                    interval_results[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_decimal_places)
-                    ][elements_with_parameter[counter]] = element_list.index(
-                        elements_with_parameter[counter])
-                counter += 1
+                    interval_results["{0:1.{j}f} - {1:1.{j}f}".format(
+                        intervals[i],
+                        intervals[i + 1],
+                        j=legend_decimal_places)][elements_with_parameter[j]] \
+                        = element_list.index(elements_with_parameter[j])
         elif i == len(intervals) - 1:
-            counter = 0
-            for parameter in parameter_results:
+            for parameter in enumerate(parameter_results):
                 if parameter > intervals[i]:
-                    interval_results["> {0:1.{j}f}".format(intervals[i], j=legend_decimal_places)][
-                        elements_with_parameter[counter]
-                    ] = element_list.index(elements_with_parameter[counter])
-                counter += 1
+                    interval_results["> {0:1.{j}f}".format(
+                        intervals[i],
+                        j=legend_decimal_places)][elements_with_parameter[j]] \
+                        = element_list.index(elements_with_parameter[j])
     if disable_interval_deleting:
         pass
     else:
