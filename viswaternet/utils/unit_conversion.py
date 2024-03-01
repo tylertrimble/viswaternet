@@ -48,5 +48,6 @@ def unit_conversion(parameter_results, parameter, new_unit):
     if isinstance(parameter_results, int):
         parameter_results = parameter_results * cf[parameter][new_unit]
     else:
-        parameter_results = [i * cf[parameter][new_unit] for i in parameter_results]
+        parameter_results = \
+            [i * cf[parameter][new_unit] for i in parameter_results]
     return parameter_results

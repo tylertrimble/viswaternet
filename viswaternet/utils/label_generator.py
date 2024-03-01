@@ -23,7 +23,7 @@ def label_generator(parameter, value, unit=None):
         'pressure': 'Pressure',
         'velocity': 'Velocity',
         'roughness': 'Roughness',
-        'diameter': "Diameter",
+        'diameter': 'Diameter',
     }
     if parameter == 'base_demand' or parameter == 'demand' or parameter == 'flowrate':
         if unit is None:
@@ -31,16 +31,16 @@ def label_generator(parameter, value, unit=None):
         unit_titles = {"LPS": "[LPS]",
                        "LPM": "[LPM]",
                        "MLD": "[MLD]",
-                       "CMS": "[$m^3$/s]",
-                       "CMH": "[$m^3$/hr]",
-                       "CMD": "[$m^3$/day]",
+                       "CMS": "[m^3/s]",
+                       "CMH": "[m^3/hr]",
+                       "CMD": "[m^3/day]",
                        "CFS": "[CFS]",
                        "GPM": "[GPM]",
                        "MGD": "MGD]",
                        "IMGD": "[IMGD]",
                        "AFD": "[AFD]"}
 
-    if parameter == 'diameter' or parameter == 'elevation' or parameter == 'head' or parameter == 'length' or parameter == 'diameter':
+    elif parameter == 'diameter' or parameter == 'elevation' or parameter == 'head' or parameter == 'headloss' or parameter == 'length' or parameter == 'diameter':
         if unit is None:
             unit = 'm'
         unit_titles = {"ft": '[ft]',
@@ -48,21 +48,21 @@ def label_generator(parameter, value, unit=None):
                        "m": '[m]',
                        'cm': '[cm]'}
 
-    if parameter == 'pressure':
+    elif parameter == 'pressure':
         if unit is None:
             unit = 'm'
 
         unit_titles = {'m': '[m]',
                        'psi': '[psi]'}
 
-    if parameter == 'velocity':
+    elif parameter == 'velocity':
         if unit is None:
             unit = 'm/s'
 
         unit_titles = {'m/s': '[m/s]',
                        'ft/s': '[ft/s]'}
 
-    if parameter == 'quality' or parameter == 'time':
+    elif parameter == 'quality' or parameter == 'time':
         if unit is None:
             unit = None
 
@@ -70,10 +70,10 @@ def label_generator(parameter, value, unit=None):
                        'min': '[min]',
                        'hr': '[hr]',
                        'day': '[day]'}
-    if parameter == 'roughness':
+    else:
         unit_titles = {None: ''}
     if isinstance(value, int):
-        title_label = parameter_titles[parameter] + " " + unit_titles[unit] + " at timestep " + str(value)
+        title_label = parameter_titles[parameter] + " " + unit_titles[unit] + ' at timestep ' + str(value)
         
     if value=='min':
         title_label = 'Minimum ' + parameter_titles[parameter] + " " + unit_titles[unit]

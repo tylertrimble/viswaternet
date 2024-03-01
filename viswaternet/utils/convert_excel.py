@@ -2,7 +2,12 @@ import os
 import pandas as pd
 
 
-def convert_excel(self, file, parameter_type, data_type, element_index, value_index):
+def convert_excel(self,
+                  file,
+                  parameter_type,
+                  data_type,
+                  element_index,
+                  value_index):
     model = self.model
     if data_type == "unique":
         interval_results = {}
@@ -27,12 +32,10 @@ def convert_excel(self, file, parameter_type, data_type, element_index, value_in
 
         if parameter_type == 'link':
             for element, data in zip(
-                df.iloc[:, element_index].dropna(
-                ), df.iloc[:, value_index].dropna()
-            ):
-
-                interval_results[data][element] = model["G_pipe_name_list"].index(
-                    element)
+                    df.iloc[:, element_index].dropna(),
+                    df.iloc[:, value_index].dropna()):
+                interval_results[data][element] = \
+                    model["G_pipe_name_list"].index(element)
 
         return interval_results, interval_names
     if data_type == "continuous" or "discrete":

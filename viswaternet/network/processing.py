@@ -3,16 +3,15 @@ import numpy as np
 
 
 def get_parameter(
-    self,
-    parameter_type,
-    parameter,
-    value=None,
-    element_list=None,
-    include_tanks=False,
-    include_reservoirs=False,
-    include_pumps=True,
-    include_valves=True,
-):
+        self,
+        parameter_type,
+        parameter,
+        value=None,
+        element_list=None,
+        include_tanks=False,
+        include_reservoirs=False,
+        include_pumps=True,
+        include_valves=True):
     model = self.model
     if parameter_type == "node":
         # If no element list is provided, set element list to all nodes of
@@ -214,14 +213,13 @@ def get_demand_patterns(self):
 
 
 def bin_parameter(
-    self,
-    parameter_results,
-    element_list,
-    num_intervals,
-    intervals="automatic",
-    disable_interval_deleting=False,
-    legend_decimal_places=3,
-):
+        self,
+        parameter_results,
+        element_list,
+        num_intervals,
+        intervals="automatic",
+        disable_interval_deleting=False,
+        legend_decimal_places=3):
     model = self.model
     # Code that generates bins automatically based on number of intervals
     # specified. The code does this by creating num_intervals + 1 linearlly
