@@ -36,7 +36,7 @@ def label_generator(parameter, value, unit=None):
                        "CMD": "[m^3/day]",
                        "CFS": "[CFS]",
                        "GPM": "[GPM]",
-                       "MGD": "MGD]",
+                       "MGD": "[MGD]",
                        "IMGD": "[IMGD]",
                        "AFD": "[AFD]"}
     elif parameter == 'diameter' \
