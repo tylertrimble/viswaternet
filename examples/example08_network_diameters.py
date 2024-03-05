@@ -13,13 +13,15 @@ model = vis.VisWNModel('Networks/CTown.inp')
 # Plot unique pipe diameters
 model.plot_unique_data(parameter = "diameter", 
                        unit = "in", 
-                       interval_link_width_list = np.linspace(1,7,10),
+                       link_width = np.linspace(1,7,10),
                        cmap = "Blues", 
                        discrete_legend_loc = "upper left", 
-                       legend_title = "Pipe Diameter (in)", font_size = 12,
-                       legend_sig_figs = 0, 
+                       legend_title = "Pipe Diameter (in)", 
+                       discrete_legend_label_font_size = 12,
+                       legend_decimal_places = 0, 
                        pump_color = "red", 
                        pump_width = 2,
-                       save_name = 'figures/example8', dpi=400)  
+                       save_name = 'figures/example8', 
+                       dpi=400)  
 
 plt.show()

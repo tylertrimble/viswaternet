@@ -1,63 +1,19 @@
 # -*- coding: utf-8 -*-
-"""
-The viswaternet.network.processing module performs data retrieving and processing
-tasks in preparation for drawing functions.
-"""
 import numpy as np
 
 
 def get_parameter(
-    self,
-    parameter_type,
-    parameter,
-    value=None,
-    element_list=None,
-    tanks=False,
-    reservoirs=False,
-):
-    """Retrieves network data of a specified parameter. 
-
-    Arguments
-    ---------
-    parameter_type : string
-        Type of parameter (nodal, link)
-
-    parameter : string
-        Parameter that network data will be retrieved for.
-
-    value : int, string
-        For time-varying parameters only. Specifies which timestep or data
-        summary will be plotted.
-
-        .. rubric:: Possible Inputs
-
-        ======================= =========================================
-            int                 lots element data for specified timestep
-            min                 Plots minimum data point for each element
-            max                 Plots maximum data point for each element
-            mean                Plots mean for each element
-            stddev              Plots standard deviation for each element
-            range               Plots range for each element
-        ======================= =========================================
-
-    element_list : array-like
-        List of network elements that data will be retrieved for.
-
-    tanks : boolean
-        Determines if data for tanks are retrieved.
-
-    reservoirs : boolean
-        Determines if data for reservoirs are retrieved.
-
-    Returns
-    -------
-    array-like
-        Network data formatted for use in other functions
-
-    array-like
-        Elements that have had their data retrieved
-    """
+        self,
+        parameter_type,
+        parameter,
+        value=None,
+        element_list=None,
+        include_tanks=False,
+        include_reservoirs=False,
+        include_pumps=True,
+        include_valves=True):
     model = self.model
+    results = model["results"]
     if parameter_type == "node":
         # If no element list is provided, set element list to all nodes of
         # the model
@@ -73,33 +29,33 @@ def get_parameter(
             # If no value type is given (timestep, max, etc) then return
             # parameter at all timesteps
             if value is None:
-                parameter_results = model["results"].node[parameter].iloc[:, indices]
+                parameter_results = results.node[parameter].iloc[:, indices]
             else:
                 if value == "max":
                     parameter_results = np.max(
-                        model["results"].node[parameter].iloc[:, indices],
+                        results.node[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "min":
                     parameter_results = np.min(
-                        model["results"].node[parameter].iloc[:, indices],
+                        results.node[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "mean":
                     parameter_results = np.mean(
-                        model["results"].node[parameter].iloc[:, indices],
+                        results.node[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "stddev":
                     parameter_results = np.std(
-                        model["results"].node[parameter].iloc[:, indices],
+                        results.node[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "range":
                     parameter_results = np.ptp(
-                        model["results"].node[parameter].iloc[:, indices],
+                        results.node[parameter].iloc[:, indices],
                         axis=0)
                 # If an int is given, assume it is a timestep and get parameter
                 # at given timestep
                 elif isinstance(value, int):
                     parameter_results = (
-                        model["results"].node[parameter].iloc[value, indices])
+                        results.node[parameter].iloc[value, indices])
         # Node attribute fetching logic
         except KeyError:
             parameter_results = model["wn"].query_node_attribute(parameter)
@@ -116,7 +72,7 @@ def get_parameter(
                     element_list.remove(element)
             indices = [elements_in_results.index(i) for i in element_list]
             parameter_results = parameter_results.iloc[indices]
-        if tanks:
+        if include_tanks:
             pass
         else:
             for tank in model["tank_names"]:
@@ -127,7 +83,7 @@ def get_parameter(
                     element_list.remove(tank)
                 except KeyError:
                     pass
-        if reservoirs:
+        if include_reservoirs:
             pass
         else:
             for reservoir in model["reservoir_names"]:
@@ -150,31 +106,31 @@ def get_parameter(
         # get the link attribute instead.
         try:
             if value is None:
-                parameter_results = model["results"].link[parameter].iloc[:, indices]
+                parameter_results = results.link[parameter].iloc[:, indices]
             else:
                 if value == "max":
                     parameter_results = np.max(
-                        model["results"].link[parameter].iloc[:, indices],
+                        results.link[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "min":
                     parameter_results = np.min(
-                        model["results"].link[parameter].iloc[:, indices],
+                        results.link[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "mean":
                     parameter_results = np.mean(
-                        model["results"].link[parameter].iloc[:, indices],
+                        results.link[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "stddev":
                     parameter_results = np.std(
-                        model["results"].link[parameter].iloc[:, indices],
+                        results.link[parameter].iloc[:, indices],
                         axis=0)
                 elif value == "range":
                     parameter_results = np.ptp(
-                        model["results"].link[parameter].iloc[:, indices],
+                        results.link[parameter].iloc[:, indices],
                         axis=0)
                 elif type(value) == int:
                     parameter_results = (
-                        model["results"].link[parameter].iloc[value, indices])
+                        results.link[parameter].iloc[value, indices])
         # Link attribute fetching logic
         except KeyError:
             parameter_results = model["wn"].query_link_attribute(parameter)
@@ -191,20 +147,32 @@ def get_parameter(
                     element_list.remove(element)
             indices = [elements_in_results.index(i) for i in element_list]
             parameter_results = parameter_results.iloc[indices]
+        if include_pumps:
+            pass
+        else:
+            for pump in model["pump_names"]:
+                # Try block to catch KeyErrors in instance where pump does
+                # not exist in parameter_results
+                try:
+                    parameter_results.drop(pump, axis=0, inplace=True)
+                    element_list.remove(pump)
+                except KeyError:
+                    pass
+        if include_valves:
+            pass
+        else:
+            for valve in model["valve_names"]:
+                # Try block to catch KeyErrors in instance where valve
+                # does not exist in parameter_results
+                try:
+                    parameter_results.drop(valve, axis=0, inplace=True)
+                    element_list.remove(valve)
+                except KeyError:
+                    pass
     return parameter_results.values.tolist(), element_list
 
 
 def get_demand_patterns(self):
-    """Retrieves the demand pattern for each network node.
-
-    Returns
-    -------
-    array-like
-        Demand pattern for each node.
-
-    array-like
-        Name of each pattern.
-    """
     model = self.model
     demand_patterns = []
 
@@ -234,8 +202,8 @@ def get_demand_patterns(self):
     for i, junc_name in enumerate(model["junc_names"]):
         for pattern in patterns:
             if demand_patterns[i] == pattern:
-                demand_pattern_nodes[pattern][junc_name] = model["junc_names"].index(
-                    junc_name)
+                demand_pattern_nodes[pattern][junc_name] = \
+                    model["junc_names"].index(junc_name)
 
     # Remove None key if no junctions are in it
     if len(demand_pattern_nodes['None']) == 0:
@@ -245,59 +213,13 @@ def get_demand_patterns(self):
 
 
 def bin_parameter(
-    self,
-    parameter_results,
-    element_list,
-    num_intervals,
-    intervals="automatic",
-    disable_interval_deleting=False,
-    legend_sig_figs=3,
-):
-    """Discretizes network data for use in disrete drawing functions.
-
-    An important feature of bin_parameter to know of is if the intervals created
-    do not fully encapsulate the full range of network data, then a new interval
-    will be created.
-
-    Arguments
-    ---------
-    parameter_results : array-like
-        Network data to be discretized.
-
-    element_list : array-like
-        Network elements to be discretized.
-
-    num_intervals : int
-        The number of intervals to be created.
-
-    intervals : array-like, string
-        If set to 'automatic' then intervals are created automatically on a 
-        equal interval basis. Otherwise, it is the edges of the intervals to be
-        created. intervals array length should be num_intervals + 1.
-
-    disable_interval_deleting : boolean
-        If True, empty intervals will be automatically deleted. 
-
-    legend_sig_figs : int
-        Number of decimal places that the resulting discretized data will display
-        in the legend.
-
-    Returns
-    -------
-    dictionary
-        Dictionary of discretized network data.
-
-    array-like
-        Label names of each interval.
-
-    Example
-    -------
-    >>>from viswaternet.network.processing import bin_parameter
-    >>>fake_data=[1,6,10,14,15,21]
-    >>>fake_elements=['E1','E2','E3','E4','E5','E6']
-    >>>intervals,interval_names = bin_parameter(self,fake_data,fake_elements,3,intervals=[0,5,10,15])
-    [<dict>,['0.000-5.000','5.000-10.000','10.000-15.000','>15.000']]
-    """
+        self,
+        parameter_results,
+        element_list,
+        num_intervals,
+        intervals="automatic",
+        disable_interval_deleting=False,
+        legend_decimal_places=3):
     model = self.model
     # Code that generates bins automatically based on number of intervals
     # specified. The code does this by creating num_intervals + 1 linearlly
@@ -311,7 +233,6 @@ def bin_parameter(
         intervals = intervals.tolist()
     interval_results = {}
     interval_names = []
-
     elements_with_parameter = element_list
     element_type = None
     for element_with_parameter in elements_with_parameter:
@@ -328,66 +249,59 @@ def bin_parameter(
             if np.min(parameter_results) < intervals[i]:
                 interval_names.append("< {0:1.{j}f}".format(
                     intervals[i],
-                    j=legend_sig_figs))
+                    j=legend_decimal_places))
             interval_names.append("{0:1.{j}f} - {1:1.{j}f}".format(
                 intervals[i], intervals[i + 1],
-                j=legend_sig_figs))
+                j=legend_decimal_places))
         elif i < len(intervals) - 1:
             interval_names.append("{0:1.{j}f} - {1:1.{j}f}".format(
                 intervals[i], intervals[i + 1],
-                j=legend_sig_figs))
+                j=legend_decimal_places))
         elif i == len(intervals) - 1:
             if np.max(parameter_results) > intervals[i]:
                 interval_names.append("> {0:1.{j}f}".format(
                     intervals[i],
-                    j=legend_sig_figs))
+                    j=legend_decimal_places))
     for bin_name in interval_names:
         interval_results[bin_name] = {}
     for i in range(len(intervals)):
         if i == 0:
-            counter = 0
-            for parameter in parameter_results:
+            for j, parameter in enumerate(parameter_results):
                 if parameter >= intervals[i] and parameter < intervals[i + 1]:
 
-                    interval_results[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_sig_figs)
-                    ][elements_with_parameter[counter]] = element_list.index(
-                        elements_with_parameter[counter])
+                    interval_results["{0:1.{j}f} - {1:1.{j}f}".format(
+                        intervals[i],
+                        intervals[i + 1],
+                        j=legend_decimal_places)][elements_with_parameter[j]] \
+                        = element_list.index(elements_with_parameter[j])
                 if parameter < intervals[i]:
-
-                    interval_results["< {0:1.{j}f}".format(intervals[i], j=legend_sig_figs)][
-                        elements_with_parameter[counter]
-                    ] = element_list.index(elements_with_parameter[counter],)
-                counter += 1
+                    interval_results["< {0:1.{j}f}".format(
+                        intervals[i],
+                        j=legend_decimal_places)][elements_with_parameter[j]] \
+                        = element_list.index(elements_with_parameter[j])
         elif i == len(intervals) - 2:
-            counter = 0
-            for parameter in parameter_results:
+            for j, parameter in enumerate(parameter_results):
                 if parameter >= intervals[i] and parameter <= intervals[i + 1]:
-                    interval_results[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_sig_figs)
-                    ][elements_with_parameter[counter]] = element_list.index(
-                        elements_with_parameter[counter])
-                counter += 1
+                    interval_results["{0:1.{j}f} - {1:1.{j}f}".format(
+                        intervals[i],
+                        intervals[i + 1],
+                        j=legend_decimal_places)][elements_with_parameter[j]] \
+                        = element_list.index(elements_with_parameter[j])
         elif i < len(intervals) - 2:
-            counter = 0
-            for parameter in parameter_results:
+            for j, parameter in enumerate(parameter_results):
                 if parameter >= intervals[i] and parameter < intervals[i + 1]:
-                    interval_results[
-                        "{0:1.{j}f} - {1:1.{j}f}".format(
-                            intervals[i], intervals[i + 1], j=legend_sig_figs)
-                    ][elements_with_parameter[counter]] = element_list.index(
-                        elements_with_parameter[counter])
-                counter += 1
+                    interval_results["{0:1.{j}f} - {1:1.{j}f}".format(
+                        intervals[i],
+                        intervals[i + 1],
+                        j=legend_decimal_places)][elements_with_parameter[j]] \
+                        = element_list.index(elements_with_parameter[j])
         elif i == len(intervals) - 1:
-            counter = 0
-            for parameter in parameter_results:
+            for j, parameter in enumerate(parameter_results):
                 if parameter > intervals[i]:
-                    interval_results["> {0:1.{j}f}".format(intervals[i], j=legend_sig_figs)][
-                        elements_with_parameter[counter]
-                    ] = element_list.index(elements_with_parameter[counter])
-                counter += 1
+                    interval_results["> {0:1.{j}f}".format(
+                        intervals[i],
+                        j=legend_decimal_places)][elements_with_parameter[j]] \
+                        = element_list.index(elements_with_parameter[j])
     if disable_interval_deleting:
         pass
     else:

@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 model = vis.VisWNModel('Networks/CTown.inp')
 
 model.plot_discrete_links(parameter = 'velocity', value = 'max', intervals = [0,2,6,10],
-                          legend_sig_figs = 0,
+                          legend_decimal_places = 0,
                           discrete_legend_loc = 'lower left', unit = 'ft/s',
                           save_name = 'figures/example6', dpi=400)
 plt.show()

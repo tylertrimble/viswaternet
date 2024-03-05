@@ -1,254 +1,90 @@
 # -*- coding: utf-8 -*-
-"""
-The viswaternet.drawing.continuous module handles everything related to continuous data drawing.
-"""
-
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 from viswaternet.network import processing
-from viswaternet.utils import save_fig, normalize_parameter, unit_conversion, fancyarrowpatch_to_linecollection, label_generator
+from viswaternet.utils import save_fig, unit_conversion, \
+    fancyarrowpatch_to_linecollection, label_generator
 from viswaternet.drawing import base
-
+from viswaternet.utils.markers import *
 
 default_cmap = 'autumn_r'
 
 
 def plot_continuous_nodes(
-    self,
-    ax=None,
-    parameter=None,
-    element_list=None,
-    value=None,
-    unit=None,
-    vmin=None,
-    vmax=None,
-    get_tanks=False,
-    get_reservoirs=False,
-    tanks=True,
-    reservoirs=True,
-    pumps=True,
-    valves=True,
-    cmap=default_cmap,
-    color_bar_title=None,
-    node_size=100,
-    min_size=100,
-    max_size=100,
-    node_shape=".",
-    edge_colors=None,
-    line_widths=None,
-    legend=True,
-    base_legend_loc="upper right",
-    savefig=False,
-    save_name=None,
-    dpi='figure',
-    save_format='png',
-    font_size=15,
-    font_color='k',
-    legend_title_font_size=17,
-    draw_frame=False,
-    legend_sig_figs=3,
-    node_sizes=None,
-    link_sizes=None,
-    element_size_intervals=None,
-    element_size_legend_title=None,
-    element_size_legend_loc=None,
-    element_size_legend_labels=None,
-    draw_base_legend=True,
-    reservoir_size=150,
-    reservoir_color='b',
-    reservoir_shape='s',
-    reservoir_border_color='k',
-    reservoir_border_width=3,
-    tank_size=200,
-    tank_color='b',
-    tank_shape='h',
-    tank_border_color='k',
-    tank_border_width=2,
-    valve_size=200,
-    valve_color='orange',
-    valve_shape='P',
-    valve_border_color='k',
-    valve_border_width=1,
-    pump_color='b',
-    pump_width=3,
-    pump_line_style='-',
-    pump_arrows=False,
-    base_node_color='k',
-    base_node_size=30,
-    base_link_color='k',
-    base_link_width=1,
-    base_link_line_style='-',
-    base_link_arrows=False,
-    draw_color_bar=True,
-    color_bar_width=0.03,
-    color_bar_height=0.8
-):
-    """User-level function that draws continuous nodal data, base elements, legends, and saves the figure.
-
-    Arguments
-    ---------
-    ax : axes._subplots.AxesSubplot
-        Matplotlib axes object.
-    parameter : string
-        The parameter to be plotted. The following is a list of parameters
-        available to use:
-        **Static Parameters**    
-        - base_demand
-        - elevation
-        - emitter_coefficient
-        - initial_quality
-        **Time-Dependent Parameters**
-        - head
-        - demand
-        - leak_demand
-        - leak_area
-        - leak_discharg_coeff
-        - quality
-
-    value : integer, string
-        For time-varying parameters only. Specifies which timestep or data
-        summary will be plotted.
-
-        .. rubric:: Possible Inputs
-
-        ======================= =========================================
-            int                 Plots element data for specified timestep
-            'min'               Plots minimum data point for each element
-            'max'               Plots maximum data point for each element
-            'mean'              Plots mean for each element
-            'stddev'            Plots standard deviation for each element
-            'range'             Plots range for each element
-        ======================= =========================================
-
-    unit : string
-        The unit that the network data is to be converted to.
-    vmin : integer
-        The minimum value of the color bar. 
-    vmax : integer
-        The maximum value of the color bar.
-    element_list : array-like
-        List of network elements that data will be retrieved for.
-    get_tanks : boolean
-        Determines if data for tanks are retrieved.
-    get_reservoirs : boolean
-        Determines if data for reservoirs are retrieved.
-    reservoirs : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    tanks : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    pumps : boolean
-        Determines if pumps with no data associated with them are drawn.
-    valves : boolean
-        Determines if valves with no data associated with them are drawn.
-    cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
-    color_bar_title : string
-        The title of the color bar.
-    node_size : integer, array-like
-        Integer representing all node sizes, or array of sizes for each node.
-    min_size : integer
-        Minimum size of nodes to be used with normalize_parameter.
-    max_size : integer
-        Maximum size of nodes to be used with normalize_parameter.
-    node_shape : string
-        Shape of the nodes. Refer to matplotlib documentation for available marker types.
-    edge_colors : string
-        Color of the node borders.
-    line_widths : integer
-        Width of the node borders.
-    savefig : boolean
-        Determines if the figure is saved. 
-    save_name : string
-        The inputted string will be appended to the name of the network.
-        Example
-        -------
-        >>>import viswaternet as vis
-        >>>model = vis.VisWNModel(r'Networks/Net3.inp')
-        ...
-        >>>model.save_fig(save_name='_example')
-        <Net3_example.png>
-    dpi : int, string
-        The dpi that the figure will be saved with.
-    save_format : string
-        The file format that the figure will be saved as.
-    legend : boolean
-        Determines if the base elements legend will be drawn. 
-    legend_loc : string
-        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
-    font_size : integer
-        The font size of the non-title text for legends. 
-    font_color : string
-        The color of the legend text. Refer to matplotlib documentation for available colors.
-    legend_title_font_size : integer
-        The font size of the title text for legends.
-    draw_frame : boolean
-        Determines if the frame around the legend is drawn.
-    legend_sig_figs : integer
-        The number of significant figures, or decimal points, that numbers in the legend will be displayed with. 0 should be passed for whole numbers.
-    element_size_intervals : integer
-        The number of intervals to be used if an element size legend is used.
-    element_size_legend_title : string
-        The title of the element size legend.
-    element_size_legend_loc : string
-        The location of the element size legend on the figure.
-    element_size_legend_labels : array-like
-        The labels of each interval of the element size legend.
-    reservoir_size : integer
-        The size of the reservoir marker on the plot in points^2. 
-    reservoir_color : string
-        The color of the reservoir marker.
-    reservoir_shape : string
-        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
-    reservoir_border_color : string
-        The color of the border around the reservoir marker.
-    reservoir_border_width : integer
-        The width in points of the border around the reservoir marker.
-    tank_size : integer
-        The size of the tank marker on the plot in points^2. 
-    tank_color : string
-        The color of the tank marker.
-    tank_shape : string
-        The shape of the tank marker.
-    tank_border_color : string
-        The color of the border around the tank marker.
-    tank_border_width : integer
-        The width in points of the border around the tank marker.
-    valve_size : integer
-        The size of the valve marker on the plot in points^2. 
-    valve_color : string
-        The color of the valve marker.
-    valve_shape : string
-        The shape of the valve marker.
-    valve_border_color : string
-        The color of the border around the valve marker.
-    valve_border_width : integer
-        The width in points of the border around the valve marker.
-    pump_color : string
-        The color of the pump line.
-    pump_width : integer
-        The width of the pump line in points.
-    pump_line_style : string
-        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
-    pump_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the pump.
-    base_node_color : string
-        The color of the nodes without data associated with them.
-    base_node_size : integer
-        The size of the nodes without data associated with them in points^2.
-    base_link_color : string
-        The color of the links without data associated with them.
-    base_link_width : integer
-        The width of the links without data associated with them in points.
-    base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
-    base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
-    draw_color_bar : boolean
-        Determines if color bar is drawn.
-    """
-
+        self,
+        ax=None,
+        parameter=None,
+        element_list=None,
+        value=None,
+        unit=None,
+        vmin=None,
+        vmax=None,
+        include_tanks=False,
+        include_reservoirs=False,
+        draw_tanks=True,
+        draw_reservoirs=True,
+        draw_pumps=True,
+        draw_valves=True,
+        draw_nodes=False,
+        draw_links=True,
+        cmap=default_cmap,
+        color_bar_title=None,
+        node_size=100,
+        node_shape=".",
+        node_border_color=None,
+        node_border_width=None,
+        legend=True,
+        base_legend_loc="upper right",
+        savefig=False,
+        save_name=None,
+        dpi='figure',
+        save_format='png',
+        base_legend_label_font_size=15,
+        base_legend_label_color="k",
+        draw_legend_frame=False,
+        element_size_intervals=None,
+        element_size_legend_title=None,
+        element_size_legend_loc=None,
+        element_size_legend_labels=None,
+        draw_base_legend=True,
+        reservoir_size=150,
+        reservoir_color='b',
+        reservoir_shape='s',
+        reservoir_border_color='k',
+        reservoir_border_width=3,
+        tank_size=200,
+        tank_color='b',
+        tank_shape='h',
+        tank_border_color='k',
+        tank_border_width=2,
+        valve_element='node',
+        valve_size=200,
+        valve_color='orange',
+        valve_shape=epa_valve,
+        valve_border_color='k',
+        valve_border_width=1,
+        valve_width=3,
+        valve_line_style='-',
+        valve_arrows=False,
+        pump_element='link',
+        pump_size=200,
+        pump_color='b',
+        pump_shape=epa_pump,
+        pump_border_color='k',
+        pump_border_width=1,
+        pump_width=3,
+        pump_line_style='-',
+        pump_arrows=False,
+        base_node_color='k',
+        base_node_size=30,
+        base_link_color='k',
+        base_link_width=1,
+        base_link_line_style='-',
+        base_link_arrows=False,
+        draw_color_bar=True,
+        color_bar_width=0.03,
+        color_bar_height=0.8):
     if len(self.model['G_list_pumps_only']) == 0:
-        pumps = False
+        draw_pumps = False
     if ax is None:
         fig, ax = plt.subplots(figsize=self.figsize)
         self.fig = fig
@@ -261,20 +97,11 @@ def plot_continuous_nodes(
             parameter,
             value=value,
             element_list=element_list,
-            tanks=get_tanks,
-            reservoirs=get_reservoirs,
-        )
-
+            include_tanks=include_tanks,
+            include_reservoirs=include_reservoirs)
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
-        if min_size is not None and max_size is not None:
-            normalized_parameter = normalize_parameter(
-                parameter_results, min_size, max_size
-            )
-
-            node_size = normalized_parameter
-
         g = base.draw_nodes(
             self,
             ax,
@@ -285,18 +112,20 @@ def plot_continuous_nodes(
             node_size=node_size,
             cmap=cmap,
             node_shape=node_shape,
-            edge_colors=edge_colors,
-            line_widths=line_widths,
-        )
+            node_border_color=node_border_color,
+            node_border_width=node_border_width,
+            draw_tanks=draw_tanks,
+            draw_reservoirs=draw_reservoirs)
 
         base.draw_base_elements(
             self,
             ax,
-            nodes=False,
-            reservoirs=reservoirs,
-            tanks=tanks,
-            valves=valves,
-            pumps=pumps,
+            draw_nodes=False,
+            draw_reservoirs=draw_reservoirs,
+            draw_tanks=draw_tanks,
+            draw_valves=draw_valves,
+            draw_pumps=draw_pumps,
+            element_list=node_list,
             reservoir_size=reservoir_size,
             reservoir_color=reservoir_color,
             reservoir_shape=reservoir_shape,
@@ -307,12 +136,21 @@ def plot_continuous_nodes(
             tank_shape=tank_shape,
             tank_border_color=tank_border_color,
             tank_border_width=tank_border_width,
+            valve_element=valve_element,
             valve_size=valve_size,
             valve_color=valve_color,
             valve_shape=valve_shape,
             valve_border_color=valve_border_color,
             valve_border_width=valve_border_width,
+            valve_width=valve_width,
+            valve_line_style=valve_line_style,
+            valve_arrows=valve_arrows,
+            pump_element=pump_element,
+            pump_size=pump_size,
             pump_color=pump_color,
+            pump_shape=pump_shape,
+            pump_border_color=pump_border_color,
+            pump_border_width=pump_border_width,
             pump_width=pump_width,
             pump_line_style=pump_line_style,
             pump_arrows=pump_arrows,
@@ -321,286 +159,123 @@ def plot_continuous_nodes(
             base_link_color=base_link_color,
             base_link_width=base_link_width,
             base_link_line_style=base_link_line_style,
-            base_link_arrows=base_link_arrows
-        )
-        if draw_color_bar == True:
+            base_link_arrows=base_link_arrows)
+        if draw_color_bar is True:
             if color_bar_title is None:
                 color_bar_title = label_generator(parameter, value, unit)
-
             base.draw_color_bar(ax,
                                 g,
                                 cmap,
                                 color_bar_title=color_bar_title,
                                 color_bar_width=color_bar_width,
                                 color_bar_height=color_bar_height)
-    if legend:
-
-        base.draw_legend(ax,
-                         pumps=pumps,
-                         base_legend_loc=base_legend_loc,
-                         font_size=font_size,
-                         font_color=font_color,
-                         legend_title_font_size=legend_title_font_size,
-                         draw_frame=draw_frame,
-                         pump_color=pump_color,
-                         base_link_color=base_link_color,
-                         node_sizes=node_sizes,
-                         link_sizes=link_sizes,
-                         element_size_intervals=element_size_intervals,
-                         element_size_legend_title=element_size_legend_title,
-                         element_size_legend_loc=element_size_legend_loc,
-                         element_size_legend_labels=element_size_legend_labels,
-                         draw_base_legend=draw_base_legend,
-                         linewidths=line_widths,
-                         edge_colors=edge_colors,
-                         pump_line_style=pump_line_style,
-                         base_link_line_style=base_link_line_style,
-                         base_link_arrows=base_link_arrows,
-                         pump_arrows=pump_arrows,
-                         draw_base_links=True,
-                         )
+    base.draw_legend(ax,
+                     draw_pumps=draw_pumps,
+                     base_legend_loc=base_legend_loc,
+                     base_legend_label_font_size=base_legend_label_font_size,
+                     base_legend_label_color=base_legend_label_color,
+                     draw_legend_frame=draw_legend_frame,
+                     pump_color=pump_color,
+                     base_link_color=base_link_color,
+                     element_size_intervals=element_size_intervals,
+                     element_size_legend_title=element_size_legend_title,
+                     element_size_legend_loc=element_size_legend_loc,
+                     element_size_legend_labels=element_size_legend_labels,
+                     draw_base_legend=draw_base_legend,
+                     linewidths=node_border_width,
+                     node_border_color=node_border_color,
+                     pump_line_style=pump_line_style,
+                     base_link_line_style=base_link_line_style,
+                     base_link_arrows=base_link_arrows,
+                     pump_arrows=pump_arrows,
+                     draw_links=draw_links,
+                     draw_valves=draw_valves,
+                     valve_element=valve_element,
+                     valve_line_style=valve_line_style,
+                     valve_color=valve_color,
+                     valve_arrows=valve_arrows,
+                     pump_element=pump_element)
     if savefig:
 
         save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
 
 
 def plot_continuous_links(
-    self,
-    ax=None,
-    parameter=None,
-    element_list=None,
-    value=None,
-    unit=None,
-    widths=1,
-    min_width=1,
-    max_width=1,
-    vmin=None,
-    vmax=None,
-    link_style='-',
-    link_arrows=False,
-    tanks=True,
-    reservoirs=True,
-    pumps=True,
-    valves=True,
-    cmap=default_cmap,
-    color_bar_title=None,
-    legend=True,
-    base_legend_loc="upper right",
-    savefig=False,
-    save_name=None,
-    dpi='figure',
-    save_format='png',
-    font_size=15,
-    font_color='k',
-    legend_title_font_size=17,
-    draw_frame=False,
-    legend_sig_figs=3,
-    node_sizes=None,
-    link_sizes=None,
-    element_size_intervals=None,
-    element_size_legend_title=None,
-    element_size_legend_loc=None,
-    element_size_legend_labels=None,
-    draw_base_legend=True,
-    reservoir_size=150,
-    reservoir_color='b',
-    reservoir_shape='s',
-    reservoir_border_color='k',
-    reservoir_border_width=3,
-    tank_size=200,
-    tank_color='b',
-    tank_shape='h',
-    tank_border_color='k',
-    tank_border_width=2,
-    valve_size=200,
-    valve_color='orange',
-    valve_shape='P',
-    valve_border_color='k',
-    valve_border_width=1,
-    pump_color='b',
-    pump_width=3,
-    pump_line_style='-',
-    pump_arrows=False,
-    base_node_color='k',
-    base_node_size=30,
-    base_link_color='k',
-    base_link_width=1,
-    base_link_line_style='-',
-    base_link_arrows=False,
-    draw_color_bar=True,
-    color_bar_width=0.03,
-    color_bar_height=0.8
-):
-    """User-level function that draws continuous link data, base elements, legends, and saves the figure.
-
-    Arguments
-    ---------
-    ax : axes._subplots.AxesSubplot
-        Matplotlib axes object.
-    parameter : string
-        The parameter to be plotted. The following is a list of parameters
-        available to use:
-        **Static Parameters**    
-        - length
-        - minor_loss
-        - bulk_coeff
-        - wall_coeff
-        **Time-Dependent Parameters**
-        - flowrate
-        - velocity
-        - headloss
-        - friction_factor
-        - reaction_rate
-        - quality
-
-    value : integer, string
-        For time-varying parameters only. Specifies which timestep or data
-        summary will be plotted.
-
-        .. rubric:: Possible Inputs
-
-        ======================= =========================================
-            int                 Plots element data for specified timestep
-            'min'               Plots minimum data point for each element
-            'max'               Plots maximum data point for each element
-            'mean'              Plots mean for each element
-            'stddev'            Plots standard deviation for each element
-            'range'             Plots range for each element
-        ======================= =========================================
-
-    unit : string
-        The unit that the network data is to be converted to.
-    widths : integer, array-like
-        Integer representing all link widrths, or array of widths for each link.
-    min_width : integer
-        Minimum size of links to be used with normalize_parameter.
-    max_width : integer
-        Maximum size of links to be used with normalize_parameter.
-    vmin : integer
-        The minimum value of the color bar. 
-    vmax : integer
-        The maximum value of the color bar.
-    link_style : string
-        The style (solid, dashed, dotted, etc.) of the links. Refer to matplotlib documentation for available line styles.
-    link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the pump.
-    element_list : array-like
-        List of network elements that data will be retrieved for.
-    get_tanks : boolean
-        Determines if data for tanks are retrieved.
-    get_reservoirs : boolean
-        Determines if data for reservoirs are retrieved.
-    reservoirs : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    tanks : boolean
-        Determines if reservoirs with no data associated with them are drawn.
-    pumps : boolean
-        Determines if pumps with no data associated with them are drawn.
-    valves : boolean
-        Determines if valves with no data associated with them are drawn.
-    cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
-    color_bar_title : string
-        The title of the color bar.
-    node_shape : string
-        Shape of the nodes. Refer to matplotlib documentation for available marker types.
-    edge_colors : string
-        Color of the node borders.
-    line_widths : integer
-        Width of the node borders.
-    savefig : boolean
-        Determines if the figure is saved. 
-    save_name : string
-        The inputted string will be appended to the name of the network.
-        Example
-        -------
-        >>>import viswaternet as vis
-        >>>model = vis.VisWNModel(r'Networks/Net3.inp')
-        ...
-        >>>model.save_fig(save_name='_example')
-        <Net3_example.png>
-    dpi : int, string
-        The dpi that the figure will be saved with.
-    save_format : string
-        The file format that the figure will be saved as.
-    legend : boolean
-        Determines if the base elements legend will be drawn. 
-    legend_loc : string
-        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
-    font_size : integer
-        The font size of the non-title text for legends. 
-    font_color : string
-        The color of the legend text. Refer to matplotlib documentation for available colors.
-    legend_title_font_size : integer
-        The font size of the title text for legends.
-    draw_frame : boolean
-        Determines if the frame around the legend is drawn.
-    legend_sig_figs : integer
-        The number of significant figures, or decimal points, that numbers in the legend will be displayed with. 0 should be passed for whole numbers.
-    element_size_intervals : integer
-        The number of intervals to be used if an element size legend is used.
-    element_size_legend_title : string
-        The title of the element size legend.
-    element_size_legend_loc : string
-        The location of the element size legend on the figure.
-    element_size_legend_labels : array-like
-        The labels of each interval of the element size legend.
-    reservoir_size : integer
-        The size of the reservoir marker on the plot in points^2. 
-    reservoir_color : string
-        The color of the reservoir marker.
-    reservoir_shape : string
-        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
-    reservoir_border_color : string
-        The color of the border around the reservoir marker.
-    reservoir_border_width : integer
-        The width in points of the border around the reservoir marker.
-    tank_size : integer
-        The size of the tank marker on the plot in points^2. 
-    tank_color : string
-        The color of the tank marker.
-    tank_shape : string
-        The shape of the tank marker.
-    tank_border_color : string
-        The color of the border around the tank marker.
-    tank_border_width : integer
-        The width in points of the border around the tank marker.
-    valve_size : integer
-        The size of the valve marker on the plot in points^2. 
-    valve_color : string
-        The color of the valve marker.
-    valve_shape : string
-        The shape of the valve marker.
-    valve_border_color : string
-        The color of the border around the valve marker.
-    valve_border_width : integer
-        The width in points of the border around the valve marker.
-    pump_color : string
-        The color of the pump line.
-    pump_width : integer
-        The width of the pump line in points.
-    pump_line_style : string
-        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
-    pump_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the pump.
-    base_node_color : string
-        The color of the nodes without data associated with them.
-    base_node_size : integer
-        The size of the nodes without data associated with them in points^2.
-    base_link_color : string
-        The color of the links without data associated with them.
-    base_link_width : integer
-        The width of the links without data associated with them in points.
-    base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the links with no data associated with them.
-    base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the links with no data associated with them.
-    draw_color_bar : boolean
-        Determines if color bar is drawn.
-    """
-
+        self,
+        ax=None,
+        parameter=None,
+        element_list=None,
+        include_pumps=True,
+        include_valves=True,
+        value=None,
+        unit=None,
+        link_width=1,
+        vmin=None,
+        vmax=None,
+        link_style='-',
+        link_arrows=False,
+        draw_tanks=True,
+        draw_reservoirs=True,
+        draw_pumps=True,
+        draw_valves=True,
+        draw_nodes=False,
+        draw_links=True,
+        cmap=default_cmap,
+        color_bar_title=None,
+        legend=True,
+        base_legend_loc="upper right",
+        savefig=False,
+        save_name=None,
+        dpi='figure',
+        save_format='png',
+        base_legend_label_font_size=15,
+        base_legend_label_color="k",
+        draw_legend_frame=False,
+        element_size_intervals=None,
+        element_size_legend_title=None,
+        element_size_legend_loc=None,
+        element_size_legend_labels=None,
+        draw_base_legend=True,
+        reservoir_size=150,
+        reservoir_color='b',
+        reservoir_shape='s',
+        reservoir_border_color='k',
+        reservoir_border_width=3,
+        tank_size=200,
+        tank_color='b',
+        tank_shape='h',
+        tank_border_color='k',
+        tank_border_width=2,
+        valve_element='node',
+        valve_size=200,
+        valve_color='orange',
+        valve_shape=epa_valve,
+        valve_border_color='k',
+        valve_border_width=1,
+        valve_width=3,
+        valve_line_style='-',
+        valve_arrows=False,
+        pump_element='link',
+        pump_size=200,
+        pump_color='b',
+        pump_shape=epa_pump,
+        pump_border_color='k',
+        pump_border_width=1,
+        pump_width=3,
+        pump_line_style='-',
+        pump_arrows=False,
+        base_node_color='k',
+        base_node_size=30,
+        base_link_color='k',
+        base_link_width=1,
+        base_link_line_style='-',
+        base_link_arrows=False,
+        draw_color_bar=True,
+        color_bar_width=0.03,
+        color_bar_height=0.8):
+    model = self.model
     if len(self.model['G_list_pumps_only']) == 0:
-        pumps = False
+        draw_pumps = False
     if ax is None:
         if ax is None:
             fig, ax = plt.subplots(figsize=self.figsize)
@@ -608,40 +283,43 @@ def plot_continuous_links(
     if parameter is not None:
 
         parameter_results, link_list = processing.get_parameter(
-            self, "link", parameter, value=value, element_list=element_list
-        )
+            self,
+            "link",
+            parameter,
+            value=value,
+            element_list=element_list,
+            include_pumps=include_pumps,
+            include_valves=include_valves)
 
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
-        normalized_parameter = normalize_parameter(
-            parameter_results, min_width, max_width
-        )
-
-        widths = normalized_parameter
-
         g = base.draw_links(
             self,
             ax,
             link_list,
             parameter_results=parameter_results,
             cmap=cmap,
-            widths=widths,
+            link_width=link_width,
             vmin=vmin,
             vmax=vmax,
             link_style=link_style,
             link_arrows=link_arrows,
-        )
+            pump_element=pump_element,
+            draw_pumps=draw_pumps,
+            valve_element=valve_element,
+            draw_valves=draw_valves)
 
         base.draw_base_elements(
             self,
             ax,
-            nodes=False,
-            links=False,
-            reservoirs=reservoirs,
-            tanks=tanks,
-            valves=valves,
-            pumps=pumps,
+            draw_nodes=draw_nodes,
+            draw_links=draw_nodes,
+            draw_reservoirs=draw_reservoirs,
+            draw_tanks=draw_tanks,
+            draw_valves=draw_valves,
+            draw_pumps=draw_pumps,
+            element_list=link_list,
             reservoir_size=reservoir_size,
             reservoir_color=reservoir_color,
             reservoir_shape=reservoir_shape,
@@ -652,12 +330,21 @@ def plot_continuous_links(
             tank_shape=tank_shape,
             tank_border_color=tank_border_color,
             tank_border_width=tank_border_width,
+            valve_element=valve_element,
             valve_size=valve_size,
             valve_color=valve_color,
             valve_shape=valve_shape,
             valve_border_color=valve_border_color,
             valve_border_width=valve_border_width,
+            valve_width=valve_width,
+            valve_line_style=valve_line_style,
+            valve_arrows=valve_arrows,
+            pump_element=pump_element,
+            pump_size=pump_size,
             pump_color=pump_color,
+            pump_shape=pump_shape,
+            pump_border_color=pump_border_color,
+            pump_border_width=pump_border_width,
             pump_width=pump_width,
             pump_line_style=pump_line_style,
             pump_arrows=pump_arrows,
@@ -668,14 +355,12 @@ def plot_continuous_links(
             base_link_line_style=base_link_line_style,
             base_link_arrows=base_link_arrows
         )
-        if link_arrows == True:
+        if link_arrows is True:
             g = fancyarrowpatch_to_linecollection(
                 g, cmap, vmin, vmax, parameter_results)
-
-        if draw_color_bar == True:
+        if draw_color_bar is True:
             if color_bar_title is None:
                 color_bar_title = label_generator(parameter, value, unit)
-
             base.draw_color_bar(ax,
                                 g,
                                 cmap,
@@ -683,30 +368,39 @@ def plot_continuous_links(
                                 color_bar_width=color_bar_width,
                                 color_bar_height=color_bar_height)
 
-    if legend:
-
-        base.draw_legend(ax,
-                         pumps=pumps,
-                         base_legend_loc=base_legend_loc,
-                         font_size=font_size,
-                         font_color=font_color,
-                         legend_title_font_size=legend_title_font_size,
-                         draw_frame=draw_frame,
-                         pump_color=pump_color,
-                         base_link_color=base_link_color,
-                         node_sizes=node_sizes,
-                         link_sizes=link_sizes,
-                         element_size_intervals=element_size_intervals,
-                         element_size_legend_title=element_size_legend_title,
-                         element_size_legend_loc=element_size_legend_loc,
-                         element_size_legend_labels=element_size_legend_labels,
-                         draw_base_legend=draw_base_legend,
-                         pump_line_style=pump_line_style,
-                         base_link_line_style=base_link_line_style,
-                         base_link_arrows=base_link_arrows,
-                         pump_arrows=pump_arrows,
-                         draw_base_links=False,
-                         )
+    link_list = [name for name in link_list
+                 if ((name not in model["G_list_pumps_only"]
+                      or pump_element == 'node'
+                      or draw_pumps is False)
+                 and (name not in model["G_list_valves_only"]
+                      or valve_element == 'node'
+                      or draw_valves is False)
+                 and (name not in link_list))]
+    if not link_list:
+        draw_links = False
+    base.draw_legend(ax,
+                     draw_pumps=draw_pumps,
+                     base_legend_loc=base_legend_loc,
+                     base_legend_label_font_size=base_legend_label_font_size,
+                     base_legend_label_color=base_legend_label_color,
+                     draw_legend_frame=draw_legend_frame,
+                     pump_color=pump_color,
+                     base_link_color=base_link_color,
+                     element_size_intervals=element_size_intervals,
+                     element_size_legend_title=element_size_legend_title,
+                     element_size_legend_loc=element_size_legend_loc,
+                     element_size_legend_labels=element_size_legend_labels,
+                     draw_base_legend=draw_base_legend,
+                     pump_line_style=pump_line_style,
+                     base_link_line_style=base_link_line_style,
+                     base_link_arrows=base_link_arrows,
+                     pump_arrows=pump_arrows,
+                     draw_links=draw_links,
+                     draw_valves=draw_valves,
+                     valve_element=valve_element,
+                     valve_line_style=valve_line_style,
+                     valve_color=valve_color,
+                     valve_arrows=valve_arrows,
+                     pump_element=pump_element)
     if savefig:
-
         save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
