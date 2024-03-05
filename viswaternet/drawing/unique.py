@@ -108,16 +108,22 @@ def plot_unique_data(
         ax.set_frame_on(self.axis_frame)
 
     def call_draw_base_elements(element_list=None):
-        base.draw_base_elements(self, ax, draw_nodes=draw_nodes, draw_links=draw_links,
-                                draw_reservoirs=draw_reservoirs, draw_tanks=draw_tanks,
-                                draw_valves=draw_valves, draw_pumps=draw_pumps,
+        base.draw_base_elements(self,
+                                ax,
+                                draw_nodes=draw_nodes,
+                                draw_links=draw_links,
+                                draw_reservoirs=draw_reservoirs,
+                                draw_tanks=draw_tanks,
+                                draw_valves=draw_valves,
+                                draw_pumps=draw_pumps,
                                 element_list=element_list,
                                 reservoir_size=reservoir_size,
                                 reservoir_color=reservoir_color,
                                 reservoir_shape=reservoir_shape,
                                 reservoir_border_color=reservoir_border_color,
                                 reservoir_border_width=reservoir_border_width,
-                                tank_size=tank_size, tank_color=tank_color,
+                                tank_size=tank_size,
+                                tank_color=tank_color,
                                 tank_shape=tank_shape,
                                 tank_border_color=tank_border_color,
                                 tank_border_width=tank_border_width,
@@ -148,54 +154,68 @@ def plot_unique_data(
 
     def call_draw_legend(intervals=None, element_list=None):
         draw_links = True
-        if parameter_type == 'link' or parameter == 'diameter' or parameter == 'roughness':
+        if parameter_type == 'link' \
+                or parameter == 'diameter' \
+                or parameter == 'roughness':
             link_list = [name for name in element_list
-                      if ((name not in model["pump_names"] or pump_element == 'node' or draw_pumps == False) \
-                      and (name not in model["valve_names"] or valve_element == 'node' or draw_valves == False) \
-                      and (name not in element_list))]
+                         if ((name not in model["pump_names"]
+                              or pump_element == 'node'
+                              or draw_pumps is False)
+                         and (name not in model["valve_names"]
+                              or valve_element == 'node'
+                              or draw_valves is False)
+                         and (name not in element_list))]
             if not link_list:
                 draw_links = False
-        base.draw_legend(ax, intervals=intervals, title=legend_title,
-                         draw_pumps=draw_pumps, base_legend_loc=base_legend_loc, 
-                         discrete_legend_loc=discrete_legend_loc,
-                         base_legend_label_font_size=base_legend_label_font_size, 
-                         base_legend_label_color=base_legend_label_color,
-                         discrete_legend_label_font_size=discrete_legend_label_font_size, 
-                         discrete_legend_label_color=discrete_legend_label_color,
-                         discrete_legend_title_font_size=discrete_legend_title_font_size,
-                         discrete_legend_title_color=discrete_legend_title_color,
-                         cmap=cmap, color_list=color_list,
-                         draw_legend_frame=draw_legend_frame, pump_color=pump_color,
-                         base_link_color=base_link_color,
-                         node_size=node_size, link_width=link_width,
-                         element_size_intervals=element_size_intervals,
-                         element_size_legend_title=element_size_legend_title,
-                         element_size_legend_loc=element_size_legend_loc,
-                         element_size_legend_labels=element_size_legend_labels,
-                         node_border_color=node_border_color, linewidths=node_border_width,
-                         draw_base_legend=draw_base_legend,
-                         draw_discrete_legend=draw_discrete_legend,
-                         pump_line_style=pump_line_style,
-                         base_link_line_style=base_link_line_style,
-                         base_link_arrows=base_link_arrows,
-                         pump_arrows=pump_arrows,
-                         draw_links=draw_links,
-                         draw_valves=draw_valves,
-                         valve_element=valve_element,
-                         valve_line_style=valve_line_style,
-                         valve_color=valve_color,
-                         valve_arrows=valve_arrows,
-                         pump_element=pump_element)
+        base.draw_legend(
+            ax,
+            intervals=intervals,
+            title=legend_title,
+            draw_pumps=draw_pumps,
+            base_legend_loc=base_legend_loc,
+            discrete_legend_loc=discrete_legend_loc,
+            base_legend_label_font_size=base_legend_label_font_size,
+            base_legend_label_color=base_legend_label_color,
+            discrete_legend_label_font_size=discrete_legend_label_font_size,
+            discrete_legend_label_color=discrete_legend_label_color,
+            discrete_legend_title_font_size=discrete_legend_title_font_size,
+            discrete_legend_title_color=discrete_legend_title_color,
+            cmap=cmap,
+            color_list=color_list,
+            draw_legend_frame=draw_legend_frame,
+            pump_color=pump_color,
+            base_link_color=base_link_color,
+            node_size=node_size,
+            link_width=link_width,
+            element_size_intervals=element_size_intervals,
+            element_size_legend_title=element_size_legend_title,
+            element_size_legend_loc=element_size_legend_loc,
+            element_size_legend_labels=element_size_legend_labels,
+            node_border_color=node_border_color,
+            linewidths=node_border_width,
+            draw_base_legend=draw_base_legend,
+            draw_discrete_legend=draw_discrete_legend,
+            pump_line_style=pump_line_style,
+            base_link_line_style=base_link_line_style,
+            base_link_arrows=base_link_arrows,
+            pump_arrows=pump_arrows,
+            draw_links=draw_links,
+            draw_valves=draw_valves,
+            valve_element=valve_element,
+            valve_line_style=valve_line_style,
+            valve_color=valve_color,
+            valve_arrows=valve_arrows,
+            pump_element=pump_element)
 
     def call_draw_color_bar():
-        base.draw_color_bar(ax, g, cmap, color_bar_title=color_bar_title,
+        base.draw_color_bar(ax,
+                            g,
+                            cmap,
+                            color_bar_title=color_bar_title,
                             color_bar_width=color_bar_width,
                             color_bar_height=color_bar_height)
-
     if parameter == "demand_patterns":
-
         demand_pattern_nodes, patterns = processing.get_demand_patterns(self)
-
         discrete.draw_discrete_nodes(
             self,
             ax,
@@ -205,45 +225,32 @@ def plot_unique_data(
             node_shape=node_shape,
             label_list=label_list,
             node_border_color=node_border_color,
-            node_border_width =node_border_width ,
+            node_border_width=node_border_width,
             cmap=cmap,
-            color_list=color_list,
-        )
-
+            color_list=color_list)
         call_draw_base_elements(element_list=model['node_names'])
-
         call_draw_legend(intervals=patterns, element_list=model['node_names'])
-
         if savefig:
-
             save_fig(self, save_name=save_name,
                      dpi=dpi, save_format=save_format)
         return
     elif parameter == "diameter" or parameter == "roughness":
-
         parameter_results, link_list = processing.get_parameter(
-            self, "link", parameter
-        )
-
+            self, "link", parameter)
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
         uniques = sorted(list(set(parameter_results)))
-
         interval_names = [("{:.{j}f}".format(i, j=legend_decimal_places))
                           for i in uniques]
-
         interval_results = {}
-
         for interval_name in interval_names:
-
             interval_results[interval_name] = {}
-
         for i, link in enumerate(link_list):
-
-            interval_results["{:.{j}f}".format(parameter_results[i], j=legend_decimal_places)][link] = model[
-                "G_pipe_name_list"
-            ].index(link)
+            interval_results["{:.{j}f}".format(
+                parameter_results[i],
+                j=legend_decimal_places)][link] = \
+                model["G_pipe_name_list"].index(link)
         # return interval_results,parameter_results,uniques
         discrete.draw_discrete_links(
             self,
@@ -255,49 +262,32 @@ def plot_unique_data(
             cmap=cmap,
             color_list=color_list,
             link_style=link_style,
-            link_arrows=link_arrows,
-        )
-
+            link_arrows=link_arrows)
         call_draw_base_elements(element_list=link_list)
-
         call_draw_legend(intervals=interval_names, element_list=link_list)
-
         if savefig:
-
             save_fig(self, save_name=save_name,
                      dpi=dpi, save_format=save_format)
         return
-
     elif parameter == "tag":
-
         parameter_results, node_list = processing.get_parameter(
-            self, "node", parameter
-        )
-
+            self, "node", parameter)
         uniques = []
-
         if any(i is not None for i in (parameter_results)):
             uniques = list(set(parameter_results))
         interval_names = uniques
         if not uniques:
             pass
-
         if None in interval_names:
             interval_names.remove(None)
-
         interval_names.append('No Tag')
         interval_results = {}
-
         for interval_name in interval_names:
-
             interval_results[interval_name] = {}
         for i, node in enumerate(node_list):
-
             if parameter_results[i] is None:
-
                 interval_results["No Tag"][node] = model["node_names"].index(
                     node)
-
                 continue
             interval_results[parameter_results[i]][node] = model[
                 "node_names"
@@ -311,48 +301,35 @@ def plot_unique_data(
             node_shape=node_shape,
             label_list=label_list,
             node_border_color=node_border_color,
-            node_border_width =node_border_width ,
+            node_border_width=node_border_width,
             cmap=cmap,
-            color_list=color_list,
-        )
-
-        call_draw_base_elements(element_list= model["node_names"])
-
-        call_draw_legend(intervals=interval_names, element_list= model["node_names"])
-
+            color_list=color_list)
+        call_draw_base_elements(element_list=model["node_names"])
+        call_draw_legend(intervals=interval_names,
+                         element_list=model["node_names"])
         if savefig:
-
             save_fig(self, save_name=save_name,
                      dpi=dpi, save_format=save_format)
         return
     elif parameter == "custom_data":
-
         if data_type == "unique":
             interval_names = list(sorted(set(custom_data_values[1])))
             interval_results = {}
             for interval in interval_names:
-
                 interval_results[interval] = {}
-
             if parameter_type == 'node':
                 for element, data in zip(
-                    custom_data_values[0],
-                    custom_data_values[1]
-                ):
-
-                    interval_results[data][element] = model["node_names"].index(
-                        element)
-
+                        custom_data_values[0],
+                        custom_data_values[1]):
+                    interval_results[data][element] = \
+                        model["node_names"].index(element)
             if parameter_type == 'link':
                 for element, data in zip(
-                    custom_data_values[0],
-                    custom_data_values[1]
-                ):
-
-                    interval_results[data][element] = model["G_pipe_name_list"].index(
-                        element)
+                        custom_data_values[0],
+                        custom_data_values[1]):
+                    interval_results[data][element] = \
+                        model["G_pipe_name_list"].index(element)
             if parameter_type == "link":
-
                 discrete.draw_discrete_links(
                     self,
                     ax,
@@ -363,14 +340,11 @@ def plot_unique_data(
                     cmap=cmap,
                     color_list=color_list,
                     link_style=link_style,
-                    link_arrows=link_arrows,
-                )
-
+                    link_arrows=link_arrows)
                 call_draw_base_elements(element_list=custom_data_values[0])
-
-                call_draw_legend(element_list=custom_data_values[0], intervals=interval_names)
+                call_draw_legend(element_list=custom_data_values[0],
+                                 intervals=interval_names)
             elif parameter_type == "node":
-
                 discrete.draw_discrete_nodes(
                     self,
                     ax,
@@ -380,17 +354,13 @@ def plot_unique_data(
                     node_shape=node_shape,
                     label_list=label_list,
                     node_border_color=node_border_color,
-                    node_border_width =node_border_width ,
+                    node_border_width=node_border_width,
                     cmap=cmap,
-                    color_list=color_list,
-                )
-
+                    color_list=color_list)
                 call_draw_base_elements(element_list=custom_data_values[0])
-
-                call_draw_legend(intervals=interval_names, element_list=custom_data_values[0])
-
+                call_draw_legend(intervals=interval_names,
+                                 element_list=custom_data_values[0])
             if savefig:
-
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
             return
@@ -402,11 +372,8 @@ def plot_unique_data(
                 intervals=intervals,
                 num_intervals=num_intervals,
                 legend_decimal_places=legend_decimal_places,
-                disable_interval_deleting=disable_interval_deleting,
-            )
-
+                disable_interval_deleting=disable_interval_deleting)
             if parameter_type == "link":
-
                 discrete.draw_discrete_links(
                     self,
                     ax,
@@ -417,15 +384,11 @@ def plot_unique_data(
                     cmap=cmap,
                     color_list=color_list,
                     link_style=link_style,
-                    link_arrows=link_arrows,
-                )
-
+                    link_arrows=link_arrows)
                 call_draw_base_elements(element_list=custom_data_values[0])
-
-                call_draw_legend(element_list=custom_data_values[0], intervals=interval_names)
-
+                call_draw_legend(element_list=custom_data_values[0],
+                                 intervals=interval_names)
             if parameter_type == "node":
-
                 discrete.draw_discrete_nodes(
                     self,
                     ax,
@@ -435,22 +398,17 @@ def plot_unique_data(
                     node_shape=node_shape,
                     label_list=label_list,
                     node_border_color=node_border_color,
-                    node_border_width =node_border_width ,
+                    node_border_width=node_border_width,
                     cmap=cmap,
-                    color_list=color_list,
-                )
-
+                    color_list=color_list)
                 call_draw_base_elements(element_list=custom_data_values[0])
-
-                call_draw_legend(intervals=interval_names, element_list=custom_data_values[0])
-
+                call_draw_legend(intervals=interval_names,
+                                 element_list=custom_data_values[0])
             if savefig:
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
-
                 return
         if data_type == "continuous":
-
             if parameter_type == "link":
                 g = base.draw_links(
                     self,
@@ -458,7 +416,7 @@ def plot_unique_data(
                     custom_data_values[0],
                     parameter_results=custom_data_values[1],
                     cmap=cmap,
-                    widths=link_width,
+                    link_width=link_width,
                     vmin=vmin,
                     vmax=vmax,
                     link_style=link_style,
@@ -466,13 +424,9 @@ def plot_unique_data(
                     pump_element=pump_element,
                     draw_pumps=draw_pumps,
                     valve_element=valve_element,
-                    draw_valves=draw_valves
-                )
-
+                    draw_valves=draw_valves)
                 call_draw_base_elements(element_list=custom_data_values[0])
-
                 call_draw_legend(element_list=custom_data_values[0])
-
             elif parameter_type == "node":
                 g = base.draw_nodes(
                     self,
@@ -487,91 +441,83 @@ def plot_unique_data(
                     node_border_width=node_border_width,
                     node_border_color=node_border_color,
                     draw_tanks=draw_tanks,
-                    draw_reservoirs=draw_reservoirs
-                )
-
+                    draw_reservoirs=draw_reservoirs)
                 call_draw_base_elements(element_list=custom_data_values[0])
-
                 call_draw_legend(element_list=custom_data_values[0])
-
-            if draw_color_bar == True:
+            if draw_color_bar is True:
                 call_draw_color_bar()
-
             if savefig:
-
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
             return
     elif parameter == 'excel_data':
-
         if data_type == "unique":
-
-            element_list, intervals = convert_excel(
-                self, data_file, parameter_type, data_type, excel_columns[0], excel_columns[1]
-            )
-
+            interval_results, intervals = convert_excel(
+                self,
+                data_file,
+                parameter_type,
+                data_type,
+                excel_columns[0],
+                excel_columns[1])
+            element_list, results = convert_excel(
+                self,
+                data_file,
+                parameter_type,
+                'discrete',
+                excel_columns[0],
+                excel_columns[1])
             if parameter_type == "link":
-
                 discrete.draw_discrete_links(
                     self,
                     ax,
-                    element_list,
+                    interval_results,
                     intervals,
                     link_width=link_width,
                     label_list=label_list,
                     cmap=cmap,
                     color_list=color_list,
                     link_style=link_style,
-                    link_arrows=link_arrows,
-                )
-
+                    link_arrows=link_arrows)
                 call_draw_base_elements(element_list=element_list)
-
-                call_draw_legend(element_list=element_list, intervals=intervals)
-
+                call_draw_legend(element_list=element_list,
+                                 intervals=intervals)
             elif parameter_type == "node":
-
                 discrete.draw_discrete_nodes(
                     self,
                     ax,
-                    element_list,
+                    interval_results,
                     intervals,
                     node_size=node_size,
                     node_shape=node_shape,
                     label_list=label_list,
                     node_border_color=node_border_color,
-                    node_border_width =node_border_width ,
+                    node_border_width=node_border_width,
                     cmap=cmap,
-                    color_list=color_list,
-                )
-
+                    color_list=color_list)
                 call_draw_base_elements(element_list=element_list)
-
-                call_draw_legend(intervals=intervals, element_list=element_list)
-
+                call_draw_legend(intervals=intervals,
+                                 element_list=element_list)
             if savefig:
-
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
             return
         if data_type == "discrete":
-
-            element_list, intervals = convert_excel(
-                self, data_file, parameter_type, data_type, excel_columns[0], excel_columns[1]
-            )
-
+            element_list, results = convert_excel(
+                self,
+                data_file,
+                parameter_type,
+                data_type,
+                excel_columns[0],
+                excel_columns[1])
             interval_results, interval_names = processing.bin_parameter(
                 self,
+                results,
                 element_list,
-                intervals,
                 intervals=intervals,
                 num_intervals=num_intervals,
                 legend_decimal_places=legend_decimal_places,
-                disable_interval_deleting=disable_interval_deleting,
-            )
-
+                disable_interval_deleting=disable_interval_deleting)
             if parameter_type == "link":
-
                 discrete.draw_discrete_links(
                     self,
                     ax,
@@ -582,15 +528,11 @@ def plot_unique_data(
                     cmap=cmap,
                     color_list=color_list,
                     link_style=link_style,
-                    link_arrows=link_arrows,
-                )
-
+                    link_arrows=link_arrows)
                 call_draw_base_elements(element_list=element_list)
-
-                call_draw_legend(element_list=element_list, intervals=interval_names)
-
+                call_draw_legend(element_list=element_list,
+                                 intervals=interval_names)
             if parameter_type == "node":
-
                 discrete.draw_discrete_nodes(
                     self,
                     ax,
@@ -600,32 +542,30 @@ def plot_unique_data(
                     node_shape=node_shape,
                     label_list=label_list,
                     node_border_color=node_border_color,
-                    node_border_width =node_border_width ,
+                    node_border_width=node_border_width,
                     cmap=cmap,
-                    color_list=color_list,
-                )
-
+                    color_list=color_list)
                 call_draw_base_elements(element_list=element_list)
-
-                call_draw_legend(intervals=interval_names, element_list=element_list)
-
+                call_draw_legend(intervals=interval_names,
+                                 element_list=element_list)
             if savefig:
-
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
             return
         if data_type == "continuous":
-
-            element_list, intervals = convert_excel(
-                self, data_file, parameter_type, data_type, excel_columns[0], excel_columns[1]
-            )
-
+            element_list, results = convert_excel(
+                self,
+                data_file,
+                parameter_type,
+                data_type,
+                excel_columns[0],
+                excel_columns[1])
             if parameter_type == "link":
                 g = base.draw_links(
                     self,
                     ax,
                     element_list,
-                    intervals,
+                    results,
                     cmap=cmap,
                     widths=link_width,
                     vmin=vmin,
@@ -635,19 +575,15 @@ def plot_unique_data(
                     pump_element=pump_element,
                     draw_pumps=draw_pumps,
                     valve_element=valve_element,
-                    draw_valves=draw_valves
-                )
-
+                    draw_valves=draw_valves)
                 call_draw_base_elements(element_list=element_list)
-
                 call_draw_legend(element_list=element_list)
-
             elif parameter_type == "node":
                 g = base.draw_nodes(
                     self,
                     ax,
                     element_list,
-                    intervals,
+                    results,
                     node_size=node_size,
                     cmap=cmap,
                     vmin=vmin,
@@ -656,18 +592,12 @@ def plot_unique_data(
                     node_border_width=node_border_width,
                     node_border_color=node_border_color,
                     draw_tanks=draw_tanks,
-                    draw_reservoirs=draw_reservoirs
-                )
-
+                    draw_reservoirs=draw_reservoirs)
                 call_draw_base_elements(element_list=element_list)
-
                 call_draw_legend(element_list=element_list)
-
-            if draw_color_bar == True:
+            if draw_color_bar is True:
                 call_draw_color_bar()
-
             if savefig:
-
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
         return

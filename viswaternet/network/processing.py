@@ -13,6 +13,7 @@ def get_parameter(
         include_pumps=True,
         include_valves=True):
     model = self.model
+    results = model["results"]
     if parameter_type == "node":
         # If no element list is provided, set element list to all nodes of
         # the model
@@ -20,7 +21,6 @@ def get_parameter(
             element_list = list.copy(model["node_names"])
         # Get indices of nodes in model["node_names"]
         indices = [model["node_names"].index(i) for i in element_list]
-        results = model["results"]
         # WNTR differentiates between node attributes and simulation results.
         # To account for this all simulation result logic is put into a try
         # block and if a KeyError occurs, it goes into the except block to
@@ -296,7 +296,7 @@ def bin_parameter(
                         j=legend_decimal_places)][elements_with_parameter[j]] \
                         = element_list.index(elements_with_parameter[j])
         elif i == len(intervals) - 1:
-            for parameter in enumerate(parameter_results):
+            for j, parameter in enumerate(parameter_results):
                 if parameter > intervals[i]:
                     interval_results["> {0:1.{j}f}".format(
                         intervals[i],

@@ -1,6 +1,4 @@
 def label_generator(parameter, value, unit=None):
-
-
     parameter_titles = {
         "base_demand": 'Base Demand',
         'elevation': 'Elevation',
@@ -25,7 +23,9 @@ def label_generator(parameter, value, unit=None):
         'roughness': 'Roughness',
         'diameter': 'Diameter',
     }
-    if parameter == 'base_demand' or parameter == 'demand' or parameter == 'flowrate':
+    if parameter == 'base_demand' \
+            or parameter == 'demand' \
+            or parameter == 'flowrate':
         if unit is None:
             unit = 'CMS'
         unit_titles = {"LPS": "[LPS]",
@@ -39,33 +39,31 @@ def label_generator(parameter, value, unit=None):
                        "MGD": "MGD]",
                        "IMGD": "[IMGD]",
                        "AFD": "[AFD]"}
-
-    elif parameter == 'diameter' or parameter == 'elevation' or parameter == 'head' or parameter == 'headloss' or parameter == 'length' or parameter == 'diameter':
+    elif parameter == 'diameter' \
+            or parameter == 'elevation' \
+            or parameter == 'head' \
+            or parameter == 'headloss' \
+            or parameter == 'length' \
+            or parameter == 'diameter':
         if unit is None:
             unit = 'm'
         unit_titles = {"ft": '[ft]',
                        "in": '[in]',
                        "m": '[m]',
                        'cm': '[cm]'}
-
     elif parameter == 'pressure':
         if unit is None:
             unit = 'm'
-
         unit_titles = {'m': '[m]',
                        'psi': '[psi]'}
-
     elif parameter == 'velocity':
         if unit is None:
             unit = 'm/s'
-
         unit_titles = {'m/s': '[m/s]',
                        'ft/s': '[ft/s]'}
-
     elif parameter == 'quality' or parameter == 'time':
         if unit is None:
             unit = None
-
         unit_titles = {'s': '[s]',
                        'min': '[min]',
                        'hr': '[hr]',
@@ -73,23 +71,29 @@ def label_generator(parameter, value, unit=None):
     else:
         unit_titles = {None: ''}
     if isinstance(value, int):
-        title_label = parameter_titles[parameter] + " " + unit_titles[unit] + ' at timestep ' + str(value)
-        
-    if value=='min':
-        title_label = 'Minimum ' + parameter_titles[parameter] + " " + unit_titles[unit]
-        
-    if value=='max':
-        title_label = 'Maximum ' + parameter_titles[parameter] + " " + unit_titles[unit]
-        
-    if value=='mean':
-        title_label = 'Mean ' + parameter_titles[parameter] + " " + unit_titles[unit]
-    
-    if value=='stddev':
-        title_label = 'Standard Deviation of ' + parameter_titles[parameter] + " " + unit_titles[unit]
-        
-    if value=='range':
-        title_label = 'Range of ' + parameter_titles[parameter] + " " + unit_titles[unit]
-        
+        title_label = parameter_titles[parameter] \
+                      + " " + unit_titles[unit] \
+                      + ' at timestep ' + str(value)
+    if value == 'min':
+        title_label = 'Minimum ' \
+                      + parameter_titles[parameter] \
+                      + " " + unit_titles[unit]
+    if value == 'max':
+        title_label = 'Maximum ' \
+                      + parameter_titles[parameter] \
+                      + " " + unit_titles[unit]
+    if value == 'mean':
+        title_label = 'Mean ' \
+                      + parameter_titles[parameter] \
+                      + " " + unit_titles[unit]
+    if value == 'stddev':
+        title_label = 'Standard Deviation of ' \
+                      + parameter_titles[parameter] \
+                      + " " + unit_titles[unit]
+    if value == 'range':
+        title_label = 'Range of ' \
+                      + parameter_titles[parameter] \
+                      + " " + unit_titles[unit]
     if value is None:
         title_label = parameter_titles[parameter] + " " + unit_titles[unit]
     return title_label

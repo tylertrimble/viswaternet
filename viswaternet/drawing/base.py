@@ -330,13 +330,21 @@ def draw_base_elements(
     # If draw_nodes is True, then draw draw_nodes
     if draw_nodes:
         node_list = model['node_names']
-        node_list = [node_list[node_list.index(name)]
-                     for name in node_list
-                     if ((name not in model["tank_names"]
-                          or draw_tanks is False)
-                     and (name not in model["reservoir_names"]
-                          or draw_reservoirs is False)
-                     and (name not in element_list))]
+        if element_list is None:
+            node_list = [node_list[node_list.index(name)]
+                         for name in node_list
+                         if ((name not in model["tank_names"]
+                              or draw_tanks is False)
+                         and (name not in model["reservoir_names"]
+                              or draw_reservoirs is False))]
+        else:
+            node_list = [node_list[node_list.index(name)]
+                         for name in node_list
+                         if ((name not in model["tank_names"]
+                              or draw_tanks is False)
+                         and (name not in model["reservoir_names"]
+                              or draw_reservoirs is False)
+                         and (name not in element_list))]
         nxp.draw_networkx_nodes(
             model["G"],
             model["pos_dict"],
@@ -372,15 +380,26 @@ def draw_base_elements(
             label="Tanks")
     # If draw_links is True, then draw draw_links
     if draw_links:
-        edgelist = [model['pipe_list'][model['G_pipe_name_list'].index(name)]
-                    for name in model['G_pipe_name_list']
-                    if ((name not in model["pump_names"]
-                         or pump_element == 'node'
-                         or draw_pumps is False)
-                    and (name not in model["valve_names"]
-                         or valve_element == 'node'
-                         or draw_valves is False)
-                    and (name not in element_list))]
+        pipe_name_list = model['G_pipe_name_list']
+        if element_list is None:
+            edgelist = [model['pipe_list'][pipe_name_list.index(name)]
+                        for name in pipe_name_list
+                        if ((name not in model["pump_names"]
+                             or pump_element == 'node'
+                             or draw_pumps is False)
+                        and (name not in model["valve_names"]
+                             or valve_element == 'node'
+                             or draw_valves is False))]
+        else:
+            edgelist = [model['pipe_list'][pipe_name_list.index(name)]
+                        for name in pipe_name_list
+                        if ((name not in model["pump_names"]
+                             or pump_element == 'node'
+                             or draw_pumps is False)
+                        and (name not in model["valve_names"]
+                             or valve_element == 'node'
+                             or draw_valves is False)
+                        and (name not in element_list))]
         nxp.draw_networkx_edges(
             model["G"],
             model["pos_dict"],

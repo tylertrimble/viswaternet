@@ -163,7 +163,6 @@ def plot_continuous_nodes(
         if draw_color_bar is True:
             if color_bar_title is None:
                 color_bar_title = label_generator(parameter, value, unit)
-
             base.draw_color_bar(ax,
                                 g,
                                 cmap,
@@ -404,5 +403,4 @@ def plot_continuous_links(
                      valve_arrows=valve_arrows,
                      pump_element=pump_element)
     if savefig:
-
         save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
