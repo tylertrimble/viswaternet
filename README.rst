@@ -122,6 +122,24 @@ We welcome contributions in the form of suggestions, feedback, reports of bugs, 
 .. _`docs`: https://viswaternet.readthedocs.io/en/latest/contributing.html
 .. _`run automated tests`: https://viswaternet.readthedocs.io/en/latest/contributing.html#testing
 
+Cite Us
+-------
+
+To cite VisWaterNet, please use the following publication: `VisWaterNet: A Python package for visualization of water distribution networks`_
+
+.. _`VisWaterNet: A Python package for visualization of water distribution networks`: https://joss.theoj.org/papers/10.21105/joss.05139
+
+::
+
+    @article{doi:10.21105/joss.05139,
+     title={VisWaterNet: A Python package for visualization of water distribution networks},
+     author={Thomas, Meghna and Trimble, Tyler and Sela, Lina},
+     journal={Journal of Open Source Software},
+     volume={8},
+     number={84},
+     pages={5139},
+     year={2023}}
+
 Contact
 -------
 Tyler Trimble - tylerl.trimble@utexas.edu
