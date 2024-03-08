@@ -32,28 +32,29 @@ def draw_nodes(
     # Creates default list of node sizes
     if node_size is None:
         node_size = (np.ones(len(node_list)) * 100).tolist()
-    if isinstance(node_size, tuple):
-        min_size = node_size[0]
-        max_size = node_size[1]
-        if min_size is not None and max_size is not None:
-            node_size = normalize_parameter(
-                parameter_results, min_size, max_size)
     # Checks if some data values are given
     if parameter_results:
         # If values is less than this value, we treat it as a negative.
-        parameter_results = [parameter_results[node_list.index(name)]
-                             for name in node_list
-                             if ((name not in model["tank_names"]
-                                  or draw_tanks is False)
-                             and (name not in model["reservoir_names"]
-                                  or draw_reservoirs is False))]
         node_list = [node_list[node_list.index(name)]
                      for name in node_list
                      if ((name not in model["tank_names"]
                           or draw_tanks is False)
                      and (name not in model["reservoir_names"]
                           or draw_reservoirs is False))]
-
+        parameter_results = [parameter_results[node_list.index(name)]
+                             for name in node_list
+                             if ((name not in model["tank_names"]
+                                  or draw_tanks is False)
+                             and (name not in model["reservoir_names"]
+                                  or draw_reservoirs is False)
+                             and parameter_results[node_list.index(name)]
+                                 is not None)]
+        if isinstance(node_size, tuple):
+            min_size = node_size[0]
+            max_size = node_size[1]
+            if min_size is not None and max_size is not None:
+                node_size = normalize_parameter(
+                    parameter_results, min_size, max_size)
         if np.min(parameter_results) < -1e-5:
             # Gets the cmap object from matplotlib
             cmap = mpl.colormaps[cmap]
@@ -168,14 +169,9 @@ def draw_links(
     # Creates default list of link widths
     if link_width is None:
         link_width = (np.ones(len(link_list)) * 1).tolist()
-    if isinstance(link_width, tuple):
-        min_size = link_width[0]
-        max_size = link_width[1]
-        if min_size is not None and max_size is not None:
-            link_width = normalize_parameter(
-                parameter_results, min_size, max_size)
     # Checks if some data values are given
     if parameter_results:
+        pipe_names = model['G_pipe_name_list']
         edges = [model["pipe_list"][model['G_pipe_name_list'].index(name)]
                  for name in link_list
                  if ((name not in model["pump_names"]
@@ -184,7 +180,6 @@ def draw_links(
                  and (name not in model["valve_names"]
                       or valve_element == 'node'
                       or draw_valves is False))]
-        pipe_names = model['G_pipe_name_list']
         parameter_results = [parameter_results[pipe_names.index(name)]
                              for name in link_list
                              if ((name not in model["pump_names"]
@@ -192,7 +187,14 @@ def draw_links(
                                   or draw_pumps is False)
                              and (name not in model["valve_names"]
                                   or valve_element == 'node'
-                                  or draw_valves is False))]
+                                  or draw_valves is False)
+                             and not np.isnan(parameter_results[pipe_names.index(name)]))]
+        if isinstance(link_width, tuple):
+            min_size = link_width[0]
+            max_size = link_width[1]
+            if min_size is not None and max_size is not None:
+                link_width = normalize_parameter(
+                    parameter_results, min_size, max_size)
         if np.min(parameter_results) < -1e-5:
             # Gets the cmap object from matplotlib
             cmap = mpl.colormaps[cmap]
@@ -290,6 +292,10 @@ def draw_base_elements(
         draw_tanks=True,
         draw_pumps=True,
         draw_valves=True,
+        include_pumps=True,
+        include_valves=True,
+        include_reservoirs=True,
+        include_tanks=True,
         element_list=None,
         legend=True,
         reservoir_size=150,
@@ -334,16 +340,20 @@ def draw_base_elements(
             node_list = [node_list[node_list.index(name)]
                          for name in node_list
                          if ((name not in model["tank_names"]
-                              or draw_tanks is False)
+                              or draw_tanks is False
+                              or include_tanks is False)
                          and (name not in model["reservoir_names"]
-                              or draw_reservoirs is False))]
+                              or draw_reservoirs is False
+                              or include_reservoirs is False))]
         else:
             node_list = [node_list[node_list.index(name)]
                          for name in node_list
                          if ((name not in model["tank_names"]
-                              or draw_tanks is False)
+                              or draw_tanks is False
+                              or include_tanks is False)
                          and (name not in model["reservoir_names"]
-                              or draw_reservoirs is False)
+                              or draw_reservoirs is False
+                              or include_reservoirs is False)
                          and (name not in element_list))]
         nxp.draw_networkx_nodes(
             model["G"],
@@ -386,19 +396,23 @@ def draw_base_elements(
                         for name in pipe_name_list
                         if ((name not in model["pump_names"]
                              or pump_element == 'node'
-                             or draw_pumps is False)
+                             or draw_pumps is False
+                             or include_pumps is False)
                         and (name not in model["valve_names"]
                              or valve_element == 'node'
-                             or draw_valves is False))]
+                             or draw_valves is False
+                             or include_valves is False))]
         else:
             edgelist = [model['pipe_list'][pipe_name_list.index(name)]
                         for name in pipe_name_list
                         if ((name not in model["pump_names"]
                              or pump_element == 'node'
-                             or draw_pumps is False)
+                             or draw_pumps is False
+                             or include_pumps is False)
                         and (name not in model["valve_names"]
                              or valve_element == 'node'
-                             or draw_valves is False)
+                             or draw_valves is False
+                             or include_valves is False)
                         and (name not in element_list))]
         nxp.draw_networkx_edges(
             model["G"],
@@ -844,13 +858,13 @@ def draw_label(
         draw_nodes=None,
         draw_arrow=True,
         label_font_size=11,
-        label_text_color = 'k',
-        label_face_color = 'white',
-        label_edge_color = 'k',
-        label_alpha = 0.9,
-        label_font_style = None,
-        label_edge_width = None
-        ):
+        label_text_color='k',
+        label_face_color='white',
+        label_edge_color='k',
+        label_alpha=0.9,
+        label_font_style=None,
+        label_edge_width=None
+):
     model = self.model
     if ax is None:
         ax = self.ax
@@ -878,9 +892,12 @@ def draw_label(
                     ax.text(
                         model["wn"].get_node(node).coordinates[0] + xCoord,
                         model["wn"].get_node(node).coordinates[1] + yCoord,
-                        s=label, color = label_text_color, style = label_font_style,
+                        s=label,
+                        color=label_text_color,
+                        style=label_font_style,
                         bbox=dict(facecolor=label_face_color,
-                                  alpha=label_alpha, edgecolor=label_edge_color,
+                                  alpha=label_alpha,
+                                  edgecolor=label_edge_color,
                                   lw=label_edge_width),
                         horizontalalignment="right",
                         verticalalignment="center",
@@ -889,9 +906,12 @@ def draw_label(
                     ax.text(
                         model["wn"].get_node(node).coordinates[0] + xCoord,
                         model["wn"].get_node(node).coordinates[1] + yCoord,
-                        s=label, color = label_text_color, style = label_font_style,
+                        s=label,
+                        color=label_text_color,
+                        style=label_font_style,
                         bbox=dict(facecolor=label_face_color,
-                                  alpha=label_alpha, edgecolor=label_edge_color,
+                                  alpha=label_alpha,
+                                  edgecolor=label_edge_color,
                                   lw=label_edge_width),
                         horizontalalignment="left",
                         verticalalignment="center",
@@ -900,7 +920,7 @@ def draw_label(
                 ax.text(
                     model["wn"].get_node(node).coordinates[0] + xCoord,
                     model["wn"].get_node(node).coordinates[1] + yCoord,
-                    s=label, color = label_text_color, style = label_font_style,
+                    s=label, color=label_text_color, style=label_font_style,
                     bbox=dict(facecolor=label_face_color,
                               alpha=label_alpha, edgecolor=label_edge_color,
                               lw=label_edge_width),
@@ -909,9 +929,15 @@ def draw_label(
     elif draw_nodes is None:
         for label, xCoord, yCoord in zip(labels, x_coords, y_coords):
             ax.text(
-                xCoord, yCoord, s=label, color = label_text_color, style = label_font_style,
+                xCoord,
+                yCoord,
+                s=label,
+                color=label_text_color,
+                style=label_font_style,
                 bbox=dict(facecolor=label_face_color,
-                          alpha=label_alpha, edgecolor=label_edge_color,
+                          alpha=label_alpha,
+                          edgecolor=label_edge_color,
                           lw=label_edge_width),
-                horizontalalignment="center", fontsize=label_font_size,
+                horizontalalignment="center",
+                fontsize=label_font_size,
                 transform=ax.transAxes)

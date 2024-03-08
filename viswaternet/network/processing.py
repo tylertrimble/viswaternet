@@ -79,7 +79,7 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where tank does
                 # not exist in parameter_results
                 try:
-                    parameter_results.drop(tank, axis=0, inplace=True)
+                    parameter_results.loc[tank] = None
                     element_list.remove(tank)
                 except KeyError:
                     pass
@@ -90,7 +90,7 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where reservoir
                 # does not exist in parameter_results
                 try:
-                    parameter_results.drop(reservoir, axis=0, inplace=True)
+                    parameter_results.loc[reservoir] = None
                     element_list.remove(reservoir)
                 except KeyError:
                     pass
@@ -154,7 +154,7 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where pump does
                 # not exist in parameter_results
                 try:
-                    parameter_results.drop(pump, axis=0, inplace=True)
+                    parameter_results.loc[pump] = None
                     element_list.remove(pump)
                 except KeyError:
                     pass
@@ -165,7 +165,7 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where valve
                 # does not exist in parameter_results
                 try:
-                    parameter_results.drop(valve, axis=0, inplace=True)
+                    parameter_results.loc[valve] = None
                     element_list.remove(valve)
                 except KeyError:
                     pass

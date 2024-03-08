@@ -567,7 +567,7 @@ def plot_unique_data(
                     element_list,
                     results,
                     cmap=cmap,
-                    widths=link_width,
+                    link_width=link_width,
                     vmin=vmin,
                     vmax=vmax,
                     link_style=link_style,

@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import imageio
 from viswaternet.network import processing
-from viswaternet.utils import unit_conversion,convert_excel
+from viswaternet.utils import unit_conversion, convert_excel
 
 
 def animate_plot(
@@ -33,14 +33,14 @@ def animate_plot(
             excel_columns = kwargs.get("excel_columns", None)
             data_values = []
             for i in excel_columns[1]:
-                data = convert_excel(
+                element_list, results = convert_excel(
                     self, kwargs.get("data_file", None),
                     parameter_type,
                     data_type,
                     excel_columns[0],
                     i)
-                #data_values.append(data['results'])
-                data_values.append(data[1])
+                # data_values.append(data['results'])
+                data_values.append(results)
         timesteps = len(data_values)
         values = range(timesteps)
         if last_timestep is not None:
@@ -126,7 +126,7 @@ def animate_plot(
                         frames,
                         format='GIF',
                         fps=fps)
-                        
+
     else:
         imageio.mimsave(save_name+"."+save_format,
                         frames,

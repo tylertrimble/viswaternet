@@ -383,6 +383,8 @@ def plot_discrete_nodes(
             draw_tanks=draw_tanks,
             draw_valves=draw_valves,
             draw_pumps=draw_pumps,
+            include_reservoirs=include_reservoirs,
+            include_tanks=include_tanks,
             element_list=node_list,
             reservoir_size=reservoir_size,
             reservoir_color=reservoir_color,
@@ -574,6 +576,8 @@ def plot_discrete_links(
             draw_tanks=draw_tanks,
             draw_valves=draw_valves,
             draw_pumps=draw_pumps,
+            include_pumps=include_pumps,
+            include_valves=include_valves,
             element_list=link_list,
             reservoir_size=reservoir_size,
             reservoir_color=reservoir_color,
@@ -614,10 +618,12 @@ def plot_discrete_links(
         link_list = [name for name in link_list
                      if ((name not in model["G_list_pumps_only"]
                           or pump_element == 'node'
-                          or draw_pumps is False)
+                          or draw_pumps is False
+                          or include_pumps is False)
                      and (name not in model["G_list_valves_only"]
                           or valve_element == 'node'
-                          or draw_valves is False)
+                          or draw_valves is False
+                          or include_valves is False)
                      and (name not in link_list))]
         if not link_list:
             draw_links = False
