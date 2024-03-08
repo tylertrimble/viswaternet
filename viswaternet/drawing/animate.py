@@ -39,7 +39,8 @@ def animate_plot(
                     data_type,
                     excel_columns[0],
                     i)
-                data_values.append(data['results'])
+                #data_values.append(data['results'])
+                data_values.append(data[1])
         timesteps = len(data_values)
         values = range(timesteps)
         if last_timestep is not None:
@@ -124,7 +125,8 @@ def animate_plot(
         imageio.mimsave(save_name+"."+save_format,
                         frames,
                         format='GIF',
-                        duration=(100/fps))
+                        fps=fps)
+                        
     else:
         imageio.mimsave(save_name+"."+save_format,
                         frames,
