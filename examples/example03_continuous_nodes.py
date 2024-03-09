@@ -9,8 +9,9 @@ import matplotlib.pyplot as plt
 # Initialize VisWaterNet model
 model = vis.VisWNModel('Networks/CTown.inp')
 
-model.plot_continuous_nodes(parameter = "pressure", value = 10, 
-                            node_size=200, 
-                            save_name = 'figures/example3', dpi=400,
-                            include_reservoirs=False)
+model.plot_continuous_nodes(parameter = "pressure", 
+                            value = 10, 
+                            node_size=200,
+                            draw_tanks=False,
+                            include_tanks=True)                                                      
 plt.show()

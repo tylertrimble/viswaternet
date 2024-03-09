@@ -36,7 +36,6 @@ model.plot_unique_data(ax = ax, parameter = "custom_data",
                        element_size_intervals = 4,
                        element_size_legend_title="Standard Deviation (m)",
                        element_size_legend_loc="lower left",
-                       element_size_legend_labels=interval_names,
-                       save_name = 'figures/example14', dpi=400)
+                       element_size_legend_labels=interval_names)
 #Called in the case that interactive plotting isn't enabled
 plt.show()

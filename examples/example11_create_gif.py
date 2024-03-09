@@ -13,13 +13,13 @@ model = vis.VisWNModel('Networks/CTown.inp')
 fig, ax = plt.subplots(figsize=(11,11))
 ax.set_frame_on(False) 
 
-model.animate_plot(function = model.plot_unique_data,
-                   parameter="excel_data",
-                   data_file = "Excel/node_numerical_data_random.xlsx",
-                   parameter_type = 'node',
-                   data_type = 'continuous',
-                   excel_columns = [0,list(range(1,35))],
-                   ax=ax, cmap = 'coolwarm',
+model.animate_plot(function = model.plot_continuous_links, # the "function" argument takes in what kind of viswaternet function you would like to see in your animated plot
+                   ax=ax,
+                   parameter = 'flowrate', cmap = 'coolwarm', 
+                   link_width=(2,4), legend = False,
+                   
+                   # arguments specific to animated plots
                    time_unit = 'hr', fps = 7, color_bar_title = 'Flowrate [m3/s]',
-                   save_name = 'figures/example11',file_format='mp4')    
+                   
+                   pump_color = 'green', save_name = 'figures/example11',save_format='gif')    
 plt.show()

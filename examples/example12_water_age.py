@@ -10,12 +10,11 @@ model = vis.VisWNModel('Networks/CTown.inp')
 
 #Plot maximum water age in hours
 model.plot_discrete_nodes(parameter = "quality", value = 'max', unit = "hr",     
-                          num_intervals = 4, intervals = [0,6,12,24,48],
+                          intervals = [0,6,12,24,48],
                           node_size = [100,150,250,350,450], 
                           node_border_color = 'k',
                           node_border_width = 1,    
                           cmap = 'Greens', discrete_legend_loc = "lower left",    
                           discrete_legend_title_font_size="16",
-                          legend_decimal_places=0, 
-                          save_name = 'figures/example12', dpi=400)
+                          legend_decimal_places=0)
 plt.show()

@@ -14,6 +14,5 @@ model.plot_discrete_links(parameter = "diameter", unit = "in",
                           color_list = ['k','r'], cmap = "Blues", 
                           discrete_legend_loc="lower left", 
                           legend_title="Pipe Diameter (in)",
-                          legend_decimal_places=0, pump_color="mediumseagreen", 
-                          pump_width=5, save_name = 'figures/example13', dpi=400)
+                          pump_color="mediumseagreen")
 plt.show()

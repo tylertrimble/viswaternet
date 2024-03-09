@@ -13,9 +13,8 @@ model = vis.VisWNModel('Networks/CTown.inp', network_model=wn)
 
 #Plot custom data generated in nodalerror_generation.py
 model.plot_unique_data(parameter = "custom_data", node_size = 200,
-                       node_border_width = 1, node_border_color = "k",
-                       parameter_type = "node", data_type = "continuous",    
+                       parameter_type = "node", data_type = "continuous", 
                        custom_data_values = [element_list, error_list],
-                       color_bar_title = "Error (%)", cmap = "bwr",
-                       save_name = 'figures/example10', dpi = 400)
+                       node_border_width = 1, node_border_color = "k",
+                       color_bar_title = "Error (%)", cmap = "bwr")
 plt.show()
