@@ -15,6 +15,6 @@ model.plot_discrete_nodes(parameter = "quality", value = 'max', unit = "hr",
                           node_border_color = 'k',
                           node_border_width = 1,    
                           cmap = 'Greens', discrete_legend_loc = "lower left",    
-                          discrete_legend_title_font_size="16",
-                          legend_decimal_places=0)
+                          discrete_legend_title_font_size = "16",
+                          legend_decimal_places = 0)
 plt.show()

@@ -21,8 +21,6 @@ model.plot_unique_data(parameter = "diameter",
                        legend_decimal_places = 0, 
                        pump_color = "red", 
                        valve_color = 'orange',
-                       savefig = True,
-                       save_name = 'figures/example8', 
-                       dpi=400)  
+                       savefig = True, save_name = 'figures/example8', dpi=400)  
 
 plt.show()

@@ -1,5 +1,5 @@
 """
-This example demonstrates how to use the plot_discrete_links function to showcase different element attributes.
+This example demonstrates how to use the plot_discrete_links function to show binary differences.
 """
 
 import viswaternet as vis
@@ -12,7 +12,7 @@ model.plot_discrete_links(parameter = "diameter", unit = "in",
                           label_list = ["< 12", ">= 12"],
                           link_width = [3,5],    
                           color_list = ['k','r'], cmap = "Blues", 
-                          discrete_legend_loc="lower left", 
-                          legend_title="Pipe Diameter (in)",
-                          pump_color="mediumseagreen")
+                          discrete_legend_loc = "lower left", 
+                          legend_title = "Pipe Diameter (in)",
+                          pump_color = "mediumseagreen")
 plt.show()

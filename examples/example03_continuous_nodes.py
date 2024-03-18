@@ -11,7 +11,7 @@ model = vis.VisWNModel('Networks/CTown.inp')
 
 model.plot_continuous_nodes(parameter = "pressure", 
                             value = 10, 
-                            node_size=200,
-                            draw_tanks=False,
-                            include_tanks=True)                                                      
+                            node_size = 200,
+                            draw_tanks = False, # do not draw tanks on the plot 
+                            )                                                      
 plt.show()
