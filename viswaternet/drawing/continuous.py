@@ -1,4 +1,7 @@
-# -*- coding: utf-8 -*-
+"""
+The viswaternet.drawing.continuous module handles everything related to continuous data drawing.
+"""
+
 import matplotlib.pyplot as plt
 from viswaternet.network import processing
 from viswaternet.utils import save_fig, unit_conversion, \
@@ -18,8 +21,6 @@ def plot_continuous_nodes(
         unit=None,
         vmin=None,
         vmax=None,
-        include_tanks=False,
-        include_reservoirs=False,
         draw_tanks=True,
         draw_reservoirs=True,
         draw_pumps=True,
@@ -32,12 +33,8 @@ def plot_continuous_nodes(
         node_shape=".",
         node_border_color=None,
         node_border_width=None,
-        legend=True,
+        draw_base_legend=True,
         base_legend_loc="upper right",
-        savefig=False,
-        save_name=None,
-        dpi='figure',
-        save_format='png',
         base_legend_label_font_size=15,
         base_legend_label_color="k",
         draw_legend_frame=False,
@@ -45,7 +42,6 @@ def plot_continuous_nodes(
         element_size_legend_title=None,
         element_size_legend_loc=None,
         element_size_legend_labels=None,
-        draw_base_legend=True,
         reservoir_size=150,
         reservoir_color='k',
         reservoir_shape=epa_res,
@@ -82,7 +78,169 @@ def plot_continuous_nodes(
         base_link_arrows=False,
         draw_color_bar=True,
         color_bar_width=0.03,
-        color_bar_height=0.8):
+        color_bar_height=0.8,
+        include_tanks=False,
+        include_reservoirs=False,
+        savefig=False,
+        save_name=None,
+        dpi='figure',
+        save_format='png'):
+    
+    """User-level function that draws continuous nodal data, base elements, legends, and saves the figure.
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+    parameter : string
+        The parameter to be plotted. The following is a list of parameters available to use:
+        **Static Parameters**    
+        - base_demand
+        - elevation
+        - emitter_coefficient
+        - initial_quality
+        **Time-Dependent Parameters**
+        - head
+        - demand
+        - pressure
+        - quality
+        - leak_demand
+        - leak_area
+        - leak_discharg_coeff
+    element_list : list
+        A list of junctions for which the parameter will be plotted. By default, this is the list of all junction names.
+    value : integer, string
+        For time-varying parameters only. Specifies which timestep or data
+        summary will be plotted.
+        .. rubric:: Possible Inputs
+        ======================= =========================================
+            int                 Plots element data for specified timestep
+            'min'               Plots minimum data point for each element
+            'max'               Plots maximum data point for each element
+            'mean'              Plots mean for each element
+            'stddev'            Plots standard deviation for each element
+            'range'             Plots range for each element
+        ======================= =========================================
+    unit : string
+        The unit that the network data is to be converted to.
+    vmin : integer
+        The minimum value of the color bar. 
+    vmax : integer
+        The maximum value of the color bar.
+    draw_tanks : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    draw_reservoirs : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
+    color_bar_title : string
+        The title of the color bar.
+    node_size : integer, array-like
+        Integer representing all node sizes, or array of sizes for each node.
+    node_shape : string
+        Shape of the draw_nodes. Refer to matplotlib documentation for available marker types.
+    node_border_color : string
+        Color of the node borders.
+    node_border_width : integer
+        Width of the node borders.
+    draw_base_legend : boolean
+        Determines if the base elements legend will be drawn. 
+    base_legend_loc : string
+        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
+    base_legend_label_font_size : integer
+        The font size of the non-title text for the base legend. 
+    base_legend_label_color : string
+        The color of the base legend text. Refer to matplotlib documentation for available colors.
+    draw_legend_frame : boolean
+        Determines if the frame around the base legend is drawn.
+    element_size_intervals : integer
+        The number of intervals to be used if an element size legend is used.
+    element_size_legend_title : string
+        The title of the element size legend.
+    element_size_legend_loc : string
+        The location of the element size legend on the figure.
+    element_size_legend_labels : array-like
+        The labels of each interval of the element size legend.
+    reservoir_size : integer
+        The size of the reservoir marker on the plot in points^2. 
+    reservoir_color : string
+        The color of the reservoir marker.
+    reservoir_shape : string
+        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
+    reservoir_border_color : string
+        The color of the border around the reservoir marker.
+    reservoir_border_width : integer
+        The width in points of the border around the reservoir marker.
+    tank_size : integer
+        The size of the tank marker on the plot in points^2. 
+    tank_color : string
+        The color of the tank marker.
+    tank_shape : string
+        The shape of the tank marker.
+    tank_border_color : string
+        The color of the border around the tank marker.
+    tank_border_width : integer
+        The width in points of the border around the tank marker.
+    valve_size : integer
+        The size of the valve marker on the plot in points^2. 
+    valve_color : string
+        The color of the valve marker.
+    valve_shape : string
+        The shape of the valve marker.
+    valve_border_color : string
+        The color of the border around the valve marker.
+    valve_border_width : integer
+        The width in points of the border around the valve marker.
+    pump_color : string
+        The color of the pump line.
+    pump_width : integer
+        The width of the pump line in points.
+    pump_line_style : string
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
+    pump_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+    base_node_color : string
+        The color of the draw_nodes without data associated with them.
+    base_node_size : integer
+        The size of the draw_nodes without data associated with them in points^2.
+    base_link_color : string
+        The color of the draw_links without data associated with them.
+    base_link_width : integer
+        The width of the draw_links without data associated with them in points.
+    base_link_line_style : string
+        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
+    base_link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
+    draw_color_bar : boolean
+        Determines if color bar is drawn.
+    color_bar_width : boolean
+        Width of color bar.
+    color_bar_height : boolean
+        Height of color bar.
+    include_tanks : boolean
+        Determines if data for draw_tanks are retrieved.
+    include_reservoirs : boolean
+        Determines if data for draw_reservoirs are retrieved.
+    savefig : boolean
+        Determines if the figure is saved. 
+    save_name : string
+        The inputted string will be appended to the name of the network.
+        Example
+        -------
+        >>>import viswaternet as vis
+        >>>model = vis.VisWNModel(r'Networks/Net3.inp')
+        ...
+        >>>model.save_fig(save_name='_example')
+        <Net3_example.png>
+    dpi : int, string
+        The dpi that the figure will be saved with.
+    save_format : string
+        The file format that the figure will be saved as.
+    """
+    
     if len(self.model['G_list_pumps_only']) == 0:
         draw_pumps = False
     if ax is None:
