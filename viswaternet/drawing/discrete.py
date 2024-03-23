@@ -287,7 +287,7 @@ def plot_discrete_nodes(
         draw_valves=True,
         draw_nodes=False,
         draw_links=True,
-        legend_title=None,
+        discrete_legend_title=None,
         base_legend_loc="upper right",
         discrete_legend_loc="lower right",
         cmap=default_cmap,
@@ -417,13 +417,13 @@ def plot_discrete_nodes(
             base_link_line_style=base_link_line_style,
             base_link_arrows=base_link_arrows)
 
-        if legend_title is None:
-            legend_title = label_generator(parameter, value, unit)
+        if discrete_legend_title is None:
+            discrete_legend_title = label_generator(parameter, value, unit)
 
         base.draw_legend(
             ax,
             intervals=interval_names,
-            title=legend_title,
+            title=discrete_legend_title,
             draw_pumps=draw_pumps,
             base_legend_loc=base_legend_loc,
             discrete_legend_loc=discrete_legend_loc,
@@ -478,7 +478,7 @@ def plot_discrete_links(
         draw_nodes=False,
         draw_links=False,
         cmap=default_cmap,
-        legend_title=None,
+        discrete_legend_title=None,
         base_legend_loc="upper right",
         discrete_legend_loc="lower right",
         savefig=False,
@@ -609,8 +609,8 @@ def plot_discrete_links(
             base_link_width=base_link_width,
             base_link_line_style=base_link_line_style,
             base_link_arrows=base_link_arrows)
-        if legend_title is None:
-            legend_title = label_generator(parameter, value, unit)
+        if discrete_legend_title is None:
+            discrete_legend_title = label_generator(parameter, value, unit)
         link_list = [name for name in link_list
                      if ((name not in model["G_list_pumps_only"]
                           or pump_element == 'node'
@@ -624,7 +624,7 @@ def plot_discrete_links(
         base.draw_legend(
             ax,
             intervals=interval_names,
-            title=legend_title,
+            title=discrete_legend_title,
             draw_pumps=draw_pumps,
             base_legend_loc=base_legend_loc,
             discrete_legend_loc=discrete_legend_loc,

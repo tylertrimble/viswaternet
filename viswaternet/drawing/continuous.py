@@ -380,7 +380,6 @@ def plot_continuous_links(
         draw_links=True,
         cmap=default_cmap,
         color_bar_title=None,
-        legend=True,
         base_legend_loc="upper right",
         savefig=False,
         save_name=None,
