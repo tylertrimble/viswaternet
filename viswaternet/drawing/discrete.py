@@ -28,30 +28,29 @@ def draw_discrete_nodes(
         node_border_width=None,
         color_list=None):
     """Draws discretized nodal data onto the figure.
-    Arguments
-    ---------
-    ax : axes._subplots.AxesSubplot
-        Matplotlib axes object.
-    element_list : array-like
-        List of network elements that data will be retrieved for.
-    intervals : dict
-        The dictionary containting the intervals and the draw_nodes assocaited with each interval.
-    node_size : integer, array-like
-        List of node sizes for each interval.
-    label_list : string, array-like
-        List of labels for each interval.
-    node_shape : string, array-like
-        List of node shapes for each interval. Refer to matplotlib documentation for available marker types.
-    cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
-    node_border_color : string, array-like
-        The color of the node borders for each interval.
-    node_border_width  : integer, array-like
-        The width of the node borders for each interval.
-    color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
-    """
-    
+   Arguments
+   ---------
+   ax : axes._subplots.AxesSubplot
+       Matplotlib axes object.
+   element_list : array-like
+       List of network elements that data will be retrieved for.
+   intervals : dict
+       The dictionary containting the intervals and the draw_nodes assocaited with each interval.
+   node_size : integer, array-like
+       List of node sizes for each interval.
+   label_list : string, array-like
+       List of labels for each interval.
+   node_shape : string, array-like
+       List of node shapes for each interval. Refer to matplotlib documentation for available marker types.
+   cmap : string
+       The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
+   node_border_color : string, array-like
+       The color of the node borders for each interval.
+   node_border_width  : integer, array-like
+       The width of the node borders for each interval.
+   color_list : string, array-like
+       The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
+   """
     model = self.model
     if node_size is None:
         if len(model["node_names"]) < 300:
@@ -71,16 +70,15 @@ def draw_discrete_nodes(
     if isinstance(node_shape, str):
         node_shape = [node_shape for i in range(len(intervals))]
     if node_border_color is None:
-        node_border_color = ['k' for i in range(len(intervals))]
+        node_border_color = ['k' for i in range(len(intervals))]    
     if isinstance(node_border_color, str):
         node_border_color = [node_border_color for i in range(len(intervals))]
     if node_border_width is None:
-        node_border_width = [0 for i in range(len(intervals))]
+       node_border_width = [0 for i in range(len(intervals))]
     if isinstance(node_border_width, int) \
             or isinstance(node_border_width, float):
         node_border_width = [node_border_width for i in range(len(intervals))]
     empty_interval = False
-
     if (color_list is not None and cmap is not None) or color_list is not None:
         for j, interval_name in enumerate(intervals):
             node_list = [model["node_names"][i]
@@ -190,27 +188,27 @@ def draw_discrete_links(
         link_style='-',
         link_arrows=False):
     """Draws discretized link data onto the figure.
-    Arguments
-    ---------
-    ax : axes._subplots.AxesSubplot
-        Matplotlib axes object.
-    element_list : array-like
-        List of network elements that data will be retrieved for.
-    intervals : dict
-        The dictionary containting the intervals and the draw_links associated with each interval.
-    link_width : integer, array-like
-        List of link widths for each interval.
-    label_list : string, array-like
-        List of labels for each interval.
-    cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
-    color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
-    link_style : string
-        The style (solid, dashed, dotted, etc.) of the draw_links. Refer to matplotlib documentation for available line styles.
-    link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the pump.
-    """   
+   Arguments
+   ---------
+  ax : axes._subplots.AxesSubplot
+       Matplotlib axes object.
+   element_list : array-like
+       List of network elements that data will be retrieved for.
+   intervals : dict
+       The dictionary containting the intervals and the draw_links associated with each interval.
+   link_width : integer, array-like
+       List of link widths for each interval.
+   label_list : string, array-like
+       List of labels for each interval.
+   cmap : string
+       The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
+   color_list : string, array-like
+       The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
+   link_style : string
+       The style (solid, dashed, dotted, etc.) of the draw_links. Refer to matplotlib documentation for available line styles.
+   link_arrows : boolean
+       Determines if an arrow is drawn in the direction of flow of the pump.
+   """   
     
     model = self.model
     if link_width is None:
