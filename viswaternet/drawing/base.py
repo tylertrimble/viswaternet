@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+"""
+The viswaternet.utils.base module contains plotting functions that are 
+frequently utilized by other plotting functions. This includes base element
+drawing, legend drawing, color map, and label drawing functions.
+"""
 import numpy as np
 import networkx.drawing.nx_pylab as nxp
 import matplotlib.pyplot as plt
@@ -25,6 +30,53 @@ def draw_nodes(
         label=None,
         draw_tanks=True,
         draw_reservoirs=True):
+    """Draws continuous nodal data onto the figure.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+        
+    node_list : string, array-like
+        List of draw_nodes to be drawn.
+        
+    parameter_results : array-like
+        The data associated with each node.
+        
+    vmin : integer
+        The minimum value of the color bar. 
+        
+    vmax : integer
+        The maximum value of the color bar.
+        
+    node_size : integer, array-like
+        Integer representing all node sizes, or array of sizes for each node.
+    
+    node_color : string
+        Color of the draw_nodes.
+    
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
+    
+    node_shape : string
+        Shape of the draw_nodes. Refer to matplotlib documentation for available marker types.
+    
+    node_border_color : string
+        Color of the node borders.
+    
+    node_border_width : integer
+        Width of the node borders.
+    
+    label : string
+        Matplotlib label of plotting instance.
+        
+    draw_tanks : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+        
+    draw_reservoirs : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    """
+    
     # Initalize parameters
     model = self.model
     if parameter_results is None:
@@ -159,6 +211,52 @@ def draw_links(
         draw_pumps=True,
         valve_element='node',
         draw_valves=True):
+    """Draws continuous link data onto the figure.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+    
+    link_list : string, array-like
+        List of draw_links to be drawn.
+    
+    parameter_results : array-like
+        The data associated with each node.
+    
+    edge_color : string
+        Color of draw_links.
+    
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
+    
+    vmin : integer
+        The minimum value of the color bar. 
+    
+    vmax : integer
+        The maximum value of the color bar.    
+    
+    link_width : integer, array-like
+        Integer representing all link widths, or array of widths for each link.
+    
+    link_style : string
+        The style (solid, dashed, dotted, etc.) of the draw_links. Refer to matplotlib documentation for available line styles.
+    
+    link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+   
+    pump_element : string
+        Determines if pumps are drawn as links or nodes.
+    
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
+        
+    valve_element : string
+        Determines if valves are drawn as links or nodes.
+    
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
+    """
     # Initalize parameters
     model = self.model
     if isinstance(link_list, np.ndarray):
@@ -326,6 +424,138 @@ def draw_base_elements(
         base_link_width=1,
         base_link_line_style='-',
         base_link_arrows=False):
+    """
+    Draws base elements (draw_nodes, draw_links, draw_reservoirs, draw_tanks, draw_pumps, and draw_valves)
+    without any data associated with the elements.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+        
+    draw_nodes : boolean
+        Determines if base draw_nodes with no data associated with them are drawn. Set to False for all functions excep plot_basic_elements by default.
+    
+    draw_links : boolean
+        Determines if base draw_links with no data associated with them are drawn. Set to False for all functions that deal with link data plotting.
+    
+    draw_reservoirs : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    
+    draw_tanks : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
+    
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
+    
+    legend : boolean
+        Determines if the base elements legend will be drawn. 
+    
+    reservoir_size : integer
+        The size of the reservoir marker on the plot in points^2. 
+    
+    reservoir_color : string
+        The color of the reservoir marker. Refer to matplotlib documentation for available colors.
+    
+    reservoir_shape : string
+        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
+    
+    reservoir_border_color : string
+        The color of the border around the reservoir marker.
+    
+    reservoir_border_width : integer
+        The width in points of the border around the reservoir marker.
+    
+    tank_size : integer
+        The size of the tank marker on the plot in points^2. 
+    
+    tank_color : string
+        The color of the tank marker.
+    
+    tank_shape : string
+        The shape of the tank marker.
+    
+    tank_border_color : string
+        The color of the border around the tank marker.
+    
+    tank_border_width : integer
+        The width in points of the border around the tank marker.
+    
+    valve_elememt : string
+        Determines whether the valves are drawn as links or nodes.
+    
+    valve_size : integer
+        The size of the valve marker on the plot in points^2. 
+    
+    valve_color : string
+        The color of the valve marker.
+    
+    valve_shape : string
+        The shape of the valve marker.
+    
+    valve_border_color : string
+        The color of the border around the valve marker.
+    
+    valve_border_width : integer
+        The width in points of the border around the valve marker.
+    
+    valve_width : integer
+        The width of the valve line in points
+    
+    valve_line_style : string
+        The line style of valves if they are drawn as links. Refer to matplotlib documentation for available line styles.
+    
+    valve_arrows : boolean
+       Determines if an arrow is drawn in the direction of flow of the valves. 
+   
+    pump_element : string
+       Determines if pumps are drawn as links or nodes. 
+        
+    pump_size : integer
+        The size of the pump marker on the plot in points^2.
+        
+    pump_color : string
+        The color of the pump line.
+    
+    pump_shape : string
+        The shape of the pump marker.
+    
+    pump_border_color : string
+        The color of the border around the pump marker.
+    
+    pump_border_width : integer
+        The width in points of the border around the pump marker.
+    
+    pump_width : integer
+        The width of the pump line in points.
+    
+    pump_line_style : string
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
+    
+    pump_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+    
+    base_node_color : string
+        The color of the draw_nodes without data associated with them.
+    
+    base_node_size : integer
+        The size of the draw_nodes without data associated with them in points^2.
+    
+    base_link_color : string
+        The color of the draw_links without data associated with them.
+    
+    base_link_width : integer
+        The width of the draw_links without data associated with them in points.
+    
+    base_link_line_style : string
+        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
+    
+    base_link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
+    """
     model = self.model
     # If draw_nodes is True, then draw draw_nodes
     if draw_nodes:
@@ -531,6 +761,169 @@ def plot_basic_elements(
         base_link_width=1,
         base_link_line_style='-',
         base_link_arrows=False):
+    """User-level function that draws base elements with no data assocaited with
+    them, draws a legend, and saves the figure.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+   
+    draw_nodes : boolean
+        Determines if base draw_nodes with no data associated with them are drawn. Set to False for all functions excep plot_basic_elements by default.
+    
+    draw_links : boolean
+        Determines if base draw_links with no data associated with them are drawn. Set to False for all functions that deal with link data plotting.
+    
+    draw_reservoirs : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    
+    draw_tanks : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
+    
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
+    
+    savefig : boolean
+        Determines if the figure is saved. 
+    
+    save_name : string
+        The inputted string will be appended to the name of the network.
+    
+        Example
+        -------
+        >>>import viswaternet as vis
+        >>>model = vis.VisWNModel(r'Networks/Net3.inp')
+        ...
+        >>>model.save_fig(save_name='_example')
+        <Net3_example.png>
+    
+    dpi : int, string
+        The dpi that the figure will be saved with.
+    
+    save_format : string
+        The file format that the figure will be saved as.
+    
+    legend : boolean
+        Determines if the base elements legend will be drawn. 
+    
+    base_legend_loc : string
+        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
+    
+    base_legend_label_font_size : integer
+        The font size of the non-title text for legends. 
+    
+    base_legend_label_color : string
+        The color of the legend text. Refer to matplotlib documentation for available colors.
+
+    draw_legend_frame : boolean
+        Determines if the frame around the legend is drawn.
+    
+    reservoir_size : integer
+        The size of the reservoir marker on the plot in points^2. 
+    
+    reservoir_color : string
+        The color of the reservoir marker.
+    
+    reservoir_shape : string
+        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
+    
+    reservoir_border_color : string
+        The color of the border around the reservoir marker.
+    
+    reservoir_border_width : integer
+        The width in points of the border around the reservoir marker.
+    
+    tank_size : integer
+        The size of the tank marker on the plot in points^2. 
+    
+    tank_color : string
+        The color of the tank marker.
+    
+    tank_shape : string
+        The shape of the tank marker.
+    
+    tank_border_color : string
+        The color of the border around the tank marker.
+    
+    tank_border_width : integer
+        The width in points of the border around the tank marker.
+    
+    valve_elememt : string
+        Determines whether the valves are drawn as links or nodes.
+    
+    valve_size : integer
+        The size of the valve marker on the plot in points^2. 
+    
+    valve_color : string
+        The color of the valve marker.
+    
+    valve_shape : string
+        The shape of the valve marker.
+    
+    valve_border_color : string
+        The color of the border around the valve marker.
+    
+    valve_border_width : integer
+        The width in points of the border around the valve marker.
+    
+    valve_width : integer
+        The width of the valve line in points
+    
+    valve_line_style : string
+        The line style of valves if they are drawn as links. Refer to matplotlib documentation for available line styles.
+    
+    valve_arrows : boolean
+       Determines if an arrow is drawn in the direction of flow of the valves. 
+   
+    pump_element : string
+       Determines if pumps are drawn as links or nodes. 
+        
+    pump_size : integer
+        The size of the pump marker on the plot in points^2.
+        
+    pump_color : string
+        The color of the pump line.
+    
+    pump_shape : string
+        The shape of the pump marker.
+    
+    pump_border_color : string
+        The color of the border around the pump marker.
+    
+    pump_border_width : integer
+        The width in points of the border around the pump marker.
+    
+    pump_width : integer
+        The width of the pump line in points.
+    
+    pump_line_style : string
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
+    
+    pump_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+    
+    base_node_color : string
+        The color of the draw_nodes without data associated with them.
+    
+    base_node_size : integer
+        The size of the draw_nodes without data associated with them in points^2.
+    
+    base_link_color : string
+        The color of the draw_links without data associated with them.
+    
+    base_link_width : integer
+        The width of the draw_links without data associated with them in points.
+    
+    base_link_line_style : string
+        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
+    
+    base_link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
+    """
     # Checks if there is no draw_pumps
     if not self.model['G_list_pumps_only']:
         draw_pumps = False
@@ -649,6 +1042,124 @@ def draw_legend(
         base_link_arrows=False,
         pump_arrows=False,
         draw_links=True):
+    """Draws the legends for all other plotting functions. There are two legends that might be drawn. One is the base elements legend with displays what markers are associated with each element type (draw_nodes, draw_links, etc.) The other legend is the intervals legend which is the legend for discrete drawing. Under normal use, draw_legends is not normally called by the user directly, even with more advanced applications. However, some specialized plots may require draw_legend to be called directly.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+   
+    intervals : array-like, string
+        If set to 'automatic' then intervals are created automatically on a equal interval basis. Otherwise, it is the edges of the intervals to be created. intervals array length should be num_intervals + 1.
+    
+    color_list : string, array-like
+        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
+    
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
+    
+    title : string
+        The title text of the legend.
+    
+    draw_discrete_legend : boolean
+        Determine if the intervals legend is drawn.
+    
+    discrete_legend_loc : string
+        The location of the intervals legend on the figure.
+    
+    discrete_legend_label_font_size : integer
+        The font size of the intervals legend text.
+    
+    discrete_legend_label_color : string
+        The color of the intervals legend text. Refer to matplotlib documentation for available colors.
+    
+    discrete_legend_title_font_size : integer
+        The font size of the title text for the intervals legend.
+    
+    discrete_legend_title_color : string
+        The color of the title tect for the intervals legend.
+    
+    draw_base_legend : boolean
+        Determine if the base elements legend is drawn.
+    
+    base_legend_loc : string
+        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
+    
+    base_legend_label_font_size : integer
+        The font size of the non-title text for the base elements legend. 
+    
+    base_legend_label_color : string
+        The color of the legend text. Refer to matplotlib documentation for available colors.
+    
+    draw_legend_frame : boolean
+        Determines if the frame around the legend is drawn.
+    
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
+    
+    pump_element : string
+        Determines if pumps are drawn as links or nodes. 
+    
+    pump_color : string
+        The color of the pump line.
+        
+    pump_line_style
+       The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles. 
+    
+    pump_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+    
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
+        
+    valve_element : string
+        Determines if valves are drawn as links or nodes.
+        
+    valve_color : string
+        The color of the valve line.
+        
+    valve_line_style : string
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles. 
+    
+    valve_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the valve.
+   
+    draw_links : boolean
+        Determines if draw_links with no data associated with them are drawn.
+    
+    base_link_color : string
+        The color of the draw_links without data associated with them.
+        
+    base_link_line_style : string
+        The style (solid, dashed, dotted, etc.) of draw_links with no data associated with them.
+    
+    base_link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
+    
+    node_size : integer, array-like
+        The size of the node elements. Can either be an integer if the node sizes are uniform, or an array-like if variable node sizes are present.
+    
+    link_width : integer, array-like
+        The width of the link elements. Can either be an integer if the link sizes are uniform, or an array-like if variable link sizes are present.
+    
+    element_size_intervals : integer
+        The number of intervals to be used if an element size legend is used.
+    
+    element_size_legend_title : string
+        The title of the element size legend.
+    
+    element_size_legend_loc : string
+        The location of the element size legend on the figure.
+    
+    element_size_legend_labels : array-like
+        The labels of each interval of the element size legend.
+    
+    node_border_color : string
+        The color of the legend draw_nodes edges when plotting element size legend.
+    
+    linewidths: integer
+        The width of the line of the legend draw_nodes when plotting element size legend.
+    """
     # If no intervals for data legend are specified, then create empty array
     if intervals is None:
         intervals = []
@@ -821,6 +1332,28 @@ def draw_color_bar(
         color_bar_title=None,
         color_bar_width=0.03,
         color_bar_height=0.8):
+    """Draws the color bar for all continuous plotting functions.Like draw_legends, under normal use, draw_color_bar is not normally called by the user directly, even with more advanced applications. However, some specialized plots may require draw_color_bar to be called directly.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+    
+    g : NetworkX path collection
+        The list of elements drawn by NetworkX function.
+    
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
+    
+    color_bar_title : string
+        The title of the color bar.
+    
+    color_bar_width : integer
+        Width of color bar.
+        
+    color_bar_height : integer
+        Height of color bar.
+    """
     # Unruly code to make colorbar location nice and symmetrical when dealing
     # with subplots especially.
     divider = make_axes_locatable(ax)
@@ -851,6 +1384,45 @@ def draw_label(
         label_font_style = None,
         label_edge_width = None
         ):
+    """Draws customizable labels on the figure.
+    There are two modes of coordinate input: If the 'draw_nodes' argument is not specified, then the label coordinates are processed as absolute coordinates with possible values from 0 to 1. For instance, (0,0) would place the label in the bottom left of the figure, while (1,1) would place the label in the top right of the figure. If the 'draw_nodes' argument IS specified, then the coordinates are processed as coordinates relative to it's associated node. The scale of the coordinates scaling differs between networks. For instance, (50,100) would place the label 50 units to the right, and 100 units above the associated node.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+    
+    labels : string, array-like
+        The label(s) textual content.
+    
+    x_coords : integer, array-like
+        The x coordinate(s) of the labels.
+    
+    y_coords : integer, array-like
+        The y coordinate(s) of the labels.
+    
+    draw_nodes : string, array-like
+        A list of the draw_nodes the labels are to be associated with.
+    
+    draw_arrow : boolean
+        Determine if an arrow is drawn from the associated draw_nodes to labels.
+    
+    label_font_size : integer
+        The font size of the labels.
+        
+    label_text_color : string
+        The color of the text of the labels.
+        
+    label_face_color : string
+    
+    label_edge_color : string
+    
+    label_alpha : integer
+    
+    label_font_style : string
+        
+    label_edge_width : integer
+    """
     model = self.model
     if ax is None:
         ax = self.ax
