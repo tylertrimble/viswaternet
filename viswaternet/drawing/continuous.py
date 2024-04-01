@@ -495,6 +495,7 @@ def plot_continuous_links(
         color_bar_width=0.03,
         color_bar_height=0.8):
     """User-level function that draws continuous link data, base elements, legends, and saves the figure.
+    
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
