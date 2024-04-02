@@ -1,7 +1,6 @@
 """
 This example demonstrates how to plot node data by assigning node color according to a colorbar.
 """
-
 # Import libraries
 import viswaternet as vis
 import matplotlib.pyplot as plt

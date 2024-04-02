@@ -33,7 +33,7 @@ def draw_nodes(
     if node_size is None:
         node_size = (np.ones(len(node_list)) * 100).tolist()
     # Checks if some data values are given
-    if parameter_results:
+    if parameter_results.values.tolist():
         # If values is less than this value, we treat it as a negative.
         node_list = [node_list[node_list.index(name)]
                      for name in node_list
@@ -41,14 +41,8 @@ def draw_nodes(
                           or draw_tanks is False)
                      and (name not in model["reservoir_names"]
                           or draw_reservoirs is False))]
-        parameter_results = [parameter_results[node_list.index(name)]
-                             for name in node_list
-                             if ((name not in model["tank_names"]
-                                  or draw_tanks is False)
-                             and (name not in model["reservoir_names"]
-                                  or draw_reservoirs is False)
-                             and parameter_results[node_list.index(name)]
-                                 is not None)]
+        parameter_results = parameter_results.loc[node_list]
+        parameter_results = parameter_results.values.tolist()
         if isinstance(node_size, tuple):
             min_size = node_size[0]
             max_size = node_size[1]
@@ -170,25 +164,19 @@ def draw_links(
     if link_width is None:
         link_width = (np.ones(len(link_list)) * 1).tolist()
     # Checks if some data values are given
-    if parameter_results:
-        pipe_names = model['G_pipe_name_list']
+    if parameter_results.values.tolist():
+        link_list = [link_list[link_list.index(name)]
+                     for name in link_list
+                     if ((name not in model["pump_names"]
+                          or pump_element == 'node'
+                          or draw_pumps is False)
+                     and (name not in model["valve_names"]
+                          or valve_element == 'node'
+                          or draw_valves is False))]
         edges = [model["pipe_list"][model['G_pipe_name_list'].index(name)]
-                 for name in link_list
-                 if ((name not in model["pump_names"]
-                      or pump_element == 'node'
-                      or draw_pumps is False)
-                 and (name not in model["valve_names"]
-                      or valve_element == 'node'
-                      or draw_valves is False))]
-        parameter_results = [parameter_results[pipe_names.index(name)]
-                             for name in link_list
-                             if ((name not in model["pump_names"]
-                                  or pump_element == 'node'
-                                  or draw_pumps is False)
-                             and (name not in model["valve_names"]
-                                  or valve_element == 'node'
-                                  or draw_valves is False)
-                             and not np.isnan(parameter_results[pipe_names.index(name)]))]
+                 for name in link_list]
+        parameter_results = parameter_results.loc[link_list]
+        parameter_results = parameter_results.values.tolist()
         if isinstance(link_width, tuple):
             min_size = link_width[0]
             max_size = link_width[1]

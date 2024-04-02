@@ -79,7 +79,7 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where tank does
                 # not exist in parameter_results
                 try:
-                    parameter_results.loc[tank] = None
+                    parameter_results.drop(tank,inplace=True)
                     element_list.remove(tank)
                 except KeyError:
                     pass
@@ -90,7 +90,7 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where reservoir
                 # does not exist in parameter_results
                 try:
-                    parameter_results.loc[reservoir] = None
+                    parameter_results.drop(reservoir,inplace=True)
                     element_list.remove(reservoir)
                 except KeyError:
                     pass
@@ -154,7 +154,7 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where pump does
                 # not exist in parameter_results
                 try:
-                    parameter_results.loc[pump] = None
+                    parameter_results.drop(pump,inplace=True)
                     element_list.remove(pump)
                 except KeyError:
                     pass
@@ -165,11 +165,12 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where valve
                 # does not exist in parameter_results
                 try:
-                    parameter_results.loc[valve] = None
+                    parameter_results.drop(valve,inplace=True)
                     element_list.remove(valve)
                 except KeyError:
                     pass
-    return parameter_results.values.tolist(), element_list
+    print(parameter_results)
+    return parameter_results, element_list
 
 
 def get_demand_patterns(self):

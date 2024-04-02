@@ -509,6 +509,7 @@ def plot_unique_data(
                 data_type,
                 excel_columns[0],
                 excel_columns[1])
+            results = results.values.tolist()
             interval_results, interval_names = processing.bin_parameter(
                 self,
                 results,

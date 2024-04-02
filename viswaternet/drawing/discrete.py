@@ -548,6 +548,16 @@ def plot_discrete_links(
             value=value,
             include_pumps=include_pumps,
             include_valves=include_valves)
+        link_list = [link_list[link_list.index(name)]
+                     for name in link_list
+                     if ((name not in model["pump_names"]
+                          or pump_element == 'node'
+                          or draw_pumps is False)
+                     and (name not in model["valve_names"]
+                          or valve_element == 'node'
+                          or draw_valves is False))]
+        parameter_results = parameter_results.loc[link_list]
+        parameter_results = parameter_results.values.tolist()
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)

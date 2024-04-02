@@ -44,7 +44,6 @@ def convert_excel(self,
 
         df = pd.read_excel(dataFile)
         element_list = df.iloc[:, element_index]
-        results = df.iloc[:, value_index]
+        results = df.iloc[:, value_index].rename(element_list)
         element_list = element_list.tolist()
-        results = results.tolist()
         return element_list, results
