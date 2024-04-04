@@ -92,11 +92,10 @@ def animate_plot(
             try:
                 kwargs["custom_data_values"] = [custom_data_values[0],
                                                 custom_data_values[1][value]]
-                function(ax=ax, savefig=False, **kwargs)
             except Exception:
                 kwargs["excel_columns"] = [excel_columns[0],
                                            excel_columns[1][value]]
-                function(ax=ax, savefig=False, **kwargs)
+            function(ax=ax, savefig=False, **kwargs)
         else:
             function(ax=ax, value=value, savefig=False, **kwargs)
         handles, labels = [], []

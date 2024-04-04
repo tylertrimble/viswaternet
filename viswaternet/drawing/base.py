@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import networkx.drawing.nx_pylab as nxp
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -33,6 +34,9 @@ def draw_nodes(
     if node_size is None:
         node_size = (np.ones(len(node_list)) * 100).tolist()
     # Checks if some data values are given
+    if isinstance(parameter_results, list):
+        parameter_results = pd.Series(parameter_results, node_list)
+        print(parameter_results)
     if parameter_results.values.tolist():
         # If values is less than this value, we treat it as a negative.
         node_list = [node_list[node_list.index(name)]
