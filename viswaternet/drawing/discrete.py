@@ -285,7 +285,7 @@ def plot_discrete_nodes(
         draw_reservoirs=True,
         draw_pumps=True,
         draw_valves=True,
-        draw_nodes=False,
+        draw_nodes=True,
         draw_links=True,
         legend_title=None,
         base_legend_loc="upper right",
@@ -337,6 +337,7 @@ def plot_discrete_nodes(
         base_link_arrows=False,
         draw_base_legend=True,
         draw_interval_legend=True):
+    model = self.model
     if len(self.model['G_list_pumps_only']) == 0:
         draw_pumps = False
     if ax is None:
@@ -352,6 +353,14 @@ def plot_discrete_nodes(
             value=value,
             include_tanks=include_tanks,
             include_reservoirs=include_reservoirs)
+        node_list = [node_list[node_list.index(name)]
+                     for name in node_list
+                     if ((name not in model["reservoir_names"]
+                          or draw_reservoirs is False)
+                     and (name not in model["tank_names"]
+                          or draw_tanks is False))]
+        parameter_results = parameter_results.loc[node_list]
+        parameter_results = parameter_results.values.tolist()
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
@@ -478,7 +487,7 @@ def plot_discrete_links(
         draw_pumps=True,
         draw_valves=True,
         draw_nodes=False,
-        draw_links=False,
+        draw_links=True,
         cmap=default_cmap,
         legend_title=None,
         base_legend_loc="upper right",
@@ -552,10 +561,12 @@ def plot_discrete_links(
                      for name in link_list
                      if ((name not in model["pump_names"]
                           or pump_element == 'node'
-                          or draw_pumps is False)
+                          or draw_pumps is False
+                          or include_pumps is False)
                      and (name not in model["valve_names"]
                           or valve_element == 'node'
-                          or draw_valves is False))]
+                          or draw_valves is False
+                          or include_valves is False))]
         parameter_results = parameter_results.loc[link_list]
         parameter_results = parameter_results.values.tolist()
         if unit is not None:
@@ -628,12 +639,10 @@ def plot_discrete_links(
         link_list = [name for name in link_list
                      if ((name not in model["G_list_pumps_only"]
                           or pump_element == 'node'
-                          or draw_pumps is False
-                          or include_pumps is False)
+                          or draw_pumps is False)
                      and (name not in model["G_list_valves_only"]
                           or valve_element == 'node'
-                          or draw_valves is False
-                          or include_valves is False)
+                          or draw_valves is False)
                      and (name not in link_list))]
         if not link_list:
             draw_links = False

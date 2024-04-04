@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
+import pandas as pd
 from viswaternet.network import processing
 from viswaternet.utils import convert_excel, save_fig, unit_conversion
 from viswaternet.drawing import base
@@ -237,6 +238,16 @@ def plot_unique_data(
     elif parameter == "diameter" or parameter == "roughness":
         parameter_results, link_list = processing.get_parameter(
             self, "link", parameter)
+        link_list = [link_list[link_list.index(name)]
+                     for name in link_list
+                     if ((name not in model["pump_names"]
+                          or pump_element == 'node'
+                          or draw_pumps is False)
+                     and (name not in model["valve_names"]
+                          or valve_element == 'node'
+                          or draw_valves is False))]
+        parameter_results = parameter_results.loc[link_list]
+        parameter_results = parameter_results.values.tolist()
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
@@ -410,11 +421,16 @@ def plot_unique_data(
                 return
         if data_type == "continuous":
             if parameter_type == "link":
+                if isinstance(custom_data_values[1], list):
+                    parameter_results = pd.Series(custom_data_values[1],
+                                                  custom_data_values[0])
+                else:
+                    parameter_results = custom_data_values[1]
                 g = base.draw_links(
                     self,
                     ax,
                     custom_data_values[0],
-                    parameter_results=custom_data_values[1],
+                    parameter_results=parameter_results,
                     cmap=cmap,
                     link_width=link_width,
                     vmin=vmin,
@@ -428,11 +444,16 @@ def plot_unique_data(
                 call_draw_base_elements(element_list=custom_data_values[0])
                 call_draw_legend(element_list=custom_data_values[0])
             elif parameter_type == "node":
+                if isinstance(custom_data_values[1], list):
+                    parameter_results = pd.Series(custom_data_values[1],
+                                                  custom_data_values[0])
+                else:
+                    parameter_results = custom_data_values[1]
                 g = base.draw_nodes(
                     self,
                     ax,
                     custom_data_values[0],
-                    parameter_results=custom_data_values[1],
+                    parameter_results=parameter_results,
                     node_size=node_size,
                     cmap=cmap,
                     vmin=vmin,

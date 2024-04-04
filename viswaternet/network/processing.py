@@ -169,7 +169,6 @@ def get_parameter(
                     element_list.remove(valve)
                 except KeyError:
                     pass
-    print(parameter_results)
     return parameter_results, element_list
 
 
