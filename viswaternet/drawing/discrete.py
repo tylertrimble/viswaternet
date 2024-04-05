@@ -7,7 +7,7 @@ from viswaternet.network import processing
 from viswaternet.utils import save_fig, unit_conversion, label_generator
 from viswaternet.drawing import base
 from viswaternet.utils.markers import *
-
+import time
 default_cmap = 'autumn_r'
 
 
@@ -160,6 +160,7 @@ def draw_discrete_links(
         color_list=None,
         link_style='-',
         link_arrows=False):
+    t1 = time.time()
     model = self.model
     if link_width is None:
         link_width = (np.ones(len(intervals)) * 2).tolist()
@@ -259,7 +260,8 @@ def draw_discrete_links(
                     arrows=link_arrows[k],
                     style=link_style[k])
                 cmapValue2 += 1 / len(intervals)
-
+    t2 = time.time()
+    print("Discrete Drawing Time: " + str(t2-t1))
 
 def plot_discrete_nodes(
         self,
@@ -345,14 +347,18 @@ def plot_discrete_nodes(
             fig, ax = plt.subplots(figsize=self.figsize)
             ax.set_frame_on(self.axis_frame)
     if parameter is not None:
-        parameter_results, node_list = processing.get_parameter(
-            self,
-            "node",
-            parameter,
-            element_list=element_list,
-            value=value,
-            include_tanks=include_tanks,
-            include_reservoirs=include_reservoirs)
+        if not isinstance(value, list):
+            parameter_results, node_list = processing.get_parameter(
+                self,
+                "node",
+                parameter,
+                element_list=element_list,
+                value=value,
+                include_tanks=include_tanks,
+                include_reservoirs=include_reservoirs)
+        else:
+            parameter_results = value[0]
+            node_list = value[1]
         node_list = [node_list[node_list.index(name)]
                      for name in node_list
                      if ((name not in model["reservoir_names"]
@@ -541,6 +547,7 @@ def plot_discrete_links(
         base_link_arrows=False,
         draw_base_legend=True,
         draw_discrete_legend=True):
+    t1 = time.time()
     model = self.model
     if len(self.model['G_list_pumps_only']) == 0:
         draw_pumps = False
@@ -549,14 +556,18 @@ def plot_discrete_links(
             fig, ax = plt.subplots(figsize=self.figsize)
             ax.set_frame_on(self.axis_frame)
     if parameter is not None:
-        parameter_results, link_list = processing.get_parameter(
-            self,
-            "link",
-            parameter,
-            element_list=element_list,
-            value=value,
-            include_pumps=include_pumps,
-            include_valves=include_valves)
+        if not isinstance(value, list):
+            parameter_results, link_list = processing.get_parameter(
+                self,
+                "link",
+                parameter,
+                element_list=element_list,
+                value=value,
+                include_pumps=include_pumps,
+                include_valves=include_valves)
+        else:
+            parameter_results = value[0]
+            link_list = value[1]
         link_list = [link_list[link_list.index(name)]
                      for name in link_list
                      if ((name not in model["pump_names"]
@@ -580,6 +591,8 @@ def plot_discrete_links(
             num_intervals=num_intervals,
             disable_interval_deleting=disable_interval_deleting,
             legend_decimal_places=legend_decimal_places)
+        t2 = time.time()
+        print("Discrete Processing Time: " + str(t2-t1))
         draw_discrete_links(
             self, ax, interval_results, interval_names,
             link_width=link_width,

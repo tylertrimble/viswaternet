@@ -91,14 +91,18 @@ def plot_continuous_nodes(
         self.ax = ax
         ax.set_frame_on(self.axis_frame)
     if parameter is not None:
-        parameter_results, node_list = processing.get_parameter(
-            self,
-            "node",
-            parameter,
-            value=value,
-            element_list=element_list,
-            include_tanks=include_tanks,
-            include_reservoirs=include_reservoirs)
+        if not isinstance(value, list):
+            parameter_results, node_list = processing.get_parameter(
+                self,
+                "node",
+                parameter,
+                value=value,
+                element_list=element_list,
+                include_tanks=include_tanks,
+                include_reservoirs=include_reservoirs)
+        else:
+            parameter_results = value[0]
+            node_list = value[1]
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
@@ -283,16 +287,18 @@ def plot_continuous_links(
             fig, ax = plt.subplots(figsize=self.figsize)
             ax.set_frame_on(self.axis_frame)
     if parameter is not None:
-
-        parameter_results, link_list = processing.get_parameter(
-            self,
-            "link",
-            parameter,
-            value=value,
-            element_list=element_list,
-            include_pumps=include_pumps,
-            include_valves=include_valves)
-
+        if not isinstance(value, list):
+            parameter_results, link_list = processing.get_parameter(
+                self,
+                "link",
+                parameter,
+                value=value,
+                element_list=element_list,
+                include_pumps=include_pumps,
+                include_valves=include_valves)
+        else:
+            parameter_results = value[0]
+            link_list = value[1]
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)

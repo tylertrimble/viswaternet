@@ -334,12 +334,51 @@ def plot_unique_data(
                         custom_data_values[1]):
                     interval_results[data][element] = \
                         model["node_names"].index(element)
-            if parameter_type == 'link':
+                discrete.draw_discrete_nodes(
+                    self,
+                    ax,
+                    interval_results,
+                    interval_names,
+                    node_size=node_size,
+                    node_shape=node_shape,
+                    label_list=label_list,
+                    node_border_color=node_border_color,
+                    node_border_width=node_border_width,
+                    cmap=cmap,
+                    color_list=color_list)
+            elif parameter_type == 'link':
                 for element, data in zip(
                         custom_data_values[0],
                         custom_data_values[1]):
                     interval_results[data][element] = \
                         model["G_pipe_name_list"].index(element)
+                discrete.draw_discrete_links(
+                    self,
+                    ax,
+                    interval_results,
+                    interval_names,
+                    link_width=link_width,
+                    label_list=label_list,
+                    cmap=cmap,
+                    color_list=color_list,
+                    link_style=link_style,
+                    link_arrows=link_arrows)
+            call_draw_base_elements(element_list=custom_data_values[0])
+            call_draw_legend(intervals=interval_names,
+                             element_list=custom_data_values[0])
+            if savefig:
+                save_fig(self, save_name=save_name,
+                         dpi=dpi, save_format=save_format)
+            return
+        elif data_type == "discrete":
+            interval_results, interval_names = processing.bin_parameter(
+                self,
+                custom_data_values[1],
+                custom_data_values[0],
+                intervals=intervals,
+                num_intervals=num_intervals,
+                legend_decimal_places=legend_decimal_places,
+                disable_interval_deleting=disable_interval_deleting)
             if parameter_type == "link":
                 discrete.draw_discrete_links(
                     self,
@@ -375,51 +414,7 @@ def plot_unique_data(
                 save_fig(self, save_name=save_name,
                          dpi=dpi, save_format=save_format)
             return
-        if data_type == "discrete":
-            interval_results, interval_names = processing.bin_parameter(
-                self,
-                custom_data_values[1],
-                custom_data_values[0],
-                intervals=intervals,
-                num_intervals=num_intervals,
-                legend_decimal_places=legend_decimal_places,
-                disable_interval_deleting=disable_interval_deleting)
-            if parameter_type == "link":
-                discrete.draw_discrete_links(
-                    self,
-                    ax,
-                    interval_results,
-                    interval_names,
-                    link_width=link_width,
-                    label_list=label_list,
-                    cmap=cmap,
-                    color_list=color_list,
-                    link_style=link_style,
-                    link_arrows=link_arrows)
-                call_draw_base_elements(element_list=custom_data_values[0])
-                call_draw_legend(element_list=custom_data_values[0],
-                                 intervals=interval_names)
-            if parameter_type == "node":
-                discrete.draw_discrete_nodes(
-                    self,
-                    ax,
-                    interval_results,
-                    interval_names,
-                    node_size=node_size,
-                    node_shape=node_shape,
-                    label_list=label_list,
-                    node_border_color=node_border_color,
-                    node_border_width=node_border_width,
-                    cmap=cmap,
-                    color_list=color_list)
-                call_draw_base_elements(element_list=custom_data_values[0])
-                call_draw_legend(intervals=interval_names,
-                                 element_list=custom_data_values[0])
-            if savefig:
-                save_fig(self, save_name=save_name,
-                         dpi=dpi, save_format=save_format)
-                return
-        if data_type == "continuous":
+        elif data_type == "continuous":
             if parameter_type == "link":
                 if isinstance(custom_data_values[1], list):
                     parameter_results = pd.Series(custom_data_values[1],
