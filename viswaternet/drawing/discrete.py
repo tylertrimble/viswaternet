@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+The viswaternet.drawing.discrete module handles everything related to discrete data drawing.
+"""
+
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -23,6 +27,40 @@ def draw_discrete_nodes(
         node_border_color=None,
         node_border_width=None,
         color_list=None):
+    """Draws discretized nodal data onto the figure.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+        
+    element_list : array-like
+        List of network elements that data will be retrieved for.
+        
+    intervals : dict
+        The dictionary containting the intervals and the draw_nodes assocaited with each interval.
+        
+    node_size : integer, array-like
+        List of node sizes for each interval.
+        
+    label_list : string, array-like
+        List of labels for each interval.
+        
+    node_shape : string, array-like
+        List of node shapes for each interval. Refer to matplotlib documentation for available marker types.
+        
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
+        
+    node_border_color : string, array-like
+        The color of the node borders for each interval.
+        
+    node_border_width  : integer, array-like
+        The width of the node borders for each interval.
+        
+    color_list : string, array-like
+        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
+    """
     model = self.model
     if node_size is None:
         if len(model["node_names"]) < 300:
@@ -42,16 +80,15 @@ def draw_discrete_nodes(
     if isinstance(node_shape, str):
         node_shape = [node_shape for i in range(len(intervals))]
     if node_border_color is None:
-        node_border_color = ['k' for i in range(len(intervals))]
+        node_border_color = ['k' for i in range(len(intervals))]    
     if isinstance(node_border_color, str):
         node_border_color = [node_border_color for i in range(len(intervals))]
     if node_border_width is None:
-        node_border_width = [0 for i in range(len(intervals))]
+       node_border_width = [0 for i in range(len(intervals))]
     if isinstance(node_border_width, int) \
             or isinstance(node_border_width, float):
         node_border_width = [node_border_width for i in range(len(intervals))]
     empty_interval = False
-
     if (color_list is not None and cmap is not None) or color_list is not None:
         for j, interval_name in enumerate(intervals):
             node_list = [model["node_names"][i]
@@ -160,7 +197,37 @@ def draw_discrete_links(
         color_list=None,
         link_style='-',
         link_arrows=False):
-    t1 = time.time()
+    """Draws discretized link data onto the figure.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+        
+    element_list : array-like
+        List of network elements that data will be retrieved for.
+        
+    intervals : dict
+        The dictionary containting the intervals and the draw_links associated with each interval.
+        
+    link_width : integer, array-like
+        List of link widths for each interval.
+        
+    label_list : string, array-like
+        List of labels for each interval.
+        
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
+        
+    color_list : string, array-like
+        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
+        
+    link_style : string
+        The style (solid, dashed, dotted, etc.) of the draw_links. Refer to matplotlib documentation for available line styles.
+        
+    link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+    """
     model = self.model
     if link_width is None:
         link_width = (np.ones(len(intervals)) * 2).tolist()
@@ -289,7 +356,7 @@ def plot_discrete_nodes(
         draw_valves=True,
         draw_nodes=True,
         draw_links=True,
-        legend_title=None,
+        discrete_legend_title=None,
         base_legend_loc="upper right",
         discrete_legend_loc="lower right",
         cmap=default_cmap,
@@ -339,7 +406,267 @@ def plot_discrete_nodes(
         base_link_arrows=False,
         draw_base_legend=True,
         draw_interval_legend=True):
-    model = self.model
+    """User-level function that draws discretized nodal data, base elements, legends, and saves the figure.
+   
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+        
+    num_intervals : integer
+        The number of intervals.
+        
+    parameter : string
+        The parameter to be plotted. The following is a list of parameters
+        available to use:
+        **Static Parameters**    
+        - base_demand
+        - elevation
+        - emitter_coefficient
+        - initial_quality
+        
+        **Time-Dependent Parameters**
+        - head
+        - demand
+        - leak_demand
+        - leak_area
+        - leak_discharg_coeff
+        - quality
+        
+    value : integer, string
+        For time-varying parameters only. Specifies which timestep or data
+        summary will be plotted.
+        
+        .. rubric:: Possible Inputs
+        
+        ======================= =========================================
+            int                 Plots element data for specified timestep
+            'min'               Plots minimum data point for each element
+            'max'               Plots maximum data point for each element
+            'mean'              Plots mean for each element
+            'stddev'            Plots standard deviation for each element
+            'range'             Plots range for each element
+        ======================= =========================================
+        
+    unit : string
+        The unit that the network data is to be converted to.
+        
+    element_list : array-like
+        List of network elements that data will be retrieved for.
+        
+    include_tanks : boolean
+        Determines if data for draw_tanks are retrieved.
+        
+    include_reservoirs : boolean
+        Determines if data for draw_reservoirs are retrieved.
+        
+    intervals : integer, string
+        If set to 'automatic' then intervals are created automatically on a equal interval basis. Otherwise, it is the edges of the intervals to be created. Intervals array length should be num_intervals + 1.
+        
+    label_list : string, array-like
+        List of labels for each interval.
+        
+    node_size : integer, array-like
+        List of node sizes for each interval.
+        
+    node_shape : string, array-like
+        List of node shapes for each interval. Refer to matplotlib documentation for available marker types.
+   
+    node_border_color : string, array-like
+        The color of the node borders for each interval.
+   
+    node_border_width  : integer, array-like
+        The width of the node borders for each interval.
+    
+    draw_reservoirs : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    
+    draw_tanks : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
+    
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
+    
+    draw_nodes : boolean
+        Determines if draw_nodes with no data associated with them are drawn.
+    
+    draw_links : boolean
+        Determines if draw_links with no data associated with them are drawn.
+    
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
+    
+    color_list : string, array-like
+        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
+    
+    disable_interval_deleting : boolean
+        If True, empty intervals will be automatically deleted. 
+    
+    draw_interval_legend : boolean
+        Determine if the intervals legend is drawn.
+    
+    discrete_legend_title : string
+        Title of the intervals legend.
+    
+    discrete_legend_loc : string
+        The location of the intervals legend on the figure.
+    
+    discrete_legend_label_font_size : integer
+        The font size of the intervals legend text.
+    
+    discrete_legend_label_color : string
+        The color of the intervals legend text. Refer to matplotlib documentation for available colors.
+    
+    discrete_legend_title_font_size : integer
+        The font size of the title text for the intervals legend.
+    
+    discrete_legend_title_color : string
+        The color of the title tect for the intervals legend.
+  
+    draw_base_legend : boolean
+        Determine if the base elements legend is drawn.
+    
+    base_legend_loc : string
+        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
+    
+    base_legend_font_size : integer
+        The font size of the non-title text for the base elements legend. 
+    
+    base_legend_label_color : string
+        The color of the legend text. Refer to matplotlib documentation for 
+        available colors.
+    
+    draw_legend_frame : boolean
+        Determines if the frame around the legend is drawn.
+    
+    legend_decimal_places : integer
+        The number of significant figures, or decimal points, that numbers in the legend will be displayed with. 0 should be passed for whole numbers.
+    
+    reservoir_size : integer
+        The size of the reservoir marker on the plot in points^2. 
+    
+    reservoir_color : string
+        The color of the reservoir marker.
+    
+    reservoir_shape : string
+        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
+    
+    reservoir_border_color : string
+        The color of the border around the reservoir marker.
+    
+    reservoir_border_width : integer
+        The width in points of the border around the reservoir marker.
+
+    tank_size : integer
+        The size of the tank marker on the plot in points^2. 
+    
+    tank_color : string
+        The color of the tank marker.
+    
+    tank_shape : string
+        The shape of the tank marker.
+    
+    tank_border_color : string
+        The color of the border around the tank marker.
+    
+    tank_border_width : integer
+        The width in points of the border around the tank marker.
+    
+    valve_element : string
+        Determines if the valves are drawn as nodes or links.
+    
+    valve_size : integer
+        The size of the valve marker on the plot in points^2. 
+    
+    valve_color : string
+        The color of the valve marker.
+    
+    valve_shape : string
+        The shape of the valve marker.
+    
+    valve_border_color : string
+        The color of the border around the valve marker.
+    
+    valve_border_width : integer
+        The width in points of the border around the valve marker.
+    
+    valve_width : integer
+        The width of the valve line in points.
+    
+    valve_line_style : string
+        The line style of valves if they are drawn as links. Refer to matplotlib documentation for available line styles.
+    
+    valve_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the valves. 
+    
+    pump_element : string
+        Determines if pumps are drawn as links or nodes. 
+    
+    pump_size : integer
+        The size of the pump marker on the plot in points^2.
+    
+    pump_color : string
+        The color of the pump line.
+    
+    pump_shape : string
+        The shape of the pump marker.
+    
+    pump_border_color : string
+        The color of the border around the pump marker.
+    
+    pump_border_width : integer
+        The width in points of the border around the pump marker.
+    
+    pump_width : integer
+        The width of the pump line in points.
+    
+    pump_line_style : string
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
+    
+    pump_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+    
+    base_node_color : string
+        The color of the draw_nodes without data associated with them.
+    
+    base_node_size : integer
+        The size of the draw_nodes without data associated with them in points^2.
+    
+    base_link_color : string
+        The color of the draw_links without data associated with them.
+    
+    base_link_width : integer
+        The width of the draw_links without data associated with them in points.
+    
+    base_link_line_style : string
+        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
+    
+    base_link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
+    
+    savefig : boolean
+        Determines if the figure is saved. 
+    
+    save_name : string
+        The inputted string will be appended to the name of the network.
+    
+        Example
+        -------
+        >>>import viswaternet as vis
+        >>>model = vis.VisWNModel(r'Networks/Net3.inp')
+        ...
+        >>>model.save_fig(save_name='_example')
+        <Net3_example.png>
+    
+    dpi : int, string
+        The dpi that the figure will be saved with.
+    
+    save_format : string
+        The file format that the figure will be saved as.
+    """
     if len(self.model['G_list_pumps_only']) == 0:
         draw_pumps = False
     if ax is None:
@@ -434,13 +761,13 @@ def plot_discrete_nodes(
             base_link_line_style=base_link_line_style,
             base_link_arrows=base_link_arrows)
 
-        if legend_title is None:
-            legend_title = label_generator(parameter, value, unit)
+        if discrete_legend_title is None:
+            discrete_legend_title = label_generator(parameter, value, unit)
 
         base.draw_legend(
             ax,
             intervals=interval_names,
-            title=legend_title,
+            title=discrete_legend_title,
             draw_pumps=draw_pumps,
             base_legend_loc=base_legend_loc,
             discrete_legend_loc=discrete_legend_loc,
@@ -495,7 +822,7 @@ def plot_discrete_links(
         draw_nodes=False,
         draw_links=True,
         cmap=default_cmap,
-        legend_title=None,
+        discrete_legend_title=None,
         base_legend_loc="upper right",
         discrete_legend_loc="lower right",
         savefig=False,
@@ -547,7 +874,262 @@ def plot_discrete_links(
         base_link_arrows=False,
         draw_base_legend=True,
         draw_discrete_legend=True):
-    t1 = time.time()
+    """User-level function that draws discretized link data, base elements, legends, and saves the figure.
+    
+    Arguments
+    ---------
+    ax : axes._subplots.AxesSubplot
+        Matplotlib axes object.
+        
+    num_intervals : integer
+        The number of intervals.
+        
+    parameter : string
+        The parameter to be plotted. The following is a list of parameters
+        available to use:
+        **Static Parameters**    
+        - length
+        - minor_loss
+        - bulk_coeff
+        - wall_coeff
+       
+        **Time-Dependent Parameters**
+        - flowrate
+        - velocity
+        - headloss
+        - friction_factor
+        - reaction_rate
+        - quality
+    
+    value : integer, string
+        For time-varying parameters only. Specifies which timestep or data summary will be plotted.
+        
+        .. rubric:: Possible Inputs
+        
+        ======================= =========================================
+            int                 Plots element data for specified timestep
+            'min'               Plots minimum data point for each element
+            'max'               Plots maximum data point for each element
+            'mean'              Plots mean for each element
+            'stddev'            Plots standard deviation for each element
+            'range'             Plots range for each element
+        ======================= =========================================
+        
+    unit : string
+        The unit that the network data is to be converted to.
+    
+    element_list : array-like
+        List of network elements that data will be retrieved for.
+    
+    include_pumps : boolean
+        Determines if data for draw_pumps are retrieved.
+    
+    include_valves : boolean
+        Determines if data for draw_valves are retrieved.
+    
+    intervals : integer, string
+        If set to 'automatic' then intervals are created automatically on an equal interval basis. Otherwise, it is the edges of the intervals to be created. intervals array length should be num_intervals + 1.
+    
+    disable_interval_deleting : boolean
+        If True, empty intervals will be automatically deleted.     
+    
+    link_width : integer, array-like
+        List of link widths for each interval.
+    
+    label_list : string, array-like
+        List of labels for each interval.
+    
+    color_list : string, array-like
+        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
+    
+    cmap : string
+        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
+    
+    link_style : string
+        The style (solid, dashed, dotted, etc.) of the draw_links. Refer to matplotlib documentation for available line styles.
+    
+    link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+    
+    draw_reservoirs : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    
+    draw_tanks : boolean
+        Determines if draw_reservoirs with no data associated with them are drawn.
+    
+    draw_pumps : boolean
+        Determines if draw_pumps with no data associated with them are drawn.
+    
+    draw_valves : boolean
+        Determines if draw_valves with no data associated with them are drawn.
+    
+    draw_nodes : boolean
+        Determines if draw_nodes with no data associated with them are drawn.
+    
+    draw_links : boolean
+        Determines if draw_links with no data associated with them are drawn.
+    
+    draw_discrete_legend : boolean
+        Determine if the intervals legend is drawn.
+    
+    discrete_legend_title : string
+        Title of the intervals legend.
+    
+    discrete_legend_loc : string
+        The location of the intervals legend on the figure.
+    
+    discrete_legend_label_font_size : integer
+        The font size of the intervals legend text.
+    
+    discrete_legend_label_color : string
+        The color of the intervals legend text. Refer to matplotlib documentation for available colors.
+    
+    discrete_legend_title_font_size : integer
+        The font size of the title text for the intervals legend.
+    
+    discrete_legend_title_color : string
+        The color of the title tect for the intervals legend.
+    
+    draw_base_legend : boolean
+        Determine if the base elements legend is drawn.
+    
+    base_legend_loc : string
+        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
+    
+    base_legend_font_size : integer
+        The font size of the non-title text for the base elements legend. 
+    
+    base_legend_label_color : string
+        The color of the legend text. Refer to matplotlib documentation for available colors.
+    
+    draw_legend_frame : boolean
+        Determines if the frame around the legend is drawn.
+    
+    legend_decimal_places : integer
+        The number of significant figures, or decimal points, that numbers in the legend will be displayed with. 0 should be passed for whole numbers.
+    
+    reservoir_size : integer
+        The size of the reservoir marker on the plot in points^2. 
+    
+    reservoir_color : string
+        The color of the reservoir marker.
+    
+    reservoir_shape : string
+        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
+    
+    reservoir_border_color : string
+        The color of the border around the reservoir marker.
+    
+    reservoir_border_width : integer
+        The width in points of the border around the reservoir marker.
+    
+    tank_size : integer
+        The size of the tank marker on the plot in points^2. 
+    
+    tank_color : string
+        The color of the tank marker.
+    
+    tank_shape : string
+        The shape of the tank marker.
+    
+    tank_border_color : string
+        The color of the border around the tank marker.
+    
+    tank_border_width : integer
+        The width in points of the border around the tank marker.
+    
+    valve_element : string
+        Determines if the valves are drawn as nodes or links.
+    
+    valve_size : integer
+        The size of the valve marker on the plot in points^2. 
+    
+    valve_color : string
+        The color of the valve marker.
+    
+    valve_shape : string
+        The shape of the valve marker.
+    
+    valve_border_color : string
+        The color of the border around the valve marker.
+    
+    valve_border_width : integer
+        The width in points of the border around the valve marker.
+    
+    valve_width : integer
+        The width of the valve line in points.
+    
+    valve_line_style : string
+        The line style of valves if they are drawn as links. Refer to matplotlib documentation for available line styles.
+    
+    valve_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the valves. 
+    
+    pump_element : string
+        Determines if pumps are drawn as links or nodes. 
+    
+    pump_size : integer
+        The size of the pump marker on the plot in points^2.
+    
+    pump_color : string
+        The color of the pump line.
+    
+    pump_shape : string
+        The shape of the pump marker.
+    
+    pump_border_color : string
+        The color of the border around the pump marker.
+    
+    pump_border_width : integer
+        The width in points of the border around the pump marker.
+    
+    pump_width : integer
+        The width of the pump line in points.
+    
+    pump_line_style : string
+        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
+    
+    pump_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the pump.
+    
+    base_node_color : string
+        The color of the draw_nodes without data associated with them.
+    
+    base_node_size : integer
+        The size of the draw_nodes without data associated with them in points^2.
+    
+    base_link_color : string
+        The color of the draw_links without data associated with them.
+    
+    base_link_width : integer
+        The width of the draw_links without data associated with them in points.
+    
+    base_link_line_style : string
+        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
+    
+    base_link_arrows : boolean
+        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
+    
+    savefig : boolean
+        Determines if the figure is saved. 
+    
+    save_name : string
+        The inputted string will be appended to the name of the network.
+    
+        Example
+        -------
+        >>>import viswaternet as vis
+        >>>model = vis.VisWNModel(r'Networks/Net3.inp')
+        ...
+        >>>model.save_fig(save_name='_example')
+        <Net3_example.png>
+    
+    dpi : int, string
+        The dpi that the figure will be saved with.
+    
+    save_format : string
+        The file format that the figure will be saved as.
+    """
     model = self.model
     if len(self.model['G_list_pumps_only']) == 0:
         draw_pumps = False
@@ -647,8 +1229,8 @@ def plot_discrete_links(
             base_link_width=base_link_width,
             base_link_line_style=base_link_line_style,
             base_link_arrows=base_link_arrows)
-        if legend_title is None:
-            legend_title = label_generator(parameter, value, unit)
+        if discrete_legend_title is None:
+            discrete_legend_title = label_generator(parameter, value, unit)
         link_list = [name for name in link_list
                      if ((name not in model["G_list_pumps_only"]
                           or pump_element == 'node'
@@ -662,7 +1244,7 @@ def plot_discrete_links(
         base.draw_legend(
             ax,
             intervals=interval_names,
-            title=legend_title,
+            title=discrete_legend_title,
             draw_pumps=draw_pumps,
             base_legend_loc=base_legend_loc,
             discrete_legend_loc=discrete_legend_loc,

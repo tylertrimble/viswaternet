@@ -28,17 +28,17 @@ def label_generator(parameter, value, unit=None):
             or parameter == 'flowrate':
         if unit is None:
             unit = 'CMS'
-        unit_titles = {"LPS": "[LPS]",
-                       "LPM": "[LPM]",
-                       "MLD": "[MLD]",
-                       "CMS": "[m^3/s]",
-                       "CMH": "[m^3/hr]",
-                       "CMD": "[m^3/day]",
-                       "CFS": "[CFS]",
-                       "GPM": "[GPM]",
-                       "MGD": "[MGD]",
-                       "IMGD": "[IMGD]",
-                       "AFD": "[AFD]"}
+        unit_titles = {"LPS": "[$LPS$]",
+                       "LPM": "[$LPM$]",
+                       "MLD": "[$MLD$]",
+                       "CMS": "[$m^3/s$]",
+                       "CMH": "[$m^3/hr$]",
+                       "CMD": "[$m^3/day$]",
+                       "CFS": "[$CFS$]",
+                       "GPM": "[$GPM$]",
+                       "MGD": "[$MGD$]",
+                       "IMGD": "[$IMGD$]",
+                       "AFD": "[$AFD$]"}
     elif parameter == 'diameter' \
             or parameter == 'elevation' \
             or parameter == 'head' \
@@ -47,27 +47,31 @@ def label_generator(parameter, value, unit=None):
             or parameter == 'diameter':
         if unit is None:
             unit = 'm'
-        unit_titles = {"ft": '[ft]',
-                       "in": '[in]',
-                       "m": '[m]',
-                       'cm': '[cm]'}
+        unit_titles = {"ft": '[$ft$]',
+                       "in": '[$in$]',
+                       "m": '[$m$]',
+                       'cm': '[$cm$]'}
     elif parameter == 'pressure':
         if unit is None:
             unit = 'm'
-        unit_titles = {'m': '[m]',
-                       'psi': '[psi]'}
+        unit_titles = {'m': '[$m$]',
+                       'psi': '[$psi$]'}
     elif parameter == 'velocity':
         if unit is None:
             unit = 'm/s'
-        unit_titles = {'m/s': '[m/s]',
-                       'ft/s': '[ft/s]'}
-    elif parameter == 'quality' or parameter == 'time':
+        unit_titles = {'m/s': '[$m/s$]',
+                       'ft/s': '[$ft/s$]'}
+    elif parameter == 'time':
         if unit is None:
             unit = None
-        unit_titles = {'s': '[s]',
-                       'min': '[min]',
-                       'hr': '[hr]',
-                       'day': '[day]'}
+        unit_titles = {'s': '[$s$]',
+                       'min': '[$min$]',
+                       'hr': '[$hr$]',
+                       'day': '[$day$]'}
+    elif parameter == 'quality':
+        unit = ' '
+        unit_titles = {' ': ' '}
+    
     else:
         unit_titles = {None: ''}
     if isinstance(value, int):

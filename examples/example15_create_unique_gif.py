@@ -1,5 +1,5 @@
 """
-This example demonstrates how to plot and save time-varying data as GIFs
+This example demonstrates how to plot and save time-varying custom generated data as GIFs
 """
 
 # Import libraries
@@ -14,12 +14,14 @@ fig, ax = plt.subplots(figsize=(11,11))
 ax.set_frame_on(False) 
 
 model.animate_plot(function = model.plot_unique_data,
+                   
+                   ax=ax,
+                   
                    parameter="excel_data",
-                   data_file = "Excel/link_numerical_data_random.xlsx",
-                   parameter_type = 'link',
+                   data_file = "Excel/node_numerical_data_random.xlsx", excel_columns = [0,list(range(1,35))],
+                   parameter_type = 'node',
                    data_type = 'continuous',
-                   excel_columns = [0,list(range(1,35))],
-                   ax=ax, cmap = 'coolwarm',
-                   time_unit = 'hr', fps = 7, color_bar_title = 'Flowrate [m3/s]',
+                   time_unit = 'hr', fps = 3, color_bar_title = 'Flowrate [m3/s]',
+                   cmap = 'coolwarm',
                    save_name = 'figures/example15',save_format='mp4')    
 plt.show()
