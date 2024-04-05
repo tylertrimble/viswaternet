@@ -10,7 +10,6 @@ class VisWNModel:
                  network_model=None,
                  figsize=(12, 12),
                  axis_frame=False):
-        t1 = time.time()
         model = {}
         dirname = os.getcwd()
 
