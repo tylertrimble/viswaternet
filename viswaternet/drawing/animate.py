@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import imageio
 from viswaternet.network import processing
-from viswaternet.utils import unit_conversion,convert_excel
-
-
+from viswaternet.utils import unit_conversion, convert_excel
+import time as t
 def animate_plot(
         self,
         function,
@@ -75,20 +75,19 @@ def animate_plot(
         data_type = kwargs.get("data_type", None)
         try:
             custom_data_values = kwargs.get("custom_data_values")
-            data_values = custom_data_values[1]
+            data_values = pd.Series(custom_data_values[1],
+                                    custom_data_values[0])
         except TypeError:
             excel_columns = kwargs.get("excel_columns", None)
-            data_values = []
-            for i in excel_columns[1]:
-                data = convert_excel(
-                    self, kwargs.get("data_file", None),
-                    parameter_type,
-                    data_type,
-                    excel_columns[0],
-                    i)
-                #data_values.append(data['results'])
-                data_values.append(data[1])
-        timesteps = len(data_values)
+            element_list, results = convert_excel(
+                self, kwargs.get("data_file", None),
+                parameter_type,
+                data_type,
+                excel_columns[0],
+                excel_columns[1])
+            # data_values.append(data['results'])
+            data_values = results
+        timesteps = data_values.shape[1]
         values = range(timesteps)
         if last_timestep is not None:
             values = values[first_timestep:last_timestep]
@@ -101,6 +100,8 @@ def animate_plot(
             kwargs["disable_interval_deleting"] = True
             if kwargs.get("intervals", None) is None:
                 kwargs["intervals"] = make_intervals(data_values, kwargs)
+        data_values = [data_values[i].tolist() 
+                       for i in data_values.columns]
     else:
         timesteps = int(
             model["wn"].options.time.duration
@@ -118,20 +119,22 @@ def animate_plot(
             or function == self.plot_continuous_links:
         if kwargs.get("vmin", None) is None \
                 or kwargs.get("vmax", None) is None:
-            parameter_results, link_list = processing.get_parameter(
+            parameter_results, element_list = processing.get_parameter(
                 self,
                 parameter_type,
                 kwargs.get("parameter"), kwargs.get("value", None))
             kwargs["vmin"], kwargs["vmax"] = make_vmin_vmax(parameter_results,
                                                             kwargs)
+            parameter_results = parameter_results.transpose()
     if function == self.plot_discrete_nodes \
             or function == self.plot_discrete_links:
         kwargs["disable_interval_deleting"] = True
         if kwargs.get("intervals", None) is None:
-            parameter_results, link_list = processing.get_parameter(
+            parameter_results, element_list = processing.get_parameter(
                 self, parameter_type, kwargs.get(
                     "parameter"), kwargs.get("value", None))
             kwargs["intervals"] = make_intervals(parameter_results, kwargs)
+        parameter_results = parameter_results.transpose()
     for value in values:
         plt.ioff()
         fig = ax.get_figure()
@@ -139,13 +142,15 @@ def animate_plot(
             try:
                 kwargs["custom_data_values"] = [custom_data_values[0],
                                                 custom_data_values[1][value]]
-                function(ax=ax, savefig=False, **kwargs)
             except Exception:
-                kwargs["excel_columns"] = [excel_columns[0],
-                                           excel_columns[1][value]]
-                function(ax=ax, savefig=False, **kwargs)
+                kwargs["custom_data_values"] = [element_list,
+                                           data_values[value]]
+                kwargs["parameter"] = 'custom_data'
+            function(ax=ax, savefig=False, **kwargs)
         else:
-            function(ax=ax, value=value, savefig=False, **kwargs)
+            kwargs["value"] = [parameter_results.iloc[:,value],
+                               element_list]
+            function(ax=ax, savefig=False, **kwargs)
         handles, labels = [], []
         time = value*model["wn"].options.time.report_timestep
         time = unit_conversion(time, "time", time_unit)
@@ -173,7 +178,7 @@ def animate_plot(
                         frames,
                         format='GIF',
                         fps=fps)
-                        
+
     else:
         imageio.mimsave(save_name+"."+save_format,
                         frames,
@@ -181,7 +186,8 @@ def animate_plot(
                         fps=fps,
                         quality=8,
                         ffmpeg_log_level='quiet')
-
+    t2 = t.time()
+    print("Animate Time: " + str(t2-t1))
 
 def make_vmin_vmax(parameter, kwargs):
     for value in np.min(parameter, axis=0):

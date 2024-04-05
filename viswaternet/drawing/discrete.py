@@ -11,7 +11,7 @@ from viswaternet.network import processing
 from viswaternet.utils import save_fig, unit_conversion, label_generator
 from viswaternet.drawing import base
 from viswaternet.utils.markers import *
-
+import time
 default_cmap = 'autumn_r'
 
 
@@ -227,8 +227,7 @@ def draw_discrete_links(
         
     link_arrows : boolean
         Determines if an arrow is drawn in the direction of flow of the pump.
-    """   
-    
+    """
     model = self.model
     if link_width is None:
         link_width = (np.ones(len(intervals)) * 2).tolist()
@@ -328,7 +327,8 @@ def draw_discrete_links(
                     arrows=link_arrows[k],
                     style=link_style[k])
                 cmapValue2 += 1 / len(intervals)
-
+    t2 = time.time()
+    print("Discrete Drawing Time: " + str(t2-t1))
 
 def plot_discrete_nodes(
         self,
@@ -354,7 +354,7 @@ def plot_discrete_nodes(
         draw_reservoirs=True,
         draw_pumps=True,
         draw_valves=True,
-        draw_nodes=False,
+        draw_nodes=True,
         draw_links=True,
         discrete_legend_title=None,
         base_legend_loc="upper right",
@@ -667,7 +667,6 @@ def plot_discrete_nodes(
     save_format : string
         The file format that the figure will be saved as.
     """
-    
     if len(self.model['G_list_pumps_only']) == 0:
         draw_pumps = False
     if ax is None:
@@ -675,14 +674,26 @@ def plot_discrete_nodes(
             fig, ax = plt.subplots(figsize=self.figsize)
             ax.set_frame_on(self.axis_frame)
     if parameter is not None:
-        parameter_results, node_list = processing.get_parameter(
-            self,
-            "node",
-            parameter,
-            element_list=element_list,
-            value=value,
-            include_tanks=include_tanks,
-            include_reservoirs=include_reservoirs)
+        if not isinstance(value, list):
+            parameter_results, node_list = processing.get_parameter(
+                self,
+                "node",
+                parameter,
+                element_list=element_list,
+                value=value,
+                include_tanks=include_tanks,
+                include_reservoirs=include_reservoirs)
+        else:
+            parameter_results = value[0]
+            node_list = value[1]
+        node_list = [node_list[node_list.index(name)]
+                     for name in node_list
+                     if ((name not in model["reservoir_names"]
+                          or draw_reservoirs is False)
+                     and (name not in model["tank_names"]
+                          or draw_tanks is False))]
+        parameter_results = parameter_results.loc[node_list]
+        parameter_results = parameter_results.values.tolist()
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
@@ -714,6 +725,8 @@ def plot_discrete_nodes(
             draw_tanks=draw_tanks,
             draw_valves=draw_valves,
             draw_pumps=draw_pumps,
+            include_reservoirs=include_reservoirs,
+            include_tanks=include_tanks,
             element_list=node_list,
             reservoir_size=reservoir_size,
             reservoir_color=reservoir_color,
@@ -807,7 +820,7 @@ def plot_discrete_links(
         draw_pumps=True,
         draw_valves=True,
         draw_nodes=False,
-        draw_links=False,
+        draw_links=True,
         cmap=default_cmap,
         discrete_legend_title=None,
         base_legend_loc="upper right",
@@ -1117,7 +1130,6 @@ def plot_discrete_links(
     save_format : string
         The file format that the figure will be saved as.
     """
-
     model = self.model
     if len(self.model['G_list_pumps_only']) == 0:
         draw_pumps = False
@@ -1126,14 +1138,30 @@ def plot_discrete_links(
             fig, ax = plt.subplots(figsize=self.figsize)
             ax.set_frame_on(self.axis_frame)
     if parameter is not None:
-        parameter_results, link_list = processing.get_parameter(
-            self,
-            "link",
-            parameter,
-            element_list=element_list,
-            value=value,
-            include_pumps=include_pumps,
-            include_valves=include_valves)
+        if not isinstance(value, list):
+            parameter_results, link_list = processing.get_parameter(
+                self,
+                "link",
+                parameter,
+                element_list=element_list,
+                value=value,
+                include_pumps=include_pumps,
+                include_valves=include_valves)
+        else:
+            parameter_results = value[0]
+            link_list = value[1]
+        link_list = [link_list[link_list.index(name)]
+                     for name in link_list
+                     if ((name not in model["pump_names"]
+                          or pump_element == 'node'
+                          or draw_pumps is False
+                          or include_pumps is False)
+                     and (name not in model["valve_names"]
+                          or valve_element == 'node'
+                          or draw_valves is False
+                          or include_valves is False))]
+        parameter_results = parameter_results.loc[link_list]
+        parameter_results = parameter_results.values.tolist()
         if unit is not None:
             parameter_results = unit_conversion(
                 parameter_results, parameter, unit)
@@ -1145,6 +1173,8 @@ def plot_discrete_links(
             num_intervals=num_intervals,
             disable_interval_deleting=disable_interval_deleting,
             legend_decimal_places=legend_decimal_places)
+        t2 = time.time()
+        print("Discrete Processing Time: " + str(t2-t1))
         draw_discrete_links(
             self, ax, interval_results, interval_names,
             link_width=link_width,
@@ -1162,6 +1192,8 @@ def plot_discrete_links(
             draw_tanks=draw_tanks,
             draw_valves=draw_valves,
             draw_pumps=draw_pumps,
+            include_pumps=include_pumps,
+            include_valves=include_valves,
             element_list=link_list,
             reservoir_size=reservoir_size,
             reservoir_color=reservoir_color,

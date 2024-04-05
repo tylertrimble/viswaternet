@@ -39,5 +39,4 @@ model.plot_unique_data(parameter = "custom_data", node_size = 200,
                        custom_data_values = [wn.junction_name_list[:100], node_num_data[:100]],
                        color_bar_title = "Error (%)", cmap = "bwr",
                        base_node_size = 50, base_node_color = 'k') 
-
 plt.show()
