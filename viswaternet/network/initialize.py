@@ -3,7 +3,6 @@ import os
 import wntr
 import numpy as np
 from packaging.version import parse
-import time
 
 class VisWNModel:
     def __init__(self,
@@ -78,8 +77,6 @@ class VisWNModel:
         self.model = model
         self.figsize = figsize
         self.axis_frame = axis_frame
-        t2 = time.time()
-        print("Initialize Time: " + str(t2-t1))
     from viswaternet.network.processing import get_parameter, bin_parameter
     from viswaternet.drawing.base import draw_nodes, draw_links, \
         draw_base_elements, plot_basic_elements, draw_label

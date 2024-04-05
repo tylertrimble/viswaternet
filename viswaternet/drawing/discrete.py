@@ -11,7 +11,6 @@ from viswaternet.network import processing
 from viswaternet.utils import save_fig, unit_conversion, label_generator
 from viswaternet.drawing import base
 from viswaternet.utils.markers import *
-import time
 default_cmap = 'autumn_r'
 
 
@@ -327,8 +326,6 @@ def draw_discrete_links(
                     arrows=link_arrows[k],
                     style=link_style[k])
                 cmapValue2 += 1 / len(intervals)
-    t2 = time.time()
-    print("Discrete Drawing Time: " + str(t2-t1))
 
 def plot_discrete_nodes(
         self,
@@ -667,6 +664,7 @@ def plot_discrete_nodes(
     save_format : string
         The file format that the figure will be saved as.
     """
+    model = self.model
     if len(self.model['G_list_pumps_only']) == 0:
         draw_pumps = False
     if ax is None:
@@ -1173,8 +1171,6 @@ def plot_discrete_links(
             num_intervals=num_intervals,
             disable_interval_deleting=disable_interval_deleting,
             legend_decimal_places=legend_decimal_places)
-        t2 = time.time()
-        print("Discrete Processing Time: " + str(t2-t1))
         draw_discrete_links(
             self, ax, interval_results, interval_names,
             link_width=link_width,

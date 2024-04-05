@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import imageio
 from viswaternet.network import processing
 from viswaternet.utils import unit_conversion, convert_excel
-import time as t
 def animate_plot(
         self,
         function,
@@ -186,8 +185,6 @@ def animate_plot(
                         fps=fps,
                         quality=8,
                         ffmpeg_log_level='quiet')
-    t2 = t.time()
-    print("Animate Time: " + str(t2-t1))
 
 def make_vmin_vmax(parameter, kwargs):
     for value in np.min(parameter, axis=0):

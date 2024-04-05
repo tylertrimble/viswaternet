@@ -737,7 +737,7 @@ def plot_continuous_links(
     save_format : string
         The file format that the figure will be saved as.
     """
-    model = self.modelz
+    model = self.model
     if len(self.model['G_list_pumps_only']) == 0:
         draw_pumps = False
     if ax is None:
