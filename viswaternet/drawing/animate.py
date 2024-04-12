@@ -122,6 +122,7 @@ def animate_plot(
         parameter_type = 'link'
     if function == self.plot_continuous_nodes \
             or function == self.plot_continuous_links:
+        data_type = 'continuous'
         if kwargs.get("vmin", None) is None \
                 or kwargs.get("vmax", None) is None:
             parameter_results, element_list = processing.get_parameter(
@@ -134,6 +135,7 @@ def animate_plot(
     if function == self.plot_discrete_nodes \
             or function == self.plot_discrete_links:
         kwargs["disable_interval_deleting"] = True
+        data_type = 'discrete'
         if kwargs.get("intervals", None) is None:
             parameter_results, element_list = processing.get_parameter(
                 self, parameter_type, kwargs.get(
@@ -165,7 +167,6 @@ def animate_plot(
             title="Timestep "+str(time)+" "+time_unit,
             loc="lower left",
             frameon=False)
-        size_inches = fig.get_size_inches()
         restore_bbox = bbox_inches_tight_resize(fig)
         fig.canvas.draw()
         with io.BytesIO() as buff:

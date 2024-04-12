@@ -168,7 +168,7 @@ class TestUnitConversion(unittest.TestCase):
 class TestGetParameter(unittest.TestCase):
     
     def test_reservoir_tank_fetching(self):
-        results, elements = model.get_parameter('node','pressure',5,draw_tanks=True,draw_reservoirs=True)
+        results, elements = model.get_parameter('node','pressure',5,include_tanks=True,include_reservoirs=True)
         self.assertAlmostEqual(results[0],91.91539,places=6,msg="Parameters are not in the correct order.")
         self.assertAlmostEqual(results[9],0,msg="Parameters are not in the correct order when reservoir data is collected.")
         self.assertAlmostEqual(results[10],40.014896,places=6,msg="Parameters are not in the correct order when tank data is collected.")
