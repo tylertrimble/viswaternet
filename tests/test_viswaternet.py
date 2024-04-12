@@ -58,7 +58,7 @@ class TestParameterBinning(unittest.TestCase):
         self.assertListEqual(interval_names,['1.000 - 3.000', '3.000 - 5.000', '5.000 - 7.000'],"Intervals are not being named properly.")
         
         dummy_data=[1,2,3,5,6,10]
-        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],2,legend_sig_figs=0)
+        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],2,legend_decimal_places=0)
         self.assertListEqual(interval_names,['1 - 6','6 - 10'],"Interval names are not following sig-fig adjustments correctly.")
         
     def test_interval_dict_structure(self):
@@ -168,7 +168,7 @@ class TestUnitConversion(unittest.TestCase):
 class TestGetParameter(unittest.TestCase):
     
     def test_reservoir_tank_fetching(self):
-        results, elements = model.get_parameter('node','pressure',5,tanks=True,reservoirs=True)
+        results, elements = model.get_parameter('node','pressure',5,draw_tanks=True,draw_reservoirs=True)
         self.assertAlmostEqual(results[0],91.91539,places=6,msg="Parameters are not in the correct order.")
         self.assertAlmostEqual(results[9],0,msg="Parameters are not in the correct order when reservoir data is collected.")
         self.assertAlmostEqual(results[10],40.014896,places=6,msg="Parameters are not in the correct order when tank data is collected.")
