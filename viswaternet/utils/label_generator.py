@@ -78,26 +78,28 @@ def label_generator(parameter, value, unit=None):
         title_label = parameter_titles[parameter] \
                       + " " + unit_titles[unit] \
                       + ' at timestep ' + str(value)
-    if value == 'min':
+    elif value == 'min':
         title_label = 'Minimum ' \
                       + parameter_titles[parameter] \
                       + " " + unit_titles[unit]
-    if value == 'max':
+    elif value == 'max':
         title_label = 'Maximum ' \
                       + parameter_titles[parameter] \
                       + " " + unit_titles[unit]
-    if value == 'mean':
+    elif value == 'mean':
         title_label = 'Mean ' \
                       + parameter_titles[parameter] \
                       + " " + unit_titles[unit]
-    if value == 'stddev':
+    elif value == 'stddev':
         title_label = 'Standard Deviation of ' \
                       + parameter_titles[parameter] \
                       + " " + unit_titles[unit]
-    if value == 'range':
+    elif value == 'range':
         title_label = 'Range of ' \
                       + parameter_titles[parameter] \
                       + " " + unit_titles[unit]
-    if value is None:
+    elif value is None:
+        title_label = parameter_titles[parameter] + " " + unit_titles[unit]
+    else:
         title_label = parameter_titles[parameter] + " " + unit_titles[unit]
     return title_label
