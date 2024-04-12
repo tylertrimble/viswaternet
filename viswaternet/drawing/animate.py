@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.tight_bbox as tight_bbox
+import matplotlib._tight_bbox as tight_bbox
 from matplotlib.transforms import Bbox, TransformedBbox, Affine2D
 import imageio
 import io
