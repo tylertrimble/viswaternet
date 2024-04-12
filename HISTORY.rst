@@ -1,6 +1,28 @@
 =======
 History
 =======
+2.0.0 beta (2024-04-12)
+------------------
+* Added new label customization options
+* Added ability to plot valves as links, and pumps as markers
+* Added EPANET icons for pumps, valves, reservoirs, and tanks.
+* Renamed, consolidated many arguments for clarity and to reduce # of aruments.
+* Removed superfluous arguments.
+* Added ability to make discrete legend text color align with interval color. 
+* Legend label colors can now be changed independently for base legend and discrete legend.
+* Title color for discrete legend can now be changed.
+* Rewrote code to use data structures more consistently.
+* Base links and nodes are now only drawn when necessary when not all nodes/links have data associated with them.
+* Added ability to choose to include pump/valve or reservoir/tank data.
+* Further improved animate plot speed for excel data plotting
+* Animate plot output layout now conforms to normal plotting layout.
+* Fixed discrete plotting when empty interval is present.
+* Fixed animation issue where color bar label would be cut off.
+* Fixed animation of custom data and excel data
+* Fixed node size legend not properly showing up
+* Fixed case where base elements legend and discrete legend were joined into one legend
+* Fixed missing argument passes
+* Fixed instances where network elements don't know show up when they should.
 1.2.0 (2023-08-01)
 ------------------
 * Overhauled animate_plot function to allow for plotting of custom data and use different file formats
