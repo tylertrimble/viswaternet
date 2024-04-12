@@ -16,8 +16,8 @@ ax.set_frame_on(False)
 model.animate_plot(function = model.plot_continuous_links, # the "function" argument takes in what kind of viswaternet function you would like to see in your animated plot
                    ax=ax,
                    parameter = 'flowrate', cmap = 'coolwarm', 
-                   link_width=(2,4), legend = False,
-                   
+                   link_width=(2,4),
+                   last_timestep=24,
                    # arguments specific to animated plots
                    time_unit = 'hr', fps = 7, color_bar_title = 'Flowrate [m3/s]',
                    

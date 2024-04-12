@@ -229,11 +229,11 @@ def bbox_inches_tight_resize(fig):
     # saving figures with bbox_inches='tight' is done. Maybe there was a
     # better way to do this? I don't know but tight_layout() wasn't doing
     # the trick.
-    bbox_inches = fig.get_tightbbox()
+    bbox_inches = fig.get_tightbbox(fig.canvas.get_renderer())
     bbox_artists = fig.get_default_bbox_extra_artists()
     bbox_filtered = []
     for a in bbox_artists:
-        bbox = a.get_window_extent()
+        bbox = a.get_window_extent(fig.canvas.get_renderer())
         if a.get_clip_on():
             clip_box = a.get_clip_box()
             if clip_box is not None:
