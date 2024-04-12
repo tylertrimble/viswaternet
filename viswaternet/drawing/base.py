@@ -81,7 +81,7 @@ def draw_nodes(
     # Initalize parameters
     model = self.model
     if parameter_results is None:
-        parameter_results = []
+        parameter_results = pd.DataFrame([])
     # Creates default list of node sizes
     if node_size is None:
         node_size = (np.ones(len(node_list)) * 100).tolist()
@@ -258,7 +258,7 @@ def draw_links(
     if isinstance(link_list, np.ndarray):
         link_list = link_list.tolist()
     if parameter_results is None:
-        parameter_results = []
+        parameter_results = pd.DataFrame([])
     # Creates default list of link widths
     if link_width is None:
         link_width = (np.ones(len(link_list)) * 1).tolist()

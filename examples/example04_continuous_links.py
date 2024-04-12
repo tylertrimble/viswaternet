@@ -11,7 +11,7 @@ model = vis.VisWNModel('Networks/CTown.inp')
 
 model.plot_continuous_links(parameter = "flowrate", value = 'mean', 
                             cmap = 'coolwarm', 
-                            link_width=(4,10), # this argument varies link widths to match the associated data
+                            link_width=(2,6), # this argument varies link widths to match the associated data
                             )
 
 plt.show()
