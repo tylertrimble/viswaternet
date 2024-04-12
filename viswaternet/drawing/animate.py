@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib._tight_bbox as tight_bbox
+from packaging.version import parse
+if parse(str(matplotlib.__version__)) < parse('3.6.0'):
+    import matplotlib.tight_bbox as tight_bbox
+else:
+    import matplotlib._tight_bbox as tight_bbox
 from matplotlib.transforms import Bbox, TransformedBbox, Affine2D
 import imageio
 import io
