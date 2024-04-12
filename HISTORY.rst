@@ -1,8 +1,8 @@
 =======
 History
 =======
-2.0.0 beta (2024-04-12)
-------------------
+2.0.0 (2024-04-12)
+-----------------------
 * Added new label customization options
 * Added ability to plot valves as links, and pumps as markers
 * Added EPANET icons for pumps, valves, reservoirs, and tanks.
@@ -23,6 +23,7 @@ History
 * Fixed case where base elements legend and discrete legend were joined into one legend
 * Fixed missing argument passes
 * Fixed instances where network elements don't know show up when they should.
+
 1.2.0 (2023-08-01)
 ------------------
 * Overhauled animate_plot function to allow for plotting of custom data and use different file formats
