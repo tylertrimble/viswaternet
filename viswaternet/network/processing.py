@@ -302,12 +302,11 @@ def bin_parameter(
                         intervals[i],
                         j=legend_decimal_places)][elements_with_parameter[j]] \
                         = element_list.index(elements_with_parameter[j])
-    if disable_interval_deleting:
+    if disable_interval_deleting is True:
         pass
     else:
         for bin_name in interval_names:
-            if len(interval_results[bin_name]) == 0:
-                interval_names = np.delete(
-                    interval_names, np.where(interval_names == bin_name))
+            if not interval_results[bin_name]:
+                del interval_names[interval_names.index(bin_name)]
                 del interval_results[bin_name]
     return interval_results, interval_names

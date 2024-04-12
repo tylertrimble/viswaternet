@@ -6,6 +6,7 @@ The viswaternet.drawing.discrete module handles everything related to discrete d
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import networkx.drawing.nx_pylab as nxp
 from viswaternet.network import processing
 from viswaternet.utils import save_fig, unit_conversion, label_generator
@@ -25,7 +26,9 @@ def draw_discrete_nodes(
         cmap="tab10",
         node_border_color=None,
         node_border_width=None,
-        color_list=None):
+        color_list=None,
+        base_node_color='k',
+        base_node_size=30,):
     """Draws discretized nodal data onto the figure.
     
     Arguments
@@ -90,23 +93,10 @@ def draw_discrete_nodes(
     empty_interval = False
     if (color_list is not None and cmap is not None) or color_list is not None:
         for j, interval_name in enumerate(intervals):
-            node_list = [model["node_names"][i]
-                         for i in element_list.get(interval_name).values()]
-
-            if not node_list:
-                nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
-                    nodelist=[model["node_names"][0]],
-                    node_size=node_size[j],
-                    node_color=color_list[j],
-                    node_shape=node_shape[j],
-                    label=label_list[j],
-                    edgecolors=node_border_color[j],
-                    linewidths=node_border_width[j])
-                empty_interval is True
-            else:
+            interval_elements = element_list.get(interval_name)
+            if interval_elements:
+                node_list = [model["node_names"][i]
+                             for i in element_list.get(interval_name).values()]
                 nxp.draw_networkx_nodes(
                     model["G"], model["pos_dict"], ax=ax,
                     nodelist=(
@@ -118,71 +108,45 @@ def draw_discrete_nodes(
                     label=label_list[j],
                     edgecolors=node_border_color[j],
                     linewidths=node_border_width[j])
-        if empty_interval:
-            for k, interval_name in enumerate(intervals):
-                node_list = [
-                    model["node_names"][i]
-                    for i in element_list.get(interval_name).values()]
-                nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
-                    nodelist=node_list,
-                    node_size=node_size[k],
-                    node_color=color_list[k],
-                    node_shape=node_shape[k],
-                    edgecolors=node_border_color[k],
-                    linewidths=node_border_width[k])
+            else:
+                m = Line2D([], [], color=color_list[j],
+                              marker=node_shape[j], 
+                              linestyle='None',
+                              markersize=node_size[j]**(1/2),
+                              markeredgecolor=node_border_color[j],
+                              markeredgewidth=node_border_width[j],
+                              label=label_list[j])
+                ax.add_artist(m)          
     else:
         cmap = mpl.colormaps[cmap]
         cmapValue = 1 / len(intervals)
         for j, interval_name in enumerate(intervals):
-            node_list = [model["node_names"][i]
-                         for i in element_list.get(interval_name).values()]
-            if not node_list:
+            interval_elements = element_list.get(interval_name)
+            if interval_elements:
+                node_list = [model["node_names"][i]
+                             for i in element_list.get(interval_name).values()]
                 nxp.draw_networkx_nodes(
                     model["G"],
                     model["pos_dict"],
                     ax=ax,
-                    nodelist=[model["node_names"][0]],
+                    nodelist=node_list,
                     node_size=node_size[j],
                     node_color=[cmap(float(cmapValue))],
                     node_shape=node_shape[j],
                     label=label_list[j],
                     edgecolors=node_border_color[j],
                     linewidths=node_border_width[j])
-                empty_interval = True
             else:
-                nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
-                    nodelist=node_list,
-                    node_size=node_size[j],
-                    node_color=[cmap(float(cmapValue))],
-                    node_shape=node_shape[j],
-                    label=label_list[j],
-                    edgecolors=node_border_color[j],
-                    linewidths=node_border_width[j])
+                m = Line2D([], [], color=cmap(float(cmapValue)),
+                              marker=node_shape[j], 
+                              linestyle='None',
+                              markersize=node_size[j]**(1/2),
+                              markeredgecolor=node_border_color[j],
+                              markeredgewidth=node_border_width[j],
+                              label=label_list[j])
+                ax.add_artist(m)
             cmapValue += 1 / len(intervals)
-        if empty_interval:
-            cmap2 = cmap
-            cmapValue2 = 1 / len(intervals)
-            for k, interval_name in enumerate(intervals):
-                node_list = [
-                    model["node_names"][i]
-                    for i in element_list.get(interval_name).values()]
-                nxp.draw_networkx_nodes(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
-                    nodelist=node_list,
-                    node_size=node_size[k],
-                    node_color=[cmap2(float(cmapValue2))],
-                    node_shape=node_shape[k],
-                    edgecolors=node_border_color[k],
-                    linewidths=node_border_width[k])
-                cmapValue2 += 1 / len(intervals)
+
 
 
 def draw_discrete_links(
@@ -241,34 +205,8 @@ def draw_discrete_links(
     empty_interval = False
     if (color_list is not None and cmap is not None) or color_list is not None:
         for j, interval_name in enumerate(intervals):
-            edge_list = [model["pipe_list"][i]
-                         for i in element_list.get(interval_name).values()]
-            if not edge_list:
-                nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
-                    edgelist=[model["pipe_list"][0]],
-                    edge_color=color_list[j],
-                    width=link_width[j],
-                    arrows=link_arrows[j],
-                    style=link_style[j],
-                    label=label_list[j])
-
-                empty_interval = True
-            else:
-                nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
-                    edgelist=edge_list,
-                    edge_color=color_list[j],
-                    width=link_width[j],
-                    arrows=link_arrows[j],
-                    style=link_style[j],
-                    label=label_list[j])
-        if empty_interval:
-            for k, interval_name in enumerate(intervals):
+            interval_elements = element_list.get(interval_name)
+            if interval_elements:
                 edge_list = [model["pipe_list"][i]
                              for i in element_list.get(interval_name).values()]
                 nxp.draw_networkx_edges(
@@ -276,56 +214,55 @@ def draw_discrete_links(
                     model["pos_dict"],
                     ax=ax,
                     edgelist=edge_list,
-                    edge_color=color_list[k],
-                    width=link_width[k],
-                    arrows=link_arrows[k],
-                    style=link_style[k])
-    else:
-        cmap = mpl.colormaps[cmap]
-        cmapValue = 1 / len(intervals)
-        for j, interval_name in enumerate(intervals):
-            edge_list = [model["pipe_list"][i]
-                         for i in element_list.get(interval_name).values()]
-            if not edge_list:
-                nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
-                    edgelist=[model["pipe_list"][0]],
-                    edge_color=[cmap(float(cmapValue))],
+                    edge_color=color_list[j],
                     width=link_width[j],
                     arrows=link_arrows[j],
                     style=link_style[j],
                     label=label_list[j])
-                empty_interval = True
             else:
                 nxp.draw_networkx_edges(
                     model["G"],
                     model["pos_dict"],
                     ax=ax,
+                    edgelist=[(model['node_names'][0], 
+                               model['node_names'][0])],
+                    edge_color=color_list[j],
+                    width=link_width[j],
+                    arrows=link_arrows[j],
+                    style=link_style[j],
+                    label=label_list[j])    
+    else:
+        cmap = mpl.colormaps[cmap]
+        cmapValue = 1 / len(intervals)
+        for j, interval_name in enumerate(intervals):
+            interval_elements = element_list.get(interval_name)
+            if interval_elements:
+                edge_list = [model["pipe_list"][i]
+                             for i in element_list.get(interval_name).values()]
+                nxp.draw_networkx_edges(
+                    model["G"],
+                    model["pos_dict"],
+                    ax=ax,
                     edgelist=edge_list,
+                    edge_color=[cmap(float(cmapValue))],
+                    width=link_width[j],
+                    arrows=link_arrows[j],
+                    style=link_style[j],
+                    label=label_list[j])
+            else:
+                # Janky as always :)
+                nxp.draw_networkx_edges(
+                    model["G"],
+                    model["pos_dict"],
+                    ax=ax,
+                    edgelist=[(model['node_names'][0], 
+                               model['node_names'][0])],
                     edge_color=[cmap(float(cmapValue))],
                     width=link_width[j],
                     arrows=link_arrows[j],
                     style=link_style[j],
                     label=label_list[j])
             cmapValue += 1 / len(intervals)
-        if empty_interval:
-            cmap2 = cmap
-            cmapValue2 = 1 / len(intervals)
-            for k, interval_name in enumerate(intervals):
-                edge_list = [model["pipe_list"][i]
-                             for i in element_list.get(interval_name).values()]
-                nxp.draw_networkx_edges(
-                    model["G"],
-                    model["pos_dict"],
-                    ax=ax,
-                    edgelist=edge_list,
-                    edge_color=[cmap2(float(cmapValue2))],
-                    width=link_width[k],
-                    arrows=link_arrows[k],
-                    style=link_style[k])
-                cmapValue2 += 1 / len(intervals)
 
 def plot_discrete_nodes(
         self,
