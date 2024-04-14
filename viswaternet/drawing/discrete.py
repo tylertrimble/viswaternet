@@ -263,6 +263,23 @@ def draw_discrete_links(
                     style=link_style[j],
                     label=label_list[j])
             cmapValue += 1 / len(intervals)
+    pos = model["pos_dict"]
+    edge_list_x = []
+    edge_list_y = []
+    for edge in pos.values():
+        edge_list_x.append(edge[0])
+        edge_list_y.append(edge[1])
+    minx = np.min(edge_list_x)
+    maxx = np.max(edge_list_x)
+    miny = np.min(edge_list_y)
+    maxy = np.max(edge_list_y)
+    w = maxx - minx
+    h = maxy - miny
+    padx, pady = 0.05 * w, 0.05 * h
+    corners = (minx - padx, miny - pady), (maxx + padx, maxy + pady)
+    ax.update_datalim(corners)
+    ax.autoscale_view()
+
 
 def plot_discrete_nodes(
         self,
