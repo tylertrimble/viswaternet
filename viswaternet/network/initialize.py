@@ -3,19 +3,13 @@ import os
 import wntr
 import numpy as np
 from packaging.version import parse
-<<<<<<< Updated upstream
-import time
-
-=======
 from viswaternet.drawing.style import VisWaterNetStyle as style
->>>>>>> Stashed changes
 class VisWNModel:
     def __init__(self,
                  inp_file,
                  network_model=None,
                  figsize=(12, 12),
                  axis_frame=False):
-        t1 = time.time()
         model = {}
         dirname = os.getcwd()
 
@@ -82,12 +76,7 @@ class VisWNModel:
         self.model = model
         self.figsize = figsize
         self.axis_frame = axis_frame
-<<<<<<< Updated upstream
-        t2 = time.time()
-        print("Initialize Time: " + str(t2-t1))
-=======
         self.default_style = style('default')
->>>>>>> Stashed changes
     from viswaternet.network.processing import get_parameter, bin_parameter
     from viswaternet.drawing.base import draw_nodes, draw_links, \
         draw_base_elements, plot_basic_elements, draw_label, draw_legend

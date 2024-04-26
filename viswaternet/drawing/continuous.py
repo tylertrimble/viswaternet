@@ -8,8 +8,6 @@ from viswaternet.utils import save_fig, unit_conversion, \
     fancyarrowpatch_to_linecollection, label_generator
 from viswaternet.drawing import base
 
-default_cmap = 'autumn_r'
-
 
 def plot_continuous_nodes(
         self,
@@ -281,18 +279,12 @@ def plot_continuous_links(
         >>>model.save_fig(save_name='_example')
         <Net3_example.png>
     """
-<<<<<<< Updated upstream
-    model = self.modelz
-    if len(self.model['G_list_pumps_only']) == 0:
-        draw_pumps = False
-=======
     if style is None:
         style = self.default_style
     args = style.args
     link_arrows = args['link_arrows']
     cmap = args['cmap']
     draw_color_bar = args['draw_color_bar']
->>>>>>> Stashed changes
     if ax is None:
         if ax is None:
             fig, ax = plt.subplots(figsize=self.figsize)
