@@ -3,7 +3,7 @@ import os
 import wntr
 import numpy as np
 from packaging.version import parse
-
+from viswaternet.drawing.style import VisWaterNetStyle as style
 class VisWNModel:
     def __init__(self,
                  inp_file,
@@ -76,9 +76,10 @@ class VisWNModel:
         self.model = model
         self.figsize = figsize
         self.axis_frame = axis_frame
+        self.default_style = style('default')
     from viswaternet.network.processing import get_parameter, bin_parameter
     from viswaternet.drawing.base import draw_nodes, draw_links, \
-        draw_base_elements, plot_basic_elements, draw_label
+        draw_base_elements, plot_basic_elements, draw_label, draw_legend
     from viswaternet.drawing.discrete import draw_discrete_nodes, \
         draw_discrete_links, plot_discrete_nodes, plot_discrete_links
     from viswaternet.drawing.continuous import plot_continuous_links, \

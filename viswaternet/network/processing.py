@@ -219,8 +219,12 @@ def bin_parameter(
         num_intervals,
         intervals="automatic",
         disable_interval_deleting=False,
-        legend_decimal_places=3):
+        style=None):
     model = self.model
+    if style is None:
+        style = self.default_style
+    args = style.args
+    legend_decimal_places = args['legend_decimal_places']
     # Code that generates bins automatically based on number of intervals
     # specified. The code does this by creating num_intervals + 1 linearlly
     # spaced bins. There are currently no options to automatically create

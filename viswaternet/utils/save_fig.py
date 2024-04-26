@@ -2,8 +2,13 @@ import matplotlib.pyplot as plt
 import os
 
 
-def save_fig(self, save_name=None, dpi='figure', save_format='png'):
+def save_fig(self, save_name=None, style=None):
     model = self.model
+    if style is None:
+        style = self.default_style
+    args = style.args
+    dpi = args['dpi']
+    save_format = args['save_format']
     networkName = model["inp_file"]
     if networkName.endswith(".inp"):
         try:
