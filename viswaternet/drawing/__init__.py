@@ -11,3 +11,4 @@ from .discrete import draw_discrete_nodes, draw_discrete_links, plot_discrete_no
 from .continuous import plot_continuous_nodes, plot_continuous_links
 from .unique import plot_unique_data
 from .animate import animate_plot
+from .style import VisWaterNetStyle

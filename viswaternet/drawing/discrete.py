@@ -10,9 +10,12 @@ import networkx.drawing.nx_pylab as nxp
 from viswaternet.network import processing
 from viswaternet.utils import save_fig, unit_conversion, label_generator
 from viswaternet.drawing import base
+<<<<<<< Updated upstream
 from viswaternet.utils.markers import *
 import time
 default_cmap = 'autumn_r'
+=======
+>>>>>>> Stashed changes
 
 
 def draw_discrete_nodes(
@@ -20,13 +23,16 @@ def draw_discrete_nodes(
         ax,
         element_list,
         intervals,
-        node_size=None,
         label_list=None,
+<<<<<<< Updated upstream
         node_shape=None,
         cmap="tab10",
         node_border_color=None,
         node_border_width=None,
         color_list=None):
+=======
+        style=None):
+>>>>>>> Stashed changes
     """Draws discretized nodal data onto the figure.
     
     Arguments
@@ -40,29 +46,19 @@ def draw_discrete_nodes(
     intervals : dict
         The dictionary containting the intervals and the draw_nodes assocaited with each interval.
         
-    node_size : integer, array-like
-        List of node sizes for each interval.
-        
     label_list : string, array-like
         List of labels for each interval.
-        
-    node_shape : string, array-like
-        List of node shapes for each interval. Refer to matplotlib documentation for available marker types.
-        
-    cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
-        
-    node_border_color : string, array-like
-        The color of the node borders for each interval.
-        
-    node_border_width  : integer, array-like
-        The width of the node borders for each interval.
-        
-    color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
     """
     model = self.model
-    if node_size is None:
+    if style is None:
+        style = self.default_style
+    args = style.args
+    node_shape = args['node_shape']
+    node_border_color = args['node_border_color']
+    node_border_width = args['node_border_width']
+    color_list = args['color_list']
+    cmap = args['cmap']
+    if args['node_size'] is None:
         if len(model["node_names"]) < 300:
             node_size = (np.ones(len(intervals)) * 300).tolist()
         elif len(model["node_names"]) >= 300 \
@@ -88,7 +84,6 @@ def draw_discrete_nodes(
     if isinstance(node_border_width, int) \
             or isinstance(node_border_width, float):
         node_border_width = [node_border_width for i in range(len(intervals))]
-    empty_interval = False
     if (color_list is not None and cmap is not None) or color_list is not None:
         for j, interval_name in enumerate(intervals):
             node_list = [model["node_names"][i]
@@ -191,12 +186,8 @@ def draw_discrete_links(
         ax,
         element_list,
         intervals,
-        link_width=None,
         label_list=None,
-        cmap="tab10",
-        color_list=None,
-        link_style='-',
-        link_arrows=False):
+        style=None):
     """Draws discretized link data onto the figure.
     
     Arguments
@@ -210,25 +201,18 @@ def draw_discrete_links(
     intervals : dict
         The dictionary containting the intervals and the draw_links associated with each interval.
         
-    link_width : integer, array-like
-        List of link widths for each interval.
-        
     label_list : string, array-like
         List of labels for each interval.
-        
-    cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
-        
-    color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
-        
-    link_style : string
-        The style (solid, dashed, dotted, etc.) of the draw_links. Refer to matplotlib documentation for available line styles.
-        
-    link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the pump.
     """
     model = self.model
+    if style is None:
+        style = self.default_style
+    args = style.args
+    link_width = args['link_width']
+    link_style = args['link_style']
+    link_arrows = args['link_arrows']
+    color_list = args['color_list']
+    cmap = args['cmap']
     if link_width is None:
         link_width = (np.ones(len(intervals)) * 2).tolist()
     if isinstance(link_width, int) or isinstance(link_width, float):
@@ -239,7 +223,6 @@ def draw_discrete_links(
         link_style = [link_style for i in range(len(intervals))]
     if isinstance(link_arrows, bool):
         link_arrows = [link_arrows for i in range(len(intervals))]
-    empty_interval = False
     if (color_list is not None and cmap is not None) or color_list is not None:
         for j, interval_name in enumerate(intervals):
             edge_list = [model["pipe_list"][i]
@@ -311,6 +294,7 @@ def draw_discrete_links(
                     style=link_style[j],
                     label=label_list[j])
             cmapValue += 1 / len(intervals)
+<<<<<<< Updated upstream
         if empty_interval:
             cmap2 = cmap
             cmapValue2 = 1 / len(intervals)
@@ -329,6 +313,24 @@ def draw_discrete_links(
                 cmapValue2 += 1 / len(intervals)
     t2 = time.time()
     print("Discrete Drawing Time: " + str(t2-t1))
+=======
+    pos = model["pos_dict"]
+    edge_list_x = []
+    edge_list_y = []
+    for edge in pos.values():
+        edge_list_x.append(edge[0])
+        edge_list_y.append(edge[1])
+    minx = np.min(edge_list_x)
+    maxx = np.max(edge_list_x)
+    miny = np.min(edge_list_y)
+    maxy = np.max(edge_list_y)
+    w = maxx - minx
+    h = maxy - miny
+    padx, pady = 0.05 * w, 0.05 * h
+    corners = (minx - padx, miny - pady), (maxx + padx, maxy + pady)
+    ax.update_datalim(corners)
+    ax.autoscale_view()
+>>>>>>> Stashed changes
 
 def plot_discrete_nodes(
         self,
@@ -341,71 +343,13 @@ def plot_discrete_nodes(
         include_tanks=False,
         include_reservoirs=False,
         intervals="automatic",
-        node_size=None,
-        node_shape=None,
         label_list=None,
-        node_border_color=None,
-        node_border_width=None,
         savefig=False,
         save_name=None,
-        dpi='figure',
-        save_format='png',
-        draw_tanks=True,
-        draw_reservoirs=True,
-        draw_pumps=True,
-        draw_valves=True,
         draw_nodes=True,
-        draw_links=True,
         discrete_legend_title=None,
-        base_legend_loc="upper right",
-        discrete_legend_loc="lower right",
-        cmap=default_cmap,
-        color_list=None,
         disable_interval_deleting=True,
-        base_legend_label_font_size=15,
-        base_legend_label_color="k",
-        discrete_legend_label_font_size=15,
-        discrete_legend_label_color="k",
-        discrete_legend_title_font_size=17,
-        discrete_legend_title_color='k',
-        draw_legend_frame=False,
-        legend_decimal_places=3,
-        reservoir_size=150,
-        reservoir_color='k',
-        reservoir_shape=epa_res,
-        reservoir_border_color='k',
-        reservoir_border_width=3,
-        tank_size=200,
-        tank_color='k',
-        tank_shape=epa_tank,
-        tank_border_color='k',
-        tank_border_width=2,
-        valve_element='node',
-        valve_size=200,
-        valve_color='k',
-        valve_shape=epa_valve,
-        valve_border_color='k',
-        valve_border_width=1,
-        valve_width=3,
-        valve_line_style='-',
-        valve_arrows=False,
-        pump_element='node',
-        pump_size=200,
-        pump_color='k',
-        pump_shape=epa_pump,
-        pump_border_color='k',
-        pump_border_width=1,
-        pump_width=3,
-        pump_line_style='-',
-        pump_arrows=False,
-        base_node_color='k',
-        base_node_size=30,
-        base_link_color='k',
-        base_link_width=1,
-        base_link_line_style='-',
-        base_link_arrows=False,
-        draw_base_legend=True,
-        draw_interval_legend=True):
+        style=None):
     """User-level function that draws discretized nodal data, base elements, legends, and saves the figure.
    
     Arguments
@@ -466,186 +410,14 @@ def plot_discrete_nodes(
     label_list : string, array-like
         List of labels for each interval.
         
-    node_size : integer, array-like
-        List of node sizes for each interval.
-        
-    node_shape : string, array-like
-        List of node shapes for each interval. Refer to matplotlib documentation for available marker types.
-   
-    node_border_color : string, array-like
-        The color of the node borders for each interval.
-   
-    node_border_width  : integer, array-like
-        The width of the node borders for each interval.
-    
-    draw_reservoirs : boolean
-        Determines if draw_reservoirs with no data associated with them are drawn.
-    
-    draw_tanks : boolean
-        Determines if draw_reservoirs with no data associated with them are drawn.
-    
-    draw_pumps : boolean
-        Determines if draw_pumps with no data associated with them are drawn.
-    
-    draw_valves : boolean
-        Determines if draw_valves with no data associated with them are drawn.
-    
     draw_nodes : boolean
         Determines if draw_nodes with no data associated with them are drawn.
-    
-    draw_links : boolean
-        Determines if draw_links with no data associated with them are drawn.
-    
-    cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
-    
-    color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
-    
+
     disable_interval_deleting : boolean
         If True, empty intervals will be automatically deleted. 
     
-    draw_interval_legend : boolean
-        Determine if the intervals legend is drawn.
-    
     discrete_legend_title : string
         Title of the intervals legend.
-    
-    discrete_legend_loc : string
-        The location of the intervals legend on the figure.
-    
-    discrete_legend_label_font_size : integer
-        The font size of the intervals legend text.
-    
-    discrete_legend_label_color : string
-        The color of the intervals legend text. Refer to matplotlib documentation for available colors.
-    
-    discrete_legend_title_font_size : integer
-        The font size of the title text for the intervals legend.
-    
-    discrete_legend_title_color : string
-        The color of the title tect for the intervals legend.
-  
-    draw_base_legend : boolean
-        Determine if the base elements legend is drawn.
-    
-    base_legend_loc : string
-        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
-    
-    base_legend_font_size : integer
-        The font size of the non-title text for the base elements legend. 
-    
-    base_legend_label_color : string
-        The color of the legend text. Refer to matplotlib documentation for 
-        available colors.
-    
-    draw_legend_frame : boolean
-        Determines if the frame around the legend is drawn.
-    
-    legend_decimal_places : integer
-        The number of significant figures, or decimal points, that numbers in the legend will be displayed with. 0 should be passed for whole numbers.
-    
-    reservoir_size : integer
-        The size of the reservoir marker on the plot in points^2. 
-    
-    reservoir_color : string
-        The color of the reservoir marker.
-    
-    reservoir_shape : string
-        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
-    
-    reservoir_border_color : string
-        The color of the border around the reservoir marker.
-    
-    reservoir_border_width : integer
-        The width in points of the border around the reservoir marker.
-
-    tank_size : integer
-        The size of the tank marker on the plot in points^2. 
-    
-    tank_color : string
-        The color of the tank marker.
-    
-    tank_shape : string
-        The shape of the tank marker.
-    
-    tank_border_color : string
-        The color of the border around the tank marker.
-    
-    tank_border_width : integer
-        The width in points of the border around the tank marker.
-    
-    valve_element : string
-        Determines if the valves are drawn as nodes or links.
-    
-    valve_size : integer
-        The size of the valve marker on the plot in points^2. 
-    
-    valve_color : string
-        The color of the valve marker.
-    
-    valve_shape : string
-        The shape of the valve marker.
-    
-    valve_border_color : string
-        The color of the border around the valve marker.
-    
-    valve_border_width : integer
-        The width in points of the border around the valve marker.
-    
-    valve_width : integer
-        The width of the valve line in points.
-    
-    valve_line_style : string
-        The line style of valves if they are drawn as links. Refer to matplotlib documentation for available line styles.
-    
-    valve_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the valves. 
-    
-    pump_element : string
-        Determines if pumps are drawn as links or nodes. 
-    
-    pump_size : integer
-        The size of the pump marker on the plot in points^2.
-    
-    pump_color : string
-        The color of the pump line.
-    
-    pump_shape : string
-        The shape of the pump marker.
-    
-    pump_border_color : string
-        The color of the border around the pump marker.
-    
-    pump_border_width : integer
-        The width in points of the border around the pump marker.
-    
-    pump_width : integer
-        The width of the pump line in points.
-    
-    pump_line_style : string
-        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
-    
-    pump_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the pump.
-    
-    base_node_color : string
-        The color of the draw_nodes without data associated with them.
-    
-    base_node_size : integer
-        The size of the draw_nodes without data associated with them in points^2.
-    
-    base_link_color : string
-        The color of the draw_links without data associated with them.
-    
-    base_link_width : integer
-        The width of the draw_links without data associated with them in points.
-    
-    base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
-    
-    base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
     
     savefig : boolean
         Determines if the figure is saved. 
@@ -660,15 +432,18 @@ def plot_discrete_nodes(
         ...
         >>>model.save_fig(save_name='_example')
         <Net3_example.png>
-    
-    dpi : int, string
-        The dpi that the figure will be saved with.
-    
-    save_format : string
-        The file format that the figure will be saved as.
     """
+<<<<<<< Updated upstream
     if len(self.model['G_list_pumps_only']) == 0:
         draw_pumps = False
+=======
+    model = self.model
+    if style is None:
+        style = self.default_style
+    args = style.args
+    draw_reservoirs = args['draw_reservoirs']
+    draw_tanks = args['draw_tanks']
+>>>>>>> Stashed changes
     if ax is None:
         if ax is None:
             fig, ax = plt.subplots(figsize=self.figsize)
@@ -704,62 +479,21 @@ def plot_discrete_nodes(
             intervals=intervals,
             num_intervals=num_intervals,
             disable_interval_deleting=disable_interval_deleting,
-            legend_decimal_places=legend_decimal_places)
+            style=style)
         draw_discrete_nodes(
             self,
             ax,
             interval_results,
             interval_names,
-            node_size=node_size,
-            node_shape=node_shape,
-            label_list=label_list,
-            node_border_color=node_border_color,
-            node_border_width=node_border_width,
-            cmap=cmap,
-            color_list=color_list)
+            label_list=label_list)
         base.draw_base_elements(
             self,
             ax,
             draw_nodes=draw_nodes,
-            draw_reservoirs=draw_reservoirs,
-            draw_tanks=draw_tanks,
-            draw_valves=draw_valves,
-            draw_pumps=draw_pumps,
             include_reservoirs=include_reservoirs,
             include_tanks=include_tanks,
             element_list=node_list,
-            reservoir_size=reservoir_size,
-            reservoir_color=reservoir_color,
-            reservoir_shape=reservoir_shape,
-            reservoir_border_color=reservoir_border_color,
-            reservoir_border_width=reservoir_border_width,
-            tank_size=tank_size,
-            tank_color=tank_color,
-            tank_shape=tank_shape,
-            tank_border_color=tank_border_color,
-            tank_border_width=tank_border_width,
-            valve_element=valve_element,
-            valve_size=valve_size,
-            valve_color=valve_color,
-            valve_shape=valve_shape,
-            valve_border_color=valve_border_color,
-            valve_border_width=valve_border_width,
-            valve_width=valve_width,
-            valve_line_style=valve_line_style,
-            valve_arrows=valve_arrows,
-            pump_element=pump_element,
-            pump_size=pump_size,
-            pump_color=pump_color,
-            pump_shape=pump_shape,
-            pump_border_color=pump_border_color,
-            pump_border_width=pump_border_width,
-            pump_width=pump_width,
-            pump_line_style=pump_line_style,
-            pump_arrows=pump_arrows, base_node_color=base_node_color,
-            base_node_size=base_node_size, base_link_color=base_link_color,
-            base_link_width=base_link_width,
-            base_link_line_style=base_link_line_style,
-            base_link_arrows=base_link_arrows)
+            style=style)
 
         if discrete_legend_title is None:
             discrete_legend_title = label_generator(parameter, value, unit)
@@ -768,35 +502,9 @@ def plot_discrete_nodes(
             ax,
             intervals=interval_names,
             title=discrete_legend_title,
-            draw_pumps=draw_pumps,
-            base_legend_loc=base_legend_loc,
-            discrete_legend_loc=discrete_legend_loc,
-            base_legend_label_font_size=base_legend_label_font_size,
-            base_legend_label_color=base_legend_label_color,
-            discrete_legend_label_font_size=discrete_legend_label_font_size,
-            discrete_legend_label_color=discrete_legend_label_color,
-            discrete_legend_title_font_size=discrete_legend_title_font_size,
-            discrete_legend_title_color=discrete_legend_title_color,
-            cmap=cmap,
-            color_list=color_list,
-            draw_legend_frame=draw_legend_frame,
-            pump_color=pump_color,
-            base_link_color=base_link_color,
-            draw_base_legend=draw_base_legend,
-            draw_discrete_legend=draw_interval_legend,
-            pump_line_style=pump_line_style,
-            base_link_line_style=base_link_line_style,
-            base_link_arrows=base_link_arrows,
-            pump_arrows=pump_arrows,
-            draw_links=draw_links,
-            draw_valves=draw_valves,
-            valve_element=valve_element,
-            valve_line_style=valve_line_style,
-            valve_color=valve_color,
-            valve_arrows=valve_arrows,
-            pump_element=pump_element)
+            style=style)
     if savefig:
-        save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
+        save_fig(self, save_name=save_name, style=style)
 
 
 def plot_discrete_links(
@@ -810,70 +518,13 @@ def plot_discrete_links(
         value=None,
         unit=None,
         intervals="automatic",
-        link_width=None,
         label_list=None,
-        color_list=None,
-        link_style='-',
-        link_arrows=False,
-        draw_tanks=True,
-        draw_reservoirs=True,
-        draw_pumps=True,
-        draw_valves=True,
         draw_nodes=False,
-        draw_links=True,
-        cmap=default_cmap,
         discrete_legend_title=None,
-        base_legend_loc="upper right",
-        discrete_legend_loc="lower right",
         savefig=False,
         save_name=None,
-        dpi='figure',
-        save_format='png',
         disable_interval_deleting=True,
-        base_legend_label_font_size=15,
-        base_legend_label_color="k",
-        discrete_legend_label_font_size=15,
-        discrete_legend_label_color="k",
-        discrete_legend_title_font_size=17,
-        discrete_legend_title_color='k',
-        draw_legend_frame=False,
-        legend_decimal_places=3,
-        reservoir_size=150,
-        reservoir_color='k',
-        reservoir_shape=epa_res,
-        reservoir_border_color='k',
-        reservoir_border_width=3,
-        tank_size=200,
-        tank_color='k',
-        tank_shape=epa_tank,
-        tank_border_color='k',
-        tank_border_width=2,
-        valve_element='node',
-        valve_size=200,
-        valve_color='k',
-        valve_shape=epa_valve,
-        valve_border_color='k',
-        valve_border_width=1,
-        valve_width=3,
-        valve_line_style='-',
-        valve_arrows=False,
-        pump_element='node',
-        pump_size=200,
-        pump_color='k',
-        pump_shape=epa_pump,
-        pump_border_color='k',
-        pump_border_width=1,
-        pump_width=3,
-        pump_line_style='-',
-        pump_arrows=False,
-        base_node_color='k',
-        base_node_size=30,
-        base_link_color='k',
-        base_link_width=1,
-        base_link_line_style='-',
-        base_link_arrows=False,
-        draw_base_legend=True,
-        draw_discrete_legend=True):
+        style=None):
     """User-level function that draws discretized link data, base elements, legends, and saves the figure.
     
     Arguments
@@ -933,183 +584,15 @@ def plot_discrete_links(
     disable_interval_deleting : boolean
         If True, empty intervals will be automatically deleted.     
     
-    link_width : integer, array-like
-        List of link widths for each interval.
-    
     label_list : string, array-like
         List of labels for each interval.
-    
-    color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
-    
-    cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
-    
-    link_style : string
-        The style (solid, dashed, dotted, etc.) of the draw_links. Refer to matplotlib documentation for available line styles.
-    
-    link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the pump.
-    
-    draw_reservoirs : boolean
-        Determines if draw_reservoirs with no data associated with them are drawn.
-    
-    draw_tanks : boolean
-        Determines if draw_reservoirs with no data associated with them are drawn.
-    
-    draw_pumps : boolean
-        Determines if draw_pumps with no data associated with them are drawn.
-    
-    draw_valves : boolean
-        Determines if draw_valves with no data associated with them are drawn.
-    
+        
     draw_nodes : boolean
         Determines if draw_nodes with no data associated with them are drawn.
-    
-    draw_links : boolean
-        Determines if draw_links with no data associated with them are drawn.
-    
-    draw_discrete_legend : boolean
-        Determine if the intervals legend is drawn.
-    
+        
     discrete_legend_title : string
         Title of the intervals legend.
-    
-    discrete_legend_loc : string
-        The location of the intervals legend on the figure.
-    
-    discrete_legend_label_font_size : integer
-        The font size of the intervals legend text.
-    
-    discrete_legend_label_color : string
-        The color of the intervals legend text. Refer to matplotlib documentation for available colors.
-    
-    discrete_legend_title_font_size : integer
-        The font size of the title text for the intervals legend.
-    
-    discrete_legend_title_color : string
-        The color of the title tect for the intervals legend.
-    
-    draw_base_legend : boolean
-        Determine if the base elements legend is drawn.
-    
-    base_legend_loc : string
-        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
-    
-    base_legend_font_size : integer
-        The font size of the non-title text for the base elements legend. 
-    
-    base_legend_label_color : string
-        The color of the legend text. Refer to matplotlib documentation for available colors.
-    
-    draw_legend_frame : boolean
-        Determines if the frame around the legend is drawn.
-    
-    legend_decimal_places : integer
-        The number of significant figures, or decimal points, that numbers in the legend will be displayed with. 0 should be passed for whole numbers.
-    
-    reservoir_size : integer
-        The size of the reservoir marker on the plot in points^2. 
-    
-    reservoir_color : string
-        The color of the reservoir marker.
-    
-    reservoir_shape : string
-        The shape of the reservoir marker. Refer to matplotlib documentation for available marker types.
-    
-    reservoir_border_color : string
-        The color of the border around the reservoir marker.
-    
-    reservoir_border_width : integer
-        The width in points of the border around the reservoir marker.
-    
-    tank_size : integer
-        The size of the tank marker on the plot in points^2. 
-    
-    tank_color : string
-        The color of the tank marker.
-    
-    tank_shape : string
-        The shape of the tank marker.
-    
-    tank_border_color : string
-        The color of the border around the tank marker.
-    
-    tank_border_width : integer
-        The width in points of the border around the tank marker.
-    
-    valve_element : string
-        Determines if the valves are drawn as nodes or links.
-    
-    valve_size : integer
-        The size of the valve marker on the plot in points^2. 
-    
-    valve_color : string
-        The color of the valve marker.
-    
-    valve_shape : string
-        The shape of the valve marker.
-    
-    valve_border_color : string
-        The color of the border around the valve marker.
-    
-    valve_border_width : integer
-        The width in points of the border around the valve marker.
-    
-    valve_width : integer
-        The width of the valve line in points.
-    
-    valve_line_style : string
-        The line style of valves if they are drawn as links. Refer to matplotlib documentation for available line styles.
-    
-    valve_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the valves. 
-    
-    pump_element : string
-        Determines if pumps are drawn as links or nodes. 
-    
-    pump_size : integer
-        The size of the pump marker on the plot in points^2.
-    
-    pump_color : string
-        The color of the pump line.
-    
-    pump_shape : string
-        The shape of the pump marker.
-    
-    pump_border_color : string
-        The color of the border around the pump marker.
-    
-    pump_border_width : integer
-        The width in points of the border around the pump marker.
-    
-    pump_width : integer
-        The width of the pump line in points.
-    
-    pump_line_style : string
-        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles.
-    
-    pump_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the pump.
-    
-    base_node_color : string
-        The color of the draw_nodes without data associated with them.
-    
-    base_node_size : integer
-        The size of the draw_nodes without data associated with them in points^2.
-    
-    base_link_color : string
-        The color of the draw_links without data associated with them.
-    
-    base_link_width : integer
-        The width of the draw_links without data associated with them in points.
-    
-    base_link_line_style : string
-        The style (solid, dashed, dotted, etc) of the draw_links with no data associated with them.
-    
-    base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
-    
+        
     savefig : boolean
         Determines if the figure is saved. 
     
@@ -1123,16 +606,15 @@ def plot_discrete_links(
         ...
         >>>model.save_fig(save_name='_example')
         <Net3_example.png>
-    
-    dpi : int, string
-        The dpi that the figure will be saved with.
-    
-    save_format : string
-        The file format that the figure will be saved as.
     """
     model = self.model
-    if len(self.model['G_list_pumps_only']) == 0:
-        draw_pumps = False
+    if style is None:
+        style = self.default_style
+    args = style.args
+    pump_element = args['pump_element']
+    draw_pumps = args['draw_pumps']
+    valve_element = args['valve_element']
+    draw_valves = args['draw_valves']
     if ax is None:
         if ax is None:
             fig, ax = plt.subplots(figsize=self.figsize)
@@ -1172,105 +654,30 @@ def plot_discrete_links(
             intervals=intervals,
             num_intervals=num_intervals,
             disable_interval_deleting=disable_interval_deleting,
+<<<<<<< Updated upstream
             legend_decimal_places=legend_decimal_places)
         t2 = time.time()
         print("Discrete Processing Time: " + str(t2-t1))
+=======
+            style=style)
+>>>>>>> Stashed changes
         draw_discrete_links(
             self, ax, interval_results, interval_names,
-            link_width=link_width,
-            label_list=label_list,
-            cmap=cmap,
-            color_list=color_list,
-            link_style=link_style,
-            link_arrows=link_arrows)
+            label_list=label_list)
         base.draw_base_elements(
             self,
             ax,
             draw_nodes=draw_nodes,
-            draw_links=draw_links,
-            draw_reservoirs=draw_reservoirs,
-            draw_tanks=draw_tanks,
-            draw_valves=draw_valves,
-            draw_pumps=draw_pumps,
             include_pumps=include_pumps,
             include_valves=include_valves,
             element_list=link_list,
-            reservoir_size=reservoir_size,
-            reservoir_color=reservoir_color,
-            reservoir_shape=reservoir_shape,
-            reservoir_border_color=reservoir_border_color,
-            reservoir_border_width=reservoir_border_width,
-            tank_size=tank_size,
-            tank_color=tank_color,
-            tank_shape=tank_shape,
-            tank_border_color=tank_border_color,
-            tank_border_width=tank_border_width,
-            valve_element=valve_element,
-            valve_size=valve_size,
-            valve_color=valve_color,
-            valve_shape=valve_shape,
-            valve_border_color=valve_border_color,
-            valve_border_width=valve_border_width,
-            valve_width=valve_width,
-            valve_line_style=valve_line_style,
-            valve_arrows=valve_arrows,
-            pump_element=pump_element,
-            pump_size=pump_size,
-            pump_color=pump_color,
-            pump_shape=pump_shape,
-            pump_border_color=pump_border_color,
-            pump_border_width=pump_border_width,
-            pump_width=pump_width,
-            pump_line_style=pump_line_style,
-            pump_arrows=pump_arrows,
-            base_node_color=base_node_color,
-            base_node_size=base_node_size,
-            base_link_color=base_link_color,
-            base_link_width=base_link_width,
-            base_link_line_style=base_link_line_style,
-            base_link_arrows=base_link_arrows)
+            style=style)
         if discrete_legend_title is None:
             discrete_legend_title = label_generator(parameter, value, unit)
-        link_list = [name for name in link_list
-                     if ((name not in model["G_list_pumps_only"]
-                          or pump_element == 'node'
-                          or draw_pumps is False)
-                     and (name not in model["G_list_valves_only"]
-                          or valve_element == 'node'
-                          or draw_valves is False)
-                     and (name not in link_list))]
-        if not link_list:
-            draw_links = False
         base.draw_legend(
             ax,
             intervals=interval_names,
             title=discrete_legend_title,
-            draw_pumps=draw_pumps,
-            base_legend_loc=base_legend_loc,
-            discrete_legend_loc=discrete_legend_loc,
-            base_legend_label_font_size=base_legend_label_font_size,
-            base_legend_label_color=base_legend_label_color,
-            discrete_legend_label_font_size=discrete_legend_label_font_size,
-            discrete_legend_label_color=discrete_legend_label_color,
-            discrete_legend_title_font_size=discrete_legend_title_font_size,
-            discrete_legend_title_color=discrete_legend_title_color,
-            cmap=cmap,
-            color_list=color_list,
-            draw_legend_frame=draw_legend_frame,
-            pump_color=pump_color,
-            base_link_color=base_link_color,
-            draw_base_legend=draw_base_legend,
-            draw_discrete_legend=draw_discrete_legend,
-            pump_line_style=pump_line_style,
-            base_link_line_style=base_link_line_style,
-            base_link_arrows=base_link_arrows,
-            pump_arrows=pump_arrows,
-            draw_links=draw_links,
-            draw_valves=draw_valves,
-            valve_element=valve_element,
-            valve_line_style=valve_line_style,
-            valve_color=valve_color,
-            valve_arrows=valve_arrows,
-            pump_element=pump_element)
+            style=style)
     if savefig:
-        save_fig(self, save_name=save_name, dpi=dpi, save_format=save_format)
+        save_fig(self, save_name=save_name, style=style)
