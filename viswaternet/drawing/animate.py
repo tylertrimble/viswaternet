@@ -147,8 +147,12 @@ def animate_plot(
                     "parameter"), kwargs.get("value", None))
             kwargs["intervals"] = make_intervals(parameter_results, kwargs)
         parameter_results = parameter_results.transpose()
-    for value in values:
+    if plt.isinteractive():
+        plt_interactive = plt.isinteractive()
         plt.ioff()
+    else:
+        plt_interactive = False
+    for value in values:
         fig = ax.get_figure()
         if function == self.plot_unique_data:
             try:
@@ -187,6 +191,8 @@ def animate_plot(
                 or data_type == 'continuous':
             fig.axes[1].remove()
         ax.clear()
+    if plt_interactive:
+        plt.ion()
     if save_format == "gif" or save_format == "GIF":
         imageio.mimsave(save_name+"."+save_format,
                         frames,
@@ -200,7 +206,7 @@ def animate_plot(
                         fps=fps,
                         quality=8,
                         ffmpeg_log_level='quiet')
-
+    
 
 def make_vmin_vmax(parameter, kwargs):
     for value in np.min(parameter, axis=0):
