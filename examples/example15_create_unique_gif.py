@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 
 # Initialize VisWaterNet model
 model = vis.VisWNModel('Networks/CTown.inp')
-
+style = vis.NetworkStyle(cmap = 'coolwarm',
+                         dpi=400)
 # Initialize a Matplotlib figure and axis.
 fig, ax = plt.subplots(figsize=(11,11))
 ax.set_frame_on(False) 
@@ -22,6 +23,5 @@ model.animate_plot(function = model.plot_unique_data,
                    parameter_type = 'node',
                    data_type = 'continuous',
                    time_unit = 'hr', fps = 3, color_bar_title = 'Flowrate [m3/s]',
-                   cmap = 'coolwarm',
                    save_name = 'figures/example15',save_format='mp4')    
 plt.show()

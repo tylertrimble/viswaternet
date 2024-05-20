@@ -340,7 +340,7 @@ def plot_unique_data(
     pump_element = args['pump_element']
     draw_pumps = args['draw_pumps']
     valve_element = args['valve_element']
-    draw_valves = args['valve_elements']
+    draw_valves = args['draw_valves']
     legend_decimal_places = args['legend_decimal_places']
     if len(self.model['G_list_pumps_only']) == 0:
         draw_pumps = False
@@ -371,6 +371,7 @@ def plot_unique_data(
             if not link_list:
                 draw_links = False
         base.draw_legend(
+            self,
             ax,
             intervals=intervals,
             title=discrete_legend_title,
@@ -381,7 +382,8 @@ def plot_unique_data(
             style=style)
 
     def call_draw_color_bar():
-        base.draw_color_bar(ax,
+        base.draw_color_bar(self,
+                            ax,
                             g,
                             color_bar_title=color_bar_title,
                             style=style)

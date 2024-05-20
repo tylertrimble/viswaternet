@@ -153,18 +153,18 @@ def plot_continuous_nodes(
         base.draw_base_elements(
             self,
             ax,
-            include_reservoirs=include_reservoirs,
-            include_tanks=include_tanks,
             element_list=node_list,
             style=style)
         if draw_color_bar is True:
             if color_bar_title is None:
                 color_bar_title = label_generator(parameter, value, unit)
-            base.draw_color_bar(ax,
+            base.draw_color_bar(self,
+                                ax,
                                 g,
                                 color_bar_title=color_bar_title,
                                 style=style)
-    base.draw_legend(ax,
+    base.draw_legend(self,
+                     ax,
                      element_size_intervals=element_size_intervals,
                      element_size_legend_title=element_size_legend_title,
                      element_size_legend_loc=element_size_legend_loc,
@@ -318,8 +318,6 @@ def plot_continuous_links(
             self,
             ax,
             draw_nodes=draw_nodes,
-            include_pumps=include_pumps,
-            include_valves=include_valves,
             element_list=link_list,
             style=style)
         if link_arrows is True:
@@ -328,10 +326,12 @@ def plot_continuous_links(
         if draw_color_bar is True:
             if color_bar_title is None:
                 color_bar_title = label_generator(parameter, value, unit)
-            base.draw_color_bar(ax,
+            base.draw_color_bar(self,
+                                ax,
                                 g,
                                 color_bar_title=color_bar_title)
-    base.draw_legend(ax,
+    base.draw_legend(self,
+                     ax,
                      element_size_intervals=element_size_intervals,
                      element_size_legend_title=element_size_legend_title,
                      element_size_legend_loc=element_size_legend_loc,

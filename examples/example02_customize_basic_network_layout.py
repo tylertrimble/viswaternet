@@ -11,14 +11,15 @@ import matplotlib.pyplot as plt
 model = vis.VisWNModel('Networks/CTown.inp')
 
 # Initialize a Matplotlib figure and axis.
-fig, ax = plt.subplots(figsize=(11,11))
-ax.set_frame_on(False) 
-
-# Customize and plot basic network layout 
-model.plot_basic_elements(ax, 
-                          pump_size=200,
-                          reservoir_size=500,
-                          tank_color = 'g', 
-                          base_legend_loc = 'lower left', 
-                          savefig = True, save_name = 'figures/example2', dpi=400)
+fig, ax = plt.subplots(figsize=(11, 11))
+ax.set_frame_on(False)
+style = vis.NetworkStyle(pump_size=200,
+                         reservoir_size=500,
+                         tank_color='g',
+                         base_legend_loc='lower left',
+                         dpi=400)
+# Customize and plot basic network layout
+model.plot_basic_elements(ax,
+                          savefig=True, save_name='figures/example2',
+                          style=style)
 plt.show()

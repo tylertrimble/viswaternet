@@ -9,7 +9,10 @@ def save_fig(self, save_name=None, style=None):
     args = style.args
     dpi = args['dpi']
     save_format = args['save_format']
-    networkName = model["inp_file"]
+    if model['inp_file'] is not None:
+        networkName = model["inp_file"]
+    else:
+        networkName = 'Viswaternet'
     if networkName.endswith(".inp"):
         try:
             prefixRemove = networkName.rfind("/")

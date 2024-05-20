@@ -397,13 +397,12 @@ def plot_discrete_nodes(
             ax,
             interval_results,
             interval_names,
-            label_list=label_list)
+            label_list=label_list,
+            style=style)
         base.draw_base_elements(
             self,
             ax,
             draw_nodes=draw_nodes,
-            include_reservoirs=include_reservoirs,
-            include_tanks=include_tanks,
             element_list=node_list,
             style=style)
 
@@ -411,6 +410,7 @@ def plot_discrete_nodes(
             discrete_legend_title = label_generator(parameter, value, unit)
 
         base.draw_legend(
+            self,
             ax,
             intervals=interval_names,
             title=discrete_legend_title,
@@ -574,13 +574,12 @@ def plot_discrete_links(
             self,
             ax,
             draw_nodes=draw_nodes,
-            include_pumps=include_pumps,
-            include_valves=include_valves,
             element_list=link_list,
             style=style)
         if discrete_legend_title is None:
             discrete_legend_title = label_generator(parameter, value, unit)
         base.draw_legend(
+            self,
             ax,
             intervals=interval_names,
             title=discrete_legend_title,

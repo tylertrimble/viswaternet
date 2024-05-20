@@ -32,11 +32,16 @@ for junction_name, junction in wn.junctions():
 
 # Initialize VisWaterNet model
 model = vis.VisWNModel('Networks/CTown.inp')
-
-model.plot_unique_data(parameter = "custom_data", node_size = 200,
-                       base_link_width = 1, base_link_color = "purple",
+style = vis.NetworkStyle(node_size = 200,
+                         base_link_width = 1,
+                         base_link_color = "purple",
+                         cmap = "bwr",
+                         base_node_size = 50,
+                         base_node_color = 'k',
+                         dpi=400)
+model.plot_unique_data(parameter = "custom_data",
                        parameter_type = "node", data_type = "continuous",    
                        custom_data_values = [wn.junction_name_list[:100], node_num_data[:100]],
-                       color_bar_title = "Error (%)", cmap = "bwr",
-                       base_node_size = 50, base_node_color = 'k') 
+                       color_bar_title = "Error (%)",
+                       style=style) 
 plt.show()

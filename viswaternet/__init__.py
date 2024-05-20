@@ -9,4 +9,5 @@ import warnings
 from viswaternet import utils
 from viswaternet import network
 from viswaternet.network.initialize import VisWNModel
+from viswaternet.drawing.style import NetworkStyle
 from viswaternet import drawing

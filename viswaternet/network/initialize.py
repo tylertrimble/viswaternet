@@ -3,10 +3,10 @@ import os
 import wntr
 import numpy as np
 from packaging.version import parse
-from viswaternet.drawing.style import VisWaterNetStyle as style
+from viswaternet.drawing.style import NetworkStyle as style
 class VisWNModel:
     def __init__(self,
-                 inp_file,
+                 inp_file=None,
                  network_model=None,
                  figsize=(12, 12),
                  axis_frame=False):
@@ -15,8 +15,9 @@ class VisWNModel:
 
         if network_model is not None:
             wn = network_model
-            inp_file = os.path.join(dirname, inp_file)
-            model["inp_file"] = inp_file
+            if inp_file is not None:
+                inp_file = os.path.join(dirname, inp_file)
+                model["inp_file"] = inp_file
         else:
             inp_file = os.path.join(dirname, inp_file)
             model["inp_file"] = inp_file
@@ -76,10 +77,11 @@ class VisWNModel:
         self.model = model
         self.figsize = figsize
         self.axis_frame = axis_frame
-        self.default_style = style('default')
+        self.default_style = style()
     from viswaternet.network.processing import get_parameter, bin_parameter
     from viswaternet.drawing.base import draw_nodes, draw_links, \
-        draw_base_elements, plot_basic_elements, draw_label, draw_legend
+        draw_base_elements, plot_basic_elements, draw_label, draw_legend, \
+        draw_color_bar
     from viswaternet.drawing.discrete import draw_discrete_nodes, \
         draw_discrete_links, plot_discrete_nodes, plot_discrete_links
     from viswaternet.drawing.continuous import plot_continuous_links, \

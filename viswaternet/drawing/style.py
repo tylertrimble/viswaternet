@@ -6,11 +6,11 @@ Created on Fri Apr 26 14:27:17 2024
 """
 from viswaternet.utils.markers import *
 
-class VisWaterNetStyle:
+class NetworkStyle:
     def __init__(self,
-                 name,
                  **kwargs):
         args = {'node_size': 100,
+                        'node_color': None,
                         'node_shape': '.',
                         'node_border_color': None,
                         'node_border_width': None,
@@ -27,7 +27,7 @@ class VisWaterNetStyle:
                         'cmap': 'autumn',
                         'draw_base_legend': True,
                         'base_legend_loc': 'upper right',
-                        'discrete_legend_loc': 'best',
+                        'discrete_legend_loc': 'lower right',
                         'base_legend_label_font_size': 15,
                         'base_legend_label_color': 'k',
                         'discrete_legend_label_font_size': 15,
@@ -85,7 +85,7 @@ class VisWaterNetStyle:
     def update_style_args(self, **kwargs):
         self.args.update(kwargs)
     
-    def delete_style_args(self, args_list):
+    def revert_style_args(self, args_list):
         if isinstance(args_list, str):
             args_list = list(args_list)
         for key in args_list:

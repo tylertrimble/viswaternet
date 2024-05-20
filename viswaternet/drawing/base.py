@@ -19,8 +19,14 @@ def draw_nodes(
         ax,
         node_list,
         parameter_results=None,
+        node_size = None,
+        node_shape = None,
+        node_border_width = None,
+        node_border_color = None,
+        node_color = None,
         vmin=None,
         vmax=None,
+        label=None,
         style=None):
     """Draws continuous nodal data onto the figure.
     
@@ -49,7 +55,20 @@ def draw_nodes(
     args = style.args
     if parameter_results is None:
         parameter_results = pd.DataFrame([])
-    # Creates default list of node sizes
+    args = style.args
+    if node_size is None:
+        node_size = args['node_size']
+    draw_tanks = args['draw_tanks']
+    draw_reservoirs = args['draw_reservoirs']
+    cmap = args['cmap']
+    if node_shape is None:
+        node_shape = args['node_shape']
+    if node_border_width is None:
+        node_border_width = args['node_border_width']
+    if node_border_color is None:
+        node_border_color = args['node_border_color']
+    if node_color is None:
+        node_color = args['node_color']
     if node_size is None:
         node_size = (np.ones(len(node_list)) * 100).tolist()
     # Checks if some data values are given
@@ -160,6 +179,10 @@ def draw_links(
         ax,
         link_list,
         parameter_results=None,
+        link_width=None,
+        link_style=None,
+        link_arrows=None,
+        link_color=None,
         vmin=None,
         vmax=None,
         style=None):
@@ -184,6 +207,22 @@ def draw_links(
     """
     # Initalize parameters
     model = self.model
+    if style is None:
+        style = self.default_style
+    args = style.args
+    if link_width is None:
+        link_width = args['link_width']
+    pump_element = args['pump_element']
+    draw_pumps = args['draw_pumps']
+    valve_element = args['valve_element']
+    draw_valves = args['draw_valves']
+    cmap = args['cmap']
+    if link_style is None:
+        link_style = args['link_style']
+    if link_arrows is None:
+        link_arrows = args['link_arrows']
+    if link_color is None:
+        link_color = args['link_color']
     if isinstance(link_list, np.ndarray):
         link_list = link_list.tolist()
     if parameter_results is None:
@@ -321,6 +360,44 @@ def draw_base_elements(
     if style is None:
         style = self.default_style
     args = style.args
+    draw_tanks = args['draw_tanks']
+    draw_reservoirs = args['draw_reservoirs']
+    base_node_size = args['base_node_size']
+    base_node_color = args['base_node_color']
+    reservoir_size = args['reservoir_size']
+    reservoir_color = args['reservoir_color']
+    reservoir_border_color = args['reservoir_border_color']
+    reservoir_border_width = args['reservoir_border_width']
+    reservoir_shape = args['reservoir_shape']
+    tank_size = args['tank_size']
+    tank_color = args['tank_color']
+    tank_border_color = args['tank_border_color']
+    tank_border_width = args['tank_border_width']
+    tank_shape = args['tank_shape']
+    pump_element = args['pump_element']
+    draw_pumps = args['draw_pumps']
+    valve_element = args['valve_element']
+    draw_valves = args['draw_valves']
+    base_link_color = args['base_link_color']
+    base_link_width = args['base_link_width']
+    base_link_line_style = args['base_link_line_style']
+    base_link_arrows = args['base_link_arrows']
+    valve_size = args['valve_size']
+    valve_color = args['valve_color']
+    valve_border_color = args['valve_border_color']
+    valve_border_width = args['valve_border_width']
+    valve_shape = args['valve_shape']
+    pump_size = args['pump_size']
+    pump_color = args['pump_color']
+    pump_border_color = args['pump_border_color']
+    pump_border_width = args['pump_border_width']
+    pump_shape = args['pump_shape']
+    valve_width = args['valve_width']
+    valve_line_style = args['valve_line_style']
+    valve_arrows = args['valve_arrows']
+    pump_width = args['pump_width']
+    pump_line_style = args['pump_line_style']
+    pump_arrows = args['pump_arrows']
     # If draw_nodes is True, then draw draw_nodes
     if draw_nodes:
         node_list = model['node_names']
@@ -520,10 +597,10 @@ def plot_basic_elements(
         draw_nodes=draw_nodes,
         style=style)
     # Draw legend if legend is True. Only draws base elements legend
-    if legend:
-        draw_legend(
-            ax,
-            style=style)
+    draw_legend(
+        self,
+        ax,
+        style=style)
     # Save figure if savefig is set to True
     if savefig:
         save_fig(self, save_name=save_name, style=style)
@@ -558,87 +635,6 @@ def draw_legend(
     title : string
         The title text of the legend.
     
-    draw_discrete_legend : boolean
-        Determine if the intervals legend is drawn.
-    
-    discrete_legend_loc : string
-        The location of the intervals legend on the figure.
-    
-    discrete_legend_label_font_size : integer
-        The font size of the intervals legend text.
-    
-    discrete_legend_label_color : string
-        The color of the intervals legend text. Refer to matplotlib documentation for available colors.
-    
-    discrete_legend_title_font_size : integer
-        The font size of the title text for the intervals legend.
-    
-    discrete_legend_title_color : string
-        The color of the title tect for the intervals legend.
-    
-    draw_base_legend : boolean
-        Determine if the base elements legend is drawn.
-    
-    base_legend_loc : string
-        The location of the base elements legend on the figure. Refer to matplotlib documentation for possible inputs.
-    
-    base_legend_label_font_size : integer
-        The font size of the non-title text for the base elements legend. 
-    
-    base_legend_label_color : string
-        The color of the legend text. Refer to matplotlib documentation for available colors.
-    
-    draw_legend_frame : boolean
-        Determines if the frame around the legend is drawn.
-    
-    draw_pumps : boolean
-        Determines if draw_pumps with no data associated with them are drawn.
-    
-    pump_element : string
-        Determines if pumps are drawn as links or nodes. 
-    
-    pump_color : string
-        The color of the pump line.
-        
-    pump_line_style
-       The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles. 
-    
-    pump_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the pump.
-    
-    draw_valves : boolean
-        Determines if draw_valves with no data associated with them are drawn.
-        
-    valve_element : string
-        Determines if valves are drawn as links or nodes.
-        
-    valve_color : string
-        The color of the valve line.
-        
-    valve_line_style : string
-        The style (solid, dashed, dotted, etc.) of the pump line. Refer to matplotlib documentation for available line styles. 
-    
-    valve_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the valve.
-   
-    draw_links : boolean
-        Determines if draw_links with no data associated with them are drawn.
-    
-    base_link_color : string
-        The color of the draw_links without data associated with them.
-        
-    base_link_line_style : string
-        The style (solid, dashed, dotted, etc.) of draw_links with no data associated with them.
-    
-    base_link_arrows : boolean
-        Determines if an arrow is drawn in the direction of flow of the draw_links with no data associated with them.
-    
-    node_size : integer, array-like
-        The size of the node elements. Can either be an integer if the node sizes are uniform, or an array-like if variable node sizes are present.
-    
-    link_width : integer, array-like
-        The width of the link elements. Can either be an integer if the link sizes are uniform, or an array-like if variable link sizes are present.
-    
     element_size_intervals : integer
         The number of intervals to be used if an element size legend is used.
     
@@ -663,6 +659,37 @@ def draw_legend(
     if style is None:
         style = self.default_style
     args = style.args
+    pump_color = args['pump_color']
+    pump_element = args['pump_element']
+    draw_pumps = args['draw_pumps']
+    valve_color = args['valve_color']
+    valve_element = args['valve_element']
+    draw_valves = args['draw_valves']
+    valve_line_style = args['valve_line_style']
+    valve_arrows = args['valve_arrows']
+    pump_line_style = args['pump_line_style']
+    pump_arrows = args['pump_arrows']
+    base_link_color = args['base_link_color']
+    base_link_line_style = args['base_link_line_style']
+    base_link_arrows = args['base_link_arrows']
+    draw_base_legend = args['draw_base_legend']
+    base_legend_loc = args['base_legend_loc']
+    base_legend_label_font_size = args['base_legend_label_font_size']
+    base_legend_label_color = args['base_legend_label_color']
+    draw_legend_frame = args['draw_legend_frame']
+    draw_discrete_legend = args['draw_discrete_legend']
+    discrete_legend_loc = args['discrete_legend_loc']
+    discrete_legend_label_font_size = args['discrete_legend_label_font_size']
+    discrete_legend_label_color = args['discrete_legend_label_color']
+    draw_legend_frame = args['draw_legend_frame']
+    discrete_legend_title_color = args['discrete_legend_title_color']
+    discrete_legend_title_font_size = args['discrete_legend_title_font_size']
+    cmap = args['cmap']
+    color_list = args['color_list']
+    node_size = args['node_size']
+    node_border_width = args['node_border_width']
+    node_border_color = args['node_border_color']
+    link_width = args['link_width']
     # Get handles, labels
     handles, labels = ax.get_legend_handles_labels()
 
@@ -790,7 +817,7 @@ def draw_legend(
             for size, label in zip(marker_sizes, element_size_legend_labels):
                 handles_2.append(Line2D([], [], marker='.', color='w',
                                  markeredgecolor=node_border_color,
-                                 markeredgewidth=linewidths,
+                                 markeredgewidth=node_border_width,
                                  label=label, markerfacecolor='k',
                                  markersize=np.sqrt(size)))
             legend3 = ax.legend(
@@ -826,12 +853,11 @@ def draw_legend(
 
 
 def draw_color_bar(
+        self,
         ax,
         g,
-        cmap,
         color_bar_title=None,
-        color_bar_width=0.03,
-        color_bar_height=0.8):
+        style=None):
     """Draws the color bar for all continuous plotting functions.Like draw_legends, under normal use, draw_color_bar is not normally called by the user directly, even with more advanced applications. However, some specialized plots may require draw_color_bar to be called directly.
     
     Arguments
@@ -847,15 +873,15 @@ def draw_color_bar(
     
     color_bar_title : string
         The title of the color bar.
-    
-    color_bar_width : integer
-        Width of color bar.
-        
-    color_bar_height : integer
-        Height of color bar.
     """
     # Unruly code to make colorbar location nice and symmetrical when dealing
     # with subplots especially.
+    if style is None:
+        style = self.default_style
+    args = style.args
+    color_bar_height = args['color_bar_height']
+    color_bar_width = args['color_bar_width']
+    cmap = args['cmap']
     divider = make_axes_locatable(ax)
     fig = plt.gcf()
     cax = fig.add_axes([divider.get_position()[0]+divider.get_position()[2]
