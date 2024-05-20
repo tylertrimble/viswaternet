@@ -9,18 +9,19 @@ import numpy as np
 
 # Initialize VisWaterNet model
 model = vis.VisWNModel('Networks/CTown.inp')  
-
+style = vis.NetworkStyle(cmap='Blues',
+                         discrete_legend_loc='upper left',
+                         discrete_legend_label_font_size=12,
+                         legend_decimal_places=0,
+                         link_width=np.linspace(1, 7, 10),
+                         pump_color="red",
+                         valve_color='orange',
+                         dpi=400)
 # Plot unique pipe diameters
 model.plot_unique_data(parameter = "diameter", 
                        unit = "in", 
-                       link_width = np.linspace(1,7,10),
-                       cmap = "Blues", 
-                       discrete_legend_loc = "upper left", 
-                       legend_title = "Pipe Diameter (in)", 
-                       discrete_legend_label_font_size = 12,
-                       legend_decimal_places = 0, 
-                       pump_color = "red", 
-                       valve_color = 'orange',
-                       savefig = True, save_name = 'figures/example8', dpi=400)  
+                       discrete_legend_title = "Pipe Diameter (in)", 
+                       savefig = True,
+                       style=style)  
 
 plt.show()

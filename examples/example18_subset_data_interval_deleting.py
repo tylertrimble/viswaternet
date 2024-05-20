@@ -35,31 +35,35 @@ for index, pipe_name in enumerate(wn.pipe_name_list):
 
 # Initialize VisWaterNet model
 model = vis.VisWNModel('Networks/CTown.inp')
-
+style = vis.NetworkStyle(node_size = 200,
+                         base_link_width = 1,
+                         base_link_color = "green",
+                         cmap = "coolwarm",
+                         base_node_size = 50,
+                         base_node_color = 'k',
+                         link_width = 2, 
+                         discrete_legend_loc = 'lower left',
+                         dpi=400)
 # Initialize a Matplotlib figure and axis.
 fig, ax = plt.subplots(1,2,figsize=(22,11))
 ax[0].set_frame_on(False) 
 ax[1].set_frame_on(False) 
 
 # Plot data with equal intervals defined across the full range of data
-model.plot_unique_data(ax=ax[0], parameter = "custom_data", node_size = 200,
-                       base_link_width = 1, base_link_color = "green",
+model.plot_unique_data(ax=ax[0], parameter = "custom_data", 
                        parameter_type = "link", data_type = "discrete",    
                        custom_data_values = [wn.pipe_name_list[:100], link_num_data[:100]],
-                       color_bar_title = "Error (%)", cmap = "coolwarm",
-                       base_node_size = 50, base_node_color = 'k',
-                       link_width = 2, 
-                       disable_interval_deleting = False, discrete_legend_loc = 'lower left') 
+                       color_bar_title = "Error (%)", 
+                       disable_interval_deleting = False,
+                       style=style) 
 
 # Do not include empty intervals (i.e., intervals with no data points)
-model.plot_unique_data(ax=ax[1], parameter = "custom_data", node_size = 200,
-                       base_link_width = 1, base_link_color = "green",
+model.plot_unique_data(ax=ax[1], parameter = "custom_data",
                        parameter_type = "link", data_type = "discrete",    
                        custom_data_values = [wn.pipe_name_list[:100], link_num_data[:100]],
-                       color_bar_title = "Error (%)", cmap = "coolwarm",
-                       base_node_size = 50, base_node_color = 'k',
-                       link_width=2, 
-                       disable_interval_deleting = True, discrete_legend_loc = 'lower left') 
+                       color_bar_title = "Error (%)",
+                       disable_interval_deleting = True,
+                       style=style) 
 
 # Save figure
 fig.tight_layout()

@@ -8,10 +8,10 @@ import matplotlib.pyplot as plt
 
 # Initialize VisWaterNet model
 model = vis.VisWNModel('Networks/CTown.inp')
-
-model.plot_continuous_links(parameter = "flowrate", value = 'mean', 
-                            cmap = 'coolwarm', 
-                            link_width=(2,6), # this argument varies link widths to match the associated data
-                            )
+style = vis.NetworkStyle(cmap='coolwarm',
+                         link_width=(2, 6),  # this argument varies link widths to match the associated data
+                         dpi=400)
+model.plot_continuous_links(parameter="flowrate", value='mean',
+                            style=style)
 
 plt.show()

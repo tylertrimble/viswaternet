@@ -2,9 +2,17 @@ import matplotlib.pyplot as plt
 import os
 
 
-def save_fig(self, save_name=None, dpi='figure', save_format='png'):
+def save_fig(self, save_name=None, style=None):
     model = self.model
-    networkName = model["inp_file"]
+    if style is None:
+        style = self.default_style
+    args = style.args
+    dpi = args['dpi']
+    save_format = args['save_format']
+    if model['inp_file'] is not None:
+        networkName = model["inp_file"]
+    else:
+        networkName = 'Viswaternet'
     if networkName.endswith(".inp"):
         try:
             prefixRemove = networkName.rfind("/")
