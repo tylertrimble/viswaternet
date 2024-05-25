@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 model = viswaternet.VisWNModel("tests/net1.inp")
-
+style = viswaternet.NetworkStyle()
 class TestViswaternet(unittest.TestCase):
     """Tests for `viswaternet` package."""
 
@@ -33,13 +33,13 @@ class TestSaveFig(unittest.TestCase):
         
         fig,ax=plt.subplots()
         
-        viswaternet.utils.save_fig(self)
+        viswaternet.utils.save_fig(self,style=style)
         self.assertTrue(os.path.isfile('dummynetwork.png'), "save_fig() is not including network name to file name properly.")
         
-        viswaternet.utils.save_fig(self,save_name="Test_")
+        viswaternet.utils.save_fig(self,save_name="Test_",style=style)
         self.assertTrue(os.path.isfile('Test_dummynetwork.png'),"save_fig() is not applying user-defined string to file name correctly.")
-        
-        viswaternet.utils.save_fig(self,save_format='jpg')
+        style_1 = viswaternet.NetworkStyle(save_format='jpg')
+        viswaternet.utils.save_fig(self,style=style_1)
         self.assertTrue(os.path.isfile('dummynetwork.jpg'),"save_fig() is not creating files with correct format.")
         
         os.remove('dummynetwork.png')
@@ -53,12 +53,12 @@ class TestParameterBinning(unittest.TestCase):
         self.model = {}
         self.model['node_names'] = ['E1','E2','E3','E4','E5','E6']
         dummy_data=[1,2,3,5,6,7]
-        
-        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],3)
+        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],3,style=style)
         self.assertListEqual(interval_names,['1.000 - 3.000', '3.000 - 5.000', '5.000 - 7.000'],"Intervals are not being named properly.")
         
         dummy_data=[1,2,3,5,6,10]
-        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],2,legend_decimal_places=0)
+        style_1 = viswaternet.NetworkStyle(legend_decimal_places=0)
+        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],2,style=style_1)
         self.assertListEqual(interval_names,['1 - 6','6 - 10'],"Interval names are not following sig-fig adjustments correctly.")
         
     def test_interval_dict_structure(self):
@@ -78,7 +78,7 @@ class TestParameterBinning(unittest.TestCase):
                       '3.000 - 5.000': {'E3':2},
                       '5.000 - 7.000': {'E4':3,'E5':4,'E6':5}}
         
-        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],3)
+        interval_results, interval_names = viswaternet.network.bin_parameter(self,dummy_data,self.model['node_names'],3,style=style)
         self.assertDictEqual(correct_dict,interval_results,"bin_parameter is not producing correct dictionary structure.")
         
 class TestPlottingFunctions(unittest.TestCase):

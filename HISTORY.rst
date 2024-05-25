@@ -1,6 +1,11 @@
 =======
 History
 =======
+2.1.0 (2024-05-25)
+-----------------------
+* Added new style object
+* Converted all functions to work with style objects
+
 2.0.0 (2024-04-12)
 -----------------------
 * Added new label customization options
