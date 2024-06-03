@@ -78,6 +78,10 @@ class NetworkStyle:
                         'draw_color_bar': True,
                         'color_bar_width': 0.03,
                         'color_bar_height': 0.8,
+                        'color_bar_loc': 'right',
+                        'color_bar_label_loc': 'right',
+                        'color_bar_label_font_size': 10,
+                        'color_bar_label_font_color': 'k',
                         'save_format': 'png',
                         'dpi': 'figure'}
         args.update(kwargs)

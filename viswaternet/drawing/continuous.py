@@ -329,7 +329,8 @@ def plot_continuous_links(
             base.draw_color_bar(self,
                                 ax,
                                 g,
-                                color_bar_title=color_bar_title)
+                                color_bar_title=color_bar_title,
+                                style=style)
     base.draw_legend(self,
                      ax,
                      element_size_intervals=element_size_intervals,
