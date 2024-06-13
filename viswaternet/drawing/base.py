@@ -881,18 +881,66 @@ def draw_color_bar(
     args = style.args
     color_bar_height = args['color_bar_height']
     color_bar_width = args['color_bar_width']
+    color_bar_loc = args['color_bar_loc']
+    color_bar_label_loc = args['color_bar_label_loc']
+    color_bar_label_font_size = args['color_bar_label_font_size']
+    color_bar_label_font_color = args['color_bar_label_font_color']
     cmap = args['cmap']
     divider = make_axes_locatable(ax)
     fig = plt.gcf()
-    cax = fig.add_axes([divider.get_position()[0]+divider.get_position()[2]
-                        + 0.02, (divider.get_position()[1])
-                        + ((divider.get_position()[3]
-                            * (1-color_bar_height)))/2,
-                        color_bar_width,
-                        divider.get_position()[3]*color_bar_height])
-    cbar = fig.colorbar(g, cax=cax)
+    if color_bar_loc == 'right':
+        cax = fig.add_axes([divider.get_position()[0]+divider.get_position()[2]
+                            + 0.02, (divider.get_position()[1])
+                            + ((divider.get_position()[3]
+                                * (1-color_bar_height)))/2,
+                            color_bar_width,
+                            divider.get_position()[3]*color_bar_height])
+        cbar = fig.colorbar(g, cax=cax)
+        if color_bar_label_loc == 'left':
+            cbar.ax.yaxis.set_label_position('left')
+        else:
+            pass
+    if color_bar_loc == 'left':
+        cax = fig.add_axes([divider.get_position()[0] - 0.02 - color_bar_width,
+                            (divider.get_position()[1])
+                            + ((divider.get_position()[3]
+                                * (1-color_bar_height)))/2,
+                            color_bar_width,
+                            divider.get_position()[3]*color_bar_height])
+        cbar = fig.colorbar(g, cax=cax)
+        if color_bar_label_loc == 'left':
+            cbar.ax.yaxis.set_label_position('left')
+        else:
+            pass
+    if color_bar_loc == 'top':
+        cax = fig.add_axes([(divider.get_position()[0])
+                            + (divider.get_position()[2]
+                               * (1-color_bar_width))/2,
+                            divider.get_position()[3] + 0.15,
+                            divider.get_position()[2]*color_bar_width,
+                            color_bar_height])
+        cbar = fig.colorbar(g, cax=cax, orientation='horizontal')
+        if color_bar_label_loc == 'top':
+            cbar.ax.xaxis.set_label_position('top')
+        else:
+            pass
+    if color_bar_loc == 'bottom':
+        cax = fig.add_axes([(divider.get_position()[0])
+                            + (divider.get_position()[2]
+                               * (1-color_bar_width))/2,
+                            divider.get_position()[1],
+                            divider.get_position()[2]*color_bar_width,
+                            color_bar_height])
+        cbar = fig.colorbar(g, cax=cax, orientation='horizontal')
+        if color_bar_label_loc == 'top':
+            cbar.ax.xaxis.set_label_position('top')
+        else:
+            pass
     cbar.set_label(color_bar_title, fontsize=10)
-
+    cbar.ax.yaxis.label.set_fontsize(color_bar_label_font_size)
+    cbar.ax.yaxis.label.set_color(color_bar_label_font_color)
+    cbar.ax.xaxis.label.set_fontsize(color_bar_label_font_size)
+    cbar.ax.xaxis.label.set_color(color_bar_label_font_color)
 
 def draw_label(
         self,

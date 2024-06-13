@@ -24,7 +24,7 @@ Dependencies
 ------------
 ◉ WNTR ◉ NetworkX 2.7+ ◉ Matplotlib 3.5.0+ ◉ Pandas ◉ NumPy ◉ imageio ◉
 
-VisWaterNet has been tested on Python **3.8** and **3.9**.
+VisWaterNet has been tested on Python **3.8+**.
 
 Features
 --------
@@ -66,12 +66,12 @@ To get started, import the VisWaterNet package:
 
     import viswaternet as vis
     
-Next, initialize a VisWaterNet model. For example purposes, we use the CTown network from `Ostfeld (2016)`_ included in the Examples folder:
+Next, initialize a VisWaterNet model and optionally a style object. For example purposes, we use the CTown network from `Ostfeld (2016)`_ included in the Examples folder:
 
 .. code:: python
 
     model = vis.VisWNModel('Networks/CTown.inp')
-
+    style = vis.NetworkStyle(discrete_legend_loc='lower left', legend_sig_figs=0)
 .. _`Ostfeld (2016)`: https://uknowledge.uky.edu/wdst_models/2/
     
 Then, call on any of the plotting functions with the argument inputs of your choice. For example, the following line of code displays the network layout of CTown with each node colored according its mean pressure (in *psi*). This is a **continuous** node plot, where the nodal colors are assigned based a gradient scale:
@@ -89,8 +89,8 @@ We can represent the same data in a different way by generating a **discrete** n
 .. code:: python
 
     model.plot_discrete_nodes(parameter="pressure", value='mean', unit="psi",
-                              legend_loc_2 = 'lower left', intervals = [0,40,80,120],
-                              legend_sig_figs =0)
+                              intervals = [0,40,80,120],
+                              style=style)
 
 .. figure:: logo/readme2.png
    :width: 600
