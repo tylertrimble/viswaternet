@@ -43,7 +43,7 @@ This example demonstrates the basic plotting functionality provided by VisWaterN
     model.plot_basic_elements()
 
 .. _basic1:
-.. figure:: figures/example1.png
+.. figure:: figures/example1CTown.png
    :width: 600
    :alt: Basic network layout
 
@@ -53,14 +53,16 @@ Example 2 - Customizing a Basic Network Layout Plot
 Here, we customize the **basic** network plot by changing the location of the legend, color of the tank marker, and pump line style, and draw the figure into axis *ax*.
 
 .. code:: python
+    
+    style = vis.NetworkStyle(base_legend_loc = 'lower left', 
+                             tank_color = 'g', 
+                             pump_line_style = ':')
 
     model.plot_basic_elements(ax, 
-                              legend_loc = 'lower left', 
-                              tank_color = 'g', 
-                              pump_line_style = ':')
+                              style = style)
 
 .. _basic2:
-.. figure:: figures/example2.png
+.. figure:: figures/example2CTown.png
    :width: 600
    :alt: Basic network layout modified
 
@@ -78,12 +80,15 @@ Here, we create a **continuous** data plot for **nodal pressure at hour 10**. We
 
 .. code:: python
 
-    model.plot_continuous_nodes(parameter = "pressure", value = 10, 
-                                min_size = 200, max_size = 200, 
-                                save_name = 'figures/example3', dpi=400)
+    style = vis.NetworkStyle(node_size = 200,
+                             dpi = 400)
+
+    model.plot_continuous_nodes(parameter = "pressure", value = 10,
+                                style = style, 
+                                save_name = 'figures/example3')
     
 .. _basic3:
-.. figure:: figures/example3.png
+.. figure:: figures/example3CTown.png
    :width: 600
    :alt: Continuous node plot
 
@@ -94,11 +99,14 @@ Here, we create a **continuous** data plot for mean **link flow rate** over the 
 
 .. code:: python
 
+    style = vis.NetworkStyle(cmap = 'coolwarm',
+			     link_width = (2,6))
+	
     model.plot_continuous_links(parameter = "flowrate", value = 'mean', 
-                                cmap = 'coolwarm', min_width = 2, max_width = 6)
+                                style = style)
 
 .. _basic4:
-.. figure:: figures/example4.png
+.. figure:: figures/example4CTown.png
    :width: 600
    :alt: Continuous link plot
 
@@ -113,12 +121,14 @@ Here, we create a **discrete** data plot for **nodal demand at hour 10**. We spe
 
 .. code:: python
 
+    style = vis.NetworkStyle(discrete_legend_loc = 'upper left')
+
     model.plot_discrete_nodes(parameter = "demand", value = 10, 
-                              num_intervals = 3, 
-                              legend_loc_2 = 'upper left', unit = 'CMH')
+                              num_intervals = 3, style = style,
+                              unit = 'CMH')
     
 .. _basic5:
-.. figure:: figures/example5.png
+.. figure:: figures/example5CTown.png
    :width: 600
    :alt: Discrete node plot
 
@@ -129,12 +139,16 @@ Here, we create a **discrete** data plot for **maximum link velocity** over the 
 
 .. code:: python
 
+    style = vis.NetworkStyle(discrete_legend_loc = 'lower left',
+			     legend_decimal_places = 0)
+
     model.plot_discrete_links(ax,parameter = "velocity", value = 'max', 
-                              intervals = [0,2,6,10], legend_sig_figs = 0, 
-                              legend_loc_2 = 'lower left', unit = 'ft/s')
+                              intervals = [0,2,6,10], 
+                              unit = 'ft/s',
+			      style = style)
 
 .. _basic6:
-.. figure:: figures/example6.png
+.. figure:: figures/example6CTown.png
    :width: 600
    :alt: Continuous link plot
    
@@ -151,14 +165,18 @@ Here, we create a **categorical** data plot for **nodal demand pattern**. We mod
 
 .. code:: python
 
-    model.plot_unique_data(parameter = "demand_patterns", cmap = 'tab10', 
-                          legend_loc_2 = 'lower left', legend_title = 'Demand Patterns', 
-                          legend_title_font_size = 13, font_size = 12,
-                          interval_label_list = ['Pattern 1', 'Pattern 2', 'Pattern 3', 
-                          'Patten 4', 'Pattern 5', 'No Pattern'])
+    style = vis.NetworkStyle(cmap = 'tab10',
+			     discrete_legend_loc = 'lower left', 
+			     discreten_legend_title_font_size = 12, discrete_legend_label_font_size = 12)
+
+    model.plot_unique_data(parameter = "demand_patterns",
+                           discrete_legend_title = 'Demand Patterns', 
+                           label_list = ['Pattern 1', 'Pattern 2', 'Pattern 3', 
+                           'Patten 4', 'Pattern 5', 'No Pattern'],
+			   style = style)
 
 .. _basic7:
-.. figure:: figures/example7.png
+.. figure:: figures/example7CTown.png
    :width: 600
    :alt: Categorical node plot
 
@@ -171,16 +189,19 @@ Here, we create a **categorical** data plot for **link pipe diameter**. In this 
 
 .. code:: python
 
+    style = vis.NetworkStyle(cmap = 'Blues',
+			     discrete_legend_loc = 'upper left', discrete_legend_label_font_size = 12,
+			     legend_decimal_places = 0,
+			     pump_width = 2, pump_color = 'red',
+			     link_width = np.linspace(1,7,10))
+
     model.plot_unique_data(parameter = "diameter", 
-                           interval_link_width_list = np.linspace(1,7,10),
-                           cmap = 'Blues', unit = 'in', 
-                           legend_loc_2 = 'upper left', 
-                           legend_title = 'Pipe Diameter (in)', 
-                           legend_sig_figs = 0, font_size = 12,
-                           pump_color = 'red', pump_width = 2)
+                           unit = 'in', 
+                           discrete_legend_title = 'Pipe Diameter (in)', 
+                           style = style)
 
 .. _basic8:
-.. figure:: figures/example8.png
+.. figure:: figures/example8CTown.png
    :width: 600
    :alt: Categorical link plot
 
@@ -191,16 +212,18 @@ Here, we import data from an excel file named "CTown_pipes_age.xlsx" that has tw
 
 .. code:: python
 
-    model.plot_unique_data(parameter='Excel/CTown_pipe_ages.xlsx',
+    style = vis.NetworkStyle(color_list = ['red', 'blue', 'green', 'orange'], 
+			     discrete_legend_loc = 'lower left', 
+			     tank_color = 'k', pump_color = 'gray', reservoir_color = 'navy')
+
+    model.plot_unique_data(parameter='excel_data', 
+			   data_file = 'Excel/CTown_pipe_ages.xlsx',
                            parameter_type='link', data_type='unique', 
-                           excel_columns=[0,1], 
-                           color_list = ["red", "blue", "green","orange"], 
-                           legend_loc_2 = 'lower left', , tank_color = 'k',
-                           pump_color = 'gray', reservoir_color = 'navy',
-                           legend_title = 'Pipe Installation Year')
+                           excel_columns=[0,1], style = style,
+                           discrete_legend_title = 'Pipe Installation Year')
 
 .. _basic9:
-.. figure:: figures/example9.png
+.. figure:: figures/example9CTown.png
    :width: 600
    :alt: Unique link plot from Excel
 
@@ -216,14 +239,17 @@ Here, we demonstrate how lists of data corresponding to nodes or links can be ea
     element_list = wn.junction_name_list
     data_list = [random.randrange(1, 50, 1) for i in range(wn.num_junctions)]
     
-    model.plot_unique_data(parameter = 'custom_data', node_size = 200,
+    style = vis.NetworkStyle(node_size=200,
+			     node_border_width = 1, node_border_color = 'k', 
+			     cmap = 'bwr')
+	
+    model.plot_unique_data(parameter = 'custom_data',
                            parameter_type = 'node', data_type = 'continuous', 
-                           line_widths = 1, edge_colors = "k",
                            custom_data_values = [element_list, data_list], 
-                           color_bar_title = "Error (%)", cmap = "bwr")
+                           color_bar_title = "Error (%)", style = style)
 
 .. _basic10:
-.. figure:: figures/example10.png
+.. figure:: figures/example10CTown.png
    :width: 600
    :alt: Custom continuous node plot
 
@@ -247,17 +273,19 @@ Additional parameters can be provided to customize the frames as shown in previo
 
 .. code:: python
 
-    model.animate_plot(ax, function = model.plot_continuous_links ,
-                       data_type = 'continuous', parameter_type = 'link',
-                       parameter = 'flowrate',  
+    style = vis.NetworkStyle(link_width = (2,4),
+			     cmap = 'coolwarm', pump_color = 'green',
+			     dpi = 400)
+
+    model.animate_plot(ax, function = model.plot_continuous_links ,                       		       
+		       parameter = 'flowrate',  
                        first_timestep = 0, last_timestep = 40,
-                       unit = 'hr',  fps = 7, 
-                       max_width = 5, min_width = 5, legend = False,
+                       time_unit = 'hr',  fps = 7, 
                        color_bar_title = 'Flowrate [m3/s]',
-                       pump_color = 'green', cmap = 'coolwarm')    
+                       style = style)    
 
 .. _basic11:
-.. figure:: figures/example11_gif.gif
+.. figure:: figures/example11.gif
    :width: 600
    :alt: Flow rate gif
  
