@@ -1,6 +1,11 @@
 =======
 History
 =======
+2.2.0 (2024-7-30)
+-----------------------
+*Added additional colorbar style options: Colorbar location, label location, font color, and font size.
+*Updated Python dependency to be 3.8+
+
 2.1.0 (2024-05-25)
 -----------------------
 * Added new style object
