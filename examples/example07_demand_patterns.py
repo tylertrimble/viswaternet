@@ -18,6 +18,6 @@ model.plot_unique_data(parameter="demand_patterns",
                        discrete_legend_title='Demand Patterns',
                        label_list=['Pattern 1', 'Pattern 2', 'Pattern 3',
                                    'Patten 4', 'Pattern 5', 'No Pattern'],
-                       savefig=True, save_name='figures/example7',
+                       savefig=True, save_name='figures/example07',
                        style=style)
 plt.show()
