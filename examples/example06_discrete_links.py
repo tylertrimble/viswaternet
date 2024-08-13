@@ -15,6 +15,6 @@ style = vis.NetworkStyle(discrete_legend_loc = 'lower left',
 model.plot_discrete_links(parameter = 'velocity', value = 'max', 
                           unit = 'ft/s',
                           intervals = [0,2,6,10],
-                          savefig = True, save_name = 'figures/example6',
+                          savefig = True, save_name = 'figures/example06',
                           style=style)
 plt.show()
