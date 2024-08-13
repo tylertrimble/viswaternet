@@ -20,6 +20,6 @@ style = vis.NetworkStyle(pump_size=200,
                          dpi=400)
 # Customize and plot basic network layout
 model.plot_basic_elements(ax,
-                          savefig=True, save_name='figures/example2',
+                          savefig=True, save_name='figures/example02',
                           style=style)
 plt.show()
