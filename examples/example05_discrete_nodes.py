@@ -18,6 +18,6 @@ model.plot_discrete_nodes(parameter="demand", value=10,
                           num_intervals=3,
                           unit='CMH',
                           savefig=True,
-                          save_name='figures/example5',
+                          save_name='figures/example05',
                           style=style)
 plt.show()
