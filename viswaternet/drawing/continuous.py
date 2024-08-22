@@ -154,6 +154,7 @@ def plot_continuous_nodes(
             self,
             ax,
             element_list=node_list,
+            draw_originator='node',
             style=style)
         if draw_color_bar is True:
             if color_bar_title is None:
@@ -319,6 +320,7 @@ def plot_continuous_links(
             ax,
             draw_nodes=draw_nodes,
             element_list=link_list,
+            draw_originator='link',
             style=style)
         if link_arrows is True:
             g = fancyarrowpatch_to_linecollection(

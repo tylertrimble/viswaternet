@@ -1,6 +1,11 @@
 =======
 History
 =======
+2.2.1 (2024-7-30)
+-----------------------
+*Fix bug with models that use the same names for pipes and nodes.
+*Allow for custom color maps
+
 2.2.0 (2024-7-30)
 -----------------------
 *Added additional colorbar style options: Colorbar location, label location, font color, and font size.

@@ -99,7 +99,14 @@ def draw_discrete_nodes(
                               label=label_list[j])
                 ax.add_artist(m)          
     else:
-        cmap = mpl.colormaps[cmap]
+        try:
+            cmap = mpl.colormaps[cmap]
+        except Exception:
+            if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
+                or isinstance(cmap, mpl.colors.ListedColormap):
+                    pass
+            else:
+                raise Exception('Invalid cmap!')
         cmapValue = 1 / len(intervals)
         for j, interval_name in enumerate(intervals):
             interval_elements = element_list.get(interval_name)
@@ -200,7 +207,14 @@ def draw_discrete_links(
                     style=link_style[j],
                     label=label_list[j])    
     else:
-        cmap = mpl.colormaps[cmap]
+        try:
+            cmap = mpl.colormaps[cmap]
+        except Exception:
+            if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
+                or isinstance(cmap, mpl.colors.ListedColormap):
+                    pass
+            else:
+                raise Exception('Invalid cmap!')
         cmapValue = 1 / len(intervals)
         for j, interval_name in enumerate(intervals):
             interval_elements = element_list.get(interval_name)
@@ -404,6 +418,7 @@ def plot_discrete_nodes(
             ax,
             draw_nodes=draw_nodes,
             element_list=node_list,
+            draw_originator='node',
             style=style)
 
         if discrete_legend_title is None:
@@ -575,6 +590,7 @@ def plot_discrete_links(
             ax,
             draw_nodes=draw_nodes,
             element_list=link_list,
+            draw_originator='link',
             style=style)
         if discrete_legend_title is None:
             discrete_legend_title = label_generator(parameter, value, unit)

@@ -90,7 +90,14 @@ def draw_nodes(
                     parameter_results, min_size, max_size)
         if np.min(parameter_results) < -1e-5:
             # Gets the cmap object from matplotlib
-            cmap = mpl.colormaps[cmap]
+            try:
+                cmap = mpl.colormaps[cmap]
+            except Exception:
+                if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
+                    or isinstance(cmap, mpl.colors.ListedColormap):
+                        pass
+                else:
+                    raise Exception('Invalid cmap!')
             # If both vmin and vmax are None, set vmax to the max data
             # value and vmin to the negative of the max data value. This
             # ensures that the colorbar is centered at 0.
@@ -127,7 +134,14 @@ def draw_nodes(
             return g
         else:
             # Gets the cmap object from matplotlib
-            cmap = mpl.colormaps[cmap]
+            try:
+                cmap = mpl.colormaps[cmap]
+            except Exception:
+                if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
+                    or isinstance(cmap, mpl.colors.ListedColormap):
+                        pass
+                else:
+                    raise Exception('Invalid cmap!')
             # If both vmin and vmax are None, don't pass vmin and vmax,
             # as networkx will handle the limits of the colorbar
             # itself.
@@ -252,7 +266,14 @@ def draw_links(
                     parameter_results, min_size, max_size)
         if np.min(parameter_results) < -1e-5:
             # Gets the cmap object from matplotlib
-            cmap = mpl.colormaps[cmap]
+            try:
+                cmap = mpl.colormaps[cmap]
+            except Exception:
+                if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
+                    or isinstance(cmap, mpl.colors.ListedColormap):
+                        pass
+                else:
+                    raise Exception('Invalid cmap!')
             # If both vmin and vmax are None, set vmax to the max data
             # value and vmin to the negative of the max data value. This
             # ensures that the colorbar is centered at 0.
@@ -289,7 +310,14 @@ def draw_links(
             return g
         else:
             # Gets the cmap object from matplotlib
-            cmap = mpl.colormaps[cmap]
+            try:
+                cmap = mpl.colormaps[cmap]
+            except Exception:
+                if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
+                    or isinstance(cmap, mpl.colors.ListedColormap):
+                        pass
+                else:
+                    raise Exception('Invalid cmap!')
             # If both vmin and vmax are None, don't pass vmin and vmax,
             # as networkx will handle the limits of the colorbar
             # itself.
@@ -343,6 +371,7 @@ def draw_base_elements(
         ax,
         draw_nodes=True,
         element_list=None,
+        draw_originator=None,
         style=None):
     """
     Draws base elements (draw_nodes, draw_links, draw_reservoirs, draw_tanks, draw_pumps, and draw_valves)
@@ -401,7 +430,7 @@ def draw_base_elements(
     # If draw_nodes is True, then draw draw_nodes
     if draw_nodes:
         node_list = model['node_names']
-        if element_list is None:
+        if element_list is None or draw_originator == 'link':
             node_list = [node_list[node_list.index(name)]
                          for name in node_list
                          if ((name not in model["tank_names"]
@@ -452,7 +481,7 @@ def draw_base_elements(
     # If draw_links is True, then draw draw_links
     if draw_links:
         pipe_name_list = model['G_pipe_name_list']
-        if element_list is None:
+        if element_list is None or draw_originator == 'node':
             edgelist = [model['pipe_list'][pipe_name_list.index(name)]
                         for name in pipe_name_list
                         if ((name not in model["pump_names"]
@@ -767,7 +796,14 @@ def draw_legend(
                     for i, text in enumerate(legend2.get_texts()):
                         text.set_color(color_list[i])
                 elif cmap:
-                    cmap = mpl.colormaps[cmap]
+                    try:
+                        cmap = mpl.colormaps[cmap]
+                    except Exception:
+                        if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
+                            or isinstance(cmap, mpl.colors.ListedColormap):
+                                pass
+                        else:
+                            raise Exception('Invalid cmap!')
                     cmap_value = 1 / len(intervals)
                     for i, text in enumerate(legend2.get_texts()):
                         text.set_color(cmap(float(cmap_value)))

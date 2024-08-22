@@ -353,6 +353,7 @@ def plot_unique_data(
                                 ax,
                                 draw_nodes=draw_nodes,
                                 element_list=element_list,
+                                draw_originator=parameter_type,
                                 style=style)
 
     def call_draw_legend(intervals=None, element_list=None):
