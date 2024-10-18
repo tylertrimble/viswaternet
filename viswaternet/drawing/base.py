@@ -352,8 +352,8 @@ def draw_links(
             return g
     # Draw without any data associated with draw_links
     else:
-        edges = ([model["pipe_list"][i]
-                  for i, name in enumerate(link_list)])
+        edges = [model["pipe_list"][model['G_pipe_name_list'].index(name)]
+             for name in link_list]
         nxp.draw_networkx_edges(
             model["G"],
             model["pos_dict"],
