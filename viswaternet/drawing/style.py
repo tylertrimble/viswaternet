@@ -16,7 +16,7 @@ class NetworkStyle:
                         'node_border_width': None,
                         'color_list': None,
                         'link_width': 1,
-                        'link_color': 1,
+                        'link_color': 'black',
                         'link_style': '-',
                         'link_arrows': False,
                         'draw_tanks': True,
