@@ -1,11 +1,6 @@
 =======
 History
 =======
-2.2.2 (2024-10-22)
------------------------
-*Fixed draw_links() issue when trying to customize specific links.
-*Fixed default style typo causing error when link color is not specified.
-
 2.2.1 (2024-7-30)
 -----------------------
 *Fix bug with models that use the same names for pipes and nodes.
