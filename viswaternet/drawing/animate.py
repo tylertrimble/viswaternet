@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+
+"""
+The viswaternet.drawing.animate module contains the code that handles creation
+of animations. One can create animations from simulation data, or pass in
+outside data to be animated on the network.
+"""
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -11,7 +17,6 @@ else:
 from matplotlib.transforms import Bbox, TransformedBbox, Affine2D
 import imageio
 import io
-import math
 from viswaternet.network import processing
 from viswaternet.utils import unit_conversion, convert_excel
 
@@ -58,7 +63,15 @@ def animate_plot(
     last_timestep : integer
         The last timestep of the .gif file.
 
-    unit : string
+    save_name : string
+        The file name that will be used when saving the animation.
+
+    save_format : string
+        The file format that the animation will be saved to. A comprehensive
+        list of formats can be found on the imageio docs page:
+            https://imageio.readthedocs.io/en/stable/formats/index.html
+
+    time_unit : string
         The time unit that will be reported for each frame of the .gif file.
 
         .. rubric:: Time Units
@@ -71,8 +84,8 @@ def animate_plot(
         ====================  ====================================
 
     kwargs : Any
-        Any arguments for the plotting function passed into the function argument
-        can be passed into animate_plot.
+        Any arguments for the plotting function passed into the function
+        argument can be passed into animate_plot.
     """
     model = self.model
     if ax is None:
@@ -206,7 +219,7 @@ def animate_plot(
                         fps=fps,
                         quality=8,
                         ffmpeg_log_level='quiet')
-    
+
 
 def make_vmin_vmax(parameter, kwargs):
     for value in np.min(parameter, axis=0):

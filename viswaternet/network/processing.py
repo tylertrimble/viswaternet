@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+
+"""
+The viswaternet.network.processing module contains the code that extracts
+data from the EPANET simulation. It also handles the binning of parameters
+for discrete plotting.
+"""
 import numpy as np
 
 
@@ -12,6 +18,58 @@ def get_parameter(
         include_reservoirs=False,
         include_pumps=True,
         include_valves=True):
+    """
+    Retrieves parameters from the network and simulation results
+
+    Arguments
+    ---------
+    parameter_type : string
+        The network object the parameter is associated with. Takes either
+        'node' or 'link'.
+
+    parameter : string
+        The parameter to be plotted. The following is a list of parameters
+        available to use:
+        **Static Parameters**
+        - base_demand
+        - elevation
+        - emitter_coefficient
+        - initial_quality
+        **Time-Dependent Parameters**
+        - head
+        - demand
+        - leak_demand
+        - leak_area
+        - leak_discharg_coeff
+        - quality
+
+    value : integer, string
+        For time-varying parameters only. Specifies which timestep or data
+        summary will be plotted.
+
+        .. rubric:: Possible Inputs
+
+        ======================= =========================================
+            int                 Plots element data for specified timestep
+            'min'               Plots minimum data point for each element
+            'max'               Plots maximum data point for each element
+            'mean'              Plots mean for each element
+            'stddev'            Plots standard deviation for each element
+            'range'             Plots range for each element
+        ======================= =========================================
+
+    element_list : array-like
+        List of network elements that data will be retrieved for.
+
+    include_reservoirs : boolean
+        Determines if data for draw_reservoirs are retrieved.
+
+    include_pumps : boolean
+        Determines if data for draw_pumps are retrieved.
+
+    include_valves : boolean
+        Determines if data for draw_valves are retrieved.
+    """
     model = self.model
     results = model["results"]
     if parameter_type == "node":
@@ -79,7 +137,7 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where tank does
                 # not exist in parameter_results
                 try:
-                    parameter_results.drop(tank,inplace=True)
+                    parameter_results.drop(tank, inplace=True)
                     element_list.remove(tank)
                 except KeyError:
                     pass
@@ -90,7 +148,7 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where reservoir
                 # does not exist in parameter_results
                 try:
-                    parameter_results.drop(reservoir,inplace=True)
+                    parameter_results.drop(reservoir, inplace=True)
                     element_list.remove(reservoir)
                 except KeyError:
                     pass
@@ -128,7 +186,7 @@ def get_parameter(
                     parameter_results = np.ptp(
                         results.link[parameter].iloc[:, indices],
                         axis=0)
-                elif type(value) == int:
+                elif type(value) is int:
                     parameter_results = (
                         results.link[parameter].iloc[value, indices])
         # Link attribute fetching logic
@@ -154,7 +212,7 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where pump does
                 # not exist in parameter_results
                 try:
-                    parameter_results.drop(pump,inplace=True)
+                    parameter_results.drop(pump, inplace=True)
                     element_list.remove(pump)
                 except KeyError:
                     pass
@@ -165,7 +223,7 @@ def get_parameter(
                 # Try block to catch KeyErrors in instance where valve
                 # does not exist in parameter_results
                 try:
-                    parameter_results.drop(valve,inplace=True)
+                    parameter_results.drop(valve, inplace=True)
                     element_list.remove(valve)
                 except KeyError:
                     pass
@@ -173,6 +231,9 @@ def get_parameter(
 
 
 def get_demand_patterns(self):
+    """
+    Retrieves the demand pattern of each node, and bins them accordingly.
+    """
     model = self.model
     demand_patterns = []
 
@@ -220,6 +281,31 @@ def bin_parameter(
         intervals="automatic",
         disable_interval_deleting=False,
         style=None):
+    """
+    Takes parameter results from get_parameter and puts them into bins.
+
+    Arguments
+    ---------
+    parameter_results : array-like
+        The data associated with each node.
+
+    element_list : array-like
+        List of network elements that data will be retrieved for.
+
+    num_intervals : integer
+        The number of intervals. Results in intervals-1 bins.
+
+    intervals : array-like, string
+        If set to 'automatic' then intervals are created automatically on an
+        equal interval basis. Otherwise, it is the edges of the intervals to be
+        created. intervals array length should be num_intervals + 1.
+
+    disable_interval_deleting : boolean
+        If True, empty intervals will be automatically deleted.
+
+    style : VisWaterNet Style Object
+        The style object to be used.
+    """
     model = self.model
     if style is None:
         style = self.default_style

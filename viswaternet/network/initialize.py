@@ -1,15 +1,44 @@
 # -*- coding: utf-8 -*-
+
+"""
+The viswaternet.network.initalize module contains the code that builds
+the Viswaternet model. Eacg time you create a new VisWNModel object, you can
+define styles and parameters independently from other objects.
+"""
 import os
 import wntr
 import numpy as np
 from packaging.version import parse
 from viswaternet.drawing.style import NetworkStyle as style
+
+
 class VisWNModel:
     def __init__(self,
                  inp_file=None,
                  network_model=None,
                  figsize=(12, 12),
                  axis_frame=False):
+        """
+         Builds the VisWaterNet model object, which includes information
+         about the network and the plotting functions.
+
+         Arguments
+         ---------
+         inp_file : string
+             The inp file is the EPANET input file. You can obtain this from
+             EPANET by exporting as a Network in EPANET.
+
+        network_model : WNTR WaterNetworkModel Object
+            If you have already loaded a network with WNTR you can pass
+            it into VisWaterNet. The inp_file still needs to be passed in.
+
+        figsize : tuple
+            The figsize of the network plots automatically created by
+            VisWaterNet.
+
+        axis_frame : boolean
+            Determines if a frame is drawn around the generated plot.
+        """
         model = {}
         dirname = os.getcwd()
 

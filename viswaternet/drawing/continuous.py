@@ -1,5 +1,6 @@
 """
-The viswaternet.drawing.continuous module handles everything related to continuous data drawing.
+The viswaternet.drawing.continuous module handles everything related to
+continuous data drawing.
 """
 
 import matplotlib.pyplot as plt
@@ -29,22 +30,24 @@ def plot_continuous_nodes(
         savefig=False,
         save_name=None,
         style=None):
-    
-    """User-level function that draws continuous nodal data, base elements, legends, and saves the figure.
-    
+    """User-level function that draws continuous nodal data, base elements,
+    legends, and saves the figure.
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-    
+
     parameter : string
-        The parameter to be plotted. The following is a list of parameters available to use:
-        **Static Parameters**    
+        The parameter to be plotted. The following is a list of parameters
+        available to use:
+
+        **Static Parameters**
         - base_demand
         - elevation
         - emitter_coefficient
         - initial_quality
-        
+
         **Time-Dependent Parameters**
         - head
         - demand
@@ -53,22 +56,23 @@ def plot_continuous_nodes(
         - leak_demand
         - leak_area
         - leak_discharg_coeff
-    
+
     element_list : list
-        A list of junctions for which the parameter will be plotted. By default, this is the list of all junction names.
-    
+        A list of junctions for which the parameter will be plotted.
+        By default, this is the list of all junction names.
+
     include_tanks : boolean
         Determines if data for draw_tanks are retrieved.
-    
+
     include_reservoirs : boolean
         Determines if data for draw_reservoirs are retrieved.
-    
+
     value : integer, string
         For time-varying parameters only. Specifies which timestep or data
         summary will be plotted.
-        
+
         .. rubric:: Possible Inputs
-        
+
         ======================= =========================================
             int                 Plots element data for specified timestep
             'min'               Plots minimum data point for each element
@@ -77,37 +81,37 @@ def plot_continuous_nodes(
             'stddev'            Plots standard deviation for each element
             'range'             Plots range for each element
         ======================= =========================================
-    
+
     unit : string
         The unit that the network data is to be converted to.
-    
+
     vmin : integer
-        The minimum value of the color bar. 
-    
+        The minimum value of the color bar.
+
     vmax : integer
         The maximum value of the color bar.
-    
+
     element_size_intervals : integer
         The number of intervals to be used if an element size legend is used.
-    
+
     element_size_legend_title : string
         The title of the element size legend.
-    
+
     element_size_legend_loc : string
         The location of the element size legend on the figure.
-    
+
     element_size_legend_labels : array-like
         The labels of each interval of the element size legend.
-        
+
     color_bar_title : string
          The title of the color bar.
-         
+
     savefig : boolean
-        Determines if the figure is saved. 
-    
+        Determines if the figure is saved.
+
     save_name : string
         The inputted string will be appended to the name of the network.
-    
+
         Example
         -------
         >>>import viswaternet as vis
@@ -115,6 +119,9 @@ def plot_continuous_nodes(
         ...
         >>>model.save_fig(save_name='_example')
         <Net3_example.png>
+
+    style : VisWaterNet Style Object
+        The style object to be used.
     """
     if style is None:
         style = self.default_style
@@ -195,22 +202,23 @@ def plot_continuous_links(
         element_size_legend_labels=None,
         color_bar_title=None,
         style=None):
-    """User-level function that draws continuous link data, base elements, legends, and saves the figure.
-    
+    """User-level function that draws continuous link data, base elements,
+    legends, and saves the figure.
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-    
+
     parameter : string
         The parameter to be plotted. The following is a list of parameters
         available to use:
-        **Static Parameters**    
+        **Static Parameters**
         - length
         - minor_loss
         - bulk_coeff
         - wall_coeff
-        
+
         **Time-Dependent Parameters**
         - flowrate
         - velocity
@@ -218,21 +226,23 @@ def plot_continuous_links(
         - friction_factor
         - reaction_rate
         - quality
-   
+
     element_list : list
-        A list of links for which the parameter will be plotted. By default, this is the list of all link names.
-    
+        A list of links for which the parameter will be plotted. By default,
+        this is the list of all link names.
+
     include_pumps : boolean
         Determines if data for draw_pumps are retreived.
-    
+
     include_valves : boolean
         Determines if data for draw_valves are retrieved
-    
+
     value : integer, string
-        For time-varying parameters only. Specifies which timestep or data summary will be plotted.
-        
+        For time-varying parameters only. Specifies which timestep or data
+        summary will be plotted.
+
         .. rubric:: Possible Inputs
-        
+
         ======================= =========================================
             int                 Plots element data for specified timestep
             'min'               Plots minimum data point for each element
@@ -241,37 +251,37 @@ def plot_continuous_links(
             'stddev'            Plots standard deviation for each element
             'range'             Plots range for each element
         ======================= =========================================
-    
+
     unit : string
         The unit that the network data is to be converted to.
-    
+
     vmin : integer
-        The minimum value of the color bar. 
-    
+        The minimum value of the color bar.
+
     vmax : integer
         The maximum value of the color bar.
-    
+
     element_size_intervals : integer
         The number of intervals to be used if an element size legend is used.
-    
+
     element_size_legend_title : string
         The title of the element size legend.
-   
+
     element_size_legend_loc : string
         The location of the element size legend on the figure.
-    
+
     element_size_legend_labels : array-like
         The labels of each interval of the element size legend.
-    
+
     color_bar_title : string
          The title of the color bar.
-         
+
     savefig : boolean
-        Determines if the figure is saved. 
-    
+        Determines if the figure is saved.
+
     save_name : string
         The inputted string will be appended to the name of the network.
-        
+
         Example
         -------
         >>>import viswaternet as vis
@@ -279,6 +289,9 @@ def plot_continuous_links(
         ...
         >>>model.save_fig(save_name='_example')
         <Net3_example.png>
+
+    style : VisWaterNet Style Object
+        The style object to be used.
     """
     if style is None:
         style = self.default_style
