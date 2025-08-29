@@ -5,5 +5,5 @@ matplotlib>=3.5.0
 wntr
 imageio
 imageio-ffmpeg
-networkx>=2.7
+networkx>=2.7,<=3.3
 sphinx_rtd_theme
