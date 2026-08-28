@@ -17,7 +17,7 @@ requirements = ['pandas',
                'wntr',
                'imageio',
                'imageio-ffmpeg',
-               'networkx>=2.7']
+               'networkx>=2.7,<=3.3']
 
 test_requirements = [ ]
 
