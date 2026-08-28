@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-The viswaternet.utils.base module contains plotting functions that are 
+The viswaternet.utils.base module contains plotting functions that are
 frequently utilized by other plotting functions. This includes base element
 drawing, legend drawing, color map, and label drawing functions.
 """
@@ -19,35 +19,73 @@ def draw_nodes(
         ax,
         node_list,
         parameter_results=None,
-        node_size = None,
-        node_shape = None,
-        node_border_width = None,
-        node_border_color = None,
-        node_color = None,
+        node_size=None,
+        node_shape=None,
+        node_border_width=None,
+        node_border_color=None,
+        node_color=None,
         vmin=None,
         vmax=None,
         label=None,
         style=None):
     """Draws continuous nodal data onto the figure.
-    
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-        
+
     node_list : string, array-like
         List of draw_nodes to be drawn.
-        
+
     parameter_results : array-like
         The data associated with each node.
-        
+
+    node_size : integer, array-like
+        The size of the nodes being drawn. Can either be a single string value
+        or an array of values for each node being drawn.
+
+        Should only be used if calling draw_nodes() manually.
+
+    node_shape : string, array-like
+        The shape of the nodes being drawn. Can either be a single string value
+        or an array of values for each node being drawn.
+
+        Should only be used if calling draw_nodes() manually.
+
+        Refer to the matplotlib documentation for available marker types.
+            https://matplotlib.org/stable/api/markers_api.html
+
+    node_border_color : string, array-like
+        The color of the node borders for the nodes being drawn. Can either be
+        a single string value or an array of values for each node being drawn.
+
+        Should only be used if calling draw_nodes() manually.
+
+    node_border_width  : integer, array-like
+        The width of the node borders. Can either be a single
+        string value or an array of values for each node being drawn.
+
+        Should only be used if calling draw_nodes() manually.
+
     vmin : integer
-        The minimum value of the color bar. 
-        
+        The minimum value of the color bar.
+
     vmax : integer
-        The maximum value of the color bar. 
+        The maximum value of the color bar.
+
+    label : string, array-like
+        Labels to be assigned to each of the nodes drawn. Can either be a
+        single string value or an array of values for each node being drawn.
+
+        (Not Implemented Yet)
+
+        Should only be used if calling draw_nodes() manually.
+
+    style : VisWaterNet Style Object
+        The style object to be used.
     """
-    
+
     # Initalize parameters
     model = self.model
     if style is None:
@@ -94,8 +132,8 @@ def draw_nodes(
                 cmap = mpl.colormaps[cmap]
             except Exception:
                 if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
-                    or isinstance(cmap, mpl.colors.ListedColormap):
-                        pass
+                        or isinstance(cmap, mpl.colors.ListedColormap):
+                    pass
                 else:
                     raise Exception('Invalid cmap!')
             # If both vmin and vmax are None, set vmax to the max data
@@ -138,8 +176,8 @@ def draw_nodes(
                 cmap = mpl.colormaps[cmap]
             except Exception:
                 if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
-                    or isinstance(cmap, mpl.colors.ListedColormap):
-                        pass
+                        or isinstance(cmap, mpl.colors.ListedColormap):
+                    pass
                 else:
                     raise Exception('Invalid cmap!')
             # If both vmin and vmax are None, don't pass vmin and vmax,
@@ -199,25 +237,64 @@ def draw_links(
         link_color=None,
         vmin=None,
         vmax=None,
+        label=None,
         style=None):
     """Draws continuous link data onto the figure.
-    
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-    
+
     link_list : string, array-like
         List of draw_links to be drawn.
-    
+
     parameter_results : array-like
         The data associated with each node.
-    
+
+    link_width : string, array-like
+        The width of the link being drawn. Can either be a single string value
+        or an array of values for each link being drawn.
+
+        Should only be used if calling draw_links() manually.
+
+    link_style : string, array-like
+        The style of the link being drawn. Can either be a single string value
+        or an array of values for each link being drawn.
+
+        Should only be used if calling draw_links() manually.
+
+        Refer to the matplotlib documentation for available link styles.
+            https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html
+
+    link_arrows : string, array-like
+        Whether arrows should be drawn for each link. Can either be a single
+        string value or an array of values for each link being drawn.
+
+        Should only be used if calling draw_links() manually.
+
+    link_color : string, array-like
+        The color the link being drawn. Can either be a single string value
+        or an array of values for each link being drawn.
+
+        Should only be used if calling draw_links() manually.
+
     vmin : integer
-        The minimum value of the color bar. 
-    
+        The minimum value of the color bar.
+
     vmax : integer
-        The maximum value of the color bar.    
+        The maximum value of the color bar.
+
+    label : string, array-like
+        Labels to be assigned to each of the nodes drawn. Can either be a
+        single string value or an array of values for each node being drawn.
+
+        (Not Implemented Yet)
+
+        Should only be used if calling draw_links() manually.
+
+    style : VisWaterNet Style Object
+        The style object to be used.
     """
     # Initalize parameters
     model = self.model
@@ -270,8 +347,8 @@ def draw_links(
                 cmap = mpl.colormaps[cmap]
             except Exception:
                 if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
-                    or isinstance(cmap, mpl.colors.ListedColormap):
-                        pass
+                        or isinstance(cmap, mpl.colors.ListedColormap):
+                    pass
                 else:
                     raise Exception('Invalid cmap!')
             # If both vmin and vmax are None, set vmax to the max data
@@ -314,8 +391,8 @@ def draw_links(
                 cmap = mpl.colormaps[cmap]
             except Exception:
                 if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
-                    or isinstance(cmap, mpl.colors.ListedColormap):
-                        pass
+                        or isinstance(cmap, mpl.colors.ListedColormap):
+                    pass
                 else:
                     raise Exception('Invalid cmap!')
             # If both vmin and vmax are None, don't pass vmin and vmax,
@@ -353,7 +430,7 @@ def draw_links(
     # Draw without any data associated with draw_links
     else:
         edges = [model["pipe_list"][model['G_pipe_name_list'].index(name)]
-             for name in link_list]
+                 for name in link_list]
         nxp.draw_networkx_edges(
             model["G"],
             model["pos_dict"],
@@ -374,16 +451,30 @@ def draw_base_elements(
         draw_originator=None,
         style=None):
     """
-    Draws base elements (draw_nodes, draw_links, draw_reservoirs, draw_tanks, draw_pumps, and draw_valves)
-    without any data associated with the elements.
-    
+    Draws base elements (draw_nodes, draw_links, draw_reservoirs, draw_tanks,
+    draw_pumps, and draw_valves) without any data associated with the elements.
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-        
+
     draw_nodes : boolean
-        Determines if base draw_nodes with no data associated with them are drawn. Set to False for all functions excep plot_basic_elements by default.
+        Determines if base draw_nodes with no data associated with them are
+        drawn. Set to False for all functions excep plot_basic_elements by
+        default.
+
+    element_list : array-like
+        The list of elements being drawn. Can either be links or nodes, but
+        not a combination. When this is None, all links/nodes are drawn, but
+        if not None only the ones listed are drawn.
+
+    draw_originator : string
+        Used with element_list and stores whether the elements being drawn
+        are nodes or links.
+
+    style : VisWaterNet Style Object
+        The style object to be used.
    """
     model = self.model
     if style is None:
@@ -586,23 +677,25 @@ def plot_basic_elements(
         savefig=False,
         save_name=None,
         style=None):
-    """User-level function that draws base elements with no data assocaited with
-    them, draws a legend, and saves the figure.
-    
+    """User-level function that draws base elements with no data assocaited
+    with them, draws a legend, and saves the figure.
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-   
+
     draw_nodes : boolean
-        Determines if base draw_nodes with no data associated with them are drawn. Set to False for all functions excep plot_basic_elements by default.
-    
+        Determines if base draw_nodes with no data associated with them are
+        drawn. Set to False for all functions excep plot_basic_elements by
+        default.
+
     savefig : boolean
-        Determines if the figure is saved. 
-    
+        Determines if the figure is saved.
+
     save_name : string
         The inputted string will be appended to the name of the network.
-    
+
         Example
         -------
         >>>import viswaternet as vis
@@ -610,10 +703,12 @@ def plot_basic_elements(
         ...
         >>>model.save_fig(save_name='_example')
         <Net3_example.png>
+
+    style : VisWaterNet Style Object
+        The style object to be used.
     """
     if style is None:
         style = self.default_style
-    args = style.args
     # Checks if an axis as been specified
     if ax is None:
         if ax is None:
@@ -645,42 +740,51 @@ def draw_legend(
         element_size_legend_loc=None,
         element_size_legend_labels=None,
         style=None):
-    """Draws the legends for all other plotting functions. There are two legends that might be drawn. One is the base elements legend with displays what markers are associated with each element type (draw_nodes, draw_links, etc.) The other legend is the intervals legend which is the legend for discrete drawing. Under normal use, draw_legends is not normally called by the user directly, even with more advanced applications. However, some specialized plots may require draw_legend to be called directly.
-    
+    """Draws the legends for all other plotting functions. There are two
+    legends that might be drawn. One is the base elements legend with displays
+    what markers are associated with each element type (draw_nodes, draw_links,
+    etc.) The other legend is the intervals legend which is the legend for
+    discrete drawing. Under normal use, draw_legends is not normally called by
+    the user directly, even with more advanced applications. However, some
+    specialized plots may require draw_legend to be called directly.
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-   
+
     intervals : array-like, string
-        If set to 'automatic' then intervals are created automatically on a equal interval basis. Otherwise, it is the edges of the intervals to be created. intervals array length should be num_intervals + 1.
-    
+        If set to 'automatic' then intervals are created automatically on an
+        equal interval basis. Otherwise, it is the edges of the intervals to be
+        created. intervals array length should be num_intervals + 1.
+
     color_list : string, array-like
-        The list of node colors for each interval. Both cmap and color_list can not be used at the same time to color draw_nodes. If both are, then color_list takes priority.
-    
+        The list of node colors for each interval. Both cmap and color_list can
+        not be used at the same time to color draw_nodes. If both are, then
+        color_list takes priority.
+
     cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
-    
+        The matplotlib color map to be used for plotting. Refer to matplotlib
+        documentation for possible inputs.
+            https://matplotlib.org/stable/users/explain/colors/colormaps.html
+
     title : string
         The title text of the legend.
-    
+
     element_size_intervals : integer
         The number of intervals to be used if an element size legend is used.
-    
+
     element_size_legend_title : string
         The title of the element size legend.
-    
+
     element_size_legend_loc : string
         The location of the element size legend on the figure.
-    
+
     element_size_legend_labels : array-like
         The labels of each interval of the element size legend.
-    
-    node_border_color : string
-        The color of the legend draw_nodes edges when plotting element size legend.
-    
-    linewidths: integer
-        The width of the line of the legend draw_nodes when plotting element size legend.
+
+    style : VisWaterNet Style Object
+        The style object to be used.
     """
     # If no intervals for data legend are specified, then create empty array
     if intervals is None:
@@ -800,8 +904,8 @@ def draw_legend(
                         cmap = mpl.colormaps[cmap]
                     except Exception:
                         if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
-                            or isinstance(cmap, mpl.colors.ListedColormap):
-                                pass
+                                or isinstance(cmap, mpl.colors.ListedColormap):
+                            pass
                         else:
                             raise Exception('Invalid cmap!')
                     cmap_value = 1 / len(intervals)
@@ -894,21 +998,24 @@ def draw_color_bar(
         g,
         color_bar_title=None,
         style=None):
-    """Draws the color bar for all continuous plotting functions.Like draw_legends, under normal use, draw_color_bar is not normally called by the user directly, even with more advanced applications. However, some specialized plots may require draw_color_bar to be called directly.
-    
+    """Draws the color bar for all continuous plotting functions. Like
+    draw_legends, under normal use, draw_color_bar is not normally called by
+    the user directly, even with more advanced applications. However, some
+    specialized plots may require draw_color_bar to be called directly.
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-    
+
     g : NetworkX path collection
         The list of elements drawn by NetworkX function.
-    
-    cmap : string
-        The matplotlib color map to be used for plotting. Refer to matplotlib documentation for possible inputs.
-    
+
     color_bar_title : string
         The title of the color bar.
+
+    style : VisWaterNet Style Object
+        The style object to be used.
     """
     # Unruly code to make colorbar location nice and symmetrical when dealing
     # with subplots especially.
@@ -921,7 +1028,6 @@ def draw_color_bar(
     color_bar_label_loc = args['color_bar_label_loc']
     color_bar_label_font_size = args['color_bar_label_font_size']
     color_bar_label_font_color = args['color_bar_label_font_color']
-    cmap = args['cmap']
     divider = make_axes_locatable(ax)
     fig = plt.gcf()
     if color_bar_loc == 'right':
@@ -978,6 +1084,7 @@ def draw_color_bar(
     cbar.ax.xaxis.label.set_fontsize(color_bar_label_font_size)
     cbar.ax.xaxis.label.set_color(color_bar_label_font_color)
 
+
 def draw_label(
         self,
         labels,
@@ -993,45 +1100,59 @@ def draw_label(
         label_alpha=0.9,
         label_font_style=None,
         label_edge_width=None
-        ):
+):
     """Draws customizable labels on the figure.
-    There are two modes of coordinate input: If the 'draw_nodes' argument is not specified, then the label coordinates are processed as absolute coordinates with possible values from 0 to 1. For instance, (0,0) would place the label in the bottom left of the figure, while (1,1) would place the label in the top right of the figure. If the 'draw_nodes' argument IS specified, then the coordinates are processed as coordinates relative to it's associated node. The scale of the coordinates scaling differs between networks. For instance, (50,100) would place the label 50 units to the right, and 100 units above the associated node.
-    
+    There are two modes of coordinate input: If the 'draw_nodes' argument is
+    not specified, then the label coordinates are processed as absolute
+    coordinates with possible values from 0 to 1. For instance, (0,0) would
+    place the label in the bottom left of the figure, while (1,1) would place
+    the label in the top right of the figure. If the 'draw_nodes' argument is
+    specified, then the coordinates are processed as coordinates relative to
+    it's associated node. The scale of the coordinates scaling differs between
+    networks. For instance, (50,100) would place the label 50 units to the
+    right, and 100 units above the associated node.
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-    
+
     labels : string, array-like
         The label(s) textual content.
-    
+
     x_coords : integer, array-like
         The x coordinate(s) of the labels.
-    
+
     y_coords : integer, array-like
         The y coordinate(s) of the labels.
-    
+
     draw_nodes : string, array-like
         A list of the draw_nodes the labels are to be associated with.
-    
+
     draw_arrow : boolean
-        Determine if an arrow is drawn from the associated draw_nodes to labels.
-    
+        Determine if an arrow is drawn from the associated draw_nodes to
+        labels.
+
     label_font_size : integer
         The font size of the labels.
-        
+
     label_text_color : string
         The color of the text of the labels.
-        
+
     label_face_color : string
-    
+        The face color of the label.
+
     label_edge_color : string
-    
+        The edge color of the label
+
     label_alpha : integer
-    
+        The transparency of the label. Takes a value between 0.0 and 1.0.
+
     label_font_style : string
-        
+        The font style of the label. Takes 'normal', 'italic', or 'oblique'.
+   
     label_edge_width : integer
+        The width of the label edge.
     """
     model = self.model
     if ax is None:

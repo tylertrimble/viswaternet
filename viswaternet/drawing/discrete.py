@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-The viswaternet.drawing.discrete module handles everything related to discrete data drawing.
+The viswaternet.drawing.discrete module handles everything related to discrete
+data drawing.
 """
 
 import numpy as np
@@ -21,20 +22,24 @@ def draw_discrete_nodes(
         label_list=None,
         style=None):
     """Draws discretized nodal data onto the figure.
-    
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-        
+
     element_list : array-like
         List of network elements that data will be retrieved for.
-        
+
     intervals : dict
-        The dictionary containting the intervals and the draw_nodes assocaited with each interval.
-        
+        The dictionary containting the intervals and the draw_nodes assocaited
+        with each interval.
+
     label_list : string, array-like
         List of labels for each interval.
+
+    style : VisWaterNet Style Object
+        The style object to be used.
     """
     model = self.model
     if style is None:
@@ -64,11 +69,11 @@ def draw_discrete_nodes(
     if isinstance(node_shape, str):
         node_shape = [node_shape for i in range(len(intervals))]
     if node_border_color is None:
-        node_border_color = ['k' for i in range(len(intervals))]    
+        node_border_color = ['k' for i in range(len(intervals))]
     if isinstance(node_border_color, str):
         node_border_color = [node_border_color for i in range(len(intervals))]
     if node_border_width is None:
-       node_border_width = [0 for i in range(len(intervals))]
+        node_border_width = [0 for i in range(len(intervals))]
     if isinstance(node_border_width, int) \
             or isinstance(node_border_width, float):
         node_border_width = [node_border_width for i in range(len(intervals))]
@@ -91,20 +96,20 @@ def draw_discrete_nodes(
                     linewidths=node_border_width[j])
             else:
                 m = Line2D([], [], color=color_list[j],
-                              marker=node_shape[j], 
-                              linestyle='None',
-                              markersize=node_size[j]**(1/2),
-                              markeredgecolor=node_border_color[j],
-                              markeredgewidth=node_border_width[j],
-                              label=label_list[j])
-                ax.add_artist(m)          
+                           marker=node_shape[j],
+                           linestyle='None',
+                           markersize=node_size[j]**(1/2),
+                           markeredgecolor=node_border_color[j],
+                           markeredgewidth=node_border_width[j],
+                           label=label_list[j])
+                ax.add_artist(m)
     else:
         try:
             cmap = mpl.colormaps[cmap]
         except Exception:
             if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
-                or isinstance(cmap, mpl.colors.ListedColormap):
-                    pass
+                    or isinstance(cmap, mpl.colors.ListedColormap):
+                pass
             else:
                 raise Exception('Invalid cmap!')
         cmapValue = 1 / len(intervals)
@@ -126,16 +131,16 @@ def draw_discrete_nodes(
                     linewidths=node_border_width[j])
             else:
                 m = Line2D([], [], color=cmap(float(cmapValue)),
-                              marker=node_shape[j], 
-                              linestyle='None',
-                              markersize=node_size[j]**(1/2),
-                              markeredgecolor=node_border_color[j],
-                              markeredgewidth=node_border_width[j],
-                              label=label_list[j])
+                           marker=node_shape[j],
+                           linestyle='None',
+                           markersize=node_size[j]**(1/2),
+                           markeredgecolor=node_border_color[j],
+                           markeredgewidth=node_border_width[j],
+                           label=label_list[j])
                 ax.add_artist(m)
             cmapValue += 1 / len(intervals)
 
-            
+
 def draw_discrete_links(
         self,
         ax,
@@ -144,18 +149,19 @@ def draw_discrete_links(
         label_list=None,
         style=None):
     """Draws discretized link data onto the figure.
-    
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-        
+
     element_list : array-like
         List of network elements that data will be retrieved for.
-        
+
     intervals : dict
-        The dictionary containting the intervals and the draw_links associated with each interval.
-        
+        The dictionary containting the intervals and the draw_links associated
+        with each interval.
+
     label_list : string, array-like
         List of labels for each interval.
     """
@@ -199,20 +205,20 @@ def draw_discrete_links(
                     model["G"],
                     model["pos_dict"],
                     ax=ax,
-                    edgelist=[(model['node_names'][0], 
+                    edgelist=[(model['node_names'][0],
                                model['node_names'][0])],
                     edge_color=color_list[j],
                     width=link_width[j],
                     arrows=link_arrows[j],
                     style=link_style[j],
-                    label=label_list[j])    
+                    label=label_list[j])
     else:
         try:
             cmap = mpl.colormaps[cmap]
         except Exception:
             if isinstance(cmap, mpl.colors.LinearSegmentedColormap) \
-                or isinstance(cmap, mpl.colors.ListedColormap):
-                    pass
+                    or isinstance(cmap, mpl.colors.ListedColormap):
+                pass
             else:
                 raise Exception('Invalid cmap!')
         cmapValue = 1 / len(intervals)
@@ -237,7 +243,7 @@ def draw_discrete_links(
                     model["G"],
                     model["pos_dict"],
                     ax=ax,
-                    edgelist=[(model['node_names'][0], 
+                    edgelist=[(model['node_names'][0],
                                model['node_names'][0])],
                     edge_color=[cmap(float(cmapValue))],
                     width=link_width[j],
@@ -281,25 +287,27 @@ def plot_discrete_nodes(
         discrete_legend_title=None,
         disable_interval_deleting=True,
         style=None):
-    """User-level function that draws discretized nodal data, base elements, legends, and saves the figure.
-   
+    """User-level function that draws discretized nodal data, base elements,
+    legends, and saves the figure.
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-        
+
     num_intervals : integer
-        The number of intervals.
-        
+        The number of intervals. Results in intervals+1 bins.
+
     parameter : string
         The parameter to be plotted. The following is a list of parameters
         available to use:
-        **Static Parameters**    
+
+        **Static Parameters**
         - base_demand
         - elevation
         - emitter_coefficient
         - initial_quality
-        
+
         **Time-Dependent Parameters**
         - head
         - demand
@@ -307,13 +315,13 @@ def plot_discrete_nodes(
         - leak_area
         - leak_discharg_coeff
         - quality
-        
+
     value : integer, string
         For time-varying parameters only. Specifies which timestep or data
         summary will be plotted.
-        
+
         .. rubric:: Possible Inputs
-        
+
         ======================= =========================================
             int                 Plots element data for specified timestep
             'min'               Plots minimum data point for each element
@@ -322,40 +330,42 @@ def plot_discrete_nodes(
             'stddev'            Plots standard deviation for each element
             'range'             Plots range for each element
         ======================= =========================================
-        
+
     unit : string
         The unit that the network data is to be converted to.
-        
+
     element_list : array-like
         List of network elements that data will be retrieved for.
-        
+
     include_tanks : boolean
         Determines if data for draw_tanks are retrieved.
-        
+
     include_reservoirs : boolean
         Determines if data for draw_reservoirs are retrieved.
-        
+
     intervals : integer, string
-        If set to 'automatic' then intervals are created automatically on a equal interval basis. Otherwise, it is the edges of the intervals to be created. Intervals array length should be num_intervals + 1.
-        
+        If set to 'automatic' then intervals are created automatically on a
+        equal interval basis. Otherwise, it is the edges of the intervals to be
+        created. Intervals array length should be num_intervals + 1.
+
     label_list : string, array-like
         List of labels for each interval.
-        
+
     draw_nodes : boolean
         Determines if draw_nodes with no data associated with them are drawn.
 
     disable_interval_deleting : boolean
-        If True, empty intervals will be automatically deleted. 
-    
+        If True, empty intervals will be automatically deleted.
+
     discrete_legend_title : string
         Title of the intervals legend.
-    
+
     savefig : boolean
-        Determines if the figure is saved. 
-    
+        Determines if the figure is saved.
+
     save_name : string
         The inputted string will be appended to the name of the network.
-    
+
         Example
         -------
         >>>import viswaternet as vis
@@ -363,6 +373,9 @@ def plot_discrete_nodes(
         ...
         >>>model.save_fig(save_name='_example')
         <Net3_example.png>
+
+    style : VisWaterNet Style Object
+        The style object to be used.
     """
     model = self.model
     if style is None:
@@ -452,25 +465,27 @@ def plot_discrete_links(
         save_name=None,
         disable_interval_deleting=True,
         style=None):
-    """User-level function that draws discretized link data, base elements, legends, and saves the figure.
-    
+    """User-level function that draws discretized link data, base elements,
+    legends, and saves the figure.
+
     Arguments
     ---------
     ax : axes._subplots.AxesSubplot
         Matplotlib axes object.
-        
+
     num_intervals : integer
         The number of intervals.
-        
+
     parameter : string
         The parameter to be plotted. The following is a list of parameters
         available to use:
-        **Static Parameters**    
+
+        **Static Parameters**
         - length
         - minor_loss
         - bulk_coeff
         - wall_coeff
-       
+
         **Time-Dependent Parameters**
         - flowrate
         - velocity
@@ -478,12 +493,13 @@ def plot_discrete_links(
         - friction_factor
         - reaction_rate
         - quality
-    
+
     value : integer, string
-        For time-varying parameters only. Specifies which timestep or data summary will be plotted.
-        
+        For time-varying parameters only. Specifies which timestep or data
+        summary will be plotted.
+
         .. rubric:: Possible Inputs
-        
+
         ======================= =========================================
             int                 Plots element data for specified timestep
             'min'               Plots minimum data point for each element
@@ -492,40 +508,42 @@ def plot_discrete_links(
             'stddev'            Plots standard deviation for each element
             'range'             Plots range for each element
         ======================= =========================================
-        
+
     unit : string
         The unit that the network data is to be converted to.
-    
+
     element_list : array-like
         List of network elements that data will be retrieved for.
-    
+
     include_pumps : boolean
         Determines if data for draw_pumps are retrieved.
-    
+
     include_valves : boolean
         Determines if data for draw_valves are retrieved.
-    
+
     intervals : integer, string
-        If set to 'automatic' then intervals are created automatically on an equal interval basis. Otherwise, it is the edges of the intervals to be created. intervals array length should be num_intervals + 1.
-    
+        If set to 'automatic' then intervals are created automatically on an
+        equal interval basis. Otherwise, it is the edges of the intervals to be
+        created. intervals array length should be num_intervals + 1.
+
     disable_interval_deleting : boolean
-        If True, empty intervals will be automatically deleted.     
-    
+        If True, empty intervals will be automatically deleted.
+
     label_list : string, array-like
         List of labels for each interval.
-        
+
     draw_nodes : boolean
         Determines if draw_nodes with no data associated with them are drawn.
-        
+
     discrete_legend_title : string
         Title of the intervals legend.
-        
+
     savefig : boolean
-        Determines if the figure is saved. 
-    
+        Determines if the figure is saved.
+
     save_name : string
         The inputted string will be appended to the name of the network.
-    
+
         Example
         -------
         >>>import viswaternet as vis
@@ -533,6 +551,9 @@ def plot_discrete_links(
         ...
         >>>model.save_fig(save_name='_example')
         <Net3_example.png>
+
+    style : VisWaterNet Style Object
+        The style object to be used.
     """
     model = self.model
     if style is None:
