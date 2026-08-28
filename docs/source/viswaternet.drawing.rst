@@ -44,6 +44,14 @@ viswaternet.drawing.unique module
    :undoc-members:
    :show-inheritance:
 
+viswaternet.drawing.style module
+---------------------------------
+
+.. automodule:: viswaternet.drawing.style
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
